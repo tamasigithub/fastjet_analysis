@@ -11,7 +11,7 @@ using namespace fastjet;
 int main () 
 {
   TChain rec("m_recTree");
-  rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.15403921.MYSTREAM._000002.root");
+  rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.tkar119995.MBRoot2_MYSTREAM/user.tkar.15403921.MYSTREAM._000002.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -19,20 +19,20 @@ int main ()
   std::vector<double> *theta_rec = 0;
   std::vector<double> *phi_rec = 0;
   std::vector<double> *tid_rec = 0;
-  rec.TChain::SetBranchStatus("Pt_n",1);
-  rec.TChain::SetBranchStatus("Z013",1);
-  rec.TChain::SetBranchStatus("Theta13",1);
-  rec.TChain::SetBranchStatus("Phi013",1);
-  rec.TChain::SetBranchStatus("Tid",1);
-  rec.TChain::SetBranchAddress("Pt_n", &pt_rec);
-  rec.TChain::SetBranchAddress("Z013", &z0_rec);
-  rec.TChain::SetBranchAddress("Theta13", &theta_rec);
-  rec.TChain::SetBranchAddress("Phi013", &phi_rec);
-  rec.TChain::SetBranchAddress("Tid", &tid_rec);
+  rec.SetBranchStatus("Pt_n",1);
+  rec.SetBranchStatus("Z013",1);
+  rec.SetBranchStatus("Theta13",1);
+  rec.SetBranchStatus("Phi013",1);
+  rec.SetBranchStatus("Tid",1);
+  rec.SetBranchAddress("Pt_n", &pt_rec);
+  rec.SetBranchAddress("Z013", &z0_rec);
+  rec.SetBranchAddress("Theta13", &theta_rec);
+  rec.SetBranchAddress("Phi013", &phi_rec);
+  rec.SetBranchAddress("Tid", &tid_rec);
   
   //! Get total no. of events
   //Long64_t n_entries = rec.GetEntries();
-  Long64_t n_entries = 5;
+  Long64_t n_entries = 10;
   std::vector<TrackJetObj> tjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
   //! for every event do the following
   for(Long64_t i = 0; i < n_entries; ++i)
@@ -40,10 +40,11 @@ int main ()
 	double pt,z0,theta,phi,tid;
 	TrackJetObj tjObj;
 	tjVec.clear();
-	rec.TChain::GetEntry(i);
+	rec.GetEntry(i);
 	//! number of tracks reconstructed in an event
 	int nobj = pt_rec->size();
-  	
+  	std::cout<<"nobj: "<<nobj<<std::endl;
+	if(nobj<1) continue;
 	for (int j = 0; j < nobj; ++j)
 	{
 		pt	= (*pt_rec)[j];

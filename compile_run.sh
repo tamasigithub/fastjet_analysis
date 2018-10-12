@@ -3,6 +3,6 @@
 #./short-example
 
 g++ trackJet.cc -o trackjet \
-`root-config --cflags` -std=c++11 \
+`root-config --cflags --libs` \
 `fastjet-install/bin/fastjet-config --cxxflags --libs --plugins`
 #./trackjet
