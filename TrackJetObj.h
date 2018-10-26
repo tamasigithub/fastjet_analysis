@@ -16,6 +16,8 @@ public:
 	double E;
 	double zv;
 	int flag;
+	double pdg;
+	double Vz0;
 public:
 	TrackJetObj() = default;
 	~TrackJetObj() = default;
@@ -24,5 +26,5 @@ public:
   TrackJetObj(const TrackJetObj&) = delete;
   TrackJetObj& operator=(const TrackJetObj&) = delete;*/
 };
-#endif /*TRACKJETOBJ_H_*/
 
+#endif /*TRACKJETOBJ_H_*/
