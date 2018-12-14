@@ -14,6 +14,10 @@ public:
 	double py;
 	double pz;
 	double E;
+	/*double px_m;
+	double py_m;
+	double pz_m;
+	double E_m;*/
 	double zv;
 	int flag;
 	double pdg;
