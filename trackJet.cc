@@ -12,8 +12,8 @@ using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
 int main () 
 {
-  bool debug = true;
-  //bool debug = false;
+  //bool debug = true;
+  bool debug = false;
   // store results in an output root file 
   // branch variables
   gInterpreter->GenerateDictionary("vector<vector<double> >","vector");
@@ -35,10 +35,10 @@ int main ()
   std::vector<std::vector<double> > constituentMt;      // it's constituents mass
   std::vector<std::vector<int> >    constituentPdg;	// pdg of track-jet constituents
   std::vector<std::vector<double> > constituentZ0;	// reconstructed z vertex track-jet constituents
-  std::vector<int>   Nconstituents;	            	// number of constituents for each jet
   std::vector<bool>   hasConstituents;            	// flag indicating if the track-jet has constituents
+  std::vector<int>   Nconstituents;	            	// number of constituents for each jet
   //! matched truth particle jets
-  /*int M_Njets;						// # of matched truth particle jets
+  int M_Njets;						// # of matched truth particle jets
   std::vector<double> M_jetPt;				// matched truth particle jet pt
   std::vector<std::vector<double> > M_constituentPt;	// it's constituents pt
   std::vector<double> M_jetPhi;                     	// matched truth particle jet phi
@@ -54,9 +54,10 @@ int main ()
   std::vector<std::vector<int> >    M_constituentPdg;	// pdg of matched truth particle jet constituents
   std::vector<std::vector<double> > M_constituentZ0;	// matched truth particle z vertex track-jet constituents
   std::vector<bool>   M_hasConstituents;            	// flag indicating if the truth particle jet has constituents
-*/
+  std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
+
   //! output root file
-  TFile *f_out = new TFile("test_jetout1.root","RECREATE");
+  TFile *f_out = new TFile("jetout1_rec.root","RECREATE");
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
   glob_jet->Branch("Njets",&Njets);
@@ -76,7 +77,7 @@ int main ()
   glob_jet->Branch("jetConstZ0",&constituentZ0);
   glob_jet->Branch("has_constituents",&hasConstituents);
   glob_jet->Branch("Nconstituents", &Nconstituents);
-  /*
+  
   glob_jet->Branch("M_Njets",&M_Njets);
   glob_jet->Branch("M_jetPt",&M_jetPt);
   glob_jet->Branch("M_jetConstPt",&M_constituentPt);
@@ -93,7 +94,8 @@ int main ()
   glob_jet->Branch("M_jetConstPdg",&M_constituentPdg);
   glob_jet->Branch("M_jetConstZ0",&M_constituentZ0);
   glob_jet->Branch("M_has_constituents",&M_hasConstituents);
-  */
+  glob_jet->Branch("M_Nconstituents",&M_Nconstituents);
+  
   //! open input trees 
   TChain rec("m_recTree");
   rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
@@ -103,55 +105,57 @@ int main ()
   std::vector<double> *z0_rec = 0;
   std::vector<double> *theta_rec = 0;
   std::vector<double> *phi_rec = 0;
-  std::vector<double> *tid_rec = 0;
+  std::vector<int> *tid_rec = 0;
   std::vector<int> *m_pdg = 0;
-  /*std::vector<double> *m_pt = 0;
-  */std::vector<double> *m_Vz = 0;
-  /*std::vector<double> *m_theta = 0;
+  std::vector<double> *m_pt = 0;
+  std::vector<double> *m_Vz = 0;
+  std::vector<double> *m_theta = 0;
   std::vector<double> *m_phi = 0;
-  */rec.SetBranchStatus("Pt_n",1);
+  rec.SetBranchStatus("Pt_n",1);
   rec.SetBranchStatus("Z013",1);
   rec.SetBranchStatus("Theta13",1);
   rec.SetBranchStatus("Phi013",1);
   rec.SetBranchStatus("Tid",1);
   rec.SetBranchStatus("M_pdg",1);
-  /*rec.SetBranchStatus("M_pt",1);
-  */rec.SetBranchStatus("M_Vz",1);
-  /*rec.SetBranchStatus("M_theta",1);
+  rec.SetBranchStatus("M_pt",1);
+  rec.SetBranchStatus("M_Vz",1);
+  rec.SetBranchStatus("M_theta",1);
   rec.SetBranchStatus("M_phi",1);
-  */rec.SetBranchAddress("Pt_n", &pt_rec);
+  rec.SetBranchAddress("Pt_n", &pt_rec);
   rec.SetBranchAddress("Z013", &z0_rec);
   rec.SetBranchAddress("Theta13", &theta_rec);
   rec.SetBranchAddress("Phi013", &phi_rec);
   rec.SetBranchAddress("Tid", &tid_rec);
   rec.SetBranchAddress("M_pdg", &m_pdg);
-  /*rec.SetBranchAddress("M_pt", &m_pt);
-  */rec.SetBranchAddress("M_Vz", &m_Vz);
-  /*rec.SetBranchAddress("M_theta", &m_theta);
+  rec.SetBranchAddress("M_pt", &m_pt);
+  rec.SetBranchAddress("M_Vz", &m_Vz);
+  rec.SetBranchAddress("M_theta", &m_theta);
   rec.SetBranchAddress("M_phi", &m_phi);
-  *///! get mc information -pdgid and z vertex  
+  //! get mc information -pdgid and z vertex  
   //! vectors containing a single pileup event
   std::vector<double> pt_recPU;
   std::vector<double> z0_recPU;
   std::vector<double> theta_recPU;
   std::vector<double> phi_recPU;
-  std::vector<double> tid_recPU;
+  std::vector<int> tid_recPU;
   std::vector<int> m_pdgPU;
-  /*std::vector<double> m_ptPU;
-  */std::vector<double> m_VzPU;
-  /*std::vector<double> m_thetaPU;
+  std::vector<double> m_ptPU;
+  std::vector<double> m_VzPU;
+  std::vector<double> m_thetaPU;
   std::vector<double> m_phiPU;
-  */
+  
   //! Get total no. of events
-  //Long64_t nentries = rec.GetEntries();
-  Long64_t n_entries = 300;
+  Long64_t nentries = rec.GetEntries();
+  //Long64_t nentries = 300;
   int pileup = 140;
-  Long64_t nevents = n_entries/pileup;
+  Long64_t nevents = nentries/pileup;
+  std::cout<<"Total number of enteries : " << nentries <<std::endl;
+  std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
   std::vector<TrackJetObj> tjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
   //! for every event do the following
   //
-  double pt,z0,theta,phi,tid/*,mpt*/,mVz/*,mtheta,mphi*/;
+  double pt,z0,theta,phi,tid,mpt,mVz,mtheta,mphi;
   int pid;
   for(Long64_t i = 0; i < nevents; ++i)
   {
@@ -173,6 +177,22 @@ int main ()
 	constituentZ0.clear();
 	hasConstituents.clear();
 	Nconstituents.clear();
+	M_jetPt.clear();
+	M_constituentPt.clear();
+	M_jetPhi.clear();
+	M_constituentPhi.clear();
+	M_jetTheta.clear();
+	M_constituentTheta.clear();
+	M_jetEta.clear();
+	M_constituentEta.clear();
+	M_jetEt.clear();
+	M_constituentEt.clear();
+	M_jetMt.clear();
+	M_constituentMt.clear();
+	M_constituentPdg.clear();
+	M_constituentZ0.clear();
+	M_hasConstituents.clear();
+	M_Nconstituents.clear();
 	tjVec.clear();
 	pt_recPU.clear();
 	z0_recPU.clear();
@@ -180,11 +200,11 @@ int main ()
 	phi_recPU.clear();
 	tid_recPU.clear();
 	m_pdgPU.clear();
-	/*m_ptPU.clear();
-	*/m_VzPU.clear();
-	/*m_thetaPU.clear();
+	m_ptPU.clear();
+	m_VzPU.clear();
+	m_thetaPU.clear();
 	m_phiPU.clear();
-	*/
+	
 
 	
 	int skip = i*pileup;
@@ -204,11 +224,11 @@ int main ()
 			phi_recPU.push_back((*phi_rec)[ik]);
 			tid_recPU.push_back((*tid_rec)[ik]);
 			m_pdgPU.push_back((*m_pdg)[ik]);
-			/*m_ptPU.push_back((*m_pt)[ik]);
-			*/m_VzPU.push_back((*m_Vz)[ik]);
-			/*m_thetaPU.push_back((*m_theta)[ik]);
+			m_ptPU.push_back((*m_pt)[ik]);
+			m_VzPU.push_back((*m_Vz)[ik]);
+			m_thetaPU.push_back((*m_theta)[ik]);
 			m_phiPU.push_back((*m_phi)[ik]);
-			*/
+			
 		}
 		
 	}
@@ -224,12 +244,12 @@ int main ()
 		phi	= phi_recPU[j];
 		tid	= tid_recPU[j];
 		pid	= m_pdgPU[j];
-		/*mpt	= m_ptPU[j];
-		*/mVz	= m_VzPU[j];
-		/*mtheta	= m_thetaPU[j];
+		mpt	= m_ptPU[j];
+		mVz	= m_VzPU[j];
+		mtheta	= m_thetaPU[j];
 		mphi	= m_phiPU[j];
-		*/
-
+		
+		if(debug){std::cout<<"mpt, mVz, mtheta, mphi, tid: " << mpt << " , " << mVz << " , " << mtheta << " , " << mphi << " , " << tid << std::endl; }
 		if(tid==-1)tjObj.flag = 0;//fakes
 		else if(tid > 0)tjObj.flag = 1;//matched tracks
 		else if(tid < -1)tjObj.flag = -1;//dc tracks
@@ -241,11 +261,19 @@ int main ()
 		tjObj.py = pt*sin(phi);
 		tjObj.pz = pt/tan(theta);
 		tjObj.E  = std::sqrt(std::pow(pt/sin(theta),2) + std::pow(mass_piPM,2));
-		/*tjObj.px_m = mpt*cos(mphi);
+		//! matched truth info has been set to zero for fake tracks and this causes a crash while doing jet clustering
+		//! for truth jet clustering we anyway do not need these zeroes
+		if(tid==-1){
+		tjObj.px_m = 1.0;
+		tjObj.py_m = 1.0;
+		tjObj.pz_m = 1.0;
+		tjObj.E_m  = 1.0;}
+		else{
+		tjObj.px_m = mpt*cos(mphi);
 		tjObj.py_m = mpt*sin(mphi);
 		tjObj.pz_m = mpt/tan(mtheta);
-		tjObj.E_m  = std::sqrt(std::pow(mpt/sin(mtheta),2) + std::pow(mass_piPM,2));
-		*/tjObj.zv = z0;
+		tjObj.E_m  = std::sqrt(std::pow(mpt/sin(mtheta),2) + std::pow(mass_piPM,2));}
+		tjObj.zv = z0;
 		tjObj.pdg = pid;
 		tjObj.Vz0 = mVz;
 
@@ -259,43 +287,51 @@ int main ()
 	double R = 0.4;
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_tracks;
-	//std::vector<PseudoJet> input_particles;
+	std::vector<PseudoJet> input_particles;
 
 	for(int k = 0; k < tjVec.size(); ++k )
 	{
-		if(debug) std::cout<<"Create Pseudo jets \n";
+	//	if(debug) std::cout<<"Create Pseudo jets \n";
 		// an event with particles: px		py		pz   	E
 		PseudoJet trk(tjVec[k].px, tjVec[k].py, tjVec[k].pz, tjVec[k].E);
-		//PseudoJet m_particle(tjVec[k].px_m, tjVec[k].py_m, tjVec[k].pz_m, tjVec[k].E_m);
 		trk.set_user_info(new Constituent_info(tjVec[k].pdg, tjVec[k].Vz0, tjVec[k].zv));
-		//m_particle.set_user_info(new Constituent_info(tjVec[k].pdg, tjVec[k].Vz0, tjVec[k].zv));
 		//input_tracks.push_back( PseudoJet( tjVec[k].px, tjVec[k].py, tjVec[k].pz, tjVec[k].E) );  
 		input_tracks.push_back(trk);
-		//input_particles.push_back(m_particle);
+		
+		//! create a Pseudo jet for truth particles
+		if(tjVec[k].flag != 1) continue;// get rid of DC tracks and fakes
+		PseudoJet m_particle(tjVec[k].px_m, tjVec[k].py_m, tjVec[k].pz_m, tjVec[k].E_m);
+		m_particle.set_user_info(new Constituent_info(tjVec[k].pdg, tjVec[k].Vz0, tjVec[k].zv));
+		input_particles.push_back(m_particle);
 	}
 	if(debug)std::cout<<"Do jet Clustering \n";
 	// run the jet clustering with the above definition, extract the jets
 	ClusterSequence cs_trk(input_tracks, jet_def);
-	//ClusterSequence cs_m_pcle(input_particles, jet_def);
+	if(debug)std::cout<<"Do jet clustering for input particles \n";
+	ClusterSequence cs_m_pcle(input_particles, jet_def);
 	// sort the resulting jets in ascending order of pt
 	// sorted_by_pt is a method of PseudoJet which returns a vector of jets sorted into decreasing pt
 	std::vector<PseudoJet> incl_trkjets = sorted_by_pt(cs_trk.inclusive_jets());
-	//std::vector<PseudoJet> incl_m_pclejets = sorted_by_pt(cs_m_pcle.inclusive_jets());
+	std::vector<PseudoJet> incl_m_pclejets = sorted_by_pt(cs_m_pcle.inclusive_jets());
 	// print out some infos
 	if(debug){std::cout << "Clustering with " << jet_def.description() << std::endl;
 
 	// print the jets
 	std::cout <<   "        pt y phi" << std::endl;}
 	Njets = incl_trkjets.size();
-	if(debug)std::cout<<"Njets : " <<Njets << std::endl;
-	//M_Njets = incl_m_pclejets.size();
+	M_Njets = incl_m_pclejets.size();
+	if(debug)
+	{
+		std::cout<<"Number of reconstructed jets Njets : " <<Njets << std::endl;
+		std::cout<<"Number of truth jets M_Njets : " <<M_Njets << std::endl;
+	}
 	//TODO: Add jet matching scheme
-	/*double dr, thisDR, dphi, deta;
+	double dr, thisDR, dphi, deta;
 	int bestTruthJet;// index of the best matched truth jet
-	*///! for each track jet
+	//! for each track jet
 	for (unsigned i = 0; i < incl_trkjets.size(); i++) 
 	{
-		/*dr = 9999.0;
+		dr = 9999.0;
 		bestTruthJet = -1;
 		//! for each truth jet
 		//! TODO: what about the truth pcle jets constructed from a single fake track or a combination of fake tracks? 
@@ -310,18 +346,22 @@ int main ()
 			dphi	= incl_m_pclejets[itruth].phi() - incl_trkjets[i].phi();
 			deta	= incl_m_pclejets[itruth].eta() - incl_trkjets[i].eta();
 			thisDR	= std::sqrt(deta*deta + dphi*dphi);
-			if(debug) std::cout<<"delta r = " <<thisDR << std::endl;
+			if(debug) std::cout<<"thisDr, itruth, bestTruthJet = " <<thisDR <<" , " << itruth << " , " << bestTruthJet<< std::endl;
 			if (thisDR < dr)
 			{
 				dr = thisDR;
 				bestTruthJet = itruth;
-				if(debug) std::cout<<"dr, bestTruthJet index : " << dr << " , " << bestTruthJet << std::endl;
+				if(debug) 
+				{
+					std::cout<<"thisDr less than dr \n"; 
+					std::cout<<"dr, bestTruthJet index : " << dr << " , " << bestTruthJet << std::endl;
+				}
 			}
 		}
 		if (dr < 0.4)
 		{
 			//! matched track jet found, push_back the parameters labled as matched here  
-			if(debug) std::cout<<" matched track jet found!! with dr, index : " << dr << " , " << bestTruthJet << std::endl;
+			if(debug) std::cout<<" matched track jet found!! with dr, index , i, eventNo: " << dr << " , " << bestTruthJet <<" , " << i  <<" , " << eventNo << std::endl;
 			M_jetPt.push_back(incl_m_pclejets[bestTruthJet].pt());
 			M_jetPhi.push_back(incl_m_pclejets[bestTruthJet].phi());
 			M_jetTheta.push_back(incl_m_pclejets[bestTruthJet].theta());
@@ -358,7 +398,7 @@ int main ()
 			M_constituentMt.push_back(std::vector<double>());
 			M_constituentPdg.push_back(std::vector<int>());
 			M_constituentZ0.push_back(std::vector<double>());
-		}*/
+		}
 		//! push back all the track jet parameters here for all "i"
 		jetPt.push_back(incl_trkjets[i].pt());
 		jetPhi.push_back(incl_trkjets[i].phi());
@@ -375,10 +415,13 @@ int main ()
 		constituentMt.push_back(std::vector<double>());
 		constituentPdg.push_back(std::vector<int>());
 		constituentZ0.push_back(std::vector<double>());
-		if(debug)std::cout << "jet " << i << ": "<< incl_trkjets[i].pt() << " " << incl_trkjets[i].rap() << " " << incl_trkjets[i].phi() << std::endl;
+		if(debug)std::cout<<"truth jet pt  size : " << M_jetPt.size() << " , reco jet pt size : " << jetPt.size() << std::endl;
+		//if(debug)std::cout << "jet " << i << ": "<< incl_trkjets[i].pt() << " " << incl_trkjets[i].rap() << " " << incl_trkjets[i].phi() << std::endl;
 		std::vector<PseudoJet> constituents = incl_trkjets[i].constituents();
 		Nconstituents.push_back(constituents.size());
-		if(debug)std::cout<<"number of constituents in jet " << i << " = " << Nconstituents[i] << std::endl;
+		std::vector<PseudoJet> pcle_constituents = incl_m_pclejets[bestTruthJet].constituents();
+		M_Nconstituents.push_back(pcle_constituents.size());
+		//if(debug)std::cout<<"number of constituents in jet " << i << " = " << Nconstituents[i] << std::endl;
 		for (unsigned j = 0; j < constituents.size(); j++) 
 		{
 			/*if(j>0)
@@ -409,12 +452,30 @@ int main ()
 			constituentMt[i].push_back(constituents[j].mt());
 			constituentPdg[i].push_back(constituents[j].user_info<Constituent_info>().pdg_id());
 			constituentZ0[i].push_back(constituents[j].user_info<Constituent_info>().Z0());
-			if(debug){
+			/*if(debug){
 			std::cout << "    constituent " << j << "'s pt: " << constituents[j].pt()<< std::endl;
 			std::cout << "    constituent " << j << "'s pdg: " << constituents[j].user_info<Constituent_info>().pdg_id()<< std::endl;
 			std::cout << "    constituent " << j << "'s Vz: " << constituents[j].user_info<Constituent_info>().Vz()<< std::endl;
 			std::cout << "    constituent " << j << "'s Z0: " << constituents[j].user_info<Constituent_info>().Z0()<< std::endl;
-			}
+			}*/
+		}
+		if(debug) std::cout<<"fill truth jet constituents : i, bestTruthJet = " << i << " , " << bestTruthJet <<std::endl;
+		for (unsigned kj = 0; kj < pcle_constituents.size(); kj++) 
+		{
+			M_constituentPt[i].push_back(pcle_constituents[kj].pt());
+			M_constituentPhi[i].push_back(pcle_constituents[kj].phi());
+			M_constituentTheta[i].push_back(pcle_constituents[kj].theta());
+			M_constituentEta[i].push_back(pcle_constituents[kj].eta());
+			M_constituentEt[i].push_back(pcle_constituents[kj].Et());
+			M_constituentMt[i].push_back(pcle_constituents[kj].mt());
+			M_constituentPdg[i].push_back(pcle_constituents[kj].user_info<Constituent_info>().pdg_id());
+			M_constituentZ0[i].push_back(pcle_constituents[kj].user_info<Constituent_info>().Z0());
+			/*if(debug){
+			std::cout << "  pcle constituent " << kj << "'s pt: " << constituents[kj].pt()<< std::endl;
+			std::cout << "  pcle constituent " << kj << "'s pdg: " << constituents[kj].user_info<Constituent_info>().pdg_id()<< std::endl;
+			std::cout << "  pcle constituent " << kj << "'s Vz: " << constituents[kj].user_info<Constituent_info>().Vz()<< std::endl;
+			std::cout << "  pcle constituent " << kj << "'s Z0: " << constituents[kj].user_info<Constituent_info>().Z0()<< std::endl;
+			}*/
 		}
 	}// for loop over jet size
 	glob_jet->Fill();

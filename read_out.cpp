@@ -12,6 +12,7 @@ int event,njets;
 std::vector<double>* jetpt = nullptr;
 std::vector<int>* Nconst = nullptr;
 std::vector<std::vector<double>>* jetconstpt = nullptr;
+std::vector<std::vector<double>>* jetconstz0 = nullptr;
 
 TFile* f = new TFile("test_jetout1.root","READ");
 TTree* t = (TTree*) f->Get("glob_jet");
@@ -19,6 +20,7 @@ t->SetBranchAddress("event", &event);
 t->SetBranchAddress("Njets", &njets);
 t->SetBranchAddress("jetPt", &jetpt);
 t->SetBranchAddress("jetConstPt", &jetconstpt);
+t->SetBranchAddress("jetConstZ0", &jetconstz0);
 t->SetBranchAddress("Nconstituents", &Nconst);
 
 int nentries = t->GetEntries();
@@ -28,6 +30,7 @@ for(int i = 0; i < nentries ; ++i)
 {
 	jetpt->clear();
 	jetconstpt->clear();
+	jetconstz0->clear();
 	Nconst->clear();
 	t->GetEntry(i);
 	if(debug){
@@ -42,7 +45,7 @@ for(int i = 0; i < nentries ; ++i)
 		std::cout<<"number of constituents in jet cross check " << irec << " is : " << (*Nconst)[irec] << std::endl;}
 		for(size_t jrec = 0; jrec < (*jetconstpt)[irec].size(); ++jrec)
 		{
-			std::cout<<"event, njets, ith_jet, jth_const, jetPt, constPt : " << event << ", " << njets << ", " << irec << " , " << jrec << " , " << (*jetpt)[irec] << ", " << (*jetconstpt)[irec][jrec] << std::endl;
+			std::cout<<"event, njets, ith_jet, jth_const, jetPt, constPt, constZ0 : " << event << ", " << njets << ", " << irec << " , " << jrec << " , " << (*jetpt)[irec] << ", " << (*jetconstpt)[irec][jrec] << " , " << (*jetconstz0)[irec][jrec]<< std::endl;
 		}
 	}
 }
