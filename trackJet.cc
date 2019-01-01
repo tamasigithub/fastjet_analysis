@@ -1,11 +1,13 @@
 #include "fastjet/ClusterSequence.hh"
 #include "Constituent_info.h"
 #include "TrackJetObj.h"
+#include "Rate_sumpt.h"
 #include <iostream>
 #include <vector>
 #include "math.h"
 #include <TFile.h>
 #include <TTree.h>
+#include <TH1.h>
 #include <TChain.h>
 #include <TInterpreter.h>
 using namespace fastjet;
@@ -14,6 +16,18 @@ int main ()
 {
   //bool debug = true;
   bool debug = false;
+  
+  int NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
+  int izbin;
+  NJETS = 10;
+  NZVTXBIN = 40;
+  ZRANGE = 200; // in mm
+  ZBIN_width = ZRANGE/NZVTXBIN;
+  //! init output vector
+  std::vector<std::vector<double>> vectorof_jetpt(NZVTXBIN, std::vector<double>());
+  //! create an object to plot rate as a function of pt
+  Rate_sumpt r_sumpt(NZVTXBIN);
+  
   // store results in an output root file 
   // branch variables
   gInterpreter->GenerateDictionary("vector<vector<double> >","vector");
@@ -281,7 +295,7 @@ int main ()
 		//! push the objects into a vector of these objects
 		tjVec.push_back(tjObj);
 
-	}
+	}// end of loop over nobj
 	
 	// choose a jet definition
 	double R = 0.4;
@@ -289,6 +303,8 @@ int main ()
 	std::vector<PseudoJet> input_tracks;
 	std::vector<PseudoJet> input_particles;
 
+
+	// loop over all tracks
 	for(int k = 0; k < tjVec.size(); ++k )
 	{
 	//	if(debug) std::cout<<"Create Pseudo jets \n";
@@ -303,7 +319,8 @@ int main ()
 		PseudoJet m_particle(tjVec[k].px_m, tjVec[k].py_m, tjVec[k].pz_m, tjVec[k].E_m);
 		m_particle.set_user_info(new Constituent_info(tjVec[k].pdg, tjVec[k].Vz0, tjVec[k].zv));
 		input_particles.push_back(m_particle);
-	}
+	}// end of loop over all tracks tjVec
+	
 	if(debug)std::cout<<"Do jet Clustering \n";
 	// run the jet clustering with the above definition, extract the jets
 	ClusterSequence cs_trk(input_tracks, jet_def);
@@ -325,7 +342,7 @@ int main ()
 		std::cout<<"Number of reconstructed jets Njets : " <<Njets << std::endl;
 		std::cout<<"Number of truth jets M_Njets : " <<M_Njets << std::endl;
 	}
-	//TODO: Add jet matching scheme
+	// Add jet matching scheme
 	double dr, thisDR, dphi, deta;
 	int bestTruthJet;// index of the best matched truth jet
 	//! for each track jet
@@ -357,7 +374,7 @@ int main ()
 					std::cout<<"dr, bestTruthJet index : " << dr << " , " << bestTruthJet << std::endl;
 				}
 			}
-		}
+		}// end of loop over incl_m_pclejets.size()
 		if (dr < 0.4)
 		{
 			//! matched track jet found, push_back the parameters labled as matched here  
@@ -458,7 +475,7 @@ int main ()
 			std::cout << "    constituent " << j << "'s Vz: " << constituents[j].user_info<Constituent_info>().Vz()<< std::endl;
 			std::cout << "    constituent " << j << "'s Z0: " << constituents[j].user_info<Constituent_info>().Z0()<< std::endl;
 			}*/
-		}
+		}// end of loop over constituents
 		if(debug) std::cout<<"fill truth jet constituents : i, bestTruthJet = " << i << " , " << bestTruthJet <<std::endl;
 		for (unsigned kj = 0; kj < pcle_constituents.size(); kj++) 
 		{
@@ -476,11 +493,82 @@ int main ()
 			std::cout << "  pcle constituent " << kj << "'s Vz: " << constituents[kj].user_info<Constituent_info>().Vz()<< std::endl;
 			std::cout << "  pcle constituent " << kj << "'s Z0: " << constituents[kj].user_info<Constituent_info>().Z0()<< std::endl;
 			}*/
-		}
-	}// for loop over jet size
+		}// end of loop over pcle_constituents
+	}// end of for loop over jet size
 	glob_jet->Fill();
+
+  ///******************* jets per vertex bin *******************///
+	std::vector<PseudoJet> in_tracks;
+	//! loop over vertex bins
+	for(int ith_bin = 0; ith_bin < NZVTXBIN; ++ith_bin)
+	{
+		//! reset input list
+		in_tracks.clear();
+		//! init output list
+		(vectorof_jetpt[ith_bin]).resize(NJETS,0.0);
+
+		//! loop over all tracks
+		for(int m = 0; m < tjVec.size(); ++m )
+		{
+			//! identify the bin number in which these tracks lie
+			izbin = (tjVec[m].zv + 0.5 * ZRANGE) / (ZBIN_width);
+			if(izbin < 0) izbin = 0;
+			if(izbin > NZVTXBIN) izbin = NZVTXBIN - 1;
+
+			//! check z bin consistency
+			//! i.e. collect the tracks only from immediate neighbours or the ith_bin
+			if(abs(izbin - ith_bin)<=1)
+			{
+				//! create a fastjet::PseudoJet with these components
+				//and push back into in_tracks vector
+				in_tracks.push_back(fastjet::PseudoJet(tjVec[m].px, tjVec[m].py, tjVec[m].pz, tjVec[m].E));
+
+			}
+		}// end of loop over all tracks
+
+		//! run jet clustering with above jet definition
+		fastjet::ClusterSequence clust_seq(in_tracks, jet_def);
+
+		//! get the resulting jets ordered in pt
+		std::vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets());
+
+		//! store result: keep only highest pt jets from each bin
+		//! Notice that inclusive_jets is sorted hence vectorof_jetpt[ith_bin] is also already sorted
+		for(int n = 0; n < NJETS; ++n)
+		{
+			if(n >= inclusive_jets.size()) break;
+			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n]) vectorof_jetpt[ith_bin][n] = inclusive_jets[n].perp();
+		}
+		//! calculate sum pt for each of the ith_bins
+		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);
+	}// end of loop over NZVTXBIN
+
+	r_sumpt.max_sumpt = r_sumpt.v_sumpt[0];
+	r_sumpt.prim_bin  = 0;
+	//! find the highest sum pt bin
+	for(int p = 1; p < NZVTXBIN; ++p)
+	{
+		if(r_sumpt.max_sumpt < r_sumpt.v_sumpt[p])
+		{
+			r_sumpt.max_sumpt = r_sumpt.v_sumpt[p];
+			r_sumpt.prim_bin  = p;
+		}
+	}
+	//! Fill histograms
+	r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]);
+	r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]);
+	r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]);
+	r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]);
+	r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]);
+
+  ///******************* end of jets per vertex bin ************///
   }// for loop over nentries
 glob_jet->Write();
+TCanvas *c1 = new TCanvas();
+r_sumpt.SetHist_props();
+r_sumpt.DrawAll();
+r_sumpt.WriteAll();
+c1->Write();
 f_out->Close();
 return 0;
 }
