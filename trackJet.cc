@@ -14,8 +14,8 @@ using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
 int main () 
 {
-  //bool debug = true;
-  bool debug = false;
+  bool debug = true;
+  //bool debug = false;
   
   int NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
   int izbin;
@@ -269,7 +269,7 @@ int main ()
 		else if(tid < -1)tjObj.flag = -1;//dc tracks
 
 		//! veto fake and dc tracks?
-		//if(tjObj.flag!=1) continue;
+		if(tjObj.flag!=1) continue;
 
 		tjObj.px = pt*cos(phi);
 		tjObj.py = pt*sin(phi);
@@ -499,14 +499,23 @@ int main ()
 
   ///******************* jets per vertex bin *******************///
 	std::vector<PseudoJet> in_tracks;
+	//! init the vector of sumpt bin
+	r_sumpt.v_sumpt.clear();
+	r_sumpt.v_sumpt.resize(NZVTXBIN,0.0);
+	
 	//! loop over vertex bins
 	for(int ith_bin = 0; ith_bin < NZVTXBIN; ++ith_bin)
 	{
 		//! reset input list
 		in_tracks.clear();
 		//! init output list
+		(vectorof_jetpt[ith_bin]).clear();
 		(vectorof_jetpt[ith_bin]).resize(NJETS,0.0);
-
+		if(debug)
+		{
+			std::cout<<"ith bin, tjVec.size() : " << ith_bin <<", " << tjVec.size() << std::endl;
+			/*std::cout<<"check if v_sumpt and vector of jet pt reset or not : " << r_sumpt.v_sumpt[ith_bin] << ", " << vectorof_jetpt[ith_bin][0] << ", " << vectorof_jetpt[ith_bin][1] << ", " << vectorof_jetpt[ith_bin][2] << ", " << vectorof_jetpt[ith_bin][3] << ", " << vectorof_jetpt[ith_bin][4] << ", " << vectorof_jetpt[ith_bin][5] << ", " << vectorof_jetpt[ith_bin][6] << ", " << vectorof_jetpt[ith_bin][7] << ", " << vectorof_jetpt[ith_bin][7] << ", " << vectorof_jetpt[ith_bin][8] << ", " << vectorof_jetpt[ith_bin][9] <<std::endl;*/
+		}
 		//! loop over all tracks
 		for(int m = 0; m < tjVec.size(); ++m )
 		{
@@ -514,7 +523,7 @@ int main ()
 			izbin = (tjVec[m].zv + 0.5 * ZRANGE) / (ZBIN_width);
 			if(izbin < 0) izbin = 0;
 			if(izbin > NZVTXBIN) izbin = NZVTXBIN - 1;
-
+			if(debug) std::cout<<"looping over all tracks, m:  " << m << ", izbin: " << izbin << std::endl; 
 			//! check z bin consistency
 			//! i.e. collect the tracks only from immediate neighbours or the ith_bin
 			if(abs(izbin - ith_bin)<=1)
@@ -522,6 +531,7 @@ int main ()
 				//! create a fastjet::PseudoJet with these components
 				//and push back into in_tracks vector
 				in_tracks.push_back(fastjet::PseudoJet(tjVec[m].px, tjVec[m].py, tjVec[m].pz, tjVec[m].E));
+				if(debug) std::cout<<"z bin consistency passed!" <<std::endl;
 
 			}
 		}// end of loop over all tracks
@@ -545,6 +555,7 @@ int main ()
 
 	r_sumpt.max_sumpt = r_sumpt.v_sumpt[0];
 	r_sumpt.prim_bin  = 0;
+	if(debug) std::cout<<"initial max_sumpt and prim bin: " << r_sumpt.max_sumpt << ", " << r_sumpt.prim_bin << std::endl;
 	//! find the highest sum pt bin
 	for(int p = 1; p < NZVTXBIN; ++p)
 	{
@@ -553,6 +564,11 @@ int main ()
 			r_sumpt.max_sumpt = r_sumpt.v_sumpt[p];
 			r_sumpt.prim_bin  = p;
 		}
+	}
+	if(debug) 
+	{
+		std::cout<<"highest maxsumpt and prim bin: " << r_sumpt.max_sumpt << ", " << r_sumpt.prim_bin << std::endl;
+		std::cout<<"elements of vector of jet pt : " << vectorof_jetpt[r_sumpt.prim_bin][0] << ", " << vectorof_jetpt[r_sumpt.prim_bin][1] << ", " <<vectorof_jetpt[r_sumpt.prim_bin][2] << ", " << vectorof_jetpt[r_sumpt.prim_bin][3] << ", " << vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
 	}
 	//! Fill histograms
 	r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]);
@@ -566,6 +582,8 @@ int main ()
 glob_jet->Write();
 TCanvas *c1 = new TCanvas();
 r_sumpt.SetHist_props();
+//r_sumpt.h_PULpt->Draw();
+//r_sumpt.h_PULpt->Write();
 r_sumpt.DrawAll();
 r_sumpt.WriteAll();
 c1->Write();

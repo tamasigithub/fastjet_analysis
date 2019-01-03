@@ -37,8 +37,8 @@ public:
 	double max_sumpt;
 	int prim_bin;
 	std::vector<double> v_sumpt;
-	int nbins = 20;
-	double ptmin = 0.0, ptmax = 100000.0;//0 to 100 GeV/c
+	int nbins = 40;
+	double ptmin = 1000.0, ptmax = 1500000.0;//1 GeV/c to 15 TeV/c
 	//! Book Histogram
         TH1* h_PULpt = new TH1D("h_PULpt","Rate of highest Pt track in PU 200",nbins,ptmin,ptmax);
 	TH1* h_PUNLpt = new TH1D("h_PUNLpt","Rate of 2nd highest Pt track in PU 200",nbins,ptmin,ptmax);
@@ -47,14 +47,16 @@ public:
 	TH1* h_PUNNNNLpt = new TH1D("h_PUNNNNLpt","Rate Vs track P_{t} in PU 160, PB finding using sum pt",nbins,ptmin,ptmax);
 
 public:
-	Rate_sumpt(int nzbin):nzvtxbin(nzbin)
-	{
-		//std::vector<double> v_sumpt(nzvtxbin,0.0);
-		v_sumpt.resize(nzvtxbin,0.0);
-	}
+	Rate_sumpt(int nzbin):nzvtxbin(nzbin){}
 	~Rate_sumpt(){}
 	void SetHist_props();
 	void DrawAll();
 	void WriteAll();
+
+private:
+    //! delete the default copy constructor and assignment operator
+    Rate_sumpt(const Rate_sumpt&) = delete;
+    Rate_sumpt& operator=(const Rate_sumpt&) = delete;
+
 };
 #endif /*RATE_SUMPT_H_*/
