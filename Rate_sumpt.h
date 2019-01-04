@@ -38,7 +38,7 @@ public:
 	int prim_bin;
 	std::vector<double> v_sumpt;
 	int nbins = 40;
-	double ptmin = 1000.0, ptmax = 1500000.0;//1 GeV/c to 15 TeV/c
+	double ptmin = 0.0, ptmax = 100000.0;//1 GeV/c to 15 TeV/c
 	//! Book Histogram
         TH1* h_PULpt = new TH1D("h_PULpt","Rate of highest Pt track in PU 200",nbins,ptmin,ptmax);
 	TH1* h_PUNLpt = new TH1D("h_PUNLpt","Rate of 2nd highest Pt track in PU 200",nbins,ptmin,ptmax);

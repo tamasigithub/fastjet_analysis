@@ -14,8 +14,8 @@ using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
 int main () 
 {
-  bool debug = true;
-  //bool debug = false;
+  //bool debug = true;
+  bool debug = false;
   
   int NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
   int izbin;
@@ -71,7 +71,7 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("jetout1_rec.root","RECREATE");
+  TFile *f_out = new TFile("jetout_HptMB_rec.root","RECREATE");
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
   glob_jet->Branch("Njets",&Njets);
@@ -112,7 +112,10 @@ int main ()
   
   //! open input trees 
   TChain rec("m_recTree");
-  rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
+  //! high pt min bias sample sigma = 3
+  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM.*.root");
+  //!hh4b sigma=3
+  //rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -163,6 +166,7 @@ int main ()
   //Long64_t nentries = 300;
   int pileup = 140;
   Long64_t nevents = nentries/pileup;
+  r_sumpt.nevents = nevents;
   std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
@@ -299,6 +303,7 @@ int main ()
 	
 	// choose a jet definition
 	double R = 0.4;
+	double PTMINJET = 5.0;
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_tracks;
 	std::vector<PseudoJet> input_particles;
@@ -328,8 +333,8 @@ int main ()
 	ClusterSequence cs_m_pcle(input_particles, jet_def);
 	// sort the resulting jets in ascending order of pt
 	// sorted_by_pt is a method of PseudoJet which returns a vector of jets sorted into decreasing pt
-	std::vector<PseudoJet> incl_trkjets = sorted_by_pt(cs_trk.inclusive_jets());
-	std::vector<PseudoJet> incl_m_pclejets = sorted_by_pt(cs_m_pcle.inclusive_jets());
+	std::vector<PseudoJet> incl_trkjets = sorted_by_pt(cs_trk.inclusive_jets(PTMINJET));
+	std::vector<PseudoJet> incl_m_pclejets = sorted_by_pt(cs_m_pcle.inclusive_jets(PTMINJET));
 	// print out some infos
 	if(debug){std::cout << "Clustering with " << jet_def.description() << std::endl;
 
@@ -540,7 +545,7 @@ int main ()
 		fastjet::ClusterSequence clust_seq(in_tracks, jet_def);
 
 		//! get the resulting jets ordered in pt
-		std::vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets());
+		std::vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets(PTMINJET));
 
 		//! store result: keep only highest pt jets from each bin
 		//! Notice that inclusive_jets is sorted hence vectorof_jetpt[ith_bin] is also already sorted
@@ -581,6 +586,7 @@ int main ()
   }// for loop over nentries
 glob_jet->Write();
 TCanvas *c1 = new TCanvas();
+c1->SetLogy();
 r_sumpt.SetHist_props();
 //r_sumpt.h_PULpt->Draw();
 //r_sumpt.h_PULpt->Write();
