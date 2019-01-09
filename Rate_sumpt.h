@@ -41,26 +41,18 @@ public:
 	int nbins = 40;
 	double ptmin = 0.0, ptmax = 100000.0;//1 GeV/c to 15 TeV/c
 	double Lpt, NLpt, NNLpt, NNNLpt, NNNNLpt;
-	//!purity
-	int etabin = 30;
-	double etamin =-1.5, etamax = 1.5;
-	// log bins
-	const int ptbins = 40;//no. of bins
-	//int length = ptbins + 1;
-	Double_t xbins[41];//elements of this array are
-	double dx, l10;
 
 public:
-	Rate_sumpt(int bin):ptbins(bin) 
+	Rate_sumpt(int bin):/*ptbins*/nzvtxbin(bin) 
 	{
-		dx = 5./ptbins;//5 -> implies max until 10^5
+		/*dx = 5./ptbins;//5 -> implies max until 10^5
 		l10 = TMath::Log(10);
 		for (int i = 0; i<=ptbins; i++)
 		{
 			std::cout<<"i,dx : " <<i << ", "<<dx <<std::endl;
 			xbins[i] = TMath::Exp(l10*i*dx);
 			std::cout<<"xbin[i] : " <<xbins[i] <<std::endl;
-		}
+		}*/
 	}
 	~Rate_sumpt(){}
 	void SetHist_props();
@@ -89,11 +81,6 @@ public:
 	TH1* hb_PUNNNLpt = new TH1D("hb_PUNNNLpt","Rate of 4th highest Pt track jet in PU 200",nbins,ptmin,ptmax);
 	TH1* hb_PUNNNNLpt = new TH1D("hb_PUNNNNLpt","Rate Vs track jet P_{t} in PU 160, without binning along beam axis",nbins,ptmin,ptmax);
 	
-	//! track jet purity
-	TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
-        TH1* h_den_vs_etaPU = new TH1F("h_den_vs_etaPU", "Denominator Count vs #eta;#eta;Denominator Count", etabin, etamin, etamax);
-	TH1* h_num_vs_ptPU = new TH1F("h_num_vs_ptPU", "Numerator Count vs P_{t};P_{t} [MeV/c];Numerator Count", ptbins, xbins);
-	TH1* h_den_vs_ptPU = new TH1F("h_den_vs_ptPU", "Denominator Count vs P_{t};P_{t} [MeV/c];Denominator Count", ptbins, xbins);
 private:
     //! delete the default copy constructor and assignment operator
     Rate_sumpt(const Rate_sumpt&) = delete;

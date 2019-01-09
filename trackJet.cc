@@ -22,12 +22,30 @@ int main ()
   NJETS = 10;
   NZVTXBIN = 40;
   ZRANGE = 200; // in mm
-  ZBIN_width = ZRANGE/NZVTXBIN;
+  ZBIN_width = ZRANGE/NZVTXBIN;  
+  //! variables used to make purity plots
+  int etabin = 30;
+  double etamin =-1.5, etamax = 1.5;
+  // log bins
+  const int ptbins = 40;//no. of bins
+  int length = ptbins + 1;
+  Double_t xbins[length];//elements of this array are
+  double dx, l10;
+  dx = 5./ptbins;//5 -> implies max until 10^5
+  l10 = TMath::Log(10);
+  for (int i = 0; i<=ptbins; i++)
+  {
+	//std::cout<<"i,dx : " <<i << ", "<<dx <<std::endl;
+	xbins[i] = TMath::Exp(l10*i*dx);
+	//std::cout<<"xbin[i] : " <<xbins[i] <<std::endl;
+  }
+  //! create an object to plot rate as a function of pt
+  Rate_sumpt r_sumpt(NZVTXBIN);
   //! init output vector
   std::vector<std::vector<double>> vectorof_jetpt(NZVTXBIN, std::vector<double>());
   
-  // store results in an output root file 
-  // branch variables
+  //! store results in an output root file 
+  //! branch variables
   gInterpreter->GenerateDictionary("vector<vector<double> >","vector");
   gInterpreter->GenerateDictionary("vector<vector<int> >","vector");
    int eventNo;
@@ -69,10 +87,14 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("jetout_LptMB1_rec.root","RECREATE");
+  TFile *f_out = new TFile("jetout_LptMB1_3rec.root","RECREATE");
   TH1::SetDefaultSumw2(true);
-  //! create an object to plot rate as a function of pt
-  Rate_sumpt r_sumpt(NZVTXBIN);
+  //! track jet purity
+  TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
+  TH1* h_den_vs_etaPU = new TH1F("h_den_vs_etaPU", "Denominator Count vs #eta;#eta;Denominator Count", etabin, etamin, etamax);
+  TH1* h_num_vs_ptPU = new TH1F("h_num_vs_ptPU", "Numerator Count vs P_{t};P_{t} [MeV/c];Numerator Count", ptbins, xbins);
+  TH1* h_den_vs_ptPU = new TH1F("h_den_vs_ptPU", "Denominator Count vs P_{t};P_{t} [MeV/c];Denominator Count", ptbins, xbins);
+
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
   glob_jet->Branch("Njets",&Njets);
@@ -117,6 +139,8 @@ int main ()
   //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM.*.root");
   //!low pt min bias sample sigma=3
   rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt3_1_MYSTREAM/*.root");
+  //!low pt min bias sample sigma=5
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt5_1_MYSTREAM/*.root");
   //rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
@@ -494,10 +518,10 @@ int main ()
 		}// end of loop over pcle_constituents
 
 		//! fill purity histograms
-		r_sumpt.h_den_vs_ptPU->Fill(jetPt[i]);
-		if(M_jetPt[i]!= 0 ) r_sumpt.h_num_vs_ptPU->Fill(jetPt[i]);
-		r_sumpt.h_den_vs_etaPU->Fill(jetEta[i]);
-		if(M_jetPt[i]!= 0 ) r_sumpt.h_num_vs_etaPU->Fill(jetEta[i]);
+		h_den_vs_ptPU->Fill(jetPt[i]);
+		if(M_jetPt[i]!= 0 ) h_num_vs_ptPU->Fill(jetPt[i]);
+		h_den_vs_etaPU->Fill(jetEta[i]);
+		if(M_jetPt[i]!= 0 ) h_num_vs_etaPU->Fill(jetEta[i]);
 	}// end of for loop over jet size
 	glob_jet->Fill();
 
@@ -614,33 +638,31 @@ int main ()
   }// for loop over nentries
 
 //! create purity histograms as a function of jet pt and jet eta
-std::cout<<"xbin entries :  " << r_sumpt.xbins[1] << ", " << r_sumpt.xbins[40]<<std::endl;
-r_sumpt.h_num_vs_ptPU->Draw();
-r_sumpt.h_den_vs_ptPU->Draw();
-TH1* h_pur_vs_ptPU = dynamic_cast<TH1*>(r_sumpt.h_num_vs_ptPU->Clone("h_pur_vs_ptPU"));
+//std::cout<<"xbin entries :  " << r_sumpt.xbins[1] << ", " << r_sumpt.xbins[40]<<std::endl;
+TH1* h_pur_vs_ptPU = dynamic_cast<TH1*>(h_num_vs_ptPU->Clone("h_pur_vs_ptPU"));
 h_pur_vs_ptPU->SetTitle("Track Jet Purity vs P_{t};P_{t} [MeV/c];Purity");
-h_pur_vs_ptPU->Divide(r_sumpt.h_num_vs_ptPU, r_sumpt.h_den_vs_ptPU, 1.0, 1.0, "B");
-h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.1, 1.1);
+h_pur_vs_ptPU->Divide(h_num_vs_ptPU, h_den_vs_ptPU, 1.0, 1.0, "B");
+h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.92, 1.1);
 h_pur_vs_ptPU->GetXaxis()->SetRangeUser(2000.0,1000000.0);
 h_pur_vs_ptPU->SetMarkerSize(0.95);
 h_pur_vs_ptPU->SetMarkerStyle(kOpenTriangleDown);
 h_pur_vs_ptPU->SetMarkerColor(kBlack);
 
-TH1* h_pur_vs_etaPU = dynamic_cast<TH1*>(r_sumpt.h_num_vs_etaPU->Clone("h_pur_vs_etaPU"));
+TH1* h_pur_vs_etaPU = dynamic_cast<TH1*>(h_num_vs_etaPU->Clone("h_pur_vs_etaPU"));
 h_pur_vs_etaPU->SetTitle("Track Jet Purity vs #eta;#eta;Purity");
-h_pur_vs_etaPU->Divide(r_sumpt.h_num_vs_etaPU, r_sumpt.h_den_vs_etaPU, 1.0, 1.0, "B");
-h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.9, 1.1);
+h_pur_vs_etaPU->Divide(h_num_vs_etaPU, h_den_vs_etaPU, 1.0, 1.0, "B");
+h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.92, 1.1);
 h_pur_vs_etaPU->SetMarkerSize(0.95);
 h_pur_vs_etaPU->SetMarkerStyle(kOpenTriangleDown);
 h_pur_vs_etaPU->SetMarkerColor(kBlack);
 
 //! Write to output file
 glob_jet->Write();
-r_sumpt.h_num_vs_ptPU->Write();
-r_sumpt.h_den_vs_ptPU->Write();
+h_num_vs_ptPU->Write();
+h_den_vs_ptPU->Write();
 h_pur_vs_ptPU->Write();
-r_sumpt.h_num_vs_etaPU->Write();
-r_sumpt.h_den_vs_etaPU->Write();
+h_num_vs_etaPU->Write();
+h_den_vs_etaPU->Write();
 h_pur_vs_etaPU->Write();
 
 TCanvas *c1 = new TCanvas();
