@@ -25,8 +25,6 @@ int main ()
   ZBIN_width = ZRANGE/NZVTXBIN;
   //! init output vector
   std::vector<std::vector<double>> vectorof_jetpt(NZVTXBIN, std::vector<double>());
-  //! create an object to plot rate as a function of pt
-  Rate_sumpt r_sumpt(NZVTXBIN);
   
   // store results in an output root file 
   // branch variables
@@ -71,7 +69,10 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("jetout_HptMB_rec.root","RECREATE");
+  TFile *f_out = new TFile("jetout_LptMB1_rec.root","RECREATE");
+  TH1::SetDefaultSumw2(true);
+  //! create an object to plot rate as a function of pt
+  Rate_sumpt r_sumpt(NZVTXBIN);
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
   glob_jet->Branch("Njets",&Njets);
@@ -113,8 +114,9 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   //! high pt min bias sample sigma = 3
-  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM.*.root");
-  //!hh4b sigma=3
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM.*.root");
+  //!low pt min bias sample sigma=3
+  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt3_1_MYSTREAM/*.root");
   //rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
@@ -164,7 +166,7 @@ int main ()
   //! Get total no. of events
   Long64_t nentries = rec.GetEntries();
   //Long64_t nentries = 300;
-  int pileup = 140;
+  int pileup = 160;
   Long64_t nevents = nentries/pileup;
   r_sumpt.nevents = nevents;
   std::cout<<"Total number of enteries : " << nentries <<std::endl;
@@ -457,15 +459,6 @@ int main ()
 				hasConstituents.push_back(0);
 				
 			}*/
-			/*constituentPt.back().push_back(constituents[j].pt());
-			constituentPhi.back().push_back(constituents[j].phi());
-			constituentTheta.back().push_back(constituents[j].theta());
-			constituentEta.back().push_back(constituents[j].eta());
-			constituentEt.back().push_back(constituents[j].Et());
-			constituentMt.back().push_back(constituents[j].mt());
-			constituentPdg.back().push_back(constituents[j].user_info<Constituent_info>().pdg_id());
-			constituentMvz.back().push_back(constituents[j].user_info<Constituent_info>().Vz());
-			constituentZ0.back().push_back(constituents[j].user_info<Constituent_info>().Z0());*/
 			constituentPt[i].push_back(constituents[j].pt());
 			constituentPhi[i].push_back(constituents[j].phi());
 			constituentTheta[i].push_back(constituents[j].theta());
@@ -499,6 +492,12 @@ int main ()
 			std::cout << "  pcle constituent " << kj << "'s Z0: " << constituents[kj].user_info<Constituent_info>().Z0()<< std::endl;
 			}*/
 		}// end of loop over pcle_constituents
+
+		//! fill purity histograms
+		r_sumpt.h_den_vs_ptPU->Fill(jetPt[i]);
+		if(M_jetPt[i]!= 0 ) r_sumpt.h_num_vs_ptPU->Fill(jetPt[i]);
+		r_sumpt.h_den_vs_etaPU->Fill(jetEta[i]);
+		if(M_jetPt[i]!= 0 ) r_sumpt.h_num_vs_etaPU->Fill(jetEta[i]);
 	}// end of for loop over jet size
 	glob_jet->Fill();
 
@@ -557,13 +556,27 @@ int main ()
 		//! calculate sum pt for each of the ith_bins
 		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);
 	}// end of loop over NZVTXBIN
-
+	//! Andre's approach
+	r_sumpt.Lpt = vectorof_jetpt[0][0];
+	r_sumpt.NLpt = vectorof_jetpt[0][1];
+	r_sumpt.NNLpt = vectorof_jetpt[0][2];
+	r_sumpt.NNNLpt = vectorof_jetpt[0][3];
+	r_sumpt.NNNNLpt = vectorof_jetpt[0][4];
+	//! sumpt approach
 	r_sumpt.max_sumpt = r_sumpt.v_sumpt[0];
 	r_sumpt.prim_bin  = 0;
 	if(debug) std::cout<<"initial max_sumpt and prim bin: " << r_sumpt.max_sumpt << ", " << r_sumpt.prim_bin << std::endl;
 	//! find the highest sum pt bin
 	for(int p = 1; p < NZVTXBIN; ++p)
 	{
+		//! Andre's approach
+		//! select largest of the 1st, 2nd, 3rd, 4th, 5th highest pt track jet from all the bins
+		if(r_sumpt.Lpt < vectorof_jetpt[p][0]) r_sumpt.Lpt = vectorof_jetpt[p][0];
+		if(r_sumpt.NLpt < vectorof_jetpt[p][1]) r_sumpt.NLpt = vectorof_jetpt[p][1];
+		if(r_sumpt.NNLpt < vectorof_jetpt[p][2]) r_sumpt.NNLpt = vectorof_jetpt[p][2];
+		if(r_sumpt.NNNLpt < vectorof_jetpt[p][3]) r_sumpt.NNNLpt = vectorof_jetpt[p][3];
+		if(r_sumpt.NNNNLpt < vectorof_jetpt[p][4]) r_sumpt.NNNNLpt = vectorof_jetpt[p][4];
+		//! sumpt approach
 		if(r_sumpt.max_sumpt < r_sumpt.v_sumpt[p])
 		{
 			r_sumpt.max_sumpt = r_sumpt.v_sumpt[p];
@@ -576,23 +589,74 @@ int main ()
 		std::cout<<"elements of vector of jet pt : " << vectorof_jetpt[r_sumpt.prim_bin][0] << ", " << vectorof_jetpt[r_sumpt.prim_bin][1] << ", " <<vectorof_jetpt[r_sumpt.prim_bin][2] << ", " << vectorof_jetpt[r_sumpt.prim_bin][3] << ", " << vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
 	}
 	//! Fill histograms
+	//! Andre's approach
+	r_sumpt.ha_PULpt->Fill(r_sumpt.Lpt);
+	r_sumpt.ha_PUNLpt->Fill(r_sumpt.NLpt);
+	r_sumpt.ha_PUNNLpt->Fill(r_sumpt.NNLpt);
+	r_sumpt.ha_PUNNNLpt->Fill(r_sumpt.NNNLpt);
+	r_sumpt.ha_PUNNNNLpt->Fill(r_sumpt.NNNNLpt);
+	
+	//! Sumpt approach
 	r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]);
 	r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]);
 	r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]);
 	r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]);
 	r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]);
 
+	//! No bin approach
+	r_sumpt.hb_PULpt->Fill(incl_trkjets[0].pt());
+	r_sumpt.hb_PUNLpt->Fill(incl_trkjets[1].pt());
+	r_sumpt.hb_PUNNLpt->Fill(incl_trkjets[2].pt());
+	r_sumpt.hb_PUNNNLpt->Fill(incl_trkjets[3].pt());
+	r_sumpt.hb_PUNNNNLpt->Fill(incl_trkjets[4].pt());
+
   ///******************* end of jets per vertex bin ************///
   }// for loop over nentries
+
+//! create purity histograms as a function of jet pt and jet eta
+std::cout<<"xbin entries :  " << r_sumpt.xbins[1] << ", " << r_sumpt.xbins[40]<<std::endl;
+r_sumpt.h_num_vs_ptPU->Draw();
+r_sumpt.h_den_vs_ptPU->Draw();
+TH1* h_pur_vs_ptPU = dynamic_cast<TH1*>(r_sumpt.h_num_vs_ptPU->Clone("h_pur_vs_ptPU"));
+h_pur_vs_ptPU->SetTitle("Track Jet Purity vs P_{t};P_{t} [MeV/c];Purity");
+h_pur_vs_ptPU->Divide(r_sumpt.h_num_vs_ptPU, r_sumpt.h_den_vs_ptPU, 1.0, 1.0, "B");
+h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.1, 1.1);
+h_pur_vs_ptPU->GetXaxis()->SetRangeUser(2000.0,1000000.0);
+h_pur_vs_ptPU->SetMarkerSize(0.95);
+h_pur_vs_ptPU->SetMarkerStyle(kOpenTriangleDown);
+h_pur_vs_ptPU->SetMarkerColor(kBlack);
+
+TH1* h_pur_vs_etaPU = dynamic_cast<TH1*>(r_sumpt.h_num_vs_etaPU->Clone("h_pur_vs_etaPU"));
+h_pur_vs_etaPU->SetTitle("Track Jet Purity vs #eta;#eta;Purity");
+h_pur_vs_etaPU->Divide(r_sumpt.h_num_vs_etaPU, r_sumpt.h_den_vs_etaPU, 1.0, 1.0, "B");
+h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.9, 1.1);
+h_pur_vs_etaPU->SetMarkerSize(0.95);
+h_pur_vs_etaPU->SetMarkerStyle(kOpenTriangleDown);
+h_pur_vs_etaPU->SetMarkerColor(kBlack);
+
+//! Write to output file
 glob_jet->Write();
+r_sumpt.h_num_vs_ptPU->Write();
+r_sumpt.h_den_vs_ptPU->Write();
+h_pur_vs_ptPU->Write();
+r_sumpt.h_num_vs_etaPU->Write();
+r_sumpt.h_den_vs_etaPU->Write();
+h_pur_vs_etaPU->Write();
+
 TCanvas *c1 = new TCanvas();
 c1->SetLogy();
 r_sumpt.SetHist_props();
-//r_sumpt.h_PULpt->Draw();
-//r_sumpt.h_PULpt->Write();
-r_sumpt.DrawAll();
+r_sumpt.DrawNoBin();
+TCanvas *c2 = new TCanvas();
+c2->SetLogy();
+r_sumpt.DrawRate();
+TCanvas *c3 = new TCanvas();
+c3->SetLogy();
+r_sumpt.DrawSumpt();
 r_sumpt.WriteAll();
 c1->Write();
+c2->Write();
+c3->Write();
 f_out->Close();
 return 0;
 }
