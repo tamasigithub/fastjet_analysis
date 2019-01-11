@@ -88,6 +88,9 @@ int main ()
 
   //! output root file
   TFile *f_out = new TFile("jetout_LptMB1_3rec.root","RECREATE");
+  //TFile *f_out = new TFile("jetout_LptMB1_5rec.root","RECREATE");
+  //TFile *f_out = new TFile("jetout_LptMB1_noKaprec.root","RECREATE");
+  //TFile *f_out = new TFile("jetout_LptMB1_looserec.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -136,11 +139,15 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   //! high pt min bias sample sigma = 3
-  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM.*.root");
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM/*.root");
   //!low pt min bias sample sigma=3
   rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt3_1_MYSTREAM/*.root");
   //!low pt min bias sample sigma=5
   //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt5_1_MYSTREAM/*.root");
+  //!low pt min bias sample without kappa cut
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptnoKap_1_MYSTREAM/*.root");
+  //!low pt min bias sample without kappa, dphi2 and dz2 cuts
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptloose_1_MYSTREAM/*.root");
   //rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
@@ -642,7 +649,7 @@ int main ()
 TH1* h_pur_vs_ptPU = dynamic_cast<TH1*>(h_num_vs_ptPU->Clone("h_pur_vs_ptPU"));
 h_pur_vs_ptPU->SetTitle("Track Jet Purity vs P_{t};P_{t} [MeV/c];Purity");
 h_pur_vs_ptPU->Divide(h_num_vs_ptPU, h_den_vs_ptPU, 1.0, 1.0, "B");
-h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.92, 1.1);
+h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.85, 1.04);
 h_pur_vs_ptPU->GetXaxis()->SetRangeUser(2000.0,1000000.0);
 h_pur_vs_ptPU->SetMarkerSize(0.95);
 h_pur_vs_ptPU->SetMarkerStyle(kOpenTriangleDown);
@@ -651,7 +658,7 @@ h_pur_vs_ptPU->SetMarkerColor(kBlack);
 TH1* h_pur_vs_etaPU = dynamic_cast<TH1*>(h_num_vs_etaPU->Clone("h_pur_vs_etaPU"));
 h_pur_vs_etaPU->SetTitle("Track Jet Purity vs #eta;#eta;Purity");
 h_pur_vs_etaPU->Divide(h_num_vs_etaPU, h_den_vs_etaPU, 1.0, 1.0, "B");
-h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.92, 1.1);
+h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.93, 1.04);
 h_pur_vs_etaPU->SetMarkerSize(0.95);
 h_pur_vs_etaPU->SetMarkerStyle(kOpenTriangleDown);
 h_pur_vs_etaPU->SetMarkerColor(kBlack);
