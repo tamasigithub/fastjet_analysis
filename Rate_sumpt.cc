@@ -27,11 +27,11 @@ void Rate_sumpt::SetHist_props()
         h_PUNNNLpt->GetYaxis()->SetTitle("rate [MHz]");
         h_PUNNNNLpt->GetYaxis()->SetTitle("rate [MHz]");
 
-        h_PULpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        h_PUNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        h_PUNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        h_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        h_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
+        h_PULpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        h_PUNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        h_PUNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        h_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        h_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 	
 	ha_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 1.0e2);
 	ha_PUNNNNLpt->SetLineColor(kBlue);
@@ -58,11 +58,11 @@ void Rate_sumpt::SetHist_props()
         ha_PUNNNLpt->GetYaxis()->SetTitle("rate [MHz]");
         ha_PUNNNNLpt->GetYaxis()->SetTitle("rate [MHz]");
 
-        ha_PULpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        ha_PUNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        ha_PUNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        ha_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        ha_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
+        ha_PULpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        ha_PUNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        ha_PUNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        ha_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        ha_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 	
 	hb_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 1.0e2);
 	hb_PUNNNNLpt->SetLineColor(kBlue);
@@ -89,35 +89,35 @@ void Rate_sumpt::SetHist_props()
         hb_PUNNNLpt->GetYaxis()->SetTitle("rate [MHz]");
         hb_PUNNNNLpt->GetYaxis()->SetTitle("rate [MHz]");
 
-        hb_PULpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        hb_PUNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        hb_PUNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        hb_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
-        hb_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [MeV/c]");
+        hb_PULpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        hb_PUNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        hb_PUNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        hb_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+        hb_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 }
 void Rate_sumpt::DrawNoBin()
 {
-	hb_PUNNNNLpt->Draw();
-	hb_PUNNNLpt->Draw("same");
-	hb_PUNNLpt->Draw("same");
-	hb_PUNLpt->Draw("same");
-	hb_PULpt->Draw("same");
+	hb_PUNNNNLpt->Draw("hist");
+	hb_PUNNNLpt->Draw("hist same");
+	hb_PUNNLpt->Draw("hist same");
+	hb_PUNLpt->Draw("hist same");
+	//hb_PULpt->Draw("hist same");
 }
 void Rate_sumpt::DrawRate()
 {
-	ha_PUNNNNLpt->Draw();
-	ha_PUNNNLpt->Draw("same");
-	ha_PUNNLpt->Draw("same");
-	ha_PUNLpt->Draw("same");
-	ha_PULpt->Draw("same");
+	ha_PUNNNNLpt->Draw("hist");
+	ha_PUNNNLpt->Draw("hist same");
+	ha_PUNNLpt->Draw("hist same");
+	ha_PUNLpt->Draw("hist same");
+	//ha_PULpt->Draw("hist same");
 }
 void Rate_sumpt::DrawSumpt()
 {
-	h_PUNNNNLpt->Draw();
-	h_PUNNNLpt->Draw("same");
-	h_PUNNLpt->Draw("same");
-	h_PUNLpt->Draw("same");
-	h_PULpt->Draw("same");
+	h_PUNNNNLpt->Draw("hist");
+	h_PUNNNLpt->Draw("hist same");
+	h_PUNNLpt->Draw("hist same");
+	h_PUNLpt->Draw("hist same");
+	//h_PULpt->Draw("hist same");
 }
 
 void Rate_sumpt::WriteAll()

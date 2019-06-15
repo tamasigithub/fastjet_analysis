@@ -25,13 +25,14 @@ int main ()
   ZBIN_width = ZRANGE/NZVTXBIN;  
   //! variables used to make purity plots
   int etabin = 30;
-  double etamin =-1.5, etamax = 1.5;
+  double etamin =-1.7, etamax = 1.7;
+  //double etamin =-1.5, etamax = 1.5;
   // log bins
   const int ptbins = 40;//no. of bins
   int length = ptbins + 1;
   Double_t xbins[length];//elements of this array are
   double dx, l10;
-  dx = 5./ptbins;//5 -> implies max until 10^5
+  dx = 3./ptbins;// 7 -> 10TeV //5 -> implies max until 10^5
   l10 = TMath::Log(10);
   for (int i = 0; i<=ptbins; i++)
   {
@@ -67,6 +68,7 @@ int main ()
   std::vector<std::vector<double> > constituentZ0;	// reconstructed z vertex track-jet constituents
   std::vector<bool>   hasConstituents;            	// flag indicating if the track-jet has constituents
   std::vector<int>   Nconstituents;	            	// number of constituents for each jet
+  
   //! matched truth particle jets
   int M_Njets;						// # of matched truth particle jets
   std::vector<double> M_jetPt;				// matched truth particle jet pt
@@ -89,7 +91,7 @@ int main ()
   //! output root file
   //TFile *f_out = new TFile("jetout_LptMB2_3rec.root","RECREATE");
   //TFile *f_out = new TFile("jetout_LptMB2_5rec.root","RECREATE");
-  TFile *f_out = new TFile("jetout_LptMB2_noKaprec.root","RECREATE");
+  TFile *f_out = new TFile("jetout_hh4b_30mmoptsig5.root","RECREATE");
   //TFile *f_out = new TFile("jetout_LptMB2_looserec.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
@@ -139,16 +141,8 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   //! high pt min bias sample sigma = 3
-  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM/*.root");
-  //!low pt min bias sample sigma=3
-  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt3_1_MYSTREAM/*.root");
-  //!low pt min bias sample sigma=5
-  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt5_1_MYSTREAM/*.root");
-  //!low pt min bias sample without kappa cut
-  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptnoKap_1_MYSTREAM/*.root");
-  //!low pt min bias sample without kappa, dphi2 and dz2 cuts
-  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptloose_1_MYSTREAM/*.root");
-  //rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -194,13 +188,17 @@ int main ()
   std::vector<double> m_thetaPU;
   std::vector<double> m_phiPU;
   
+  //! Uncomment the lines below if there is no pileup in the input files
+  //! to add multiple events(artificially add pileup) into one
   //! Get total no. of events
-  Long64_t nentries = rec.GetEntries();
-  //Long64_t nentries = 300;
-  int pileup = 160;
-  Long64_t nevents = nentries/pileup;
+  //Long64_t nentries = rec.GetEntries();
+  ////Long64_t nentries = 300;
+  //int pileup = 160;
+  //Long64_t nevents = nentries/pileup;
+  //Long64_t nevents = 10;
+  Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
-  std::cout<<"Total number of enteries : " << nentries <<std::endl;
+  //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
   std::vector<TrackJetObj> tjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
@@ -258,15 +256,16 @@ int main ()
 	
 
 	
-	int skip = i*pileup;
-	if(debug)
-	{
-		std::cout<<"skip:"<<skip <<"\n";
-		std::cout<<"i:" <<i <<"\n";
-	}
-	for(int ievent = skip; ievent < skip+pileup; ++ievent)
-	{
-		rec.GetEntry(ievent);
+	//int skip = i*pileup;
+	//if(debug)
+	//{
+	//	std::cout<<"skip:"<<skip <<"\n";
+	//	std::cout<<"i:" <<i <<"\n";
+	//}
+	//for(int ievent = skip; ievent < skip+pileup; ++ievent)
+	//{
+		//rec.GetEntry(ievent);
+		rec.GetEntry(i);
 		for(int ik = 0; ik < pt_rec->size(); ++ik)
 		{
 			pt_recPU.push_back((*pt_rec)[ik]);
@@ -282,11 +281,16 @@ int main ()
 			
 		}
 		
-	}
+	//}
 	//! total number of tracks reconstructed in an event
 	int nobj = pt_recPU.size();
   	if(debug)std::cout<<"nobj: "<<nobj<<std::endl;
 	if(nobj<1) continue;
+//////////////////////////////////////////////////////////////////////////////
+//  Create track jet constituent objects to be fed to the Jet clustering Alg
+//////////////////////////////////////////////////////////////////////////////
+	//! for all tracks in a single pile-up event
+	//! create objects(constituents) for feeding it to jet clustering alg.
 	for (int j = 0; j < nobj; ++j)
 	{
 		pt	= pt_recPU[j];
@@ -335,15 +339,19 @@ int main ()
 		tjVec.push_back(tjObj);
 
 	}// end of loop over nobj
-	
-	// choose a jet definition
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+	//! choose a jet definition
 	double R = 0.4;
-	double PTMINJET = 5.0;
+	double PTMINJET = 5.0;// check if this is required in MeV or GeV
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_tracks;
 	std::vector<PseudoJet> input_particles;
 
-
+///////////////////////////////////////////////////////////////////////////////////
+//    Create PsedoJet
+///////////////////////////////////////////////////////////////////////////////////
 	// loop over all tracks
 	for(int k = 0; k < tjVec.size(); ++k )
 	{
@@ -354,14 +362,17 @@ int main ()
 		//input_tracks.push_back( PseudoJet( tjVec[k].px, tjVec[k].py, tjVec[k].pz, tjVec[k].E) );  
 		input_tracks.push_back(trk);
 		
-		//! create a Pseudo jet for truth particles
+		//! create a Pseudo jet for "truth particles" (don't need fakes marked as zero)
 		if(tjVec[k].flag != 1) continue;// get rid of DC tracks and fakes
 		PseudoJet m_particle(tjVec[k].px_m, tjVec[k].py_m, tjVec[k].pz_m, tjVec[k].E_m);
 		m_particle.set_user_info(new Constituent_info(tjVec[k].pdg, tjVec[k].Vz0, tjVec[k].zv));
 		input_particles.push_back(m_particle);
 	}// end of loop over all tracks tjVec
-	
-	if(debug)std::cout<<"Do jet Clustering \n";
+
+///////////////////////////////////////////////////////////////////////////////////
+//     Do Jet Clustering
+///////////////////////////////////////////////////////////////////////////////////	
+	if(debug)std::cout<<"Do jet Clustering  for reconstructed tracks\n";
 	// run the jet clustering with the above definition, extract the jets
 	ClusterSequence cs_trk(input_tracks, jet_def);
 	if(debug)std::cout<<"Do jet clustering for input particles \n";
@@ -382,7 +393,10 @@ int main ()
 		std::cout<<"Number of reconstructed jets Njets : " <<Njets << std::endl;
 		std::cout<<"Number of truth jets M_Njets : " <<M_Njets << std::endl;
 	}
+
+//////////////////////////////////////////////////////////////////////////////////
 	// Add jet matching scheme
+/////////////////////////////////////////////////////////////////////////////////
 	double dr, thisDR, dphi, deta;
 	int bestTruthJet;// index of the best matched truth jet
 	//! for each track jet
@@ -415,7 +429,8 @@ int main ()
 				}
 			}
 		}// end of loop over incl_m_pclejets.size()
-		if (dr < 0.4)
+
+		if (dr < 0.4)//remove hard coding
 		{
 			//! matched track jet found, push_back the parameters labled as matched here  
 			if(debug) std::cout<<" matched track jet found!! with dr, index , i, eventNo: " << dr << " , " << bestTruthJet <<" , " << i  <<" , " << eventNo << std::endl;
@@ -527,14 +542,17 @@ int main ()
 		}// end of loop over pcle_constituents
 
 		//! fill purity histograms
-		h_den_vs_ptPU->Fill(jetPt[i]);
-		if(M_jetPt[i]!= 0 ) h_num_vs_ptPU->Fill(jetPt[i]);
+		h_den_vs_ptPU->Fill(jetPt[i]/1e3);
+		if(M_jetPt[i]!= 0 ) h_num_vs_ptPU->Fill(jetPt[i]/1e3);
 		h_den_vs_etaPU->Fill(jetEta[i]);
 		if(M_jetPt[i]!= 0 ) h_num_vs_etaPU->Fill(jetEta[i]);
 	}// end of for loop over jet size
+//! end of Jet Matching
 	glob_jet->Fill();
 
+/////////////////////////////////////////////////////////////////////////////////
   ///******************* jets per vertex bin *******************///
+/////////////////////////////////////////////////////////////////////////////////
 	std::vector<PseudoJet> in_tracks;
 	//! init the vector of sumpt bin
 	r_sumpt.v_sumpt.clear();
@@ -589,6 +607,9 @@ int main ()
 		//! calculate sum pt for each of the ith_bins
 		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);
 	}// end of loop over NZVTXBIN
+	///////////////////////////////////////
+	//        Fill Histograms            //
+	///////////////////////////////////////
 	//! Andre's approach
 	r_sumpt.Lpt = vectorof_jetpt[0][0];
 	r_sumpt.NLpt = vectorof_jetpt[0][1];
@@ -623,27 +644,46 @@ int main ()
 	}
 	//! Fill histograms
 	//! Andre's approach
-	r_sumpt.ha_PULpt->Fill(r_sumpt.Lpt);
-	r_sumpt.ha_PUNLpt->Fill(r_sumpt.NLpt);
-	r_sumpt.ha_PUNNLpt->Fill(r_sumpt.NNLpt);
-	r_sumpt.ha_PUNNNLpt->Fill(r_sumpt.NNNLpt);
-	r_sumpt.ha_PUNNNNLpt->Fill(r_sumpt.NNNNLpt);
+	//std::cout<<"ha_PULpt   : " <<r_sumpt.Lpt <<std::endl;
+	//std::cout<<"ha_PU1NLpt : " <<r_sumpt.NLpt <<std::endl;
+	//std::cout<<"ha_PU2NLpt : " <<r_sumpt.NNLpt <<std::endl;
+	//std::cout<<"ha_PU3NLpt : " <<r_sumpt.NNNLpt <<std::endl;
+	//std::cout<<"ha_PU4NLpt : " <<r_sumpt.NNNNLpt <<std::endl;
+	r_sumpt.ha_PULpt->Fill(r_sumpt.Lpt/1e3);
+	r_sumpt.ha_PUNLpt->Fill(r_sumpt.NLpt/1e3);
+	r_sumpt.ha_PUNNLpt->Fill(r_sumpt.NNLpt/1e3);
+	r_sumpt.ha_PUNNNLpt->Fill(r_sumpt.NNNLpt/1e3);
+	r_sumpt.ha_PUNNNNLpt->Fill(r_sumpt.NNNNLpt/1e3);
 	
 	//! Sumpt approach
-	r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]);
-	r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]);
-	r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]);
-	r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]);
-	r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]);
+	//std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
+	//std::cout<<"h_PULpt   : " <<vectorof_jetpt[r_sumpt.prim_bin][0] <<std::endl;
+	//std::cout<<"h_PU1NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][1] <<std::endl;
+	//std::cout<<"h_PU2NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][2] <<std::endl;
+	//std::cout<<"h_PU3NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][3] <<std::endl;
+	//std::cout<<"h_PU4NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
+	r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]/1e3);
+	r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]/1e3);
+	r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]/1e3);
+	r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]/1e3);
+	r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]/1e3);
 
 	//! No bin approach
-	r_sumpt.hb_PULpt->Fill(incl_trkjets[0].pt());
-	r_sumpt.hb_PUNLpt->Fill(incl_trkjets[1].pt());
-	r_sumpt.hb_PUNNLpt->Fill(incl_trkjets[2].pt());
-	r_sumpt.hb_PUNNNLpt->Fill(incl_trkjets[3].pt());
-	r_sumpt.hb_PUNNNNLpt->Fill(incl_trkjets[4].pt());
-
+	//std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
+	//std::cout<<"hb_PULpt   : " <<incl_trkjets[0].pt() <<std::endl;
+	//std::cout<<"hb_PU1NLpt : " <<incl_trkjets[1].pt() <<std::endl;
+	//std::cout<<"hb_PU2NLpt : " <<incl_trkjets[2].pt() <<std::endl;
+	//std::cout<<"hb_PU3NLpt : " <<incl_trkjets[3].pt() <<std::endl;
+	//std::cout<<"hb_PU4NLpt : " <<incl_trkjets[4].pt() <<std::endl;
+	
+	r_sumpt.hb_PULpt->Fill(incl_trkjets[0].pt()/1e3);
+	r_sumpt.hb_PUNLpt->Fill(incl_trkjets[1].pt()/1e3);
+	r_sumpt.hb_PUNNLpt->Fill(incl_trkjets[2].pt()/1e3);
+	r_sumpt.hb_PUNNNLpt->Fill(incl_trkjets[3].pt()/1e3);
+	r_sumpt.hb_PUNNNNLpt->Fill(incl_trkjets[4].pt()/1e3);
+///////////////////////////////////////////////////////////////////////////////
   ///******************* end of jets per vertex bin ************///
+///////////////////////////////////////////////////////////////////////////////
   }// for loop over nentries
 
 //! create purity histograms as a function of jet pt and jet eta
@@ -678,6 +718,7 @@ TCanvas *c1 = new TCanvas();
 c1->SetLogy();
 r_sumpt.SetHist_props();
 r_sumpt.DrawNoBin();
+c1->Update();
 TCanvas *c2 = new TCanvas();
 c2->SetLogy();
 r_sumpt.DrawRate();
