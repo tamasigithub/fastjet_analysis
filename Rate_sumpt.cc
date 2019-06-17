@@ -1,5 +1,28 @@
 #include "Rate_sumpt.h"
 
+void Rate_sumpt::init_Histos(float xbins[], int nbins)
+{
+
+	//! Book Histogram        
+	//! sumpt histos
+	h_PULpt = new TH1D("h_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	h_PUNLpt = new TH1D("h_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	h_PUNNLpt = new TH1D("h_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	h_PUNNNLpt = new TH1D("h_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	h_PUNNNNLpt = new TH1D("h_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 , PB finding using sum pt",nbins,xbins);
+	//! overlapping bin approach
+        ha_PULpt = new TH1D("ha_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	ha_PUNLpt = new TH1D("ha_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	ha_PUNNLpt = new TH1D("ha_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	ha_PUNNNLpt = new TH1D("ha_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	ha_PUNNNNLpt = new TH1D("ha_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 ",nbins,xbins);
+	//! without binning
+        hb_PULpt = new TH1D("hb_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	hb_PUNLpt = new TH1D("hb_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	hb_PUNNLpt = new TH1D("hb_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	hb_PUNNNLpt = new TH1D("hb_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,xbins);
+	hb_PUNNNNLpt = new TH1D("hb_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 , without binning along beam axis",nbins,xbins);
+}
 void Rate_sumpt::SetHist_props()
 {
 	h_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 1.0e2);

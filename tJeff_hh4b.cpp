@@ -112,10 +112,10 @@ int tJeff_hh4b(const char* output_file_name = "test", bool debug = false)
 				if((*Pt_ttt4trkjet)[1] > xbins[i2]) n2_tot[i2] += 1;
 				
 			}
-		}
+		}//! end of loop over pt bins
 
 		
-	}
+	}//! end of loop over nentries
 	if(debug)
 	{
 		for(int ii=0; ii<nbins; ii++)

@@ -189,11 +189,12 @@ int main ()
   std::vector<double> m_phiPU;
   
   //! Get total no. of events
-  Long64_t nentries = rec.GetEntries();
-  //Long64_t nentries = 1000;
-  int pileup = 160;
-  Long64_t nevents = nentries/pileup;
-  std::cout<<"Total number of enteries : " << nentries <<std::endl;
+  //Long64_t nentries = rec.GetEntries();
+  ////Long64_t nentries = 1000;
+  //int pileup = 160;
+  //Long64_t nevents = nentries/pileup;
+  Long64_t nevents = rec.GetEntries();
+  //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
   std::vector<TrackJetObj> trjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
@@ -252,15 +253,16 @@ int main ()
 	
 
 	
-	int skip = i*pileup;
-	if(debug)
-	{
-		std::cout<<"skip:"<<skip <<"\n";
-		std::cout<<"i:" <<i <<"\n";
-	}
-	for(int ievent = skip; ievent < skip+pileup; ++ievent)
-	{
-		rec.GetEntry(ievent);
+	//int skip = i*pileup;
+	//if(debug)
+	//{
+	//	std::cout<<"skip:"<<skip <<"\n";
+	//	std::cout<<"i:" <<i <<"\n";
+	//}
+	//for(int ievent = skip; ievent < skip+pileup; ++ievent)
+	//{
+		//rec.GetEntry(ievent);
+		rec.GetEntry(i);
 		for(int ik = 0; ik < pt_tru->size(); ++ik)
 		{
 			pt_truPU.push_back((*pt_tru)[ik]);
@@ -277,11 +279,12 @@ int main ()
 			
 		}
 		
-	}
+	//}
 	//! total number of tracks reconstructed in an event
 	int nobj = pt_truPU.size();
   	if(debug)std::cout<<"nobj: "<<nobj<<std::endl;
 	if(nobj<1) continue;
+	//! for all tracks in a pileup event
 	for (int j = 0; j < nobj; ++j)
 	{
 		pt	= pt_truPU[j];

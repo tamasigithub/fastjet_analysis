@@ -2,6 +2,7 @@
 #include "Constituent_info.h"
 #include "TrackJetObj.h"
 #include "Rate_sumpt.h"
+#include "TrigEff.h"
 #include <iostream>
 #include <vector>
 #include "math.h"
@@ -22,12 +23,14 @@ int main ()
   NJETS = 10;
   NZVTXBIN = 40;
   ZRANGE = 200; // in mm
-  ZBIN_width = ZRANGE/NZVTXBIN;  
+  ZBIN_width = ZRANGE/NZVTXBIN;
+/////////////////////////////////////////////////////  
   //! variables used to make purity plots
+/////////////////////////////////////////////////////
   int etabin = 30;
   double etamin =-1.7, etamax = 1.7;
   //double etamin =-1.5, etamax = 1.5;
-  // log bins
+  // log bins //! for TTTjet puruty histos
   const int ptbins = 40;//no. of bins
   int length = ptbins + 1;
   Double_t xbins[length];//elements of this array are
@@ -40,12 +43,23 @@ int main ()
 	xbins[i] = TMath::Exp(l10*i*dx);
 	//std::cout<<"xbin[i] : " <<xbins[i] <<std::endl;
   }
+
+/////////////////////////////////////////////////////////
+  //! binning for rate and trigger efficienceis
+////////////////////////////////////////////////////////
+  const float PT_MIN = 0., PT_MAX = 300., PTCUT_WIDTH = 10.0;// in GeV/c
   //! create an object to plot rate as a function of pt
-  Rate_sumpt r_sumpt(NZVTXBIN);
+  Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
+  r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
+
+  //! create an object to plot trigger efficiency as a function of pt
+  TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH);
+
   //! init output vector
-  std::vector<std::vector<double>> vectorof_jetpt(NZVTXBIN, std::vector<double>());
-  
+  std::vector<std::vector<double> > vectorof_jetpt(NZVTXBIN, std::vector<double>());
+//////////////////////////////////////////////////  
   //! store results in an output root file 
+//////////////////////////////////////////////////
   //! branch variables
   gInterpreter->GenerateDictionary("vector<vector<double> >","vector");
   gInterpreter->GenerateDictionary("vector<vector<int> >","vector");
@@ -607,6 +621,9 @@ int main ()
 		//! calculate sum pt for each of the ith_bins
 		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);
 	}// end of loop over NZVTXBIN
+	///////////////////////////////////////////
+	//    init Histograms for the rate plot  //
+	//////////////////////////////////////////
 	///////////////////////////////////////
 	//        Fill Histograms            //
 	///////////////////////////////////////
@@ -684,7 +701,58 @@ int main ()
 ///////////////////////////////////////////////////////////////////////////////
   ///******************* end of jets per vertex bin ************///
 ///////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+   ///**************Trigger Efficiency***************************///
+/////////////////////////////////////////////////////////////////////////////
+	//! for every pt bin (corresponding to a pt threshold)
+	//std::cout<<"Just checking if everything is okay!" <<std::endl;
+	//std::cout<<"nbins : " << trigger.nbins <<std::endl;
+	//std::cout<<"Njet_max : " << trigger.Njet_max <<std::endl;
+	for(int i2 = 0; i2 < trigger.nbins; i2++)
+	{
+		//std::cout << "xbins[" <<i2 << "]" <<trigger.xbins[i2]<<std::endl;
+		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
+		if(incl_trkjets.size() >= trigger.Njet_max)
+		{
+			if(incl_trkjets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5_tot[i2] += 1;
+			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4_tot[i2] += 1;
+			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+		}
+		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
+		else if (incl_trkjets.size() >= trigger.Njet_max-1)
+		{
+			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4_tot[i2] += 1;
+			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			
+		}
+		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
+		else if (incl_trkjets.size() >= trigger.Njet_max-2)
+		{
+			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			
+		}
+		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
+		else if (incl_trkjets.size() >= trigger.Njet_max-3)
+		{
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			
+		}
+	}
   }// for loop over nentries
+	
+//! continuation of trigger efficiency cal.
+//! we fill outside as we want count the no. of events with 'n' trackjets above a pt threshold
+TCanvas *trig = new TCanvas();
+trigger.init(trigger.xbins, trigger.nbins);
+trigger.SetHist_props();
+trigger.Fill_TrigEff();
+trigger.DrawNoBin();
+trig->Write();
+trigger.WriteAll();
 
 //! create purity histograms as a function of jet pt and jet eta
 //std::cout<<"xbin entries :  " << r_sumpt.xbins[1] << ", " << r_sumpt.xbins[40]<<std::endl;
