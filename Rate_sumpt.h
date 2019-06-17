@@ -41,8 +41,8 @@ public:
 	//int nbins = 40;
 	//double ptmin = 0.0, ptmax = 1000;//in GeV/c 
 	double Lpt, NLpt, NNLpt, NNNLpt, NNNNLpt;
-	static const int nbins_plus1 = 31;
-	static const  int nbins = 30;// = (pt_max - pt_min)/ptcut_width;
+	static const int nbins_plus1 = 41;
+	static const  int nbins = 40;// = (pt_max - pt_min)/ptcut_width;
 	float pt_min, pt_max, ptcut_width;
     	float xbins[nbins_plus1];
 	bool debug = true;

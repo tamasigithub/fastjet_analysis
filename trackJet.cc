@@ -47,7 +47,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 300., PTCUT_WIDTH = 10.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 200., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -358,7 +358,7 @@ int main ()
 
 	//! choose a jet definition
 	double R = 0.4;
-	double PTMINJET = 5.0;// check if this is required in MeV or GeV
+	double PTMINJET = 5e3;// check if this is required in MeV or GeV
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_tracks;
 	std::vector<PseudoJet> input_particles;
@@ -621,9 +621,6 @@ int main ()
 		//! calculate sum pt for each of the ith_bins
 		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);
 	}// end of loop over NZVTXBIN
-	///////////////////////////////////////////
-	//    init Histograms for the rate plot  //
-	//////////////////////////////////////////
 	///////////////////////////////////////
 	//        Fill Histograms            //
 	///////////////////////////////////////
@@ -712,33 +709,96 @@ int main ()
 	for(int i2 = 0; i2 < trigger.nbins; i2++)
 	{
 		//std::cout << "xbins[" <<i2 << "]" <<trigger.xbins[i2]<<std::endl;
+		//! sumpt approach
 		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
+		if(vectorof_jetpt[r_sumpt.prim_bin].size() >= trigger.Njet_max)
+		{
+			if(vectorof_jetpt[r_sumpt.prim_bin][4]*1e-3 > trigger.xbins[i2]) trigger.n5_tot[i2] += 1;
+			if(vectorof_jetpt[r_sumpt.prim_bin][3]*1e-3 > trigger.xbins[i2]) trigger.n4_tot[i2] += 1;
+			if(vectorof_jetpt[r_sumpt.prim_bin][2]*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
+			if(vectorof_jetpt[r_sumpt.prim_bin][1]*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+		}
+		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
+		else if (vectorof_jetpt[r_sumpt.prim_bin].size() >= trigger.Njet_max-1)
+		{
+			if(vectorof_jetpt[r_sumpt.prim_bin][3]*1e-3 > trigger.xbins[i2]) trigger.n4_tot[i2] += 1;
+			if(vectorof_jetpt[r_sumpt.prim_bin][2]*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
+			if(vectorof_jetpt[r_sumpt.prim_bin][1]*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			
+		}
+		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
+		else if (vectorof_jetpt[r_sumpt.prim_bin].size() >= trigger.Njet_max-2)
+		{
+			if(vectorof_jetpt[r_sumpt.prim_bin][2]*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
+			if(vectorof_jetpt[r_sumpt.prim_bin][1]*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			
+		}
+		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
+		else if (vectorof_jetpt[r_sumpt.prim_bin].size() >= trigger.Njet_max-3)
+		{
+			if(vectorof_jetpt[r_sumpt.prim_bin][1]*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			
+		}
+		
+		//! overlapping bin approach
+		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
+		if(r_sumpt.NNNNLpt >= PTMINJET)
+		{
+			if(r_sumpt.NNNNLpt*1e-3 > trigger.xbins[i2]) trigger.n5a_tot[i2] += 1;
+			if(r_sumpt.NNNLpt*1e-3 > trigger.xbins[i2]) trigger.n4a_tot[i2] += 1;
+			if(r_sumpt.NNLpt*1e-3 > trigger.xbins[i2]) trigger.n3a_tot[i2] += 1;
+			if(r_sumpt.NLpt*1e-3 > trigger.xbins[i2]) trigger.n2a_tot[i2] += 1;
+		}
+		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
+		else if (r_sumpt.NNNLpt >= PTMINJET)
+		{
+			if(r_sumpt.NNNLpt*1e-3 > trigger.xbins[i2]) trigger.n4a_tot[i2] += 1;
+			if(r_sumpt.NNLpt*1e-3 > trigger.xbins[i2]) trigger.n3a_tot[i2] += 1;
+			if(r_sumpt.NLpt*1e-3 > trigger.xbins[i2]) trigger.n2a_tot[i2] += 1;
+			
+		}
+		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
+		else if (r_sumpt.NNLpt >= PTMINJET)
+		{
+			if(r_sumpt.NNLpt*1e-3 > trigger.xbins[i2]) trigger.n3a_tot[i2] += 1;
+			if(r_sumpt.NLpt*1e-3 > trigger.xbins[i2]) trigger.n2a_tot[i2] += 1;
+			
+		}
+		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
+		else if (r_sumpt.NLpt >= PTMINJET)
+		{
+			if(r_sumpt.NLpt*1e-3 > trigger.xbins[i2]) trigger.n2a_tot[i2] += 1;
+			
+		}
+		
+		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
+		//! no z vertex bin
 		if(incl_trkjets.size() >= trigger.Njet_max)
 		{
-			if(incl_trkjets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5_tot[i2] += 1;
-			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4_tot[i2] += 1;
-			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			if(incl_trkjets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
+			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 		}
 		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
 		else if (incl_trkjets.size() >= trigger.Njet_max-1)
 		{
-			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4_tot[i2] += 1;
-			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
 		else if (incl_trkjets.size() >= trigger.Njet_max-2)
 		{
-			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3_tot[i2] += 1;
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
 		else if (incl_trkjets.size() >= trigger.Njet_max-3)
 		{
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2_tot[i2] += 1;
+			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 	}
@@ -746,12 +806,18 @@ int main ()
 	
 //! continuation of trigger efficiency cal.
 //! we fill outside as we want count the no. of events with 'n' trackjets above a pt threshold
-TCanvas *trig = new TCanvas();
 trigger.init(trigger.xbins, trigger.nbins);
-trigger.SetHist_props();
 trigger.Fill_TrigEff();
+trigger.SetHist_props();
+TCanvas *C_trig = new TCanvas();
+trigger.DrawSumpt();
+C_trig->Write();
+C_trig->Clear();
+trigger.DrawOvpbin();
+C_trig->Write();
+C_trig->Clear();
 trigger.DrawNoBin();
-trig->Write();
+C_trig->Write();
 trigger.WriteAll();
 
 //! create purity histograms as a function of jet pt and jet eta
