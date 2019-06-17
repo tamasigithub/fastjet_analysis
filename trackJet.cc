@@ -656,45 +656,45 @@ int main ()
 		std::cout<<"highest maxsumpt and prim bin: " << r_sumpt.max_sumpt << ", " << r_sumpt.prim_bin << std::endl;
 		std::cout<<"elements of vector of jet pt : " << vectorof_jetpt[r_sumpt.prim_bin][0] << ", " << vectorof_jetpt[r_sumpt.prim_bin][1] << ", " <<vectorof_jetpt[r_sumpt.prim_bin][2] << ", " << vectorof_jetpt[r_sumpt.prim_bin][3] << ", " << vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
 	}
-	//! Fill histograms
-	//! Andre's approach
-	//std::cout<<"ha_PULpt   : " <<r_sumpt.Lpt <<std::endl;
-	//std::cout<<"ha_PU1NLpt : " <<r_sumpt.NLpt <<std::endl;
-	//std::cout<<"ha_PU2NLpt : " <<r_sumpt.NNLpt <<std::endl;
-	//std::cout<<"ha_PU3NLpt : " <<r_sumpt.NNNLpt <<std::endl;
-	//std::cout<<"ha_PU4NLpt : " <<r_sumpt.NNNNLpt <<std::endl;
-	r_sumpt.ha_PULpt->Fill(r_sumpt.Lpt/1e3);
-	r_sumpt.ha_PUNLpt->Fill(r_sumpt.NLpt/1e3);
-	r_sumpt.ha_PUNNLpt->Fill(r_sumpt.NNLpt/1e3);
-	r_sumpt.ha_PUNNNLpt->Fill(r_sumpt.NNNLpt/1e3);
-	r_sumpt.ha_PUNNNNLpt->Fill(r_sumpt.NNNNLpt/1e3);
-	
-	//! Sumpt approach
-	//std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
-	//std::cout<<"h_PULpt   : " <<vectorof_jetpt[r_sumpt.prim_bin][0] <<std::endl;
-	//std::cout<<"h_PU1NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][1] <<std::endl;
-	//std::cout<<"h_PU2NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][2] <<std::endl;
-	//std::cout<<"h_PU3NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][3] <<std::endl;
-	//std::cout<<"h_PU4NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
-	r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]/1e3);
-	r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]/1e3);
-	r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]/1e3);
-	r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]/1e3);
-	r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]/1e3);
+	////! Fill histograms
+	////! Andre's approach
+	////std::cout<<"ha_PULpt   : " <<r_sumpt.Lpt <<std::endl;
+	////std::cout<<"ha_PU1NLpt : " <<r_sumpt.NLpt <<std::endl;
+	////std::cout<<"ha_PU2NLpt : " <<r_sumpt.NNLpt <<std::endl;
+	////std::cout<<"ha_PU3NLpt : " <<r_sumpt.NNNLpt <<std::endl;
+	////std::cout<<"ha_PU4NLpt : " <<r_sumpt.NNNNLpt <<std::endl;
+	//r_sumpt.ha_PULpt->Fill(r_sumpt.Lpt/1e3);
+	//r_sumpt.ha_PUNLpt->Fill(r_sumpt.NLpt/1e3);
+	//r_sumpt.ha_PUNNLpt->Fill(r_sumpt.NNLpt/1e3);
+	//r_sumpt.ha_PUNNNLpt->Fill(r_sumpt.NNNLpt/1e3);
+	//r_sumpt.ha_PUNNNNLpt->Fill(r_sumpt.NNNNLpt/1e3);
+	//
+	////! Sumpt approach
+	////std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
+	////std::cout<<"h_PULpt   : " <<vectorof_jetpt[r_sumpt.prim_bin][0] <<std::endl;
+	////std::cout<<"h_PU1NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][1] <<std::endl;
+	////std::cout<<"h_PU2NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][2] <<std::endl;
+	////std::cout<<"h_PU3NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][3] <<std::endl;
+	////std::cout<<"h_PU4NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
+	//r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]/1e3);
+	//r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]/1e3);
+	//r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]/1e3);
+	//r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]/1e3);
+	//r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]/1e3);
 
-	//! No bin approach
-	//std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
-	//std::cout<<"hb_PULpt   : " <<incl_trkjets[0].pt() <<std::endl;
-	//std::cout<<"hb_PU1NLpt : " <<incl_trkjets[1].pt() <<std::endl;
-	//std::cout<<"hb_PU2NLpt : " <<incl_trkjets[2].pt() <<std::endl;
-	//std::cout<<"hb_PU3NLpt : " <<incl_trkjets[3].pt() <<std::endl;
-	//std::cout<<"hb_PU4NLpt : " <<incl_trkjets[4].pt() <<std::endl;
-	
-	r_sumpt.hb_PULpt->Fill(incl_trkjets[0].pt()/1e3);
-	r_sumpt.hb_PUNLpt->Fill(incl_trkjets[1].pt()/1e3);
-	r_sumpt.hb_PUNNLpt->Fill(incl_trkjets[2].pt()/1e3);
-	r_sumpt.hb_PUNNNLpt->Fill(incl_trkjets[3].pt()/1e3);
-	r_sumpt.hb_PUNNNNLpt->Fill(incl_trkjets[4].pt()/1e3);
+	////! No bin approach
+	////std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
+	////std::cout<<"hb_PULpt   : " <<incl_trkjets[0].pt() <<std::endl;
+	////std::cout<<"hb_PU1NLpt : " <<incl_trkjets[1].pt() <<std::endl;
+	////std::cout<<"hb_PU2NLpt : " <<incl_trkjets[2].pt() <<std::endl;
+	////std::cout<<"hb_PU3NLpt : " <<incl_trkjets[3].pt() <<std::endl;
+	////std::cout<<"hb_PU4NLpt : " <<incl_trkjets[4].pt() <<std::endl;
+	//
+	//r_sumpt.hb_PULpt->Fill(incl_trkjets[0].pt()/1e3);
+	//r_sumpt.hb_PUNLpt->Fill(incl_trkjets[1].pt()/1e3);
+	//r_sumpt.hb_PUNNLpt->Fill(incl_trkjets[2].pt()/1e3);
+	//r_sumpt.hb_PUNNNLpt->Fill(incl_trkjets[3].pt()/1e3);
+	//r_sumpt.hb_PUNNNNLpt->Fill(incl_trkjets[4].pt()/1e3);
 ///////////////////////////////////////////////////////////////////////////////
   ///******************* end of jets per vertex bin ************///
 ///////////////////////////////////////////////////////////////////////////////
@@ -802,8 +802,20 @@ int main ()
 			
 		}
 	}
-  }// for loop over nentries
-	
+  }// for loop over nentries	
+r_sumpt.n_tots.push_back(trigger.n2_tot);	
+r_sumpt.n_tots.push_back(trigger.n3_tot);	
+r_sumpt.n_tots.push_back(trigger.n4_tot);	
+r_sumpt.n_tots.push_back(trigger.n5_tot);
+r_sumpt.n_tots.push_back(trigger.n2a_tot);	
+r_sumpt.n_tots.push_back(trigger.n3a_tot);	
+r_sumpt.n_tots.push_back(trigger.n4a_tot);	
+r_sumpt.n_tots.push_back(trigger.n5a_tot);
+r_sumpt.n_tots.push_back(trigger.n2b_tot);	
+r_sumpt.n_tots.push_back(trigger.n3b_tot);	
+r_sumpt.n_tots.push_back(trigger.n4b_tot);	
+r_sumpt.n_tots.push_back(trigger.n5b_tot);
+r_sumpt.Fill_TrigRate(r_sumpt.n_tots);
 //! continuation of trigger efficiency cal.
 //! we fill outside as we want count the no. of events with 'n' trackjets above a pt threshold
 trigger.init(trigger.xbins, trigger.nbins);

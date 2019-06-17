@@ -46,6 +46,8 @@ public:
 	float pt_min, pt_max, ptcut_width;
     	float xbins[nbins_plus1];
 	bool debug = true;
+	
+	std::vector<int*> n_tots;
 
 public:
 	Rate_sumpt(float ptMin, float ptMax, float ptcutWidth):pt_min(ptMin), pt_max(ptMax), ptcut_width(ptcutWidth) 
@@ -71,6 +73,7 @@ public:
 	void DrawRate();
 	void DrawSumpt();
 	void WriteAll();
+	void Fill_TrigRate(std::vector<int*> vec_ntots);
 public:
 	//! Book Histogram        
 	////! sumpt histos

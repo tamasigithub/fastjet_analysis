@@ -118,6 +118,37 @@ void Rate_sumpt::SetHist_props()
         hb_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         hb_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 }
+void Rate_sumpt::Fill_TrigRate(std::vector<int*> vec_ntots)
+{
+	//! Fill the jth bin of the respective histograms with the corresponding weight 
+        for(int j = 0; j < nbins; ++j)
+        {
+        	//std::cout<<"n2tot[" <<j <<"] = " << vec_ntots[0][j] <<std::endl;
+          	
+          
+          	h_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[0][j]));
+          	h_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[1][j]));
+          	h_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[2][j]));
+          	h_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[3][j]));
+         
+	 	ha_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[4][j]));
+          	ha_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[5][j]));
+          	ha_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[6][j]));
+          	ha_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[7][j]));
+
+          	hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[8][j]));
+          	hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[9][j]));
+          	hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[10][j]));
+          	hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[11][j]));
+          	
+          
+          	/*h_tJeff5->Fill(xbins[j], (1.0*n5_tot[j])/n_entries);
+          	h_tJeff4->Fill(xbins[j], (1.0*n4_tot[j])/n_entries);
+          	h_tJeff3->Fill(xbins[j], (1.0*n3_tot[j])/n_entries);
+          	h_tJeff2->Fill(xbins[j], (1.0*n2_tot[j])/n_entries);*/
+        }
+
+}
 void Rate_sumpt::DrawNoBin()
 {
 	hb_PUNNNNLpt->Draw("hist");
@@ -145,17 +176,17 @@ void Rate_sumpt::DrawSumpt()
 
 void Rate_sumpt::WriteAll()
 {
-	hb_PULpt->Write();
+	//hb_PULpt->Write();
         hb_PUNLpt->Write();
         hb_PUNNLpt->Write();
         hb_PUNNNLpt->Write();
         hb_PUNNNNLpt->Write();
-	ha_PULpt->Write();
+	//ha_PULpt->Write();
         ha_PUNLpt->Write();
         ha_PUNNLpt->Write();
         ha_PUNNNLpt->Write();
         ha_PUNNNNLpt->Write();
-	h_PULpt->Write();
+	//h_PULpt->Write();
         h_PUNLpt->Write();
         h_PUNNLpt->Write();
         h_PUNNNLpt->Write();
