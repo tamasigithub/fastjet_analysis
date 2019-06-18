@@ -25,7 +25,7 @@ void Rate_sumpt::init_Histos(float xbins[], int nbins)
 }
 void Rate_sumpt::SetHist_props()
 {
-	h_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 1.0e2);
+	h_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
 	h_PUNNNNLpt->SetLineColor(kBlue);
 	h_PUNNNLpt->SetLineColor(kGreen);
 	h_PUNNLpt->SetLineColor(kRed);
@@ -56,7 +56,7 @@ void Rate_sumpt::SetHist_props()
         h_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         h_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 	
-	ha_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 1.0e2);
+	ha_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
 	ha_PUNNNNLpt->SetLineColor(kBlue);
 	ha_PUNNNLpt->SetLineColor(kGreen);
 	ha_PUNNLpt->SetLineColor(kRed);
@@ -87,7 +87,7 @@ void Rate_sumpt::SetHist_props()
         ha_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         ha_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 	
-	hb_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 1.0e2);
+	hb_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
 	hb_PUNNNNLpt->SetLineColor(kBlue);
 	hb_PUNNNLpt->SetLineColor(kGreen);
 	hb_PUNNLpt->SetLineColor(kRed);
@@ -117,6 +117,7 @@ void Rate_sumpt::SetHist_props()
         hb_PUNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         hb_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         hb_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
+
 }
 void Rate_sumpt::Fill_TrigRate(std::vector<int*> vec_ntots)
 {

@@ -17,7 +17,14 @@ int main ()
 {
   //bool debug = true;
   bool debug = false;
-  
+  ////////////////////////////////////////////////////////////////////////////////////
+  //     if NZVTXBIN = 40 and ZRANGE = 200mm, ZBIN_width = 5                        //
+  //     we now extend our zbin_width to +- 0.5* the neighbouring bin(5/2)          //
+  //     i.e. the first new zbin_width around 0mm will now extend from -7.5 to +7.5 //
+  //     Similarly if NZVTXBIN = 80 and ZRANGE = 200mm, ZBIN_width = 2.5            //
+  //     and the 1st new zbin_width around 0mm extenda from -3.75 to +3.75          //
+  //     and -3 to +3 if NZVTXBIN = 100                                             //
+  ////////////////////////////////////////////////////////////////////////////////////
   int NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
   int izbin;
   NJETS = 10;
@@ -47,7 +54,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 200., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 100., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -103,10 +110,8 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  //TFile *f_out = new TFile("jetout_LptMB2_3rec.root","RECREATE");
-  //TFile *f_out = new TFile("jetout_LptMB2_5rec.root","RECREATE");
-  TFile *f_out = new TFile("jetout_hh4b_30mmoptsig5.root","RECREATE");
-  //TFile *f_out = new TFile("jetout_LptMB2_looserec.root","RECREATE");
+  TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_nofaketracks.root","RECREATE");
+  //TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_nofaketracks3.0.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -324,9 +329,9 @@ int main ()
 		else if(tid < -1)tjObj.flag = -1;//dc tracks
 
 		//! veto fake and dc tracks?
-		//if(tjObj.flag!=1) continue;
+		if(tjObj.flag!=1) continue;
 		//! veto only dc tracks
-		if(tjObj.flag < 0) continue;
+		//if(tjObj.flag < 0) continue;
 
 		tjObj.px = pt*cos(phi);
 		tjObj.py = pt*sin(phi);
@@ -358,13 +363,13 @@ int main ()
 
 	//! choose a jet definition
 	double R = 0.4;
-	double PTMINJET = 5e3;// check if this is required in MeV or GeV
+	double PTMINJET = 5e3;// in MeV 
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_tracks;
 	std::vector<PseudoJet> input_particles;
 
 ///////////////////////////////////////////////////////////////////////////////////
-//    Create PsedoJet
+//    Create PseudoJet
 ///////////////////////////////////////////////////////////////////////////////////
 	// loop over all tracks
 	for(int k = 0; k < tjVec.size(); ++k )
@@ -861,16 +866,16 @@ h_den_vs_etaPU->Write();
 h_pur_vs_etaPU->Write();
 
 TCanvas *c1 = new TCanvas();
-c1->SetLogy();
-r_sumpt.SetHist_props();
 r_sumpt.DrawNoBin();
+c1->SetLogy();
 c1->Update();
 TCanvas *c2 = new TCanvas();
-c2->SetLogy();
 r_sumpt.DrawRate();
+c2->SetLogy();
 TCanvas *c3 = new TCanvas();
-c3->SetLogy();
 r_sumpt.DrawSumpt();
+c3->SetLogy();
+r_sumpt.SetHist_props();
 r_sumpt.WriteAll();
 c1->Write();
 c2->Write();

@@ -34,8 +34,8 @@ class TrigEff
 public:
 	const int Njet_max = 5;
 	const float eta_cut = 1.6; 
-	static const int nbins_plus1 = 41;
-	static const  int nbins = 40;// = (pt_max - pt_min)/ptcut_width;
+	static const int nbins_plus1 = 21;
+	static const  int nbins = 20;// = (pt_max - pt_min)/ptcut_width;
 	float pt_min, pt_max, ptcut_width;
     	float xbins[nbins_plus1];
 	bool debug = true;
