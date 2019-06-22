@@ -73,7 +73,9 @@ public:
 	void DrawRate();
 	void DrawSumpt();
 	void WriteAll();
+	void WriteNoBin();
 	void Fill_TrigRate(std::vector<int*> vec_ntots);
+	void Fill_TrigRate_EMU(std::vector<int*> vec_ntots);
 public:
 	//! Book Histogram        
 	////! sumpt histos

@@ -65,6 +65,7 @@ public:
 	void DrawOvpbin();
 	void DrawSumpt();
 	void WriteAll();
+	void WriteNoBin();
 public:
 	////! Book Histogram
 	//! sumpt histos        

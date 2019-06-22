@@ -25,12 +25,14 @@ int main ()
   //     and the 1st new zbin_width around 0mm extenda from -3.75 to +3.75          //
   //     and -3 to +3 if NZVTXBIN = 100                                             //
   ////////////////////////////////////////////////////////////////////////////////////
-  int NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
+  int MIN_Constituents, NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
   int izbin;
+  MIN_Constituents = 2;
   NJETS = 10;
   NZVTXBIN = 40;
   ZRANGE = 200; // in mm
   ZBIN_width = ZRANGE/NZVTXBIN;
+  double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
 /////////////////////////////////////////////////////  
   //! variables used to make purity plots
 /////////////////////////////////////////////////////
@@ -54,7 +56,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 100., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 200., PTCUT_WIDTH = 10.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -110,8 +112,9 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_nofaketracks.root","RECREATE");
-  //TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_nofaketracks3.0.root","RECREATE");
+  //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
+  //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks3.75_.root","RECREATE");
+  TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -160,8 +163,8 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   //! high pt min bias sample sigma = 3
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -312,7 +315,7 @@ int main ()
 	//! create objects(constituents) for feeding it to jet clustering alg.
 	for (int j = 0; j < nobj; ++j)
 	{
-		pt	= pt_recPU[j];
+		pt	= std::min(pt_recPU[j], MAX_TRACKpt);
 		z0	= z0_recPU[j];
 		theta	= theta_recPU[j];
 		phi	= phi_recPU[j];
@@ -329,9 +332,9 @@ int main ()
 		else if(tid < -1)tjObj.flag = -1;//dc tracks
 
 		//! veto fake and dc tracks?
-		if(tjObj.flag!=1) continue;
+		//if(tjObj.flag!=1) continue;
 		//! veto only dc tracks
-		//if(tjObj.flag < 0) continue;
+		if(tjObj.flag < 0) continue;
 
 		tjObj.px = pt*cos(phi);
 		tjObj.py = pt*sin(phi);
@@ -616,12 +619,28 @@ int main ()
 		//! get the resulting jets ordered in pt
 		std::vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets(PTMINJET));
 
-		//! store result: keep only highest pt jets from each bin
+		//! store result, i.e. in vectorof_jetpt[ith_bin]: keep only highest pt jets from each bin
 		//! Notice that inclusive_jets is sorted hence vectorof_jetpt[ith_bin] is also already sorted
+		int tmp = 0;
+		//! for NJETS in the ith_bin
 		for(int n = 0; n < NJETS; ++n)
 		{
+			if(debug) std::cout<<"size of inclusive_jets:" <<inclusive_jets.size()<<std::endl;
+			//! skip the ckeck below if the size of inclusive_jets is smaller than n, for all the subsequent n's
+			//! (inclusive_jets[n] will not exist in that case) 
 			if(n >= inclusive_jets.size()) break;
-			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n]) vectorof_jetpt[ith_bin][n] = inclusive_jets[n].perp();
+			
+			//! check if the nth jet has atleast MIN_Constituents
+			if(debug) std::cout<<"nconstituents: " <<inclusive_jets[n].constituents().size() <<std::endl;
+			if(inclusive_jets[n].constituents().size() < MIN_Constituents)
+			{
+				//!go to next jet. But before that fix the value of the nth index for vectorof_jetpt
+				tmp +=1;
+				continue;
+			}	
+			//! at this stage vectorof_jetpt[ith_bin][n] = 0.0 => initialised above
+			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n - tmp]) vectorof_jetpt[ith_bin][n - tmp] = inclusive_jets[n].perp();
+			if(debug) std::cout<<"contents in vectorof_jetpt["<<ith_bin<<"][" << n - tmp<<"] = " <<vectorof_jetpt[ith_bin][n - tmp] <<std::endl;
 		}
 		//! calculate sum pt for each of the ith_bins
 		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);

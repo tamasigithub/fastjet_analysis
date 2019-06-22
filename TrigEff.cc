@@ -179,3 +179,11 @@ void TrigEff::WriteAll()
 	hb_tJeff3->Write();
 	hb_tJeff2->Write();
 }
+void TrigEff::WriteNoBin()
+{
+
+	hb_tJeff5->Write();
+	hb_tJeff4->Write();
+	hb_tJeff3->Write();
+	hb_tJeff2->Write();
+}

@@ -119,6 +119,22 @@ void Rate_sumpt::SetHist_props()
         hb_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 
 }
+void Rate_sumpt::Fill_TrigRate_EMU(std::vector<int*> vec_ntots)
+{
+	//! Fill the jth bin of the respective histograms with the corresponding weight 
+        for(int j = 0; j < nbins; ++j)
+        {
+        	std::cout<<"n2tot[" <<j <<"] = " << vec_ntots[0][j] <<std::endl;
+          	
+          
+          	hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[0][j]));
+          	hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[1][j]));
+          	hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[2][j]));
+          	hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[3][j]));
+         
+	}
+
+}
 void Rate_sumpt::Fill_TrigRate(std::vector<int*> vec_ntots)
 {
 	//! Fill the jth bin of the respective histograms with the corresponding weight 
@@ -176,6 +192,24 @@ void Rate_sumpt::DrawSumpt()
 }
 
 void Rate_sumpt::WriteAll()
+{
+	//hb_PULpt->Write();
+        hb_PUNLpt->Write();
+        hb_PUNNLpt->Write();
+        hb_PUNNNLpt->Write();
+        hb_PUNNNNLpt->Write();
+	//ha_PULpt->Write();
+        ha_PUNLpt->Write();
+        ha_PUNNLpt->Write();
+        ha_PUNNNLpt->Write();
+        ha_PUNNNNLpt->Write();
+	//h_PULpt->Write();
+        h_PUNLpt->Write();
+        h_PUNNLpt->Write();
+        h_PUNNNLpt->Write();
+        h_PUNNNNLpt->Write();
+}
+void Rate_sumpt::WriteNoBin()
 {
 	//hb_PULpt->Write();
         hb_PUNLpt->Write();
