@@ -11,6 +11,7 @@
 #include <TH1.h>
 #include <TChain.h>
 #include <TMath.h>
+#include <TRandom.h>
 #include <TInterpreter.h>
 using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
@@ -25,7 +26,7 @@ int main ()
   // log bins
   const int ptbins = 40;//no. of bins
   int length = ptbins + 1;
-  Double_t xbins[length];//elements of this array are
+  Double_t xbins[length];
   double dx, l10;
   dx = 3./ptbins;//5 -> implies max until 10^5
   l10 = TMath::Log(10);
@@ -35,43 +36,55 @@ int main ()
 	xbins[i] = TMath::Exp(l10*i*dx);
 	//std::cout<<"xbin[i] : " <<xbins[i] <<std::endl;
   }
- 
+
+  int MIN_Constituents = 2;
+  float SCALEfac_Ereso = 0.5;//50% 
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 100., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 1500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
 
   //! create an object to plot trigger efficiency as a function of pt
-  TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH); 
+  TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH);
+//////////////////////////////////////////////////////////////////////// 
   //! store results in an output root file 
+////////////////////////////////////////////////////////////////////////
   //! branch variables
-  gInterpreter->GenerateDictionary("vector<vector<double> >","vector");
-  gInterpreter->GenerateDictionary("vector<vector<int> >","vector");
-   int eventNo;
+  gInterpreter->GenerateDictionary("vector<vector<double>>","vector");
+  gInterpreter->GenerateDictionary("vector<vector<int>>","vector");
+  int eventNo;
   //! truth-jets
-  int Njets;						// # of reconstructed track-jets
-  std::vector<double> jetPt;				// reconstructed track-jet pt
+  int Njets;						// # of truth-jets
+  std::vector<double> jetE_sm;				// truth-jet energy smeared 
+  std::vector<double> jetPt_sm;				// truth-jet pt smeared
+  std::vector<double> jetE;				// truth-jet energy 
+  std::vector<double> jetE_reso;			// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
+  std::vector<double> jetPt;				// truth-jet pt
   std::vector<std::vector<double> > constituentPt;	// it's constituents pt
-  std::vector<double> jetPhi;                     	// reconstructed track-jet phi
+  std::vector<double> jetPhi;                     	//  truth-jet phi
   std::vector<std::vector<double> > constituentPhi;	// it's constituents phi
-  std::vector<double> jetTheta;                   	// reconstructed track-jet theta
+  std::vector<double> jetTheta;                   	//  truth-jet theta
   std::vector<std::vector<double> > constituentTheta;	// it's constituents theta
-  std::vector<double> jetEta;                     	// reconstructed track-jet eta
+  std::vector<double> jetEta;                     	//  truth-jet eta
   std::vector<std::vector<double> > constituentEta;	// it's constituents eta
-  std::vector<double> jetEt;                     	// reconstructed track-jet energy 
+  std::vector<double> jetEt;                     	//  truth-jet energy 
   std::vector<std::vector<double> > constituentEt;      // it's constituents energy
-  std::vector<double> jetMt;                     	// reconstructed track-jet mass
+  std::vector<double> jetMt;                     	//  truth-jet mass
   std::vector<std::vector<double> > constituentMt;      // it's constituents mass
-  std::vector<std::vector<int> >    constituentPdg;	// pdg of track-jet constituents
-  std::vector<std::vector<double> > constituentZ0;	// reconstructed z vertex track-jet constituents
-  std::vector<bool>   hasConstituents;            	// flag indicating if the track-jet has constituents
+  std::vector<std::vector<int> >    constituentPdg;	// pdg of truth-jet constituents
+  std::vector<std::vector<double> > constituentZ0;	//  z vertex truth-jet constituents
+  std::vector<bool>  hasConstituents;            	// flag indicating if the truth-jet has constituents
   std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260.root","RECREATE");
+  //TFile *f_out = new TFile("jetEMU_PU1000MB_q1.2GeV_30mm.root","RECREATE");
+  TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_q1.2GeV_30mm.root","RECREATE");
+  //! default 5 GeV pt cut, eta 1.6
+  //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
+  //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet efficiency
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -82,6 +95,10 @@ int main ()
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
   glob_jet->Branch("Njets",&Njets);
+  glob_jet->Branch("jetE_sm",&jetE_sm);
+  glob_jet->Branch("jetPt_sm",&jetPt_sm);
+  glob_jet->Branch("jetE",&jetE);
+  glob_jet->Branch("jetE_reso",&jetE_reso);
   glob_jet->Branch("jetPt",&jetPt);
   glob_jet->Branch("jetConstPt",&constituentPt);
   glob_jet->Branch("jetPhi",&jetPhi);
@@ -112,18 +129,21 @@ int main ()
   std::vector<double> *eta_tru = 0;
   std::vector<double> *phi_tru = 0;
   std::vector<int> *pdg = 0;
+  std::vector<int> *charge = 0;
   rec.SetBranchStatus("pt",1);
   rec.SetBranchStatus("vz",1);
   rec.SetBranchStatus("theta",1);
   rec.SetBranchStatus("eta",1);
   rec.SetBranchStatus("phi",1);
   rec.SetBranchStatus("pid",1);
+  rec.SetBranchStatus("charge",1);
   rec.SetBranchAddress("pt", &pt_tru);
   rec.SetBranchAddress("vz", &z0_tru);
   rec.SetBranchAddress("theta", &theta_tru);
   rec.SetBranchAddress("eta", &eta_tru);
   rec.SetBranchAddress("phi", &phi_tru);
   rec.SetBranchAddress("pid", &pdg);
+  rec.SetBranchAddress("charge", &charge);
   //! get mc information -pdgid and z vertex  
   //! vectors containing a single pileup event
   std::vector<double> pt_truPU;
@@ -132,14 +152,16 @@ int main ()
   std::vector<double> eta_truPU;
   std::vector<double> phi_truPU;
   std::vector<int> pdgPU;
+  std::vector<int> chargePU;
   
   //! Get total no. of events
   //Long64_t nentries = rec.GetEntries();
   ////Long64_t nentries = 1000;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  Long64_t nevents = 3;
-  //Long64_t nevents = rec.GetEntries();
+  //Long64_t nevents = 3;
+  Long64_t nevents = rec.GetEntries();
+  r_sumpt.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
@@ -147,11 +169,15 @@ int main ()
   //! for every event do the following
   //
   double pt,z0,theta,eta,phi;
-  int pid;
+  int pid,q;
   for(Long64_t i = 0; i < nevents; ++i)
   {
   	eventNo=i;
 	TrackJetObj tjObj;
+	jetE_sm.clear();
+	jetPt_sm.clear();
+	jetE.clear();
+	jetE_reso.clear();
 	jetPt.clear();
 	constituentPt.clear();
 	jetPhi.clear();
@@ -175,29 +201,21 @@ int main ()
 	eta_truPU.clear();
 	phi_truPU.clear();
 	pdgPU.clear();
+	chargePU.clear();
 	
-	//int skip = i*pileup;
-	//if(debug)
-	//{
-	//	std::cout<<"skip:"<<skip <<"\n";
-	//	std::cout<<"i:" <<i <<"\n";
-	//}
-	//for(int ievent = skip; ievent < skip+pileup; ++ievent)
-	//{
-		//rec.GetEntry(ievent);
-		rec.GetEntry(i);
-		for(int ik = 0; ik < pt_tru->size(); ++ik)
-		{
-			pt_truPU.push_back((*pt_tru)[ik]);
-			z0_truPU.push_back((*z0_tru)[ik]);
-			theta_truPU.push_back((*theta_tru)[ik]);
-			eta_truPU.push_back((*eta_tru)[ik]);
-			phi_truPU.push_back((*phi_tru)[ik]);
-			pdgPU.push_back((*pdg)[ik]);
-			
-		}
+	rec.GetEntry(i);
+	for(int ik = 0; ik < pt_tru->size(); ++ik)
+	{
+		pt_truPU.push_back((*pt_tru)[ik]);
+		z0_truPU.push_back((*z0_tru)[ik]);
+		theta_truPU.push_back((*theta_tru)[ik]);
+		eta_truPU.push_back((*eta_tru)[ik]);
+		phi_truPU.push_back((*phi_tru)[ik]);
+		pdgPU.push_back((*pdg)[ik]);
+		chargePU.push_back((*charge)[ik]);
 		
-	//}
+	}
+		
 	//! total number of tracks reconstructed in an event
 	int nobj = pt_truPU.size();
   	if(debug)std::cout<<"nobj: "<<nobj<<std::endl;
@@ -211,10 +229,16 @@ int main ()
 		eta	= eta_truPU[j];
 		phi	= phi_truPU[j];
 		pid	= pdgPU[j];
-		
-		if(std::fabs(pt) < 5e3) continue; 	
-		if(std::fabs(eta) > 1.6) continue; 	
-		//if(pt < 5000 || abs(z0)>100 || abs(eta)>1.6) tjObj.flag = -2; //! need to get rid of them for efficiency calculation.
+		q	= chargePU[j];
+
+		//////// ACCEPTANCE CUTS //////////	
+		if(std::fabs(eta) > 1.6) continue; 
+		if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
+		if(std::abs(q) != 0) //is chrarged
+		{	
+			//! get rid of charged particles that will not make it to the calorimeter
+			if(std::fabs(pt) < 1.2e3) continue;
+		}	
 
 		//! veto fake and dc tracks?
 		//if(tjObj.flag!=1) continue;
@@ -279,13 +303,23 @@ int main ()
 		std::cout<<"Number of truth jets Njets : " <<Njets << std::endl;
 
 	}
-	// Add jet matching scheme
-	double dr, thisDR, dphi, deta;
-	int bestRecJet;// index of the best matched reco jet
 	//! for each truth jet
 	for (unsigned ii = 0; ii < incl_trpclejets.size(); ii++) 
 	{
+		//! check if the nth jet has atleast MIN_Constituents
+		//if(const_size < MIN_Constituents) continue;
+		//! smear jet energies
+		float jetE_, jetE_reso_;
+		float jetE_smeared, jetPt_smeared;
+		jetE_ = incl_trpclejets[ii].E();
+		jetE_reso_ = SCALEfac_Ereso/sqrt(jetE_);//50% energy resolution
+		jetE_smeared = gRandom->Gaus(jetE_,jetE_reso_*jetE_);
+		jetPt_smeared = sqrt(jetE_smeared*jetE_smeared - incl_trpclejets[ii].m2() - incl_trpclejets[ii].pz()*incl_trpclejets[ii].pz());
 		//! push back all the truth jet parameters here for all "ii"
+		jetPt_sm.push_back(jetPt_smeared);
+		jetE_sm.push_back(jetE_smeared);
+		jetE_reso.push_back(jetE_reso_);
+		jetE.push_back(jetE_);
 		jetPt.push_back(incl_trpclejets[ii].pt());
 		jetPhi.push_back(incl_trpclejets[ii].phi());
 		jetTheta.push_back(incl_trpclejets[ii].theta());
@@ -306,22 +340,17 @@ int main ()
 		{
 			std::cout << "truth pcle jet " << ii << ": "<< incl_trpclejets[ii].pt() << " " << incl_trpclejets[ii].rap() << " " << incl_trpclejets[ii].phi() << std::endl;
 		}
+		
 		std::vector<PseudoJet> constituents = incl_trpclejets[ii].constituents();
-		Nconstituents.push_back(constituents.size());
-		if(debug)std::cout<<"number of constituents in jet " << ii << " = " << Nconstituents[ii] << std::endl;
+		int const_size = constituents.size();
+		Nconstituents.push_back(const_size);
+		if(debug)
+		{ 
+			if(const_size < MIN_Constituents) std::cout <<"not a jet" <<std::endl;
+			std::cout<<"number of constituents in jet " << ii << " = " << Nconstituents[ii] << std::endl;
+		}
 		for (unsigned j = 0; j < constituents.size(); j++) 
 		{
-			/*if(j>0)
-			{	
-				jetPt.push_back(0);
-				jetPhi.push_back(0);
-				jetTheta.push_back(0);
-				jetEta.push_back(0);
-				jetEt.push_back(0);
-				jetMt.push_back(0);
-				hasConstituents.push_back(0);
-				
-			}*/
 			constituentPt[ii].push_back(constituents[j].pt());
 			constituentPhi[ii].push_back(constituents[j].phi());
 			constituentTheta[ii].push_back(constituents[j].theta());
@@ -336,10 +365,9 @@ int main ()
 			std::cout << "    constituent " << j << "'s Vz: " << constituents[j].user_info<Constituent_info>().Vz()<< std::endl;
 			std::cout << "    constituent " << j << "'s Z0: " << constituents[j].user_info<Constituent_info>().Z0()<< std::endl;
 			}*/
-		}// end of loop over constituents		//! fill efficiency histograms
+		}// end of loop over constituents		
 		if(debug)
 		{
-			std::cout<<"filling histograms \n";
 			std::cout<<"jetPt : " << jetPt[ii]  << std::endl;
 			std::cout<<"jetEta : " << jetEta[ii]  << std::endl;
 		}
@@ -350,38 +378,55 @@ int main ()
 	{
 		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
 		//! no z vertex bin
-		if(incl_trpclejets.size() >= trigger.Njet_max)
+		if(debug)
 		{
-			if(incl_trpclejets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
-			if(incl_trpclejets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
-			if(incl_trpclejets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
-			if(incl_trpclejets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			std::cout<<"size jetPt_sm: " << jetPt_sm.size() <<std::endl;
+			std::cout<<"size incl_trpclejets: " << incl_trpclejets.size() <<std::endl;
+			std::cout<< "n5b_tot[ " << i2 << "] : " <<trigger.n5b_tot[i2] << ",   " <<  "n4b_tot[ " << i2 << "] : " <<trigger.n4b_tot[i2] << ",   " << "n3b_tot[ " << i2 << "] : " <<trigger.n3b_tot[i2] << ",   " << "n2b_tot[ " << i2 << "] : " <<trigger.n2b_tot[i2] <<std::endl;	
+			
+		}
+
+		trigger.n5_tot[i2] = 1;
+		trigger.n4_tot[i2] = 1;
+		trigger.n3_tot[i2] = 1;
+		trigger.n2_tot[i2] = 1;
+		trigger.n5a_tot[i2] = 1;
+		trigger.n4a_tot[i2] = 1;
+		trigger.n3a_tot[i2] = 1;
+		trigger.n2a_tot[i2] = 1;
+
+		if(jetPt_sm.size() >= trigger.Njet_max)
+		{
+			if(jetPt_sm[4]*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
+			if(jetPt_sm[3]*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(jetPt_sm[2]*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 		}
 		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
-		else if (incl_trpclejets.size() >= trigger.Njet_max-1)
+		else if (jetPt_sm.size() >= trigger.Njet_max-1)
 		{
-			if(incl_trpclejets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
-			if(incl_trpclejets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
-			if(incl_trpclejets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(jetPt_sm[3]*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(jetPt_sm[2]*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
-		else if (incl_trpclejets.size() >= trigger.Njet_max-2)
+		else if (jetPt_sm.size() >= trigger.Njet_max-2)
 		{
-			if(incl_trpclejets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
-			if(incl_trpclejets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(jetPt_sm[2]*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
-		else if (incl_trpclejets.size() >= trigger.Njet_max-3)
+		else if (jetPt_sm.size() >= trigger.Njet_max-3)
 		{
-			if(incl_trpclejets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 	}
 
  }// for loop over nentries
-
+  std::cout <<"total number of events used " <<r_sumpt.nevents <<std::endl;
 r_sumpt.n_tots.push_back(trigger.n2_tot);	
 r_sumpt.n_tots.push_back(trigger.n3_tot);	
 r_sumpt.n_tots.push_back(trigger.n4_tot);	
@@ -394,8 +439,9 @@ r_sumpt.n_tots.push_back(trigger.n2b_tot);
 r_sumpt.n_tots.push_back(trigger.n3b_tot);	
 r_sumpt.n_tots.push_back(trigger.n4b_tot);	
 r_sumpt.n_tots.push_back(trigger.n5b_tot);
-r_sumpt.SetHist_props();
+//r_sumpt.SetHist_props();
 r_sumpt.Fill_TrigRate_EMU(r_sumpt.n_tots);
+r_sumpt.SetHist_props();
 //! continuation of trigger efficiency cal.
 //! we fill outside as we want count the no. of events with 'n' trackjets above a pt threshold
 trigger.init(trigger.xbins, trigger.nbins);

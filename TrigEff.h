@@ -20,6 +20,7 @@
 #include "TLatex.h"
 #include "TChain.h"
 #include "TMath.h"
+#include "TRandom.h"
 #include <vector>
 #include <list>
 #include <algorithm> 
@@ -34,8 +35,11 @@ class TrigEff
 public:
 	const int Njet_max = 5;
 	const float eta_cut = 1.6; 
-	static const int nbins_plus1 = 21;
-	static const  int nbins = 20;// = (pt_max - pt_min)/ptcut_width;
+	//static const int nbins_plus1 = 21;
+	//static const  int nbins = 20;// = (pt_max - pt_min)/ptcut_width;
+	static const int nbins_plus1 = 116;
+	static const  int nbins = 115;// = (pt_max - pt_min)/ptcut_width;
+	const int Nlowpt_bins = 80;
 	float pt_min, pt_max, ptcut_width;
     	float xbins[nbins_plus1];
 	bool debug = true;
@@ -45,8 +49,22 @@ public:
 	{
 		for(int i = 0; i <= nbins; i++)
 		{
-			xbins[i] = pt_min + i*ptcut_width;
-			//std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
+			//xbins[i] = pt_min + i*ptcut_width;
+			//
+			////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl;
+			if(i==0) xbins[i] = pt_min;
+			else if(i < Nlowpt_bins)
+			{
+			     xbins[i] = i*ptcut_width;
+			}
+			else
+			{
+			     int j = i - Nlowpt_bins;
+			     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
+			     xbins[i] = highpt_min + j*4*ptcut_width;
+			}
+
+			std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
 		}
 		
 	}
@@ -58,7 +76,6 @@ public:
 	//}
 
 	void init(float xbins[], int nbins);
-		
 	void SetHist_props();
 	void Fill_TrigEff();
 	void DrawNoBin();

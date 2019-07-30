@@ -127,10 +127,10 @@ void Rate_sumpt::Fill_TrigRate_EMU(std::vector<int*> vec_ntots)
         	std::cout<<"n2tot[" <<j <<"] = " << vec_ntots[0][j] <<std::endl;
           	
           
-          	hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[0][j]));
-          	hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[1][j]));
-          	hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[2][j]));
-          	hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[3][j]));
+          	hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[8][j]));
+          	hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[9][j]));
+          	hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[10][j]));
+          	hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[11][j]));
          
 	}
 

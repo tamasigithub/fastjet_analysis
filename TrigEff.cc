@@ -18,6 +18,7 @@ void TrigEff::init(float xbins[], int nbins)
 	hb_tJeff4 = new TH1F("hb_tJeff4"," Track Jet efficiency, No vertex bin", nbins, xbins);
 	hb_tJeff5 = new TH1F("hb_tJeff5"," Track Jet efficiency, No vertex bin", nbins, xbins);
 }
+	
 void TrigEff::SetHist_props()
 {
 	h_tJeff5->Sumw2(1);
@@ -115,7 +116,7 @@ void TrigEff::Fill_TrigEff()
 	{
 		if(debug)
 		{
-			std::cout<< "n5_tot[ " << j << "] : " <<n5_tot[j] << ",   " <<  "n4_tot[ " << j << "] : " <<n4_tot[j] << ",   " << "n3_tot[ " << j << "] : " <<n3_tot[j] << ",   " << "n2_tot[ " << j << "] : " <<n2_tot[j] <<std::endl;
+			std::cout<< "n5b_tot[ " << j << "] : " <<n5b_tot[j] << ",   " <<  "n4b_tot[ " << j << "] : " <<n4b_tot[j] << ",   " << "n3b_tot[ " << j << "] : " <<n3b_tot[j] << ",   " << "n2b_tot[ " << j << "] : " <<n2b_tot[j] <<std::endl;
 		}
 	
 		h_tJeff5->Fill(xbins[j], (1.0*n5_tot[j])/n5_tot[0]);

@@ -24,12 +24,13 @@ int main ()
   //     Similarly if NZVTXBIN = 80 and ZRANGE = 200mm, ZBIN_width = 2.5            //
   //     and the 1st new zbin_width around 0mm extenda from -3.75 to +3.75          //
   //     and -3 to +3 if NZVTXBIN = 100                                             //
+  //     -1.5 to 1.5 if NZVTXBIN = 200 						    //
   ////////////////////////////////////////////////////////////////////////////////////
   int MIN_Constituents, NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
   int izbin;
   MIN_Constituents = 2;
   NJETS = 10;
-  NZVTXBIN = 40;
+  NZVTXBIN = 200;
   ZRANGE = 200; // in mm
   ZBIN_width = ZRANGE/NZVTXBIN;
   double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
@@ -56,7 +57,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 200., PTCUT_WIDTH = 10.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 1500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -70,8 +71,8 @@ int main ()
   //! store results in an output root file 
 //////////////////////////////////////////////////
   //! branch variables
-  gInterpreter->GenerateDictionary("vector<vector<double> >","vector");
-  gInterpreter->GenerateDictionary("vector<vector<int> >","vector");
+  gInterpreter->GenerateDictionary("vector<vector<double>>","vector");
+  gInterpreter->GenerateDictionary("vector<vector<int>>","vector");
    int eventNo;
   //! reconstructed track-jets
   int Njets;						// # of reconstructed track-jets
@@ -113,8 +114,10 @@ int main ()
 
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
-  //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks3.75_.root","RECREATE");
-  TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_.root","RECREATE");
+  //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks7.5_1.2GeV.root","RECREATE");
+  TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks1.5_1.2GeV.root","RECREATE");
+  //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
+  //TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -170,6 +173,7 @@ int main ()
   std::vector<double> *pt_rec = 0;
   std::vector<double> *z0_rec = 0;
   std::vector<double> *theta_rec = 0;
+  std::vector<double> *eta_rec = 0;
   std::vector<double> *phi_rec = 0;
   std::vector<int> *tid_rec = 0;
   std::vector<int> *m_pdg = 0;
@@ -190,6 +194,7 @@ int main ()
   rec.SetBranchAddress("Pt_n", &pt_rec);
   rec.SetBranchAddress("Z013", &z0_rec);
   rec.SetBranchAddress("Theta13", &theta_rec);
+  rec.SetBranchAddress("Eta13", &eta_rec);
   rec.SetBranchAddress("Phi013", &phi_rec);
   rec.SetBranchAddress("Tid", &tid_rec);
   rec.SetBranchAddress("M_pdg", &m_pdg);
@@ -202,6 +207,7 @@ int main ()
   std::vector<double> pt_recPU;
   std::vector<double> z0_recPU;
   std::vector<double> theta_recPU;
+  std::vector<double> eta_recPU;
   std::vector<double> phi_recPU;
   std::vector<int> tid_recPU;
   std::vector<int> m_pdgPU;
@@ -226,7 +232,7 @@ int main ()
   std::vector<TrackJetObj> tjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
   //! for every event do the following
   //
-  double pt,z0,theta,phi,tid,mpt,mVz,mtheta,mphi;
+  double pt,z0,theta,eta,phi,tid,mpt,mVz,mtheta,mphi;
   int pid;
   for(Long64_t i = 0; i < nevents; ++i)
   {
@@ -268,6 +274,7 @@ int main ()
 	pt_recPU.clear();
 	z0_recPU.clear();
 	theta_recPU.clear();
+	eta_recPU.clear();
 	phi_recPU.clear();
 	tid_recPU.clear();
 	m_pdgPU.clear();
@@ -293,6 +300,7 @@ int main ()
 			pt_recPU.push_back((*pt_rec)[ik]);
 			z0_recPU.push_back((*z0_rec)[ik]);
 			theta_recPU.push_back((*theta_rec)[ik]);
+			eta_recPU.push_back((*eta_rec)[ik]);
 			phi_recPU.push_back((*phi_rec)[ik]);
 			tid_recPU.push_back((*tid_rec)[ik]);
 			m_pdgPU.push_back((*m_pdg)[ik]);
@@ -318,6 +326,7 @@ int main ()
 		pt	= std::min(pt_recPU[j], MAX_TRACKpt);
 		z0	= z0_recPU[j];
 		theta	= theta_recPU[j];
+		eta	= eta_recPU[j];
 		phi	= phi_recPU[j];
 		tid	= tid_recPU[j];
 		pid	= m_pdgPU[j];
@@ -325,7 +334,10 @@ int main ()
 		mVz	= m_VzPU[j];
 		mtheta	= m_thetaPU[j];
 		mphi	= m_phiPU[j];
-		
+	
+		if(std::fabs(pt) < 5e3) continue; 	
+		if(std::fabs(eta) > 1.7) continue; 	
+
 		if(debug){std::cout<<"mpt, mVz, mtheta, mphi, tid: " << mpt << " , " << mVz << " , " << mtheta << " , " << mphi << " , " << tid << std::endl; }
 		if(tid==-1)tjObj.flag = 0;//fakes
 		else if(tid > 0)tjObj.flag = 1;//matched tracks
@@ -401,6 +413,7 @@ int main ()
 	ClusterSequence cs_m_pcle(input_particles, jet_def);
 	// sort the resulting jets in ascending order of pt
 	// sorted_by_pt is a method of PseudoJet which returns a vector of jets sorted into decreasing pt
+	std::vector<PseudoJet> incl_trkjets_minNConstituents;
 	std::vector<PseudoJet> incl_trkjets = sorted_by_pt(cs_trk.inclusive_jets(PTMINJET));
 	std::vector<PseudoJet> incl_m_pclejets = sorted_by_pt(cs_m_pcle.inclusive_jets(PTMINJET));
 	// print out some infos
@@ -568,9 +581,18 @@ int main ()
 		if(M_jetPt[i]!= 0 ) h_num_vs_ptPU->Fill(jetPt[i]/1e3);
 		h_den_vs_etaPU->Fill(jetEta[i]);
 		if(M_jetPt[i]!= 0 ) h_num_vs_etaPU->Fill(jetEta[i]);
+		//!store psedojets that have a minimum number of constituents associated to them
+		if(constituents.size() < MIN_Constituents)
+                {
+                        continue;
+                }
+		else incl_trkjets_minNConstituents.push_back(incl_trkjets[i]);
 	}// end of for loop over jet size
-//! end of Jet Matching
+	//! end of Jet Matching
+	
 	glob_jet->Fill();
+
+
 
 /////////////////////////////////////////////////////////////////////////////////
   ///******************* jets per vertex bin *******************///
@@ -797,36 +819,37 @@ int main ()
 		
 		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
 		//! no z vertex bin
-		if(incl_trkjets.size() >= trigger.Njet_max)
+		if(incl_trkjets_minNConstituents.size() >= trigger.Njet_max)
 		{
-			if(incl_trkjets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
-			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
-			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 		}
 		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
-		else if (incl_trkjets.size() >= trigger.Njet_max-1)
+		else if (incl_trkjets_minNConstituents.size() >= trigger.Njet_max-1)
 		{
-			if(incl_trkjets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
-			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
-		else if (incl_trkjets.size() >= trigger.Njet_max-2)
+		else if (incl_trkjets_minNConstituents.size() >= trigger.Njet_max-2)
 		{
-			if(incl_trkjets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
-		else if (incl_trkjets.size() >= trigger.Njet_max-3)
+		else if (incl_trkjets_minNConstituents.size() >= trigger.Njet_max-3)
 		{
-			if(incl_trkjets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			if(incl_trkjets_minNConstituents[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
 	}
-  }// for loop over nentries	
+  }// for loop over nentries
+r_sumpt.n_tots.clear();  
 r_sumpt.n_tots.push_back(trigger.n2_tot);	
 r_sumpt.n_tots.push_back(trigger.n3_tot);	
 r_sumpt.n_tots.push_back(trigger.n4_tot);	
