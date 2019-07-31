@@ -352,6 +352,8 @@ int main ()
 		tjObj.py = pt*sin(phi);
 		tjObj.pz = pt/tan(theta);
 		tjObj.E  = std::sqrt(std::pow(pt/sin(theta),2) + std::pow(mass_piPM,2));
+		tjObj.eta = eta;
+		tjObj.phi = phi;
 		//! matched truth info has been set to zero for fake tracks and this causes a crash while doing jet clustering
 		//! for truth jet clustering we anyway do not need these zeroes
 		if(tid==-1){

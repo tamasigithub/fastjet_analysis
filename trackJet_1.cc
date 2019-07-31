@@ -3,6 +3,7 @@
 #include "TrackJetObj.h"
 #include "Rate_sumpt.h"
 #include "TrigEff.h"
+#include "CaloEmu.h"
 #include <iostream>
 #include <vector>
 #include "math.h"
@@ -159,8 +160,8 @@ int main ()
   ////Long64_t nentries = 1000;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  //Long64_t nevents = 3;
-  Long64_t nevents = rec.GetEntries();
+  Long64_t nevents = 3;
+  //Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
@@ -232,7 +233,7 @@ int main ()
 		q	= chargePU[j];
 
 		//////// ACCEPTANCE CUTS //////////	
-		if(std::fabs(eta) > 1.6) continue; 
+		if(std::fabs(eta) > 1.7) continue; 
 		if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
 		if(std::abs(q) != 0) //is chrarged
 		{	
@@ -243,8 +244,7 @@ int main ()
 		//! veto fake and dc tracks?
 		//if(tjObj.flag!=1) continue;
 		//! veto only dc tracks and those which do not satisfy the above selection cuts?
-
-		//if(tjObj.flag < 0) continue;
+		if(tjObj.flag < 0) continue;
 
 		if(debug)
 		{
@@ -256,6 +256,12 @@ int main ()
 		tjObj.py = pt*sin(phi);
 		tjObj.pz = pt/tan(theta);
 		tjObj.E  = std::sqrt(std::pow(pt/sin(theta),2) + std::pow(mass_piPM,2));
+		//! add the modified eta and phi values here
+		//! i.e. eta and phi due to bending of charged particles in magnetic field
+		//if(q!=0)double rad = pt/(0.3*4*q);
+
+		tjObj.eta = eta;
+		tjObj.phi = phi;
 		//! matched to truth, reco info has been set to zero for inefficinecy and this causes a crash while doing jet clustering
 		//! for rec jet clustering we anyway do not need these zeroes
 		tjObj.zv = z0;
@@ -273,6 +279,8 @@ int main ()
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_trpcle;
 
+	//! initialise a calo object
+	CaloEmu caloObj;
 
 	// loop over all truth particles
 	for(int k = 0; k < trjVec.size(); ++k )
@@ -284,7 +292,44 @@ int main ()
 		//input_trpcle.push_back( PseudoJet( trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E) );  
 		input_trpcle.push_back(trpcle);
 		
+		////////////////////////////////////////////////////////////////
+		//           Calorimeter - realistic emulation                //
+		////////////////////////////////////////////////////////////////           
+		//! accumulate energy deposits in each calo cell
+                //! find the particles rapidity and phi, then get the detector bins(cells) and accumulate energy in this cell
+		/*std::cout<<"eta, Eta: " <<trjVec[k].eta << ", " << trpcle.eta() <<std::endl;
+		std::cout<<"phi, Phi: " <<trjVec[k].phi << ", " << trpcle.phi() <<std::endl;
+		std::cout<<"e, E: " <<trjVec[k].E << ", " << trpcle.e() <<std::endl;*/
+		//caloObj.AccumulateEnergy(trpcle.eta(), trpcle.phi(), trpcle.e());// initial eta phi
+		caloObj.AccumulateEnergy(trjVec[k].eta, trjVec[k].phi, trjVec[k].E);// modified eta phi due to bending in magnetic field
 	}// end of loop over all tracks trjVec
+	
+	std::vector<PseudoJet> CellEnergy_forEmuCaloJets;
+	unsigned int n_xbins = caloObj.GetNxbins();
+	unsigned int n_ybins = caloObj.GetNybins();
+	std::cout << "n_xbins: " << n_xbins <<std::endl;//etabins
+	std::cout << "n_ybins: " << n_ybins <<std::endl;//phibins
+	std::cout<<"Cell Energy threshold: " << caloObj.GetCellEnergyThreshold()*1e-3 << "GeV."<<std::endl;
+	for(unsigned int i = 1; i <= n_xbins; i++ )
+	{
+		for(unsigned int j = 1; j <= n_ybins; j++)
+		{
+			std::vector<double> Eptetaphi = caloObj.GetCellEnergy(i, j);
+			if(Eptetaphi[0] > caloObj.GetCellEnergyThreshold())
+			{
+				PseudoJet p(0., 0., 0., 0.);
+				// And treat 'clusters' as massless.
+				if(debug) std::cout<<"Cell energy[ " << i << ", " << j << "]: " << Eptetaphi[0] <<std::endl;
+	                     	p.reset_PtYPhiM(Eptetaphi[1], Eptetaphi[2], Eptetaphi[3], 0.);
+				CellEnergy_forEmuCaloJets.push_back(p);
+
+			}	
+		}//phibins
+	}//etabins
+
+	ClusterSequence cs_CaloEmuJet(CellEnergy_forEmuCaloJets, jet_def);
+	std::vector<PseudoJet>  incl_CaloEmuJets = sorted_by_pt(cs_CaloEmuJet.inclusive_jets(PTMINJET));
+	// ********************************************************************************************//
 	
 	if(debug)std::cout<<"Do jet Clustering \n";
 	// run the jet clustering with the above definition, extract the jets
@@ -423,6 +468,34 @@ int main ()
 			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
+	/*	if(incl_CaloEmuJets.size() >= trigger.Njet_max)
+		{
+			if(incl_CaloEmuJets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
+			if(incl_CaloEmuJets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(incl_CaloEmuJets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_CaloEmuJets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+		}
+		//! increment n4_tot if there are atleast 4 jets with pt > xbins[i]
+		else if (incl_CaloEmuJets.size() >= trigger.Njet_max-1)
+		{
+			if(incl_CaloEmuJets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
+			if(incl_CaloEmuJets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_CaloEmuJets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			
+		}
+		//! increment n3_tot if there are atleast 3 jets with pt > xbins[i]
+		else if (incl_CaloEmuJets.size() >= trigger.Njet_max-2)
+		{
+			if(incl_CaloEmuJets[2].pt()*1e-3 > trigger.xbins[i2]) trigger.n3b_tot[i2] += 1;
+			if(incl_CaloEmuJets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			
+		}
+		//! increment n2_tot if there are atleast 2 jets with pt > xbins[i]
+		else if (incl_CaloEmuJets.size() >= trigger.Njet_max-3)
+		{
+			if(incl_CaloEmuJets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
+			
+		}*/
 	}
 
  }// for loop over nentries

@@ -14,6 +14,8 @@ public:
 	double py;
 	double pz;
 	double E;
+	double eta;
+	double phi;
 	double px_m;
 	double py_m;
 	double pz_m;
