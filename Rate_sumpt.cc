@@ -5,23 +5,99 @@ void Rate_sumpt::init_Histos(float xbins[], int nbins)
 
 	//! Book Histogram        
 	//! sumpt histos
-	h_PULpt = new TH1D("h_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	h_PUNLpt = new TH1D("h_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	h_PUNNLpt = new TH1D("h_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	h_PUNNNLpt = new TH1D("h_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	h_PUNNNNLpt = new TH1D("h_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 , PB finding using sum pt",nbins,xbins);
-	//! overlapping bin approach
-        ha_PULpt = new TH1D("ha_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	ha_PUNLpt = new TH1D("ha_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	ha_PUNNLpt = new TH1D("ha_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	ha_PUNNNLpt = new TH1D("ha_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	ha_PUNNNNLpt = new TH1D("ha_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 ",nbins,xbins);
+	h_PULpt = new TH1D("h_PULpt","Rate of highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	h_PUNLpt = new TH1D("h_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	h_PUNNLpt = new TH1D("h_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	h_PUNNNLpt = new TH1D("h_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	h_PUNNNNLpt = new TH1D("h_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 1000 , PB finding using sum pt",nbins,xbins);
+	//! maxpt approach
+        ha_PULpt = new TH1D("ha_PULpt","Rate of highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	ha_PUNLpt = new TH1D("ha_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	ha_PUNNLpt = new TH1D("ha_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	ha_PUNNNLpt = new TH1D("ha_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	ha_PUNNNNLpt = new TH1D("ha_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 1000 ",nbins,xbins);
 	//! without binning
-        hb_PULpt = new TH1D("hb_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	hb_PUNLpt = new TH1D("hb_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	hb_PUNNLpt = new TH1D("hb_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	hb_PUNNNLpt = new TH1D("hb_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,xbins);
-	hb_PUNNNNLpt = new TH1D("hb_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 , without binning along beam axis",nbins,xbins);
+        hb_PULpt = new TH1D("hb_PULpt","Rate of highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	hb_PUNLpt = new TH1D("hb_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	hb_PUNNLpt = new TH1D("hb_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	hb_PUNNNLpt = new TH1D("hb_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 1000 ",nbins,xbins);
+	hb_PUNNNNLpt = new TH1D("hb_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 1000 , without binning along beam axis",nbins,xbins);
+
+	////! sumpt histos
+	hM_PULpt = new TH1D("hM_PULpt","Multiplicity of highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hM_PUNLpt = new TH1D("hM_PUNLpt","Multiplicity of 2nd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hM_PUNNLpt = new TH1D("hM_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hM_PUNNNLpt = new TH1D("hM_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hM_PUNNNNLpt = new TH1D("hM_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000, sum-pt",nMultiplicityBins,0,maxMultiplicity);
+	//! maxpt approach
+        hMa_PULpt = new TH1D("hMa_PULpt","Multiplicity of highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMa_PUNLpt = new TH1D("hMa_PUNLpt","Multiplicity of 2nd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMa_PUNNLpt = new TH1D("hMa_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMa_PUNNNLpt = new TH1D("hMa_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMa_PUNNNNLpt = new TH1D("hMa_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000, max-pt ",nMultiplicityBins,0,maxMultiplicity);
+	//! without binning
+        hMb_PULpt = new TH1D("hMb_PULpt","Multiplicity of highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMb_PUNLpt = new TH1D("hMb_PUNLpt","Multiplicity of 2nd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMb_PUNNLpt = new TH1D("hMb_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMb_PUNNNLpt = new TH1D("hMb_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
+	hMb_PUNNNNLpt = new TH1D("hMb_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000 , w/o binning along z",nMultiplicityBins,0,maxMultiplicity);
+}
+void Rate_sumpt::SetMultiplicityHist_props()
+{
+	hM_PUNNNNLpt->SetLineColor(kBlue);
+	hM_PUNNNLpt->SetLineColor(kGreen);
+	hM_PUNNLpt->SetLineColor(kRed);
+	hM_PUNLpt->SetLineColor(kBlack);
+	hM_PULpt->SetLineColor(kOrange);
+
+	hM_PUNNNNLpt->SetLineWidth(3);
+	hM_PUNNNLpt->SetLineWidth(3);
+	hM_PUNNLpt->SetLineWidth(3);
+	hM_PUNLpt->SetLineWidth(3);
+	hM_PULpt->SetLineWidth(3);
+
+        hM_PULpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hM_PUNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hM_PUNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hM_PUNNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hM_PUNNNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+	
+	hMa_PUNNNNLpt->SetLineColor(kBlue);
+	hMa_PUNNNLpt->SetLineColor(kGreen);
+	hMa_PUNNLpt->SetLineColor(kRed);
+	hMa_PUNLpt->SetLineColor(kBlack);
+	hMa_PULpt->SetLineColor(kOrange);
+
+	hMa_PUNNNNLpt->SetLineWidth(3);
+	hMa_PUNNNLpt->SetLineWidth(3);
+	hMa_PUNNLpt->SetLineWidth(3);
+	hMa_PUNLpt->SetLineWidth(3);
+	hMa_PULpt->SetLineWidth(3);
+
+        hMa_PULpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMa_PUNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMa_PUNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMa_PUNNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMa_PUNNNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+	
+	hMb_PUNNNNLpt->SetLineColor(kBlue);
+	hMb_PUNNNLpt->SetLineColor(kGreen);
+	hMb_PUNNLpt->SetLineColor(kRed);
+	hMb_PUNLpt->SetLineColor(kBlack);
+	hMb_PULpt->SetLineColor(kOrange);
+
+	hMb_PUNNNNLpt->SetLineWidth(3);
+	hMb_PUNNNLpt->SetLineWidth(3);
+	hMb_PUNNLpt->SetLineWidth(3);
+	hMb_PUNLpt->SetLineWidth(3);
+	hMb_PULpt->SetLineWidth(3);
+
+        hMb_PULpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMb_PUNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMb_PUNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMb_PUNNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+        hMb_PUNNNNLpt->GetXaxis()->SetTitle("Track-jet Multiplicity");
+
 }
 void Rate_sumpt::SetHist_props()
 {
@@ -165,6 +241,48 @@ void Rate_sumpt::Fill_TrigRate(std::vector<int*> vec_ntots)
           	h_tJeff2->Fill(xbins[j], (1.0*n2_tot[j])/n_entries);*/
         }
 
+}
+void Rate_sumpt::DrawMultiplicitySumpt()
+{
+        hM_PUNNNNLpt->Draw("hist");
+        hM_PUNNNLpt->Draw("hist same");
+        hM_PUNNLpt->Draw("hist same");
+        hM_PUNLpt->Draw("hist same");
+	//hM_PULpt->Draw("hist");
+}
+void Rate_sumpt::DrawMultiplicityMaxpt()
+{
+        hMa_PUNNNNLpt->Draw("hist");
+        hMa_PUNNNLpt->Draw("hist same");
+        hMa_PUNNLpt->Draw("hist same");
+        hMa_PUNLpt->Draw("hist same");
+	//hMa_PULpt->Draw("hist");
+}
+void Rate_sumpt::DrawMultiplicity()
+{
+        hMb_PUNNNNLpt->Draw("hist ");
+        hMb_PUNNNLpt->Draw("hist same");
+        hMb_PUNNLpt->Draw("hist same");
+        hMb_PUNLpt->Draw("hist same");
+	//hMb_PULpt->Draw("hist");
+}
+void Rate_sumpt::WriteMultiplicity()
+{
+	hMb_PULpt->Write();
+        hMb_PUNLpt->Write();
+        hMb_PUNNLpt->Write();
+        hMb_PUNNNLpt->Write();
+        hMb_PUNNNNLpt->Write();
+	hMa_PULpt->Write();
+        hMa_PUNLpt->Write();
+        hMa_PUNNLpt->Write();
+        hMa_PUNNNLpt->Write();
+        hMa_PUNNNNLpt->Write();
+	hM_PULpt->Write();
+        hM_PUNLpt->Write();
+        hM_PUNNLpt->Write();
+        hM_PUNNNLpt->Write();
+        hM_PUNNNNLpt->Write();
 }
 void Rate_sumpt::DrawNoBin()
 {

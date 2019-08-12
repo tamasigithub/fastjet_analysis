@@ -39,6 +39,14 @@ class CaloEmu
 	      TH2F *m_detector = nullptr; // detector (modeled by a 2dim histogram)
 	      std::vector<double> EPtEtaPhi;//accumulated params for a cell
 	      double CellEnergyThreshold = 5e3;//MeV
+	      double Calo_radius = 2e3;//mm
+	      double SCALEfac_Ereso = 0.5;// 50%
+	public:
+	          //static constexpr double B_field = 4.0; //Magnetic Field strength
+		  //static constexpr double CONSTANT = 0.299760192;
+	          const double B_field = 4.0; //Magnetic Field strength
+		  const double CONSTANT = 0.299760192;
+
 
 	public:
 
@@ -67,6 +75,9 @@ class CaloEmu
 		}
 
 	public:		
+		void Reset_Detector();
+		double GetCaloRadius();
+		double GetChargedPcle_PtThreshold();
 		double GetCellEnergyThreshold();
 		unsigned int GetNxbins();
 		unsigned int GetNybins();

@@ -32,45 +32,48 @@ class Rate_sumpt
 {
 public:
 	int nevents;// number of pileup events
-        //double Z0_cut = 1.5;//3;//1.5; //in mm
-	//double tmppt , tmpz0;
-	//int nzvtxbin;
 	double max_sumpt;
 	int prim_bin;
 	std::vector<double> v_sumpt;
 	//int nbins = 40;
 	//double ptmin = 0.0, ptmax = 1000;//in GeV/c 
 	double Lpt, NLpt, NNLpt, NNNLpt, NNNNLpt;
-	//static const int nbins_plus1 = 21;
-	//static const  int nbins = 20;// = (pt_max - pt_min)/ptcut_width;
-	static const int nbins_plus1 = 116;
-	static const  int nbins = 115;// = (pt_max - pt_min)/ptcut_width;
-	const int Nlowpt_bins = 80;
+	static const int nbins_plus1 = 101;
+	static const  int nbins = 100;// = (pt_max - pt_min)/ptcut_width;
+	//static const int nbins_plus1 = 116;
+	//static const  int nbins = 115;// = (pt_max - pt_min)/ptcut_width;
+	//const int Nlowpt_bins = 80;
 	float pt_min, pt_max, ptcut_width;
     	float xbins[nbins_plus1];
+	std::vector<int*> n_tots;
+
+	std::vector<int> v_TJMult_sumpt;
+	std::vector<int> v_TJMult_maxpt;
+	int nMultiplicityBins = 10;
+	double maxMultiplicity = 10;
 	bool debug = true;
 	
-	std::vector<int*> n_tots;
 
 public:
 	Rate_sumpt(float ptMin, float ptMax, float ptcutWidth):pt_min(ptMin), pt_max(ptMax), ptcut_width(ptcutWidth) 
 	{
 		for(int i = 0; i <= nbins; i++)
 		{
-			//xbins[i] = pt_min + i*ptcut_width;
+			if(i==0) xbins[i] = pt_min;
+			xbins[i] = i*ptcut_width;
 			////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
 			
-			if(i==0) xbins[i] = pt_min;
-			else if(i < Nlowpt_bins)
-			{
-			     xbins[i] = i*ptcut_width;
-			}
-			else
-			{
-			     int j = i - Nlowpt_bins;
-			     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
-			     xbins[i] = highpt_min + j*4*ptcut_width;
-			}
+			//if(i==0) xbins[i] = pt_min;
+			//else if(i < Nlowpt_bins)
+			//{
+			//     xbins[i] = i*ptcut_width;
+			//}
+			//else
+			//{
+			//     int j = i - Nlowpt_bins;
+			//     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
+			//     xbins[i] = highpt_min + j*4*ptcut_width;
+			//}
 
 			std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
 		
@@ -86,6 +89,7 @@ public:
 	}
 	~Rate_sumpt(){}
 	void init_Histos(float xbins[], int nbins);
+	void SetMultiplicityHist_props();
 	void SetHist_props();
 	void DrawNoBin();
 	void DrawRate();
@@ -94,26 +98,12 @@ public:
 	void WriteNoBin();
 	void Fill_TrigRate(std::vector<int*> vec_ntots);
 	void Fill_TrigRate_EMU(std::vector<int*> vec_ntots);
+	void DrawMultiplicitySumpt();
+	void DrawMultiplicityMaxpt();
+	void DrawMultiplicity();
+	void WriteMultiplicity();
 public:
 	//! Book Histogram        
-	////! sumpt histos
-	//TH1* h_PULpt = new TH1D("h_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* h_PUNLpt = new TH1D("h_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* h_PUNNLpt = new TH1D("h_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* h_PUNNNLpt = new TH1D("h_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* h_PUNNNNLpt = new TH1D("h_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 , PB finding using sum pt",nbins,ptmin,ptmax);
-	////! overlapping bin approach
-        //TH1* ha_PULpt = new TH1D("ha_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* ha_PUNLpt = new TH1D("ha_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* ha_PUNNLpt = new TH1D("ha_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* ha_PUNNNLpt = new TH1D("ha_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* ha_PUNNNNLpt = new TH1D("ha_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 ",nbins,ptmin,ptmax);
-	////! without binning
-        //TH1* hb_PULpt = new TH1D("hb_PULpt","Rate of highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* hb_PUNLpt = new TH1D("hb_PUNLpt","Rate of 2nd highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* hb_PUNNLpt = new TH1D("hb_PUNNLpt","Rate of 3rd highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* hb_PUNNNLpt = new TH1D("hb_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 960 ",nbins,ptmin,ptmax);
-	//TH1* hb_PUNNNNLpt = new TH1D("hb_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 960 , without binning along beam axis",nbins,ptmin,ptmax);
 	//! sumpt histos
 	TH1* h_PULpt = nullptr;
 	TH1* h_PUNLpt = nullptr;
@@ -132,6 +122,26 @@ public:
 	TH1* hb_PUNNLpt = nullptr;
 	TH1* hb_PUNNNLpt = nullptr;
 	TH1* hb_PUNNNNLpt = nullptr;
+	//! histograms for recording track multiplicity
+	//! sumpt histos
+	TH1* hM_PULpt = nullptr;
+	TH1* hM_PUNLpt = nullptr;
+	TH1* hM_PUNNLpt = nullptr;
+	TH1* hM_PUNNNLpt = nullptr;
+	TH1* hM_PUNNNNLpt = nullptr;
+	//! overlapping bin approach
+        TH1* hMa_PULpt = nullptr;
+	TH1* hMa_PUNLpt = nullptr;
+	TH1* hMa_PUNNLpt = nullptr;
+	TH1* hMa_PUNNNLpt = nullptr;
+	TH1* hMa_PUNNNNLpt = nullptr;
+	//! without binning
+        TH1* hMb_PULpt = nullptr;
+	TH1* hMb_PUNLpt = nullptr;
+	TH1* hMb_PUNNLpt = nullptr;
+	TH1* hMb_PUNNNLpt = nullptr;
+	TH1* hMb_PUNNNNLpt = nullptr;
+
 	
 private:
     //! delete the default copy constructor and assignment operator

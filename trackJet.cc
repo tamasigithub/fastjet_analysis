@@ -19,16 +19,22 @@ int main ()
   bool debug = false;
   ////////////////////////////////////////////////////////////////////////////////////
   //     if NZVTXBIN = 40 and ZRANGE = 200mm, ZBIN_width = 5                        //
-  //     we now extend our zbin_width to +- 0.5* the neighbouring bin(5/2)          //
-  //     i.e. the first new zbin_width around 0mm will now extend from -7.5 to +7.5 //
-  //     Similarly if NZVTXBIN = 80 and ZRANGE = 200mm, ZBIN_width = 2.5            //
-  //     and the 1st new zbin_width around 0mm extenda from -3.75 to +3.75          //
-  //     and -3 to +3 if NZVTXBIN = 100                                             //
-  //     -1.5 to 1.5 if NZVTXBIN = 200 						    //
+  //     we now extend our zbin_width to include the neighbouring bins
+  //	 i.e. each of the ith bin is now 15 mm and there is an overlap of 5 mm in 
+  //	 either direction
+  //	 the 20th bin [0,5) will now include contents from the 19th and the 21st bins
+  //	 i.e. new bin range is [-5,10) i.e. ZBIN_width +- 3/2 * ZBIN_width
+  //	 NZVTXBIN = 40  => +-7.5mm about the center of the ith bin total 15mm
+  //	 NZVTXBIN = 80 => +-3.75mm about the center of the ith bin	 7.5mm
+  //	 NZVTXBIN = 100 => +-3.0mm about the center of the ith bin	 6mm
+  //	 NZVTXBIN = 120 => +-2.5mm about the center of the ith bin	 5mm 
+  //	 NZVTXBIN = 150 => +-2.0mm about the center of the ith bin  	 4mm 
+  //	 NZVTXBIN = 200 => +-1.5mm about the center of the ith bin  	 3mm
   ////////////////////////////////////////////////////////////////////////////////////
-  int MIN_Constituents, NJETS, NZVTXBIN, ZRANGE, ZBIN_width;
+  int MIN_Constituents, NJETS, NZVTXBIN;
+  float ZRANGE, ZBIN_width;
   int izbin;
-  MIN_Constituents = 2;
+  MIN_Constituents = 3;
   NJETS = 10;
   NZVTXBIN = 200;
   ZRANGE = 200; // in mm
@@ -57,7 +63,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 1500., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -67,6 +73,7 @@ int main ()
 
   //! init output vector
   std::vector<std::vector<double> > vectorof_jetpt(NZVTXBIN, std::vector<double>());
+  std::vector<std::vector<int> > vectorof_jetMult(NZVTXBIN, std::vector<int>());
 //////////////////////////////////////////////////  
   //! store results in an output root file 
 //////////////////////////////////////////////////
@@ -114,8 +121,8 @@ int main ()
 
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
-  //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks7.5_1.2GeV.root","RECREATE");
-  TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks1.5_1.2GeV.root","RECREATE");
+  //TFile *f_out = new TFile("NewjetoutPU1000hh4b_30mm_optsig5_1tracks1.5_5GeV.root","RECREATE");
+  TFile *f_out = new TFile("NewjetoutPU1000MB_30mm_optsig5_3tracks1.5_5GeV.root","RECREATE");
   //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
   //TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
@@ -168,6 +175,8 @@ int main ()
   //! high pt min bias sample sigma = 3
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
   rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -223,8 +232,8 @@ int main ()
   ////Long64_t nentries = 300;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  //Long64_t nevents = 10;
-  Long64_t nevents = rec.GetEntries();
+  Long64_t nevents = 1310;
+  //Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
@@ -234,9 +243,9 @@ int main ()
   //
   double pt,z0,theta,eta,phi,tid,mpt,mVz,mtheta,mphi;
   int pid;
-  for(Long64_t i = 0; i < nevents; ++i)
+  for(Long64_t i_event = 0; i_event < nevents; ++i_event)
   {
-  	eventNo=i;
+  	eventNo = i_event;
 	TrackJetObj tjObj;
 	jetPt.clear();
 	constituentPt.clear();
@@ -294,7 +303,7 @@ int main ()
 	//for(int ievent = skip; ievent < skip+pileup; ++ievent)
 	//{
 		//rec.GetEntry(ievent);
-		rec.GetEntry(i);
+		rec.GetEntry(i_event);
 		for(int ik = 0; ik < pt_rec->size(); ++ik)
 		{
 			pt_recPU.push_back((*pt_rec)[ik]);
@@ -430,7 +439,8 @@ int main ()
 		std::cout<<"Number of reconstructed jets Njets : " <<Njets << std::endl;
 		std::cout<<"Number of truth jets M_Njets : " <<M_Njets << std::endl;
 	}
-
+	if(Njets < 1) continue;
+	if(M_Njets < 1) continue;
 //////////////////////////////////////////////////////////////////////////////////
 	// Add jet matching scheme
 /////////////////////////////////////////////////////////////////////////////////
@@ -612,6 +622,8 @@ int main ()
 		//! init output list
 		(vectorof_jetpt[ith_bin]).clear();
 		(vectorof_jetpt[ith_bin]).resize(NJETS,0.0);
+		(vectorof_jetMult[ith_bin]).clear();
+		(vectorof_jetMult[ith_bin]).resize(NJETS,0);
 		if(debug)
 		{
 			std::cout<<"ith bin, tjVec.size() : " << ith_bin <<", " << tjVec.size() << std::endl;
@@ -643,6 +655,7 @@ int main ()
 		//! get the resulting jets ordered in pt
 		std::vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets(PTMINJET));
 
+
 		//! store result, i.e. in vectorof_jetpt[ith_bin]: keep only highest pt jets from each bin
 		//! Notice that inclusive_jets is sorted hence vectorof_jetpt[ith_bin] is also already sorted
 		int tmp = 0;
@@ -655,23 +668,35 @@ int main ()
 			if(n >= inclusive_jets.size()) break;
 			
 			//! check if the nth jet has atleast MIN_Constituents
-			if(debug) std::cout<<"nconstituents: " <<inclusive_jets[n].constituents().size() <<std::endl;
-			if(inclusive_jets[n].constituents().size() < MIN_Constituents)
+			int multiplicity = inclusive_jets[n].constituents().size();
+			//int multiplicity = 1;
+			if(debug) std::cout<<"nconstituents: " <<multiplicity <<std::endl;
+			if(multiplicity < MIN_Constituents)
 			{
 				//!go to next jet. But before that fix the value of the nth index for vectorof_jetpt
 				tmp +=1;
 				continue;
 			}	
 			//! at this stage vectorof_jetpt[ith_bin][n] = 0.0 => initialised above
-			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n - tmp]) vectorof_jetpt[ith_bin][n - tmp] = inclusive_jets[n].perp();
+			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n - tmp]) 
+			{
+				vectorof_jetpt[ith_bin][n - tmp] = inclusive_jets[n].perp();
+				vectorof_jetMult[ith_bin][n - tmp] = multiplicity;
+			}
 			if(debug) std::cout<<"contents in vectorof_jetpt["<<ith_bin<<"][" << n - tmp<<"] = " <<vectorof_jetpt[ith_bin][n - tmp] <<std::endl;
 		}
 		//! calculate sum pt for each of the ith_bins
 		r_sumpt.v_sumpt[ith_bin] = std::accumulate((vectorof_jetpt[ith_bin]).begin(), (vectorof_jetpt[ith_bin]).end(), 0.0);
 	}// end of loop over NZVTXBIN
+	
 	///////////////////////////////////////
 	//        Fill Histograms            //
 	///////////////////////////////////////
+	//!clear vectors
+	r_sumpt.v_TJMult_sumpt.clear();
+	r_sumpt.v_TJMult_maxpt.clear();
+	r_sumpt.v_TJMult_sumpt.resize(NJETS,0);
+	r_sumpt.v_TJMult_maxpt.resize(NJETS,0);
 	//! Andre's approach
 	r_sumpt.Lpt = vectorof_jetpt[0][0];
 	r_sumpt.NLpt = vectorof_jetpt[0][1];
@@ -687,11 +712,32 @@ int main ()
 	{
 		//! Andre's approach
 		//! select largest of the 1st, 2nd, 3rd, 4th, 5th highest pt track jet from all the bins
-		if(r_sumpt.Lpt < vectorof_jetpt[p][0]) r_sumpt.Lpt = vectorof_jetpt[p][0];
-		if(r_sumpt.NLpt < vectorof_jetpt[p][1]) r_sumpt.NLpt = vectorof_jetpt[p][1];
-		if(r_sumpt.NNLpt < vectorof_jetpt[p][2]) r_sumpt.NNLpt = vectorof_jetpt[p][2];
-		if(r_sumpt.NNNLpt < vectorof_jetpt[p][3]) r_sumpt.NNNLpt = vectorof_jetpt[p][3];
-		if(r_sumpt.NNNNLpt < vectorof_jetpt[p][4]) r_sumpt.NNNNLpt = vectorof_jetpt[p][4];
+		if(r_sumpt.Lpt < vectorof_jetpt[p][0]) 
+		{
+			r_sumpt.Lpt = vectorof_jetpt[p][0];
+			r_sumpt.v_TJMult_maxpt[0]  = vectorof_jetMult[p][0];
+		}
+		if(r_sumpt.NLpt < vectorof_jetpt[p][1])
+		{
+			r_sumpt.NLpt = vectorof_jetpt[p][1];
+			r_sumpt.v_TJMult_maxpt[1]  = vectorof_jetMult[p][1];
+		}
+		if(r_sumpt.NNLpt < vectorof_jetpt[p][2])
+		{
+			r_sumpt.NNLpt = vectorof_jetpt[p][2];
+			r_sumpt.v_TJMult_maxpt[2]  = vectorof_jetMult[p][2];
+		}
+		if(r_sumpt.NNNLpt < vectorof_jetpt[p][3])
+		{
+			r_sumpt.NNNLpt = vectorof_jetpt[p][3];
+			r_sumpt.v_TJMult_maxpt[3]  = vectorof_jetMult[p][3];
+		}
+		if(r_sumpt.NNNNLpt < vectorof_jetpt[p][4])
+		{
+			r_sumpt.NNNNLpt = vectorof_jetpt[p][4];
+			r_sumpt.v_TJMult_maxpt[4]  = vectorof_jetMult[p][4];
+		}
+
 		//! sumpt approach
 		if(r_sumpt.max_sumpt < r_sumpt.v_sumpt[p])
 		{
@@ -699,24 +745,31 @@ int main ()
 			r_sumpt.prim_bin  = p;
 		}
 	}
+
+	r_sumpt.v_TJMult_sumpt[0]  = vectorof_jetMult[r_sumpt.prim_bin][0];
+	r_sumpt.v_TJMult_sumpt[1]  = vectorof_jetMult[r_sumpt.prim_bin][1];
+	r_sumpt.v_TJMult_sumpt[2]  = vectorof_jetMult[r_sumpt.prim_bin][2];
+	r_sumpt.v_TJMult_sumpt[3]  = vectorof_jetMult[r_sumpt.prim_bin][3];
+	r_sumpt.v_TJMult_sumpt[4]  = vectorof_jetMult[r_sumpt.prim_bin][4];
+
 	if(debug) 
 	{
 		std::cout<<"highest maxsumpt and prim bin: " << r_sumpt.max_sumpt << ", " << r_sumpt.prim_bin << std::endl;
 		std::cout<<"elements of vector of jet pt : " << vectorof_jetpt[r_sumpt.prim_bin][0] << ", " << vectorof_jetpt[r_sumpt.prim_bin][1] << ", " <<vectorof_jetpt[r_sumpt.prim_bin][2] << ", " << vectorof_jetpt[r_sumpt.prim_bin][3] << ", " << vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
 	}
-	////! Fill histograms
+	//! Fill multiplicity histograms
 	////! Andre's approach
 	////std::cout<<"ha_PULpt   : " <<r_sumpt.Lpt <<std::endl;
 	////std::cout<<"ha_PU1NLpt : " <<r_sumpt.NLpt <<std::endl;
 	////std::cout<<"ha_PU2NLpt : " <<r_sumpt.NNLpt <<std::endl;
 	////std::cout<<"ha_PU3NLpt : " <<r_sumpt.NNNLpt <<std::endl;
 	////std::cout<<"ha_PU4NLpt : " <<r_sumpt.NNNNLpt <<std::endl;
-	//r_sumpt.ha_PULpt->Fill(r_sumpt.Lpt/1e3);
-	//r_sumpt.ha_PUNLpt->Fill(r_sumpt.NLpt/1e3);
-	//r_sumpt.ha_PUNNLpt->Fill(r_sumpt.NNLpt/1e3);
-	//r_sumpt.ha_PUNNNLpt->Fill(r_sumpt.NNNLpt/1e3);
-	//r_sumpt.ha_PUNNNNLpt->Fill(r_sumpt.NNNNLpt/1e3);
-	//
+	r_sumpt.hMa_PULpt->Fill(r_sumpt.v_TJMult_maxpt[0]);
+	r_sumpt.hMa_PUNLpt->Fill(r_sumpt.v_TJMult_maxpt[1]);
+	r_sumpt.hMa_PUNNLpt->Fill(r_sumpt.v_TJMult_maxpt[2]);
+	r_sumpt.hMa_PUNNNLpt->Fill(r_sumpt.v_TJMult_maxpt[3]);
+	r_sumpt.hMa_PUNNNNLpt->Fill(r_sumpt.v_TJMult_maxpt[4]);
+	
 	////! Sumpt approach
 	////std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
 	////std::cout<<"h_PULpt   : " <<vectorof_jetpt[r_sumpt.prim_bin][0] <<std::endl;
@@ -724,11 +777,11 @@ int main ()
 	////std::cout<<"h_PU2NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][2] <<std::endl;
 	////std::cout<<"h_PU3NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][3] <<std::endl;
 	////std::cout<<"h_PU4NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
-	//r_sumpt.h_PULpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][0]/1e3);
-	//r_sumpt.h_PUNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][1]/1e3);
-	//r_sumpt.h_PUNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][2]/1e3);
-	//r_sumpt.h_PUNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][3]/1e3);
-	//r_sumpt.h_PUNNNNLpt->Fill(vectorof_jetpt[r_sumpt.prim_bin][4]/1e3);
+	r_sumpt.hM_PULpt->Fill(r_sumpt.v_TJMult_sumpt[0]);
+	r_sumpt.hM_PUNLpt->Fill(r_sumpt.v_TJMult_sumpt[1]);
+	r_sumpt.hM_PUNNLpt->Fill(r_sumpt.v_TJMult_sumpt[2]);
+	r_sumpt.hM_PUNNNLpt->Fill(r_sumpt.v_TJMult_sumpt[3]);
+	r_sumpt.hM_PUNNNNLpt->Fill(r_sumpt.v_TJMult_sumpt[4]);
 
 	////! No bin approach
 	////std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
@@ -737,12 +790,11 @@ int main ()
 	////std::cout<<"hb_PU2NLpt : " <<incl_trkjets[2].pt() <<std::endl;
 	////std::cout<<"hb_PU3NLpt : " <<incl_trkjets[3].pt() <<std::endl;
 	////std::cout<<"hb_PU4NLpt : " <<incl_trkjets[4].pt() <<std::endl;
-	//
-	//r_sumpt.hb_PULpt->Fill(incl_trkjets[0].pt()/1e3);
-	//r_sumpt.hb_PUNLpt->Fill(incl_trkjets[1].pt()/1e3);
-	//r_sumpt.hb_PUNNLpt->Fill(incl_trkjets[2].pt()/1e3);
-	//r_sumpt.hb_PUNNNLpt->Fill(incl_trkjets[3].pt()/1e3);
-	//r_sumpt.hb_PUNNNNLpt->Fill(incl_trkjets[4].pt()/1e3);
+	r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
+	r_sumpt.hMb_PUNLpt->Fill(incl_trkjets_minNConstituents[1].constituents().size());
+	r_sumpt.hMb_PUNNLpt->Fill(incl_trkjets_minNConstituents[2].constituents().size());
+	r_sumpt.hMb_PUNNNLpt->Fill(incl_trkjets_minNConstituents[3].constituents().size());
+	r_sumpt.hMb_PUNNNNLpt->Fill(incl_trkjets_minNConstituents[4].constituents().size());
 ///////////////////////////////////////////////////////////////////////////////
   ///******************* end of jets per vertex bin ************///
 ///////////////////////////////////////////////////////////////////////////////
@@ -924,6 +976,21 @@ r_sumpt.WriteAll();
 c1->Write();
 c2->Write();
 c3->Write();
+
+r_sumpt.SetMultiplicityHist_props();
+r_sumpt.WriteMultiplicity();
+TCanvas *c4 = new TCanvas();
+r_sumpt.DrawMultiplicity();
+c4->Write();
+
+TCanvas *c5 = new TCanvas();
+r_sumpt.DrawMultiplicitySumpt();
+c5->Write();
+
+TCanvas *c6 = new TCanvas();
+r_sumpt.DrawMultiplicityMaxpt();
+c6->Write();
+
 f_out->Close();
 return 0;
 }

@@ -43,7 +43,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 1500., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -81,8 +81,8 @@ int main ()
   std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  //TFile *f_out = new TFile("jetEMU_PU1000MB_q1.2GeV_30mm.root","RECREATE");
-  TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_q1.2GeV_30mm.root","RECREATE");
+  //TFile *f_out = new TFile("NewjetEMU5GeV_PU0MB_q1.2GeV_30mm.root","RECREATE");
+  TFile *f_out = new TFile("NewjetEMU5GeV_PU0hh4b_m260_q1.2GeV_30mm.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -120,8 +120,10 @@ int main ()
   
   //! open input trees 
   TChain rec("tracks");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
@@ -160,17 +162,19 @@ int main ()
   ////Long64_t nentries = 1000;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  Long64_t nevents = 3;
-  //Long64_t nevents = rec.GetEntries();
+  //Long64_t nevents = 900;
+  Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
   std::vector<TrackJetObj> trjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
-  //! for every event do the following
   //
   double pt,z0,theta,eta,phi;
   int pid,q;
+
+
+  //! for every event do the following
   for(Long64_t i = 0; i < nevents; ++i)
   {
   	eventNo=i;
@@ -203,7 +207,8 @@ int main ()
 	phi_truPU.clear();
 	pdgPU.clear();
 	chargePU.clear();
-	
+
+	//caloObj.Reset_Detector();	
 	rec.GetEntry(i);
 	for(int ik = 0; ik < pt_tru->size(); ++ik)
 	{
@@ -216,7 +221,20 @@ int main ()
 		chargePU.push_back((*charge)[ik]);
 		
 	}
-		
+	
+
+	//! initialise a calo object
+	//! in principle one should not create objects for every event
+	//! TODO: call the block below just once and reset the detector for every event
+	//! right now this is not working for some reason.
+
+	CaloEmu caloObj;	
+	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0;
+	Rad_calo = caloObj.GetCaloRadius();//in mm since pt is in MeV
+	ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
+	if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c" <<std::endl;
+
+	
 	//! total number of tracks reconstructed in an event
 	int nobj = pt_truPU.size();
   	if(debug)std::cout<<"nobj: "<<nobj<<std::endl;
@@ -235,10 +253,15 @@ int main ()
 		//////// ACCEPTANCE CUTS //////////	
 		if(std::fabs(eta) > 1.7) continue; 
 		if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
+		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
+		phi_Rcalo = phi;
 		if(std::abs(q) != 0) //is chrarged
 		{	
 			//! get rid of charged particles that will not make it to the calorimeter
-			if(std::fabs(pt) < 1.2e3) continue;
+			if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
+			phi_Rcalo = phi + acos(0.5 * Rad_calo/Rad_pcle) - (M_PI/2);
+			if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
+			if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
 		}	
 
 		//! veto fake and dc tracks?
@@ -259,9 +282,8 @@ int main ()
 		//! add the modified eta and phi values here
 		//! i.e. eta and phi due to bending of charged particles in magnetic field
 		//if(q!=0)double rad = pt/(0.3*4*q);
-
 		tjObj.eta = eta;
-		tjObj.phi = phi;
+		tjObj.phi = phi_Rcalo;
 		//! matched to truth, reco info has been set to zero for inefficinecy and this causes a crash while doing jet clustering
 		//! for rec jet clustering we anyway do not need these zeroes
 		tjObj.zv = z0;
@@ -279,8 +301,6 @@ int main ()
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_trpcle;
 
-	//! initialise a calo object
-	CaloEmu caloObj;
 
 	// loop over all truth particles
 	for(int k = 0; k < trjVec.size(); ++k )
@@ -307,9 +327,12 @@ int main ()
 	std::vector<PseudoJet> CellEnergy_forEmuCaloJets;
 	unsigned int n_xbins = caloObj.GetNxbins();
 	unsigned int n_ybins = caloObj.GetNybins();
-	std::cout << "n_xbins: " << n_xbins <<std::endl;//etabins
-	std::cout << "n_ybins: " << n_ybins <<std::endl;//phibins
-	std::cout<<"Cell Energy threshold: " << caloObj.GetCellEnergyThreshold()*1e-3 << "GeV."<<std::endl;
+	if(debug)
+	{
+		std::cout << "n_xbins: " << n_xbins <<std::endl;//etabins
+		std::cout << "n_ybins: " << n_ybins <<std::endl;//phibins
+		std::cout<<"Cell Energy threshold: " << caloObj.GetCellEnergyThreshold()*1e-3 << "GeV."<<std::endl;
+	}
 	for(unsigned int i = 1; i <= n_xbins; i++ )
 	{
 		for(unsigned int j = 1; j <= n_ybins; j++)
@@ -440,7 +463,7 @@ int main ()
 		trigger.n3a_tot[i2] = 1;
 		trigger.n2a_tot[i2] = 1;
 
-		if(jetPt_sm.size() >= trigger.Njet_max)
+	/*	if(jetPt_sm.size() >= trigger.Njet_max)
 		{
 			if(jetPt_sm[4]*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
 			if(jetPt_sm[3]*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
@@ -468,7 +491,7 @@ int main ()
 			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
-	/*	if(incl_CaloEmuJets.size() >= trigger.Njet_max)
+	*/	if(incl_CaloEmuJets.size() >= trigger.Njet_max)
 		{
 			if(incl_CaloEmuJets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
 			if(incl_CaloEmuJets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
@@ -495,7 +518,7 @@ int main ()
 		{
 			if(incl_CaloEmuJets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
-		}*/
+		}
 	}
 
  }// for loop over nentries

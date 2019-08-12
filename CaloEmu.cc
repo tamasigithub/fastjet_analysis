@@ -22,6 +22,19 @@ CaloEmu::CaloEmu(const bool debug,
          m_detector->Reset();
 }
 
+void CaloEmu::Reset_Detector()
+{
+	m_detector->Reset();
+}
+
+double CaloEmu::GetCaloRadius()
+{
+	return Calo_radius;
+}
+double CaloEmu::GetChargedPcle_PtThreshold()
+{
+	return CONSTANT * B_field * Calo_radius/2;
+}
 double CaloEmu::GetCellEnergyThreshold()
 {
 	return CellEnergyThreshold;
@@ -54,18 +67,22 @@ std::vector<double> CaloEmu::GetCellEnergy(int i, int j)
 	double	phi = -999;
 	double	eta = -999;
 	double	E = 0;
-	double	Pt = 0;
+	//! smear jet energies
+	double E_reso_;
+	double E_smeared = 0, Pt_smeared = 0;
 
 	if (m_detector->GetBinContent(i, j) > 0) 
 	{
                      eta = m_detector->GetXaxis()->GetBinCenter(i);
                      phi = m_detector->GetYaxis()->GetBinCenter(j);
                      E = m_detector->GetBinContent(i, j);
-		     Pt = E/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
+		     E_reso_ = SCALEfac_Ereso/sqrt(E);//50% energy resolution
+		     E_smeared = gRandom->Gaus(E,E_reso_*E);
+		     Pt_smeared = E_smeared/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
 
 	}
-	EPtEtaPhi.push_back(E);
-	EPtEtaPhi.push_back(Pt);
+	EPtEtaPhi.push_back(E_smeared);
+	EPtEtaPhi.push_back(Pt_smeared);
 	EPtEtaPhi.push_back(eta);
 	EPtEtaPhi.push_back(phi);
 	return EPtEtaPhi;
