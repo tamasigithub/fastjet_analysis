@@ -34,7 +34,7 @@ int main ()
   int MIN_Constituents, NJETS, NZVTXBIN;
   float ZRANGE, ZBIN_width;
   int izbin;
-  MIN_Constituents = 3;
+  MIN_Constituents = 1;
   NJETS = 10;
   NZVTXBIN = 200;
   ZRANGE = 200; // in mm
@@ -122,7 +122,7 @@ int main ()
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
   //TFile *f_out = new TFile("NewjetoutPU1000hh4b_30mm_optsig5_1tracks1.5_5GeV.root","RECREATE");
-  TFile *f_out = new TFile("NewjetoutPU1000MB_30mm_optsig5_3tracks1.5_5GeV.root","RECREATE");
+  TFile *f_out = new TFile("NewjetoutPU1000MB_30mm_optsig5_1tracks1.5_5GeV.root","RECREATE");
   //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
   //TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
@@ -173,10 +173,10 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   //! high pt min bias sample sigma = 3
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5/*.root");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5/*.root");
+  //////rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
+  //////rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -235,7 +235,7 @@ int main ()
   Long64_t nevents = 1310;
   //Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
-  //std::cout<<"Total number of enteries : " << nentries <<std::endl;
+  std::cout<<"Total number of enteries in the input directory : " << rec.GetEntries() <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
   std::vector<TrackJetObj> tjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
