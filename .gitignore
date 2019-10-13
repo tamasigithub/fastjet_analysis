@@ -1,4 +1,11 @@
+*.so
+*.pcm
+*.d
 *.root
 *.txt
+*.png
+*.pdf
+*.C
+*.cxx
 fastjet-3.3.2/
 fastjet-install/
