@@ -51,21 +51,21 @@ public:
 		{
 			if(i==0) xbins[i] = pt_min;
 			xbins[i] = i*ptcut_width;
-			//
-			////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl;
-			//if(i==0) xbins[i] = pt_min;
-			//else if(i < Nlowpt_bins)
-			//{
-			//     xbins[i] = i*ptcut_width;
-			//}
-			//else
-			//{
-			//     int j = i - Nlowpt_bins;
-			//     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
-			//     xbins[i] = highpt_min + j*4*ptcut_width;
-			//}
+			////
+			//////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl;
+			////if(i==0) xbins[i] = pt_min;
+			////else if(i < Nlowpt_bins)
+			////{
+			////     xbins[i] = i*ptcut_width;
+			////}
+			////else
+			////{
+			////     int j = i - Nlowpt_bins;
+			////     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
+			////     xbins[i] = highpt_min + j*4*ptcut_width;
+			////}
 
-			std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
+			//std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
 		}
 		
 	}

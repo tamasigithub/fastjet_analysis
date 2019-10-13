@@ -51,6 +51,9 @@ public:
 	std::vector<int> v_TJMult_maxpt;
 	int nMultiplicityBins = 10;
 	double maxMultiplicity = 10;
+
+	int nEtaBins = 100;
+	double etaMin = 0.0, etaMax = 6.0;
 	bool debug = true;
 	
 
@@ -61,21 +64,21 @@ public:
 		{
 			if(i==0) xbins[i] = pt_min;
 			xbins[i] = i*ptcut_width;
-			////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
-			
-			//if(i==0) xbins[i] = pt_min;
-			//else if(i < Nlowpt_bins)
-			//{
-			//     xbins[i] = i*ptcut_width;
-			//}
-			//else
-			//{
-			//     int j = i - Nlowpt_bins;
-			//     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
-			//     xbins[i] = highpt_min + j*4*ptcut_width;
-			//}
+			//////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
+			//
+			////if(i==0) xbins[i] = pt_min;
+			////else if(i < Nlowpt_bins)
+			////{
+			////     xbins[i] = i*ptcut_width;
+			////}
+			////else
+			////{
+			////     int j = i - Nlowpt_bins;
+			////     int highpt_min = pt_max - 4*ptcut_width * (nbins - Nlowpt_bins);
+			////     xbins[i] = highpt_min + j*4*ptcut_width;
+			////}
 
-			std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
+			//std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl; 
 		
 		}
 		/*dx = 5./ptbins;//5 -> implies max until 10^5
@@ -89,8 +92,10 @@ public:
 	}
 	~Rate_sumpt(){}
 	void init_Histos(float xbins[], int nbins);
+	void init_EtaHist();
 	void SetMultiplicityHist_props();
 	void SetHist_props();
+	void SetEtaHist_props();
 	void DrawNoBin();
 	void DrawRate();
 	void DrawSumpt();
@@ -102,6 +107,8 @@ public:
 	void DrawMultiplicityMaxpt();
 	void DrawMultiplicity();
 	void WriteMultiplicity();
+	void WriteEta();
+	void WriteEta1();
 public:
 	//! Book Histogram        
 	//! sumpt histos
@@ -141,6 +148,19 @@ public:
 	TH1* hMb_PUNNLpt = nullptr;
 	TH1* hMb_PUNNNLpt = nullptr;
 	TH1* hMb_PUNNNNLpt = nullptr;
+	//! Histograms for recording the eta distributions of the n leading pt jets 
+        TH1* hbEta_PULpt = nullptr;
+	TH1* hbEta_PUNLpt = nullptr;
+	TH1* hbEta_PUNNLpt = nullptr;
+	TH1* hbEta_PUNNNLpt = nullptr;
+	TH1* hbEta_PUNNNNLpt = nullptr;
+
+	//! Histograms of eta distributions of jets matched to b quarks sorted into increasing eta
+	//! central to forward
+	TH1* hbEta_NNNCEta = nullptr;
+	TH1* hbEta_NNCEta = nullptr;
+	TH1* hbEta_NCEta = nullptr;
+	TH1* hbEta_CEta = nullptr;
 
 	
 private:

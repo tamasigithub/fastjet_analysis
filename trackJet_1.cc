@@ -81,8 +81,8 @@ int main ()
   std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  //TFile *f_out = new TFile("NewjetEMU5GeV_PU0MB_q1.2GeV_30mm.root","RECREATE");
-  TFile *f_out = new TFile("NewjetEMU5GeV_PU0hh4b_m260_q1.2GeV_30mm.root","RECREATE");
+  //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000MB_q1.2GeV_30mm.root","RECREATE");
+  TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -122,8 +122,8 @@ int main ()
   TChain rec("tracks");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5/*.root");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
@@ -162,8 +162,8 @@ int main ()
   ////Long64_t nentries = 1000;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  //Long64_t nevents = 900;
-  Long64_t nevents = rec.GetEntries();
+  Long64_t nevents = 1e3;
+  //Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
@@ -251,7 +251,7 @@ int main ()
 		q	= chargePU[j];
 
 		//////// ACCEPTANCE CUTS //////////	
-		if(std::fabs(eta) > 1.7) continue; 
+		if(std::fabs(eta) > 6.0) continue; 
 		if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
 		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
 		phi_Rcalo = phi;
@@ -442,6 +442,7 @@ int main ()
 	}// end of for loop over jet size
 	glob_jet->Fill();
 	
+	//! loop over jet pt thresholds
 	for(int i2 = 0; i2 < trigger.nbins; i2++)
 	{
 		//! increment n5_tot if there are atleast 5 jets with pt > xbins[i]
@@ -519,6 +520,39 @@ int main ()
 			if(incl_CaloEmuJets[1].pt()*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
+	}//! end of loop over pt thresholds
+	
+	////// Fill eta histograms of n leading pt jets /////
+	//if (incl_trpclejets.size() >= trigger.Njet_max) std::cout<<"leading pt jet eta: " << incl_CaloEmuJets[4].eta() <<std::endl;
+	if(incl_trpclejets.size() >= trigger.Njet_max)
+	{
+		r_sumpt.hbEta_PUNNNNLpt->Fill(std::fabs(incl_trpclejets[4].eta()));	
+		r_sumpt.hbEta_PUNNNLpt->Fill(std::fabs(incl_trpclejets[3].eta()));	
+		r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_trpclejets[2].eta()));	
+		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
+		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
+	}
+	else if (incl_trpclejets.size() >= trigger.Njet_max-1)
+	{
+		r_sumpt.hbEta_PUNNNLpt->Fill(std::fabs(incl_trpclejets[3].eta()));	
+		r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_trpclejets[2].eta()));	
+		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
+		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
+	}
+	else if (incl_trpclejets.size() >= trigger.Njet_max-2)
+	{
+		r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_trpclejets[2].eta()));	
+		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
+		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
+	}
+	else if (incl_trpclejets.size() >= trigger.Njet_max-3)
+	{
+		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
+		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
+	}
+	else if (incl_trpclejets.size() >= trigger.Njet_max-4)
+	{
+		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
 	}
 
  }// for loop over nentries
@@ -555,6 +589,8 @@ r_sumpt.WriteAll();
 c1->Write();
 //! Write to output file
 glob_jet->Write();
+r_sumpt.SetEtaHist_props();
+r_sumpt.WriteEta();
 
 f_out->Close();
 return 0;

@@ -23,7 +23,8 @@ void Rate_sumpt::init_Histos(float xbins[], int nbins)
 	hb_PUNNNLpt = new TH1D("hb_PUNNNLpt","Rate of 4th highest Pt track jet in <#mu> 1000 ",nbins,xbins);
 	hb_PUNNNNLpt = new TH1D("hb_PUNNNNLpt","Rate Vs track jet P_{t} in <#mu> 1000 , without binning along beam axis",nbins,xbins);
 
-	////! sumpt histos
+	/////! Multiplicity histograms
+	//! sumpt histos
 	hM_PULpt = new TH1D("hM_PULpt","Multiplicity of highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
 	hM_PUNLpt = new TH1D("hM_PUNLpt","Multiplicity of 2nd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
 	hM_PUNNLpt = new TH1D("hM_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
@@ -41,6 +42,61 @@ void Rate_sumpt::init_Histos(float xbins[], int nbins)
 	hMb_PUNNLpt = new TH1D("hMb_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
 	hMb_PUNNNLpt = new TH1D("hMb_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
 	hMb_PUNNNNLpt = new TH1D("hMb_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000 , w/o binning along z",nMultiplicityBins,0,maxMultiplicity);
+
+}
+
+void Rate_sumpt::init_EtaHist()
+{
+
+	//! eta distributions of jets matched to b quarks sorted in eta
+        hbEta_CEta = new TH1D("hbEta_CEta","Eta of most central bjet", nEtaBins, etaMin, etaMax);
+	hbEta_NCEta = new TH1D("hbEta_NCEta","Eta of 2nd most central bjet", nEtaBins, etaMin, etaMax);
+	hbEta_NNCEta = new TH1D("hbEta_NNCEta","Eta of 3rd most central bjet", nEtaBins, etaMin, etaMax);
+	hbEta_NNNCEta = new TH1D("hbEta_NNNCEta","Eta of 4th most central bjet", nEtaBins, etaMin, etaMax);
+	//! eta distributions of 5 leading pt jets
+        hbEta_PULpt = new TH1D("hbEta_PULpt","Eta of 1st highest Pt jet", nEtaBins, etaMin, etaMax);
+	hbEta_PUNLpt = new TH1D("hbEta_PUNLpt","Eta of 2nd highest Pt jet", nEtaBins, etaMin, etaMax);
+	hbEta_PUNNLpt = new TH1D("hbEta_PUNNLpt","Eta of 3rd highest Pt jet", nEtaBins, etaMin, etaMax);
+	hbEta_PUNNNLpt = new TH1D("hbEta_PUNNNLpt","Eta of 4th highest Pt jet", nEtaBins, etaMin, etaMax);
+	hbEta_PUNNNNLpt = new TH1D("hbEta_PUNNNNLpt","Eta of 5th highest Pt jet", nEtaBins, etaMin, etaMax);
+}
+
+void Rate_sumpt::SetEtaHist_props()
+{
+	
+	hbEta_PUNNNNLpt->SetLineColor(kBlue);
+	hbEta_PUNNNLpt->SetLineColor(kGreen);
+	hbEta_PUNNLpt->SetLineColor(kRed);
+	hbEta_PUNLpt->SetLineColor(kBlack);
+	hbEta_PULpt->SetLineColor(kOrange);
+
+	hbEta_PUNNNNLpt->SetLineWidth(2);
+	hbEta_PUNNNLpt->SetLineWidth(2);
+	hbEta_PUNNLpt->SetLineWidth(2);
+	hbEta_PUNLpt->SetLineWidth(2);
+	hbEta_PULpt->SetLineWidth(2);
+
+        hbEta_PULpt->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_PUNLpt->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_PUNNLpt->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_PUNNNLpt->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_PUNNNNLpt->GetXaxis()->SetTitle("Track-jet #eta");
+
+	hbEta_NNNCEta->SetLineColor(kGreen);
+	hbEta_NNCEta->SetLineColor(kRed);
+	hbEta_NCEta->SetLineColor(kBlack);
+	hbEta_CEta->SetLineColor(kOrange);
+
+	hbEta_NNNCEta->SetLineWidth(2);
+	hbEta_NNCEta->SetLineWidth(2);
+	hbEta_NCEta->SetLineWidth(2);
+	hbEta_CEta->SetLineWidth(2);
+
+        hbEta_CEta->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_NCEta->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_NNCEta->GetXaxis()->SetTitle("Track-jet #eta");
+        hbEta_NNNCEta->GetXaxis()->SetTitle("Track-jet #eta");
+
 }
 void Rate_sumpt::SetMultiplicityHist_props()
 {
@@ -344,4 +400,19 @@ void Rate_sumpt::WriteNoBin()
         h_PUNNLpt->Write();
         h_PUNNNLpt->Write();
         h_PUNNNNLpt->Write();
+}
+void Rate_sumpt::WriteEta()
+{
+	hbEta_PULpt->Write();
+        hbEta_PUNLpt->Write();
+        hbEta_PUNNLpt->Write();
+        hbEta_PUNNNLpt->Write();
+        hbEta_PUNNNNLpt->Write();
+}
+void Rate_sumpt::WriteEta1()
+{
+	hbEta_CEta->Write();
+        hbEta_NCEta->Write();
+        hbEta_NNCEta->Write();
+        hbEta_NNNCEta->Write();
 }
