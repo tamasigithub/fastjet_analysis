@@ -121,10 +121,10 @@ int main ()
 
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
-  //TFile *f_out = new TFile("NewjetoutPU1000hh4b_30mm_optsig5_1tracks1.5_5GeV.root","RECREATE");
-  TFile *f_out = new TFile("NewjetoutPU1000MB_30mm_optsig5_1tracks1.5_5GeV.root","RECREATE");
-  //TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
-  //TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
+  //TFile *f_out = new TFile("NewjetoutPU0hh4b_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
+  TFile *f_out = new TFile("NewjetoutPU0MB_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
+  ////TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
+  ////TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -176,7 +176,9 @@ int main ()
   //////rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
   //////rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5_fulleta/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5_fulleta/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5_fulleta/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -232,8 +234,8 @@ int main ()
   ////Long64_t nentries = 300;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  Long64_t nevents = 1310;
-  //Long64_t nevents = rec.GetEntries();
+  //Long64_t nevents = 1310;
+  Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
   std::cout<<"Total number of enteries in the input directory : " << rec.GetEntries() <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
@@ -344,7 +346,7 @@ int main ()
 		mtheta	= m_thetaPU[j];
 		mphi	= m_phiPU[j];
 	
-		if(std::fabs(pt) < 5e3) continue; 	
+		if(std::fabs(pt) < 2e3) continue; 	
 		if(std::fabs(eta) > 1.7) continue; 	
 
 		if(debug){std::cout<<"mpt, mVz, mtheta, mphi, tid: " << mpt << " , " << mVz << " , " << mtheta << " , " << mphi << " , " << tid << std::endl; }
@@ -759,42 +761,85 @@ int main ()
 	}
 	//! Fill multiplicity histograms
 	////! Andre's approach
-	////std::cout<<"ha_PULpt   : " <<r_sumpt.Lpt <<std::endl;
-	////std::cout<<"ha_PU1NLpt : " <<r_sumpt.NLpt <<std::endl;
-	////std::cout<<"ha_PU2NLpt : " <<r_sumpt.NNLpt <<std::endl;
-	////std::cout<<"ha_PU3NLpt : " <<r_sumpt.NNNLpt <<std::endl;
-	////std::cout<<"ha_PU4NLpt : " <<r_sumpt.NNNNLpt <<std::endl;
+	//////std::cout<<"ha_PULpt   : " <<r_sumpt.Lpt <<std::endl;
+	//////std::cout<<"ha_PU1NLpt : " <<r_sumpt.NLpt <<std::endl;
+	//////std::cout<<"ha_PU2NLpt : " <<r_sumpt.NNLpt <<std::endl;
+	//////std::cout<<"ha_PU3NLpt : " <<r_sumpt.NNNLpt <<std::endl;
+	//////std::cout<<"ha_PU4NLpt : " <<r_sumpt.NNNNLpt <<std::endl;
 	r_sumpt.hMa_PULpt->Fill(r_sumpt.v_TJMult_maxpt[0]);
 	r_sumpt.hMa_PUNLpt->Fill(r_sumpt.v_TJMult_maxpt[1]);
 	r_sumpt.hMa_PUNNLpt->Fill(r_sumpt.v_TJMult_maxpt[2]);
 	r_sumpt.hMa_PUNNNLpt->Fill(r_sumpt.v_TJMult_maxpt[3]);
 	r_sumpt.hMa_PUNNNNLpt->Fill(r_sumpt.v_TJMult_maxpt[4]);
-	
-	////! Sumpt approach
-	////std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
-	////std::cout<<"h_PULpt   : " <<vectorof_jetpt[r_sumpt.prim_bin][0] <<std::endl;
-	////std::cout<<"h_PU1NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][1] <<std::endl;
-	////std::cout<<"h_PU2NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][2] <<std::endl;
-	////std::cout<<"h_PU3NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][3] <<std::endl;
-	////std::cout<<"h_PU4NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
+	//
+	//////! Sumpt approach
+	//////std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
+	//////std::cout<<"h_PULpt   : " <<vectorof_jetpt[r_sumpt.prim_bin][0] <<std::endl;
+	//////std::cout<<"h_PU1NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][1] <<std::endl;
+	//////std::cout<<"h_PU2NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][2] <<std::endl;
+	//////std::cout<<"h_PU3NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][3] <<std::endl;
+	//////std::cout<<"h_PU4NLpt : " <<vectorof_jetpt[r_sumpt.prim_bin][4] <<std::endl;
 	r_sumpt.hM_PULpt->Fill(r_sumpt.v_TJMult_sumpt[0]);
 	r_sumpt.hM_PUNLpt->Fill(r_sumpt.v_TJMult_sumpt[1]);
 	r_sumpt.hM_PUNNLpt->Fill(r_sumpt.v_TJMult_sumpt[2]);
 	r_sumpt.hM_PUNNNLpt->Fill(r_sumpt.v_TJMult_sumpt[3]);
 	r_sumpt.hM_PUNNNNLpt->Fill(r_sumpt.v_TJMult_sumpt[4]);
 
-	////! No bin approach
-	////std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
-	////std::cout<<"hb_PULpt   : " <<incl_trkjets[0].pt() <<std::endl;
-	////std::cout<<"hb_PU1NLpt : " <<incl_trkjets[1].pt() <<std::endl;
-	////std::cout<<"hb_PU2NLpt : " <<incl_trkjets[2].pt() <<std::endl;
-	////std::cout<<"hb_PU3NLpt : " <<incl_trkjets[3].pt() <<std::endl;
-	////std::cout<<"hb_PU4NLpt : " <<incl_trkjets[4].pt() <<std::endl;
-	r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
-	r_sumpt.hMb_PUNLpt->Fill(incl_trkjets_minNConstituents[1].constituents().size());
-	r_sumpt.hMb_PUNNLpt->Fill(incl_trkjets_minNConstituents[2].constituents().size());
-	r_sumpt.hMb_PUNNNLpt->Fill(incl_trkjets_minNConstituents[3].constituents().size());
-	r_sumpt.hMb_PUNNNNLpt->Fill(incl_trkjets_minNConstituents[4].constituents().size());
+	//////! No bin approach
+	//////std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
+	//////std::cout<<"hb_PULpt   : " <<incl_trkjets[0].pt() <<std::endl;
+	//////std::cout<<"hb_PU1NLpt : " <<incl_trkjets[1].pt() <<std::endl;
+	//////std::cout<<"hb_PU2NLpt : " <<incl_trkjets[2].pt() <<std::endl;
+	//////std::cout<<"hb_PU3NLpt : " <<incl_trkjets[3].pt() <<std::endl;
+	//////std::cout<<"hb_PU4NLpt : " <<incl_trkjets[4].pt() <<std::endl;
+	if(incl_trkjets_minNConstituents.size() > 4)
+	{
+		r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
+		r_sumpt.hMb_PUNLpt->Fill(incl_trkjets_minNConstituents[1].constituents().size());
+		r_sumpt.hMb_PUNNLpt->Fill(incl_trkjets_minNConstituents[2].constituents().size());
+		r_sumpt.hMb_PUNNNLpt->Fill(incl_trkjets_minNConstituents[3].constituents().size());
+		r_sumpt.hMb_PUNNNNLpt->Fill(incl_trkjets_minNConstituents[4].constituents().size());
+	}
+	else if(incl_trkjets_minNConstituents.size() > 3)
+	{
+		r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
+		r_sumpt.hMb_PUNLpt->Fill(incl_trkjets_minNConstituents[1].constituents().size());
+		r_sumpt.hMb_PUNNLpt->Fill(incl_trkjets_minNConstituents[2].constituents().size());
+		r_sumpt.hMb_PUNNNLpt->Fill(incl_trkjets_minNConstituents[3].constituents().size());
+		r_sumpt.hMb_PUNNNNLpt->Fill(0);
+	}
+	else if(incl_trkjets_minNConstituents.size() > 2)
+	{
+		r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
+		r_sumpt.hMb_PUNLpt->Fill(incl_trkjets_minNConstituents[1].constituents().size());
+		r_sumpt.hMb_PUNNLpt->Fill(incl_trkjets_minNConstituents[2].constituents().size());
+		r_sumpt.hMb_PUNNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNNLpt->Fill(0);
+	}
+	else if(incl_trkjets_minNConstituents.size() > 1)
+	{
+		r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
+		r_sumpt.hMb_PUNLpt->Fill(incl_trkjets_minNConstituents[1].constituents().size());
+		r_sumpt.hMb_PUNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNNLpt->Fill(0);
+	}
+	else if(incl_trkjets_minNConstituents.size() > 0)
+	{
+		r_sumpt.hMb_PULpt->Fill(incl_trkjets_minNConstituents[0].constituents().size());
+		r_sumpt.hMb_PUNLpt->Fill(0);
+		r_sumpt.hMb_PUNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNNLpt->Fill(0);
+	}
+	else
+	{ 
+		r_sumpt.hMb_PULpt->Fill(0);
+		r_sumpt.hMb_PUNLpt->Fill(0);
+		r_sumpt.hMb_PUNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNLpt->Fill(0);
+		r_sumpt.hMb_PUNNNNLpt->Fill(0);
+	}
 ///////////////////////////////////////////////////////////////////////////////
   ///******************* end of jets per vertex bin ************///
 ///////////////////////////////////////////////////////////////////////////////
