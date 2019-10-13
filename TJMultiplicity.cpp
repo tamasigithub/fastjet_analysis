@@ -19,9 +19,11 @@
 #include "TAxis.h"
 #include "TGaxis.h"
 #include "TF1.h"
+#include "TLatex.h"
 const char* out_path = "./summary_plots/pdf"; 
-const char* output_file_name = "multiplicity_3tracks7.5";
+const char* output_file_name = "multiplicity_1tracks1.5_5GeVPU0";
 
+const double yMin = 0.01, yMax = 1e5;
 //! sumpt approach
 TH1D *E2 = nullptr;
 TH1D *E3 = nullptr;
@@ -52,6 +54,11 @@ TH1D *Rb2 = nullptr;
 TH1D *Rb3 = nullptr;
 TH1D *Rb4 = nullptr;
 TH1D *Rb5 = nullptr;
+int integral(TH1D *hist)
+{
+	return hist->Integral(2,11);//from multiplicity 1 to 10
+
+}
 void fetch_histos(TFile *f, TFile *f1)
 {
 
@@ -87,6 +94,74 @@ void fetch_histos(TFile *f, TFile *f1)
 	Rb3 = (TH1D*)f1->Get("hMb_PUNNLpt");
 	Rb4 = (TH1D*)f1->Get("hMb_PUNNNLpt");
 	Rb5 = (TH1D*)f1->Get("hMb_PUNNNNLpt");
+}
+void setRange()
+{
+	
+	E2->GetYaxis()->SetRangeUser(yMin,yMax);
+	E3->GetYaxis()->SetRangeUser(yMin,yMax);
+	E4->GetYaxis()->SetRangeUser(yMin,yMax);
+	E5->GetYaxis()->SetRangeUser(yMin,yMax);
+
+	Ea2->GetYaxis()->SetRangeUser(yMin,yMax);
+	Ea3->GetYaxis()->SetRangeUser(yMin,yMax);
+	Ea4->GetYaxis()->SetRangeUser(yMin,yMax);
+	Ea5->GetYaxis()->SetRangeUser(yMin,yMax);
+	
+	Eb2->GetYaxis()->SetRangeUser(yMin,yMax);
+	Eb3->GetYaxis()->SetRangeUser(yMin,yMax);
+	Eb4->GetYaxis()->SetRangeUser(yMin,yMax);
+	Eb5->GetYaxis()->SetRangeUser(yMin,yMax);
+	
+	R2->GetYaxis()->SetRangeUser(yMin,yMax);
+	R3->GetYaxis()->SetRangeUser(yMin,yMax);
+	R4->GetYaxis()->SetRangeUser(yMin,yMax);
+	R5->GetYaxis()->SetRangeUser(yMin,yMax);
+	
+	Ra2->GetYaxis()->SetRangeUser(yMin,yMax);
+	Ra3->GetYaxis()->SetRangeUser(yMin,yMax);
+	Ra4->GetYaxis()->SetRangeUser(yMin,yMax);
+	Ra5->GetYaxis()->SetRangeUser(yMin,yMax);
+	
+	
+	Rb2->GetYaxis()->SetRangeUser(yMin,yMax);
+	Rb3->GetYaxis()->SetRangeUser(yMin,yMax);
+	Rb4->GetYaxis()->SetRangeUser(yMin,yMax);
+	Rb5->GetYaxis()->SetRangeUser(yMin,yMax);
+}
+void setLineWidth()
+{
+	
+	E2->SetLineWidth(2);
+	E3->SetLineWidth(2);
+	E4->SetLineWidth(2);
+	E5->SetLineWidth(2);
+
+	Ea2->SetLineWidth(2);
+	Ea3->SetLineWidth(2);
+	Ea4->SetLineWidth(2);
+	Ea5->SetLineWidth(2);
+	
+	Eb2->SetLineWidth(2);
+	Eb3->SetLineWidth(2);
+	Eb4->SetLineWidth(2);
+	Eb5->SetLineWidth(2);
+	
+	R2->SetLineWidth(2);
+	R3->SetLineWidth(2);
+	R4->SetLineWidth(2);
+	R5->SetLineWidth(2);
+	
+	Ra2->SetLineWidth(2);
+	Ra3->SetLineWidth(2);
+	Ra4->SetLineWidth(2);
+	Ra5->SetLineWidth(2);
+	
+	
+	Rb2->SetLineWidth(2);
+	Rb3->SetLineWidth(2);
+	Rb4->SetLineWidth(2);
+	Rb5->SetLineWidth(2);
 }
 void setLineStyle()
 {
@@ -127,20 +202,22 @@ int TJMultiplicity()
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	const char *pileup = "1000";
+	const char *pileup = "0";
 	const char *gapsize = "30"; 
 	const char *file_path = ".";
 	char signal_file_name[1023];
 	
-	sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_3tracks7.5_5GeV.root",file_path,pileup,gapsize);//7.5
+	sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
 	TFile *f_ = new TFile(signal_file_name, "READ");
 	
 	char MinBias_file_name[1023];
-	sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_3tracks7.5_5GeV.root",file_path,pileup,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
 	TFile *f1_ = new TFile(MinBias_file_name, "READ");
 	
 	fetch_histos(f_, f1_);
+	setLineWidth();
 	setLineStyle();
+	setRange();
 	TCanvas *c = new TCanvas();	
         TH1::SetDefaultSumw2(true);
 
@@ -154,7 +231,34 @@ int TJMultiplicity()
         char out_file_close[1023];
         sprintf(out_file_close,"%s/%s.pdf)",out_path,output_file_name);
 
-	Double_t x1 = 0.5, y1 = 0.11, x2 = 0.89, y2 = 0.39;
+	int multiplicity1 = -1;
+	int multiplicity2 = -1;
+	float ratio = -1.0;
+	Double_t x1 = 0.64, y1 = 0.71, x2 = 0.89, y2 = 0.89;
+	TLegend *leg1 = new TLegend(x1, y1, x2, y2, "Integral");
+	//leg1->SetFillStyle(0);
+	leg1->SetBorderSize(0);
+	leg1->SetTextAlign(32);
+	leg1->SetTextFont(62);
+	leg1->SetTextSize(0.035);
+	TLegend *leg2 = new TLegend(x1, y1, x2, y2, "Integral");
+	//leg2->SetFillStyle(0);
+	leg2->SetBorderSize(0);
+	leg2->SetTextAlign(32);
+	leg2->SetTextFont(62);
+	leg2->SetTextSize(0.035);
+	TLegend *leg3 = new TLegend(x1, y1, x2, y2, "Integral");
+	//leg3->SetFillStyle(0);
+	leg3->SetBorderSize(0);
+	leg3->SetTextAlign(32);
+	leg3->SetTextFont(62);
+	leg3->SetTextSize(0.035);
+	TLegend *leg4 = new TLegend(x1, y1, x2, y2, "Integral");
+	//leg4->SetFillStyle(0);
+	leg4->SetBorderSize(0);
+	leg4->SetTextAlign(32);
+	leg4->SetTextFont(62);
+	leg4->SetTextSize(0.035);
 	TCanvas * C = new TCanvas();
 	//TCanvas * C = new TCanvas("C","C",800,800);
 	gStyle->SetOptStat(0);
@@ -171,14 +275,28 @@ int TJMultiplicity()
 	gPad->SetLogy();
 	E2->Draw();
 	R2->Draw("same");
-	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(E2);
+	multiplicity2 = integral(R2);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg1->AddEntry(E2,Form("signal = %d",multiplicity1));
+	leg1->AddEntry(R2,Form("background = %d",multiplicity2));
+	leg1->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg1->Draw();
 	gPad->Update();
+
 	C->cd(2);
 	gPad->SetGrid();
 	gPad->SetLogy();
 	E3->Draw();
 	R3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(E3);
+	multiplicity2 = integral(R3);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg2->AddEntry(E3,Form("signal = %d",multiplicity1));
+	leg2->AddEntry(R3,Form("background = %d",multiplicity2));
+	leg2->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg2->Draw();
 	gPad->Update();
 	C->cd(3);
 	gPad->SetGrid();
@@ -186,6 +304,13 @@ int TJMultiplicity()
 	E4->Draw();
 	R4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(E4);
+	multiplicity2 = integral(R4);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg3->AddEntry(E4,Form("signal = %d",multiplicity1));
+	leg3->AddEntry(R4,Form("background = %d",multiplicity2));
+	leg3->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg3->Draw();
 	gPad->Update();
 	C->cd(4);
 	gPad->SetGrid();
@@ -193,7 +318,15 @@ int TJMultiplicity()
 	E5->Draw();
 	R5->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(E5);
+	multiplicity2 = integral(R5);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg4->AddEntry(E5,Form("signal = %d",multiplicity1));
+	leg4->AddEntry(R5,Form("background = %d",multiplicity2));
+	leg4->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg4->Draw();
 	gPad->Update();
+	C->Update();
 	C->Print(out_file_open,"pdf");
 	
 	C->cd(1);
@@ -202,6 +335,15 @@ int TJMultiplicity()
 	Ea2->Draw();
 	Ra2->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Ea2);
+	multiplicity2 = integral(Ra2);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg1->Clear();
+	leg1->SetHeader("Integral");
+	leg1->AddEntry(Ea2,Form("signal = %d",multiplicity1));
+	leg1->AddEntry(Ra2,Form("background = %d",multiplicity2));
+	leg1->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg1->Draw();
 	gPad->Update();
 	C->cd(2);
 	gPad->SetGrid();
@@ -209,6 +351,15 @@ int TJMultiplicity()
 	Ea3->Draw();
 	Ra3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Ea3);
+	multiplicity2 = integral(Ra3);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg2->Clear();
+	leg2->SetHeader("Integral");
+	leg2->AddEntry(Ea3,Form("signal = %d",multiplicity1));
+	leg2->AddEntry(Ra3,Form("background = %d",multiplicity2));
+	leg2->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg2->Draw();
 	gPad->Update();
 	C->cd(3);
 	gPad->SetGrid();
@@ -216,6 +367,15 @@ int TJMultiplicity()
 	Ea4->Draw();
 	Ra4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Ea4);
+	multiplicity2 = integral(Ra4);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg3->Clear();
+	leg3->SetHeader("Integral");
+	leg3->AddEntry(Ea4,Form("signal = %d",multiplicity1));
+	leg3->AddEntry(Ra4,Form("background = %d",multiplicity2));
+	leg3->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg3->Draw();
 	gPad->Update();
 	C->cd(4);
 	gPad->SetGrid();
@@ -223,6 +383,15 @@ int TJMultiplicity()
 	Ea5->Draw();
 	Ra5->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Ea5);
+	multiplicity2 = integral(Ra5);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg4->Clear();
+	leg4->SetHeader("Integral");
+	leg4->AddEntry(Ea5,Form("signal = %d",multiplicity1));
+	leg4->AddEntry(Ra5,Form("background = %d",multiplicity2));
+	leg4->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg4->Draw();
 	gPad->Update();
 	C->Print(out_file_,"pdf");
 
@@ -232,6 +401,15 @@ int TJMultiplicity()
 	Eb2->Draw();
 	Rb2->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Eb2);
+	multiplicity2 = integral(Rb2);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg1->Clear();
+	leg1->SetHeader("Integral");
+	leg1->AddEntry(Eb2,Form("signal = %d",multiplicity1));
+	leg1->AddEntry(Rb2,Form("background = %d",multiplicity2));
+	leg1->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg1->Draw();
 	gPad->Update();
 	C->cd(2);
 	gPad->SetGrid();
@@ -239,6 +417,15 @@ int TJMultiplicity()
 	Eb3->Draw();
 	Rb3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Eb3);
+	multiplicity2 = integral(Rb3);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg2->Clear();
+	leg2->SetHeader("Integral");
+	leg2->AddEntry(Eb3,Form("signal = %d",multiplicity1));
+	leg2->AddEntry(Rb3,Form("background = %d",multiplicity2));
+	leg2->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg2->Draw();
 	gPad->Update();
 	C->cd(3);
 	gPad->SetGrid();
@@ -246,6 +433,15 @@ int TJMultiplicity()
 	Eb4->Draw();
 	Rb4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Eb4);
+	multiplicity2 = integral(Rb4);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg3->Clear();
+	leg3->SetHeader("Integral");
+	leg3->AddEntry(Eb4,Form("signal = %d",multiplicity1));
+	leg3->AddEntry(Rb4,Form("background = %d",multiplicity2));
+	leg3->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg3->Draw();
 	gPad->Update();
 	C->cd(4);
 	gPad->SetGrid();
@@ -253,6 +449,15 @@ int TJMultiplicity()
 	Eb5->Draw();
 	Rb5->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
+	multiplicity1 = integral(Eb5);
+	multiplicity2 = integral(Rb5);
+	ratio = (float)multiplicity1/multiplicity2;
+	leg4->Clear();
+	leg4->SetHeader("Integral");
+	leg4->AddEntry(Eb5,Form("signal = %d",multiplicity1));
+	leg4->AddEntry(Rb5,Form("background = %d",multiplicity2));
+	leg4->AddEntry((TObject*)0,Form("ratio = %f",ratio),"");
+	leg4->Draw();
 	gPad->Update();
 	C->Print(out_file_close,"pdf");
 return 0;
