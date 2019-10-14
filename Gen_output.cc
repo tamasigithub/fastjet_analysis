@@ -549,6 +549,15 @@ void Gen_output::Clear_OutVars()
 	constituentZ0.clear();
 	hasConstituents.clear();
 	Nconstituents.clear();
+
+	higgsPt.clear();
+	higgsLPt.clear();
+	higgsNLPt.clear();
+	
+	bLPt.clear();
+	bNLPt.clear();
+	bNNLPt.clear();
+	bNNNLPt.clear();
 }
 void Gen_output::init_TTree()
 {
@@ -580,4 +589,13 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("jetConstZ0",&constituentZ0);
 	glob_jet->Branch("has_constituents",&hasConstituents);
 	glob_jet->Branch("Nconstituents", &Nconstituents);
+	
+	glob_jet->Branch("higgsPt", &higgsPt);
+	glob_jet->Branch("higgsLPt", &higgsLPt);
+	glob_jet->Branch("higgsNLPt", &higgsNLPt);
+	
+	glob_jet->Branch("bLPt", &bLPt);
+	glob_jet->Branch("bNLPt", &bNLPt);
+	glob_jet->Branch("bNNLPt", &bNNLPt);
+	glob_jet->Branch("bNNNLPt", &bNNNLPt);
 }

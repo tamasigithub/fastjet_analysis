@@ -135,6 +135,15 @@ public:
 	std::vector<std::vector<double> > constituentZ0;	//  z vertex truth-jet constituents
 	std::vector<bool>  hasConstituents;            		// flag indicating if the truth-jet has constituents
 	std::vector<int>   Nconstituents;	            	// number of constituents for each jet
+
+	std::vector<double> higgsPt;
+	std::vector<double> higgsLPt;
+	std::vector<double> higgsNLPt;
+	
+	std::vector<double> bLPt;
+	std::vector<double> bNLPt;
+	std::vector<double> bNNLPt;
+	std::vector<double> bNNNLPt;
 	
 	//! Book Histogram        
 	//! Histograms of eta distributions of "jets matched to b quarks" sorted into increasing eta

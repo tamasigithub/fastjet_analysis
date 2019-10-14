@@ -54,7 +54,7 @@ int main()
   //! output root file
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
-  TFile *f_out = new TFile("Genjet_PU0hh4b_ggF_q1.2GeV_1.root","RECREATE");
+  TFile *f_out = new TFile("Genjet_PU0hh4b_ggF_Ctr1.0_q1.2GeV_1.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
@@ -63,7 +63,8 @@ int main()
   TChain rec("CollectionTree");
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_VBF_H_260_hh_4b_pythia82_shower_nopileup.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.dferreir.pp_VBF_H_1000_hh_4b_pythia82_shower.v8_output.root/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_ggF_hh_4b_pythia82_shower.v2_output.root/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_ggF_hh_4b_pythia82_shower.v2_output.root/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_NoGenCuts.v2_output.root/*.root");
   
   //! Get total no. of events
   //Long64_t nevents = 10000;
@@ -144,10 +145,10 @@ int main()
 		phi	= atan2(py,px);
 		pt	= hypotf(px,py);
 
-		if(std::fabs(eta) > 7) continue;
+		if(std::fabs(eta) > 17) continue;
 		tjObj.flag = 1;// stable particles
 
-		if(std::abs(pid) == 5 && barcode_ > 50) 
+		if(std::abs(pid) == 5 && status_ == 23 ) 
 		{
 			tjObj.flag = 0;
 			if(debug)
@@ -158,7 +159,8 @@ int main()
 
 		}// b quark
 
-		else if(std::abs(pid) == 25 && barcode_ > 50) 
+		//else if(std::abs(pid) == 25 && barcode_ > 50)// this is true only if a heavy higgs decays to two SM higgs 
+		else if(std::abs(pid) == 25 && status_ == 22) 
 		{
 			tjObj.flag = 2;
 			if(debug)
@@ -177,7 +179,7 @@ int main()
 		//if(std::abs(q) < -100) continue; // neutrinos do not deposit any energy
 		if(std::abs(pid) == 12 || std::abs(pid) == 14 || std::abs(pid) == 15) continue; // neutrinos do not deposit any energy
 		//if(std::abs(q) == 0) continue; // create charged particle jets only.
-		if(std::abs(q) != 0) //is chrarged
+		if(std::abs(q) != 0 && (std::abs(pid)!= 5 || pid != 25)) //is chrarged and is not a SM higgs or bquark
 		{	
 			//! get rid of charged particles that will not make it to the calorimeter
 			if(std::fabs(pt) < 1.2e3) continue;// Also try 5 GeV and see the difference
@@ -241,16 +243,7 @@ int main()
 		
 	}// end of loop over all tracks trjVec
 	
-	if(debug)std::cout<<"Do jet Clustering \n";
-	//! run the jet clustering with the above definition, extract the jets
-	ClusterSequence cs_trpcle(input_trpcle, jet_def);
-	
-	//! sort the resulting jets in descending order of pt
-	//! sorted_by_pt is a method of PseudoJet which returns a vector of jets sorted into decreasing pt
-	//! sorted_by_rapidity is a method of PseudoJet which returns a vector of jets sorted into increasing eta
-	std::vector<PseudoJet> incl_trpclejets = sorted_by_pt(cs_trpcle.inclusive_jets(PTMINJET));
-	std::vector<PseudoJet> incl_trpclejets_eta = sorted_by_rapidity(cs_trpcle.inclusive_jets(PTMINJET));
-
+	//***************** b quarks ********************//
 	//! push the |eta values| of the b quarks into a vector 
 	//! to sort input_bquarks(a PseudoJet) by increasing value of |eta|
 	input_bquarks_etaVals.clear();
@@ -261,6 +254,10 @@ int main()
 	std::vector<PseudoJet> incl_bquarks_eta = objects_sorted_by_values(input_bquarks, input_bquarks_etaVals);	
 	std::vector<PseudoJet> incl_bquarks_pt = sorted_by_pt(input_bquarks);	
 
+	genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
+	genOut.bNLPt.push_back(incl_bquarks_pt[1].pt());
+	genOut.bNNLPt.push_back(incl_bquarks_pt[2].pt());
+	genOut.bNNNLPt.push_back(incl_bquarks_pt[3].pt());
 	//! Fill eta hist of b quarks sorted in eta
 	genOut.FillEta_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
 	//! Fill eta hist of b quarks sorted in pt
@@ -269,7 +266,28 @@ int main()
 	genOut.FillPt_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
 	//! Fill pt hist of b quarks sorted in pt
 	genOut.FillPt_bquarks_pt(incl_bquarks_pt, genOut.NbJETS);
-		
+	
+	//****************** SM higgs *******************//
+	//! Pt sorted PseudoJet of SM higgs
+	std::vector<PseudoJet> incl_SMhiggs_pt = sorted_by_pt(input_SMhiggs);		
+	int n_SMhiggs = input_SMhiggs.size();
+	for (int h = 0; h < n_SMhiggs; h++)
+	{
+		genOut.higgsPt.push_back(incl_SMhiggs_pt[h].pt());
+	}
+	genOut.higgsLPt.push_back(incl_SMhiggs_pt[0].pt());
+	genOut.higgsNLPt.push_back(incl_SMhiggs_pt[1].pt());
+	
+	//******************* all jets *****************//
+	if(debug)std::cout<<"Do jet Clustering \n";
+	//! run the jet clustering with the above definition, extract the jets
+	ClusterSequence cs_trpcle(input_trpcle, jet_def);
+	
+	//! sort the resulting jets in descending order of pt
+	//! sorted_by_pt is a method of PseudoJet which returns a vector of jets sorted into decreasing pt
+	//! sorted_by_rapidity is a method of PseudoJet which returns a vector of jets sorted into increasing eta
+	std::vector<PseudoJet> incl_trpclejets = sorted_by_pt(cs_trpcle.inclusive_jets(PTMINJET));
+	std::vector<PseudoJet> incl_trpclejets_eta = sorted_by_rapidity(cs_trpcle.inclusive_jets(PTMINJET));
 	genOut.Njets = incl_trpclejets.size();
 
 	if(debug)
@@ -284,7 +302,6 @@ int main()
 	int bestTruthJet;
 	//! for each bquark sorted in eta (should be four per event)
 	int n_bquarks = input_bquarks.size(); //TODO: Fill this in a histogram
-	int n_SMhiggs = input_SMhiggs.size();
 	genOut.Nbquarks = n_bquarks;
 	genOut.NSMhiggs = n_SMhiggs;
 	genOut.vectorof_bJetsEta.clear();
