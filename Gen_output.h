@@ -43,12 +43,6 @@ public:
 
 	const int Njet_max = 5;
 	const int NbJETS = 4;
-	//! init vector to a high eta value
-	std::vector<double>vectorof_bJetsEta;
-	//! init vector to a low pt value
-	std::vector<double>vectorof_bJetsPt;
-	std::vector<int> v_bJetMultiplicity;
-	std::vector<int> v_JetMultiplicity;
 	int nMultiplicityBins = 40;
 	double maxMultiplicity = 40;
 
@@ -129,13 +123,23 @@ public:
 	std::vector<std::vector<double> > constituentEta;	// it's constituents eta
 	std::vector<double> jetEt;                     		//  truth-jet energy 
 	std::vector<std::vector<double> > constituentEt;      	// it's constituents energy
-	std::vector<double> jetMt;                     		//  truth-jet mass
+	std::vector<double> jetMt2;                     	//  truth-jet transverse mass square = (E + pz)(E- pz)
 	std::vector<std::vector<double> > constituentMt;      	// it's constituents mass
 	std::vector<std::vector<int> >    constituentPdg;	// pdg of truth-jet constituents
 	std::vector<std::vector<double> > constituentZ0;	//  z vertex truth-jet constituents
 	std::vector<bool>  hasConstituents;            		// flag indicating if the truth-jet has constituents
 	std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
+	std::vector<bool>btaggedJets;				// pt sorted jets tagged with b quarks dR = 0.4 
+	std::vector<double>btagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
+	
+	//! init vector to a high eta value
+	std::vector<double>vectorof_bJetsEta;			// jets matched to b quarks sorted in eta, dR = 0.4
+	//! init vector to a low pt value
+	std::vector<double>vectorof_bJetsPt;			// jets matched to b quarks sorted in pt, dR = 0.4
+	std::vector<int> v_bJetMultiplicity;			// multiplicity of bjets
+	std::vector<int> v_JetMultiplicity;			// multiplicity of jets (# of constituents in a jet)
+	
 	std::vector<double> higgsPt;
 	std::vector<double> higgsLPt;
 	std::vector<double> higgsNLPt;
@@ -144,6 +148,17 @@ public:
 	std::vector<double> bNLPt;
 	std::vector<double> bNNLPt;
 	std::vector<double> bNNNLPt;
+
+	std::vector<double> higgsCEta;
+	std::vector<double> higgsNCEta;
+
+	double dRhiggs;
+	double dRb12;
+	double dRb13;
+	double dRb14;
+	double dRb23;
+	double dRb24;
+	double dRb34;
 	
 	//! Book Histogram        
 	//! Histograms of eta distributions of "jets matched to b quarks" sorted into increasing eta

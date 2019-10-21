@@ -543,12 +543,20 @@ void Gen_output::Clear_OutVars()
 	constituentEta.clear();
 	jetEt.clear();
 	constituentEt.clear();
-	jetMt.clear();
+	jetMt2.clear();
 	constituentMt.clear();
 	constituentPdg.clear();
 	constituentZ0.clear();
 	hasConstituents.clear();
 	Nconstituents.clear();
+
+	btaggedJets.clear();		
+	btagJets_dR.clear();
+
+	vectorof_bJetsEta.clear();	
+	vectorof_bJetsPt.clear();	
+	v_bJetMultiplicity.clear();	
+	v_JetMultiplicity.clear();	
 
 	higgsPt.clear();
 	higgsLPt.clear();
@@ -558,10 +566,21 @@ void Gen_output::Clear_OutVars()
 	bNLPt.clear();
 	bNNLPt.clear();
 	bNNNLPt.clear();
+
+	higgsCEta.clear();
+	higgsNCEta.clear();
+
+	dRhiggs = 0;
+	dRb12 = 0;
+	dRb13 = 0;
+	dRb14 = 0;
+	dRb23 = 0;
+	dRb24 = 0;
+	dRb34 = 0;
 }
 void Gen_output::init_TTree()
 {
-	glob_jet = new TTree("glob_jet","glob_jet");
+	glob_jet = new TTree("glob_jet","tree of glob_jet");
 }
 void Gen_output::Branch_OutTree()
 {
@@ -583,12 +602,20 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("jetConstEta",&constituentEta);
 	glob_jet->Branch("jetEt",&jetEt);
 	glob_jet->Branch("jetConstEt",&constituentEt);
-	glob_jet->Branch("jetMt",&jetMt);
+	glob_jet->Branch("jetMt2",&jetMt2);
 	glob_jet->Branch("jetConstMt",&constituentMt);
 	glob_jet->Branch("jetConstPdg",&constituentPdg);
 	glob_jet->Branch("jetConstZ0",&constituentZ0);
 	glob_jet->Branch("has_constituents",&hasConstituents);
 	glob_jet->Branch("Nconstituents", &Nconstituents);
+	
+	glob_jet->Branch("btaggedJets", &btaggedJets);
+	glob_jet->Branch("btagJets_dR", &btagJets_dR);
+	
+	glob_jet->Branch("v_bJetsPt", &vectorof_bJetsPt);
+	glob_jet->Branch("v_bJetsEta", &vectorof_bJetsEta);
+	glob_jet->Branch("v_bJetMult", &v_bJetMultiplicity);
+	glob_jet->Branch("v_JetMult", &v_JetMultiplicity);
 	
 	glob_jet->Branch("higgsPt", &higgsPt);
 	glob_jet->Branch("higgsLPt", &higgsLPt);
@@ -598,4 +625,17 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("bNLPt", &bNLPt);
 	glob_jet->Branch("bNNLPt", &bNNLPt);
 	glob_jet->Branch("bNNNLPt", &bNNNLPt);
+
+	glob_jet->Branch("higgsCEta", &higgsCEta);
+	glob_jet->Branch("higgsNCEta", &higgsNCEta);
+
+	glob_jet->Branch("dRhiggs", &dRhiggs);
+	
+	glob_jet->Branch("dRb12", &dRb12);
+	glob_jet->Branch("dRb13", &dRb13);
+	glob_jet->Branch("dRb14", &dRb14);
+	glob_jet->Branch("dRb23", &dRb23);
+	glob_jet->Branch("dRb24", &dRb24);
+	glob_jet->Branch("dRb34", &dRb34);
+
 }

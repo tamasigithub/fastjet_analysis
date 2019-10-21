@@ -54,7 +54,7 @@ int main()
   //! output root file
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
-  TFile *f_out = new TFile("Genjet_PU0hh4b_ggF_Ctr1.0_q1.2GeV_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_1.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
@@ -64,7 +64,8 @@ int main()
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_VBF_H_260_hh_4b_pythia82_shower_nopileup.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.dferreir.pp_VBF_H_1000_hh_4b_pythia82_shower.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_ggF_hh_4b_pythia82_shower.v2_output.root/*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_NoGenCuts.v2_output.root/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_NoGenCuts.v2_output.root/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
   
   //! Get total no. of events
   //Long64_t nevents = 10000;
@@ -114,7 +115,7 @@ int main()
   int pid, status_, barcode_, q;
 
   //! for every event do the following
-  for(Long64_t i = 0; i < nevents; ++i)
+  for(int i = 0; i < nevents; ++i)
   {
   	genOut.Clear_OutVars();
 	genOut.eventNo = i;
@@ -215,6 +216,7 @@ int main()
 	std::vector<PseudoJet> input_bquarks;
 	std::vector<double> input_bquarks_etaVals;
 	std::vector<PseudoJet> input_SMhiggs;
+	std::vector<double> input_SMhiggs_etaVals;
 
 
 	//! loop over all truth particles
@@ -251,7 +253,7 @@ int main()
 	{
 		input_bquarks_etaVals.push_back(std::fabs(input_bquarks[ie].eta()));
 	}	
-	std::vector<PseudoJet> incl_bquarks_eta = objects_sorted_by_values(input_bquarks, input_bquarks_etaVals);	
+	std::vector<PseudoJet> incl_bquarks_eta = objects_sorted_by_values(input_bquarks, input_bquarks_etaVals);
 	std::vector<PseudoJet> incl_bquarks_pt = sorted_by_pt(input_bquarks);	
 
 	genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
@@ -266,19 +268,48 @@ int main()
 	genOut.FillPt_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
 	//! Fill pt hist of b quarks sorted in pt
 	genOut.FillPt_bquarks_pt(incl_bquarks_pt, genOut.NbJETS);
+
+	genOut.dRb12 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[1]);
+	genOut.dRb13 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[2]);
+	genOut.dRb14 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[3]);
+	genOut.dRb23 = incl_bquarks_pt[1].delta_R(incl_bquarks_pt[2]);
+	genOut.dRb24 = incl_bquarks_pt[1].delta_R(incl_bquarks_pt[3]);
+	genOut.dRb34 = incl_bquarks_pt[2].delta_R(incl_bquarks_pt[3]);
+	//************************************************//
 	
 	//****************** SM higgs *******************//
+	int n_SMhiggs = input_SMhiggs.size();
+
 	//! Pt sorted PseudoJet of SM higgs
 	std::vector<PseudoJet> incl_SMhiggs_pt = sorted_by_pt(input_SMhiggs);		
-	int n_SMhiggs = input_SMhiggs.size();
 	for (int h = 0; h < n_SMhiggs; h++)
 	{
 		genOut.higgsPt.push_back(incl_SMhiggs_pt[h].pt());
 	}
 	genOut.higgsLPt.push_back(incl_SMhiggs_pt[0].pt());
 	genOut.higgsNLPt.push_back(incl_SMhiggs_pt[1].pt());
+
+	//! Eta sorted higgs
+	if (std::fabs(incl_SMhiggs_pt[0].eta()) < std::fabs(incl_SMhiggs_pt[1].eta()))
+	{
+		genOut.higgsCEta.push_back(incl_SMhiggs_pt[0].eta());
+		genOut.higgsNCEta.push_back(incl_SMhiggs_pt[1].eta());
 	
-	//******************* all jets *****************//
+	}
+	else
+	{
+		genOut.higgsCEta.push_back(incl_SMhiggs_pt[1].eta());
+		genOut.higgsNCEta.push_back(incl_SMhiggs_pt[0].eta());
+	
+	}
+
+	//! delta R between the two higgs
+	genOut.dRhiggs = incl_SMhiggs_pt[0].delta_R(incl_SMhiggs_pt[1]);
+	
+	//***************************************************//
+
+	
+	//******************* All jets **********************//
 	if(debug)std::cout<<"Do jet Clustering \n";
 	//! run the jet clustering with the above definition, extract the jets
 	ClusterSequence cs_trpcle(input_trpcle, jet_def);
@@ -304,7 +335,6 @@ int main()
 	int n_bquarks = input_bquarks.size(); //TODO: Fill this in a histogram
 	genOut.Nbquarks = n_bquarks;
 	genOut.NSMhiggs = n_SMhiggs;
-	genOut.vectorof_bJetsEta.clear();
 	genOut.vectorof_bJetsEta.resize(genOut.NbJETS,99.0);
 	for(unsigned ii = 0; ii < incl_bquarks_eta.size(); ii++)
         {
@@ -346,10 +376,16 @@ int main()
 	genOut.Fill_bJetEta();
 
 	//! for each bquark sorted in pt (should be four per event)
-	genOut.vectorof_bJetsPt.clear();//TODO:ADD this to Gen_output.h and fill it in histograms, check multiplicities
-	genOut.vectorof_bJetsPt.resize(genOut.NbJETS,0.0);
-	genOut.v_bJetMultiplicity.clear();
-	genOut.v_bJetMultiplicity.resize(genOut.NbJETS,0);
+	//genOut.vectorof_bJetsPt.resize(genOut.NbJETS,0.0);
+	//genOut.v_bJetMultiplicity.resize(genOut.NbJETS,0);
+	//! create a flag for jets tagged as b or not for every event and fill it in the TTree
+	genOut.btaggedJets.resize(incl_trpclejets.size(), false);
+	genOut.b1tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.b2tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.b3tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.b4tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.btagJets_dR.resize(incl_trpclejets.size(), 99.0);
+
 	for(unsigned ii = 0; ii < incl_bquarks_pt.size(); ii++)
         {
 		dR = 99999.0;
@@ -358,6 +394,10 @@ int main()
 		{
 			
 			thisDR = incl_trpclejets[jj].delta_R(incl_bquarks_pt[ii]);
+			if(ii == 0) genOut.b1tagJets_dR[jj] = thisDR;
+			else if(ii == 1) genOut.b2tagJets_dR[jj] = thisDR;
+			else if(ii == 2) genOut.b3tagJets_dR[jj] = thisDR;
+			else if(ii == 3) genOut.b4tagJets_dR[jj] = thisDR;
 			if(thisDR < dR)
 			{
 				dR = thisDR;
@@ -371,13 +411,18 @@ int main()
 			//! Notice that incl_bquarks_pt is sorted hence vectorof_bJetsPt[ii] will also be already sorted	
 			//! at this stage vectorof_bJetsPt[nth_bquark] = 0 => initialised above
 			//! simple push_back should also work here
-			if(incl_trpclejets[bestTruthJet].pt() > genOut.vectorof_bJetsPt[ii]) 
-			{
-				genOut.vectorof_bJetsPt[ii] = incl_trpclejets[bestTruthJet].pt();
-				genOut.v_bJetMultiplicity[ii] = incl_trpclejets[bestTruthJet].constituents().size();
-			}
-			if(debug) std::cout<<"contents in vectorof_jetPt["<<ii<<"] = " <<genOut.vectorof_bJetsPt[ii] <<std::endl;
-			//incl_trpclejets_eta.erase(incl_trpclejets_eta.begin() + bestTruthJet);
+			genOut.vectorof_bJetsPt.push_back(incl_trpclejets[bestTruthJet].pt());
+			genOut.v_bJetMultiplicity.push_back(incl_trpclejets[bestTruthJet].constituents().size());
+			//if(incl_trpclejets[bestTruthJet].pt() > genOut.vectorof_bJetsPt[ii]) 
+			//{
+			//	genOut.vectorof_bJetsPt[ii] = incl_trpclejets[bestTruthJet].pt();
+			//	genOut.v_bJetMultiplicity[ii] = incl_trpclejets[bestTruthJet].constituents().size();
+			//}
+			//if(debug) std::cout<<"contents in vectorof_jetPt["<<ii<<"] = " <<genOut.vectorof_bJetsPt[ii] <<std::endl;
+			////incl_trpclejets_eta.erase(incl_trpclejets_eta.begin() + bestTruthJet);
+			////
+			genOut.btaggedJets[bestTruthJet] = true;
+			genOut.btagJets_dR[bestTruthJet] = dR;
 		}
 	}// END OF LOOP OVER SORTED in Pt bquarks
 
@@ -389,10 +434,9 @@ int main()
 	//! Fill eta histograms of n leading pt jets 
 	genOut.FillPt_Jets_pt(incl_trpclejets, genOut.Njet_max);
 	
-	genOut.v_JetMultiplicity.clear();
 	genOut.v_JetMultiplicity.resize(genOut.Njet_max,0);
 	//! for each truth jet sorted in pt
-	for (unsigned ii = 0; ii < incl_trpclejets.size(); ii++) 
+	for (unsigned ii = 0; ii < incl_trpclejets.size(); ++ii) 
 	{
 		//! smear jet energies
 		float jetE_;
@@ -404,7 +448,7 @@ int main()
 		genOut.jetTheta.push_back(incl_trpclejets[ii].theta());
                 genOut.jetEta.push_back(incl_trpclejets[ii].eta());
                 genOut.jetEt.push_back(incl_trpclejets[ii].Et());
-                genOut.jetMt.push_back(incl_trpclejets[ii].m());
+                genOut.jetMt2.push_back(incl_trpclejets[ii].mt2());
 		genOut.hasConstituents.push_back(incl_trpclejets[ii].has_constituents());
 		genOut.constituentPt.push_back(std::vector<double>());
 		genOut.constituentPhi.push_back(std::vector<double>());
@@ -473,7 +517,7 @@ genOut.SetPtHist_props();
 genOut.WritePt();
 genOut.SetMultiplicityHist_props();
 genOut.WriteMultiplicity();
-
+genOut.glob_jet->Write();
 f_out->Close();
 return 0;
 }
