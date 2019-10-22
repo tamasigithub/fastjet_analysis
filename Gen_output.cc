@@ -552,6 +552,10 @@ void Gen_output::Clear_OutVars()
 
 	btaggedJets.clear();		
 	btagJets_dR.clear();
+	b1tagJets_dR.clear();
+	b2tagJets_dR.clear();
+	b3tagJets_dR.clear();
+	b4tagJets_dR.clear();
 
 	vectorof_bJetsEta.clear();	
 	vectorof_bJetsPt.clear();	
@@ -611,6 +615,10 @@ void Gen_output::Branch_OutTree()
 	
 	glob_jet->Branch("btaggedJets", &btaggedJets);
 	glob_jet->Branch("btagJets_dR", &btagJets_dR);
+	glob_jet->Branch("b1tagJets_dR", &b1tagJets_dR);
+	glob_jet->Branch("b2tagJets_dR", &b2tagJets_dR);
+	glob_jet->Branch("b3tagJets_dR", &b3tagJets_dR);
+	glob_jet->Branch("b4tagJets_dR", &b4tagJets_dR);
 	
 	glob_jet->Branch("v_bJetsPt", &vectorof_bJetsPt);
 	glob_jet->Branch("v_bJetsEta", &vectorof_bJetsEta);

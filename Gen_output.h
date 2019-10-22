@@ -132,6 +132,10 @@ public:
 
 	std::vector<bool>btaggedJets;				// pt sorted jets tagged with b quarks dR = 0.4 
 	std::vector<double>btagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b1tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b2tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b3tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b4tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
 	
 	//! init vector to a high eta value
 	std::vector<double>vectorof_bJetsEta;			// jets matched to b quarks sorted in eta, dR = 0.4
