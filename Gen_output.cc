@@ -312,21 +312,35 @@ void Gen_output::Fill_bJetPt()
 		hbJetPt_NNLpt->Fill(vectorof_bJetsPt[2]*1e-3);	
 		hbJetPt_NLpt->Fill(vectorof_bJetsPt[1]*1e-3);	
 		hbJetPt_Lpt->Fill(vectorof_bJetsPt[0]*1e-3);	
+		
+		bJetLPt.push_back(vectorof_bJetsPt[0]*1e-3);
+		bJetNLPt.push_back(vectorof_bJetsPt[1]*1e-3);
+		bJetNNLPt.push_back(vectorof_bJetsPt[2]*1e-3);
+		bJetNNNLPt.push_back(vectorof_bJetsPt[3]*1e-3);
 	}
 	else if (vectorof_bJetsPt.size() >= NbJETS - 1)
 	{
 		hbJetPt_NNLpt->Fill(vectorof_bJetsPt[2]*1e-3);	
 		hbJetPt_NLpt->Fill(vectorof_bJetsPt[1]*1e-3);	
 		hbJetPt_Lpt->Fill(vectorof_bJetsPt[0]*1e-3);	
+	
+		bJetLPt.push_back(vectorof_bJetsPt[0]*1e-3);
+		bJetNLPt.push_back(vectorof_bJetsPt[1]*1e-3);
+		bJetNNLPt.push_back(vectorof_bJetsPt[2]*1e-3);
 	}
 	else if (vectorof_bJetsPt.size() >= NbJETS - 2)
 	{
 		hbJetPt_NLpt->Fill(vectorof_bJetsPt[1]*1e-3);	
 		hbJetPt_Lpt->Fill(vectorof_bJetsPt[0]*1e-3);	
+	
+		bJetLPt.push_back(vectorof_bJetsPt[0]*1e-3);
+		bJetNLPt.push_back(vectorof_bJetsPt[1]*1e-3);
 	}
 	else if (vectorof_bJetsPt.size() >= NbJETS - 3)
 	{
-		hbJetPt_Lpt->Fill(vectorof_bJetsPt[0]*1e-3);	
+		hbJetPt_Lpt->Fill(vectorof_bJetsPt[0]*1e-3);
+
+		bJetLPt.push_back(vectorof_bJetsPt[0]*1e-3);
 	}
 }
 void Gen_output::FillEta_bquarks_eta(std::vector<PseudoJet> Obj, int NObj)
@@ -529,10 +543,10 @@ void Gen_output::Clear_OutVars()
 	Njets = 0;
 	Nbquarks = 0;
 	NSMhiggs = 0;
-	//jetE_sm.clear();
-	//jetPt_sm.clear();
+	jetE_sm.clear();
+	jetPt_sm.clear();
 	jetE.clear();
-	//jetE_reso.clear();
+	jetE_reso.clear();
 	jetPt.clear();
 	constituentPt.clear();
 	jetPhi.clear();
@@ -570,6 +584,11 @@ void Gen_output::Clear_OutVars()
 	bNLPt.clear();
 	bNNLPt.clear();
 	bNNNLPt.clear();
+	
+	bJetLPt.clear();
+	bJetNLPt.clear();
+	bJetNNLPt.clear();
+	bJetNNNLPt.clear();
 
 	higgsCEta.clear();
 	higgsNCEta.clear();
@@ -592,10 +611,10 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("Njets",&Njets);
 	glob_jet->Branch("Nbquarks",&Nbquarks);
 	glob_jet->Branch("NSMhiggs",&NSMhiggs);
-	//glob_jet->Branch("jetE_sm",&jetE_sm);
-	//glob_jet->Branch("jetPt_sm",&jetPt_sm);
+	glob_jet->Branch("jetE_sm",&jetE_sm);
+	glob_jet->Branch("jetPt_sm",&jetPt_sm);
 	glob_jet->Branch("jetE",&jetE);
-	//glob_jet->Branch("jetE_reso",&jetE_reso);
+	glob_jet->Branch("jetE_reso",&jetE_reso);
 	glob_jet->Branch("jetPt",&jetPt);
 	glob_jet->Branch("jetConstPt",&constituentPt);
 	glob_jet->Branch("jetPhi",&jetPhi);
@@ -633,6 +652,11 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("bNLPt", &bNLPt);
 	glob_jet->Branch("bNNLPt", &bNNLPt);
 	glob_jet->Branch("bNNNLPt", &bNNNLPt);
+	
+	glob_jet->Branch("bJetLPt", &bJetLPt);
+	glob_jet->Branch("bJetNLPt", &bJetNLPt);
+	glob_jet->Branch("bJetNNLPt", &bJetNNLPt);
+	glob_jet->Branch("bJetNNNLPt", &bJetNNNLPt);
 
 	glob_jet->Branch("higgsCEta", &higgsCEta);
 	glob_jet->Branch("higgsNCEta", &higgsNCEta);

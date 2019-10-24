@@ -21,15 +21,15 @@
 #include "TLatex.h"
 
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "ggFhh4b_1";
+const char *output_file_name = "ggFhh4b_2.5_1";
 
-const char *inp_file1  = "./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_1.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet_ggF_Ctr0.0_q1.2GeV_1.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet_ggF_Ctr-1.0_q1.2GeV_1.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_1.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet_ggF_Ctr2.0_q1.2GeV_1.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet_ggF_Ctr2.5_q1.2GeV_1.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet_ggF_Ctr3.0_q1.2GeV_1.root"; 
+const char *inp_file1  = "./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_1.root"; 
+const char *inp_file0  = "./fastjet_output/Genjet_ggF_Ctr0.0_q1.2GeV_2.5_1.root"; 
+const char *inp_file_1 = "./fastjet_output/Genjet_ggF_Ctr-1.0_q1.2GeV_2.5_1.root"; 
+const char *inp_file_2 = "./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_2.5_1.root"; 
+const char *inp_file2  = "./fastjet_output/Genjet_ggF_Ctr2.0_q1.2GeV_2.5_1.root"; 
+const char *inp_file2_5= "./fastjet_output/Genjet_ggF_Ctr2.5_q1.2GeV_2.5_1.root"; 
+const char *inp_file3  = "./fastjet_output/Genjet_ggF_Ctr3.0_q1.2GeV_2.5_1.root"; 
 
 TFile *f1  = nullptr;
 TFile *f0  = nullptr;
@@ -175,7 +175,7 @@ TH1D *b4CEta3  = nullptr;
 
 void Set_higgsPtProps()
 {
-	int nbins = 100;
+	int nbins = 200;
 	float ptmin = 0;
 	float ptmax = 800;
 	higgsPt1  = new TH1D("higgsPt1",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
@@ -262,6 +262,21 @@ void fetch_TTrees()
 	t2_5->SetBranchStatus("higgsNLPt",1);
 	t3->SetBranchStatus("higgsNLPt",1);
 
+	t1->SetBranchStatus("NSMhiggs",1);
+	t0->SetBranchStatus("NSMhiggs",1);
+	t_1->SetBranchStatus("NSMhiggs",1);
+	t_2->SetBranchStatus("NSMhiggs",1);
+	t2->SetBranchStatus("NSMhiggs",1);
+	t2_5->SetBranchStatus("NSMhiggs",1);
+	t3->SetBranchStatus("NSMhiggs",1);
+
+	t1->SetBranchStatus("Nbquarks",1);
+	t0->SetBranchStatus("Nbquarks",1);
+	t_1->SetBranchStatus("Nbquarks",1);
+	t_2->SetBranchStatus("Nbquarks",1);
+	t2->SetBranchStatus("Nbquarks",1);
+	t2_5->SetBranchStatus("Nbquarks",1);
+	t3->SetBranchStatus("Nbquarks",1);
 	return;
 }
 void Draw_higgsPt()
@@ -607,6 +622,27 @@ int main()
 	C->Update();
 	C->Print(out_file_,"pdf");
 	
+	C->SetLogy(0);
+	t1->Draw("NSMhiggs","");
+	t0->Draw("NSMhiggs","","same");
+	t_1->Draw("NSMhiggs","","same");
+	t_2->Draw("NSMhiggs","","same");
+	t2->Draw("NSMhiggs","","same");
+	t2_5->Draw("NSMhiggs","","same");
+	t3->Draw("NSMhiggs","","same");
+	leg_higgs->Draw();
+	C->Print(out_file_,"pdf");
+
+	t1->Draw("Nbquarks","");
+	t0->Draw("Nbquarks","","same");
+	t_1->Draw("Nbquarks","","same");
+	t_2->Draw("Nbquarks","","same");
+	t2->Draw("Nbquarks","","same");
+	t2_5->Draw("Nbquarks","","same");
+	t3->Draw("Nbquarks","","same");
+	leg_higgs->Draw();
+	C->Print(out_file_,"pdf");
+
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
@@ -742,21 +778,21 @@ int main()
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
-	bjetLPt3->Draw("hist ");
+	bjetLPt_2->Draw("hist");
 	bjetLPt1->Draw("hist same");
 	bjetLPt2->Draw("hist same");
 	bjetLPt2_5->Draw("hist same");
-	bjetLPt_2->Draw("hist same");
+	bjetLPt3->Draw("hist same");
 	bjetLPt_1->Draw("hist same");
 	bjetLPt0->Draw("hist same");
 	leg_higgs->Draw();
 	
 	C->cd(2);
-	bjet2LPt3->Draw("hist");
+	bjet2LPt_2->Draw("hist");
 	bjet2LPt1->Draw("hist same");
 	bjet2LPt2->Draw("hist same");
 	bjet2LPt2_5->Draw("hist same");
-	bjet2LPt_2->Draw("hist same");
+	bjet2LPt3->Draw("hist same");
 	bjet2LPt_1->Draw("hist same");
 	bjet2LPt0->Draw("hist same");
 	leg_higgs->Draw();
@@ -773,7 +809,6 @@ int main()
 	leg_higgs->Draw();
 	
 	C->cd(4);
-	bjet4LPt_2->SetTitle("P_{t} of 4th leading b quark");
 	bjet4LPt_2->GetXaxis()->SetRangeUser(0,150);
 	
 	bjet4LPt_2->Draw("hist");

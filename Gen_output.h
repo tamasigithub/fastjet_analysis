@@ -109,10 +109,10 @@ public:
 	int Njets;						// # of truth-jets
 	int Nbquarks;						// # of truth-jets
 	int NSMhiggs;						// # of truth-jets
-	//std::vector<double> jetE_sm;				// truth-jet energy smeared 
-	//std::vector<double> jetPt_sm;				// truth-jet pt smeared
+	std::vector<double> jetE_sm;				// truth-jet energy smeared 
+	std::vector<double> jetPt_sm;				// truth-jet pt smeared
 	std::vector<double> jetE;				// truth-jet energy 
-	//std::vector<double> jetE_reso;			// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
+	std::vector<double> jetE_reso;			// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
 	std::vector<double> jetPt;				// truth-jet pt
 	std::vector<std::vector<double> > constituentPt;	// it's constituents pt
 	std::vector<double> jetPhi;                     	//  truth-jet phi
@@ -152,6 +152,11 @@ public:
 	std::vector<double> bNLPt;
 	std::vector<double> bNNLPt;
 	std::vector<double> bNNNLPt;
+	
+	std::vector<double> bJetLPt;
+	std::vector<double> bJetNLPt;
+	std::vector<double> bJetNNLPt;
+	std::vector<double> bJetNNNLPt;
 
 	std::vector<double> higgsCEta;
 	std::vector<double> higgsNCEta;

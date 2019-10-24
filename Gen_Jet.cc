@@ -1,7 +1,7 @@
 #include "fastjet/ClusterSequence.hh"
 #include "Constituent_info.h"
 #include "TrackJetObj.h"
-//#include "CaloEmu.h"
+#include "CaloEmu.h"
 #include "Gen_output.h"
 #include <iostream>
 #include <vector>
@@ -15,6 +15,7 @@
 #include <TInterpreter.h>
 using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
+#define SCALEfac_Ereso 0.5//50% 
 
 int Particle_Type(int pdgId)
 {
@@ -54,7 +55,7 @@ int main()
   //! output root file
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_1.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
@@ -64,12 +65,11 @@ int main()
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_VBF_H_260_hh_4b_pythia82_shower_nopileup.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.dferreir.pp_VBF_H_1000_hh_4b_pythia82_shower.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_ggF_hh_4b_pythia82_shower.v2_output.root/*.root");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_NoGenCuts.v2_output.root/*.root");
   
   //! Get total no. of events
-  //Long64_t nevents = 10000;
-  Long64_t nevents = rec.GetEntries();
+  Long64_t nevents = 50000;
+  //Long64_t nevents = rec.GetEntries();
   genOut.nevents = nevents;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl; 
   
@@ -126,9 +126,20 @@ int main()
 	
 	//! total number of tracks reconstructed in an event
 	int nobj = px_tru->size();
-  	if(debug)std::cout<<"nobj: "<<nobj<<std::endl;
+  	if(debug)std::cout<< "EVENT NUMBER: " << i <<" has nobj= "<<nobj<<std::endl;
 	//if(nobj<1) continue;
 	
+	//! initialise a calo object
+	//! in principle one should not create objects for every event
+	//! TODO: call the block below just once and reset the detector for every event
+	//! right now this is not working for some reason.
+	CaloEmu caloObj;	
+	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0;
+	Rad_calo = caloObj.GetCaloRadius();//in mm since pt is in MeV
+	ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
+	if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c" <<std::endl;
+
+
 	//! for all tracks in a pileup event
 	for (int j = 0; j < nobj; ++j)
 	{
@@ -146,7 +157,7 @@ int main()
 		phi	= atan2(py,px);
 		pt	= hypotf(px,py);
 
-		if(std::fabs(eta) > 17) continue;
+		if(std::fabs(eta) > 2.5) continue;
 		tjObj.flag = 1;// stable particles
 
 		if(std::abs(pid) == 5 && status_ == 23 ) 
@@ -173,19 +184,26 @@ int main()
 		}// SM higgs
 		else if(status_ != 1) continue;
 		
-		//! either use all particles for clustering or make a pt cut or around 1GeV on all particles	
-		//q = Particle_Type(pid);// for some old files charge was not stored, hence use this
 		q = (*charge)[j];
 		
-		//if(std::abs(q) < -100) continue; // neutrinos do not deposit any energy
 		if(std::abs(pid) == 12 || std::abs(pid) == 14 || std::abs(pid) == 15) continue; // neutrinos do not deposit any energy
-		//if(std::abs(q) == 0) continue; // create charged particle jets only.
+		//! calculate modified phi for particles
+		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
+		phi_Rcalo = phi;
 		if(std::abs(q) != 0 && (std::abs(pid)!= 5 || pid != 25)) //is chrarged and is not a SM higgs or bquark
 		{	
 			//! get rid of charged particles that will not make it to the calorimeter
-			if(std::fabs(pt) < 1.2e3) continue;// Also try 5 GeV and see the difference
-		       	
-		}	
+			if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
+			phi_Rcalo = phi + acos(0.5 * Rad_calo/Rad_pcle) - (M_PI/2);
+			if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
+			if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
+		}
+		//TOREMOVE
+		//{	
+		//	//! get rid of charged particles that will not make it to the calorimeter
+		//	if(std::fabs(pt) < 1.2e3) continue;// Also try 5 GeV and see the difference
+		//       	
+		//}	
 
 
 		if(debug && status_ != 1)
@@ -198,7 +216,11 @@ int main()
 		tjObj.pz = pz;
 		tjObj.E  = E;
 		tjObj.eta = eta;
-		tjObj.phi = phi;
+		//! add the modified eta and phi values here
+		//! i.e. eta and phi due to bending of charged particles in magnetic field
+		//! (eta unchanged as track is almost straight line in s-z plane)
+		tjObj.phi = phi_Rcalo;
+		//tjObj.phi = phi;//TOREMOVE
 		tjObj.zv = vz;
 		tjObj.pdg = pid;
 		tjObj.Vz0 = vz;
@@ -225,6 +247,7 @@ int main()
 		if(debug) std::cout<<"Create Pseudo jets \n";
 		if(trjVec[k].flag == 0)
 		{ 
+			if(debug) std::cout<<"Create b quarks Pseudo jets \n";
 			PseudoJet bquarks(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
 			bquarks.set_user_info(new Constituent_info(trjVec[k].pdg, trjVec[k].Vz0, trjVec[k].zv));
 			input_bquarks.push_back(bquarks);
@@ -232,6 +255,7 @@ int main()
 
 		else if(trjVec[k].flag == 2)
 		{	
+			if(debug) std::cout<<"Create higgs Pseudo jets \n";
 			PseudoJet SMhiggs(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
 			SMhiggs.set_user_info(new Constituent_info(trjVec[k].pdg, trjVec[k].Vz0, trjVec[k].zv));
 			input_SMhiggs.push_back(SMhiggs);
@@ -243,76 +267,158 @@ int main()
 			input_trpcle.push_back(trpcle);
 		}
 		
+		////////////////////////////////////////////////////////////////
+		//           Calorimeter - realistic emulation                //
+		////////////////////////////////////////////////////////////////           
+		//! accumulate energy deposits in each calo cell
+                //! find the particles rapidity and phi, then get the detector bins(cells) and accumulate energy in this cell
+		/*std::cout<<"eta, Eta: " <<trjVec[k].eta << ", " << trpcle.eta() <<std::endl;
+		std::cout<<"phi, Phi: " <<trjVec[k].phi << ", " << trpcle.phi() <<std::endl;
+		std::cout<<"e, E: " <<trjVec[k].E << ", " << trpcle.e() <<std::endl;*/
+		//caloObj.AccumulateEnergy(trpcle.eta(), trpcle.phi(), trpcle.e());// initial eta phi
+		caloObj.AccumulateEnergy(trjVec[k].eta, trjVec[k].phi, trjVec[k].E);// modified eta phi due to bending in magnetic field
 	}// end of loop over all tracks trjVec
+
+	//********** Calo detector construction using a 2D histogram *****************//	
+	std::vector<PseudoJet> CellEnergy_forEmuCaloJets;
+	unsigned int n_xbins = caloObj.GetNxbins();
+	unsigned int n_ybins = caloObj.GetNybins();
+	if(debug)
+	{
+		std::cout << "n_xbins: " << n_xbins <<std::endl;//etabins
+		std::cout << "n_ybins: " << n_ybins <<std::endl;//phibins
+		std::cout<<"Cell Energy threshold: " << caloObj.GetCellEnergyThreshold()*1e-3 << "GeV."<<std::endl;
+	}
+	for(unsigned int i = 1; i <= n_xbins; i++ )
+	{
+		for(unsigned int j = 1; j <= n_ybins; j++)
+		{
+			std::vector<double> Eptetaphi = caloObj.GetCellEnergy(i, j);
+			if(Eptetaphi[0] > caloObj.GetCellEnergyThreshold())
+			{
+				PseudoJet p(0., 0., 0., 0.);
+				// And treat 'clusters' as massless.
+				if(debug) std::cout<<"Cell energy[ " << i << ", " << j << "]: " << Eptetaphi[0] <<std::endl;
+	                     	p.reset_PtYPhiM(Eptetaphi[1], Eptetaphi[2], Eptetaphi[3], 0.);
+				p.set_user_info(new Constituent_info(0,0,0));
+				CellEnergy_forEmuCaloJets.push_back(p);
+
+			}	
+		}//phibins
+	}//etabins
+
+	//********************************************************************************************//
 	
 	//***************** b quarks ********************//
 	//! push the |eta values| of the b quarks into a vector 
 	//! to sort input_bquarks(a PseudoJet) by increasing value of |eta|
 	input_bquarks_etaVals.clear();
-	for(int ie = 0; ie < input_bquarks.size(); ie++)
+	std::vector<PseudoJet> incl_bquarks_eta;
+	std::vector<PseudoJet> incl_bquarks_pt;	
+	if(input_bquarks.size()!=0)
 	{
-		input_bquarks_etaVals.push_back(std::fabs(input_bquarks[ie].eta()));
-	}	
-	std::vector<PseudoJet> incl_bquarks_eta = objects_sorted_by_values(input_bquarks, input_bquarks_etaVals);
-	std::vector<PseudoJet> incl_bquarks_pt = sorted_by_pt(input_bquarks);	
+		for(int ie = 0; ie < input_bquarks.size(); ie++)
+		{
+			input_bquarks_etaVals.push_back(std::fabs(input_bquarks[ie].eta()));
+		}	
+		incl_bquarks_eta = objects_sorted_by_values(input_bquarks, input_bquarks_etaVals);
+		incl_bquarks_pt = sorted_by_pt(input_bquarks);	
+		
+		if(incl_bquarks_pt.size() < 2)
+		{
+			genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
+			genOut.bNLPt.push_back(0);
+			genOut.bNNLPt.push_back(0);
+			genOut.bNNNLPt.push_back(0);
+		}
+		else if(incl_bquarks_pt.size() < 3)
+		{
+			genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
+			genOut.bNLPt.push_back(incl_bquarks_pt[1].pt());
+			genOut.bNNLPt.push_back(0);
+			genOut.bNNNLPt.push_back(0);
+		}
+		else if(incl_bquarks_pt.size() < 4)
+		{
+			genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
+			genOut.bNLPt.push_back(incl_bquarks_pt[1].pt());
+			genOut.bNNLPt.push_back(incl_bquarks_pt[2].pt());
+			genOut.bNNNLPt.push_back(0);
+		}
+		else
+		{
+			genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
+			genOut.bNLPt.push_back(incl_bquarks_pt[1].pt());
+			genOut.bNNLPt.push_back(incl_bquarks_pt[2].pt());
+			genOut.bNNNLPt.push_back(incl_bquarks_pt[3].pt());
+		}
+		//! Fill eta hist of b quarks sorted in eta
+		genOut.FillEta_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
+		//! Fill eta hist of b quarks sorted in pt
+		genOut.FillEta_bquarks_pt(incl_bquarks_pt, genOut.NbJETS);
+		//! Fill pt hist of b quarks sorted in eta
+		genOut.FillPt_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
+		//! Fill pt hist of b quarks sorted in pt
+		genOut.FillPt_bquarks_pt(incl_bquarks_pt, genOut.NbJETS);
 
-	genOut.bLPt.push_back(incl_bquarks_pt[0].pt());
-	genOut.bNLPt.push_back(incl_bquarks_pt[1].pt());
-	genOut.bNNLPt.push_back(incl_bquarks_pt[2].pt());
-	genOut.bNNNLPt.push_back(incl_bquarks_pt[3].pt());
-	//! Fill eta hist of b quarks sorted in eta
-	genOut.FillEta_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
-	//! Fill eta hist of b quarks sorted in pt
-	genOut.FillEta_bquarks_pt(incl_bquarks_pt, genOut.NbJETS);
-	//! Fill pt hist of b quarks sorted in eta
-	genOut.FillPt_bquarks_eta(incl_bquarks_eta, genOut.NbJETS);
-	//! Fill pt hist of b quarks sorted in pt
-	genOut.FillPt_bquarks_pt(incl_bquarks_pt, genOut.NbJETS);
-
-	genOut.dRb12 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[1]);
-	genOut.dRb13 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[2]);
-	genOut.dRb14 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[3]);
-	genOut.dRb23 = incl_bquarks_pt[1].delta_R(incl_bquarks_pt[2]);
-	genOut.dRb24 = incl_bquarks_pt[1].delta_R(incl_bquarks_pt[3]);
-	genOut.dRb34 = incl_bquarks_pt[2].delta_R(incl_bquarks_pt[3]);
+		if(incl_bquarks_pt.size() < 3)
+		{
+			genOut.dRb12 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[1]);
+		}
+		if(incl_bquarks_pt.size() < 4)
+		{
+			genOut.dRb13 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[2]);
+			genOut.dRb23 = incl_bquarks_pt[1].delta_R(incl_bquarks_pt[2]);
+		}
+		if(incl_bquarks_pt.size() >3 )
+		{
+			genOut.dRb14 = incl_bquarks_pt[0].delta_R(incl_bquarks_pt[3]);
+			genOut.dRb24 = incl_bquarks_pt[1].delta_R(incl_bquarks_pt[3]);
+			genOut.dRb34 = incl_bquarks_pt[2].delta_R(incl_bquarks_pt[3]);
+		}
+	}
 	//************************************************//
 	
 	//****************** SM higgs *******************//
 	int n_SMhiggs = input_SMhiggs.size();
-
-	//! Pt sorted PseudoJet of SM higgs
-	std::vector<PseudoJet> incl_SMhiggs_pt = sorted_by_pt(input_SMhiggs);		
-	for (int h = 0; h < n_SMhiggs; h++)
+	if(n_SMhiggs > 1)
 	{
-		genOut.higgsPt.push_back(incl_SMhiggs_pt[h].pt());
-	}
-	genOut.higgsLPt.push_back(incl_SMhiggs_pt[0].pt());
-	genOut.higgsNLPt.push_back(incl_SMhiggs_pt[1].pt());
+		//! Pt sorted PseudoJet of SM higgs
+		std::vector<PseudoJet> incl_SMhiggs_pt = sorted_by_pt(input_SMhiggs);		
+		for (int h = 0; h < n_SMhiggs; h++)
+		{
+			genOut.higgsPt.push_back(incl_SMhiggs_pt[h].pt());
+		}
+		genOut.higgsLPt.push_back(incl_SMhiggs_pt[0].pt());
+		genOut.higgsNLPt.push_back(incl_SMhiggs_pt[1].pt());
 
-	//! Eta sorted higgs
-	if (std::fabs(incl_SMhiggs_pt[0].eta()) < std::fabs(incl_SMhiggs_pt[1].eta()))
-	{
-		genOut.higgsCEta.push_back(incl_SMhiggs_pt[0].eta());
-		genOut.higgsNCEta.push_back(incl_SMhiggs_pt[1].eta());
-	
-	}
-	else
-	{
-		genOut.higgsCEta.push_back(incl_SMhiggs_pt[1].eta());
-		genOut.higgsNCEta.push_back(incl_SMhiggs_pt[0].eta());
-	
-	}
+		//! Eta sorted higgs
+		if (std::fabs(incl_SMhiggs_pt[0].eta()) < std::fabs(incl_SMhiggs_pt[1].eta()))
+		{
+			genOut.higgsCEta.push_back(incl_SMhiggs_pt[0].eta());
+			genOut.higgsNCEta.push_back(incl_SMhiggs_pt[1].eta());
+		
+		}
+		else
+		{
+			genOut.higgsCEta.push_back(incl_SMhiggs_pt[1].eta());
+			genOut.higgsNCEta.push_back(incl_SMhiggs_pt[0].eta());
+		
+		}
 
-	//! delta R between the two higgs
-	genOut.dRhiggs = incl_SMhiggs_pt[0].delta_R(incl_SMhiggs_pt[1]);
-	
+		//! delta R between the two higgs
+		genOut.dRhiggs = incl_SMhiggs_pt[0].delta_R(incl_SMhiggs_pt[1]);
+	}
 	//***************************************************//
 
 	
 	//******************* All jets **********************//
 	if(debug)std::cout<<"Do jet Clustering \n";
 	//! run the jet clustering with the above definition, extract the jets
-	ClusterSequence cs_trpcle(input_trpcle, jet_def);
+	//ClusterSequence cs_trpcle(input_trpcle, jet_def);
+	ClusterSequence cs_trpcle(CellEnergy_forEmuCaloJets, jet_def);
+	//ClusterSequence cs_CaloEmuJet(CellEnergy_forEmuCaloJets, jet_def);
+	//std::vector<PseudoJet>  incl_CaloEmuJets = sorted_by_pt(cs_CaloEmuJet.inclusive_jets(PTMINJET));
 	
 	//! sort the resulting jets in descending order of pt
 	//! sorted_by_pt is a method of PseudoJet which returns a vector of jets sorted into decreasing pt
@@ -392,12 +498,12 @@ int main()
 		bestTruthJet = -1;
 		for (unsigned jj = 0; jj < incl_trpclejets.size(); jj++)
 		{
-			
 			thisDR = incl_trpclejets[jj].delta_R(incl_bquarks_pt[ii]);
 			if(ii == 0) genOut.b1tagJets_dR[jj] = thisDR;
 			else if(ii == 1) genOut.b2tagJets_dR[jj] = thisDR;
 			else if(ii == 2) genOut.b3tagJets_dR[jj] = thisDR;
 			else if(ii == 3) genOut.b4tagJets_dR[jj] = thisDR;
+			//if(abs(incl_trpclejets[jj].pt() - incl_bquarks_pt[ii].pt()) > 10e3) continue;
 			if(thisDR < dR)
 			{
 				dR = thisDR;
@@ -439,9 +545,18 @@ int main()
 	for (unsigned ii = 0; ii < incl_trpclejets.size(); ++ii) 
 	{
 		//! smear jet energies
-		float jetE_;
+		float jetE_, jetE_reso_;
+		float jetE_smeared, jetPt_smeared;
 		jetE_ = incl_trpclejets[ii].E();
+		jetE_reso_ = SCALEfac_Ereso/sqrt(jetE_);//50% energy resolution
+		jetE_smeared = gRandom->Gaus(jetE_,jetE_reso_*jetE_);
+		jetPt_smeared = sqrt(jetE_smeared*jetE_smeared - incl_trpclejets[ii].m2() - incl_trpclejets[ii].pz()*incl_trpclejets[ii].pz());
+		
 		//! push back all the truth jet parameters here for all "ii"
+		genOut.jetPt_sm.push_back(jetPt_smeared);
+		genOut.jetE_sm.push_back(jetE_smeared);
+		genOut.jetE_reso.push_back(jetE_reso_);
+		
 		genOut.jetE.push_back(jetE_);
 		genOut.jetPt.push_back(incl_trpclejets[ii].pt());
 		genOut.jetPhi.push_back(incl_trpclejets[ii].phi());
