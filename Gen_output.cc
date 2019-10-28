@@ -543,10 +543,12 @@ void Gen_output::Clear_OutVars()
 	Njets = 0;
 	Nbquarks = 0;
 	NSMhiggs = 0;
-	jetE_sm.clear();
-	jetPt_sm.clear();
+	Ncquarks = 0;
+	Nlightquarks = 0;
+	//jetE_sm.clear();
+	//jetPt_sm.clear();
 	jetE.clear();
-	jetE_reso.clear();
+	//jetE_reso.clear();
 	jetPt.clear();
 	constituentPt.clear();
 	jetPhi.clear();
@@ -564,7 +566,6 @@ void Gen_output::Clear_OutVars()
 	hasConstituents.clear();
 	Nconstituents.clear();
 
-	btaggedJets.clear();		
 	btagJets_dR.clear();
 	b1tagJets_dR.clear();
 	b2tagJets_dR.clear();
@@ -600,6 +601,9 @@ void Gen_output::Clear_OutVars()
 	dRb23 = 0;
 	dRb24 = 0;
 	dRb34 = 0;
+	
+	btagProb.clear();		
+	btaggedFlavor.clear();		
 }
 void Gen_output::init_TTree()
 {
@@ -611,10 +615,12 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("Njets",&Njets);
 	glob_jet->Branch("Nbquarks",&Nbquarks);
 	glob_jet->Branch("NSMhiggs",&NSMhiggs);
-	glob_jet->Branch("jetE_sm",&jetE_sm);
-	glob_jet->Branch("jetPt_sm",&jetPt_sm);
+	glob_jet->Branch("Ncquarks",&Ncquarks);
+	glob_jet->Branch("Nlightquarks",&Nlightquarks);
+	//glob_jet->Branch("jetE_sm",&jetE_sm);
+	//glob_jet->Branch("jetPt_sm",&jetPt_sm);
 	glob_jet->Branch("jetE",&jetE);
-	glob_jet->Branch("jetE_reso",&jetE_reso);
+	//glob_jet->Branch("jetE_reso",&jetE_reso);
 	glob_jet->Branch("jetPt",&jetPt);
 	glob_jet->Branch("jetConstPt",&constituentPt);
 	glob_jet->Branch("jetPhi",&jetPhi);
@@ -632,7 +638,6 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("has_constituents",&hasConstituents);
 	glob_jet->Branch("Nconstituents", &Nconstituents);
 	
-	glob_jet->Branch("btaggedJets", &btaggedJets);
 	glob_jet->Branch("btagJets_dR", &btagJets_dR);
 	glob_jet->Branch("b1tagJets_dR", &b1tagJets_dR);
 	glob_jet->Branch("b2tagJets_dR", &b2tagJets_dR);
@@ -669,5 +674,8 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("dRb23", &dRb23);
 	glob_jet->Branch("dRb24", &dRb24);
 	glob_jet->Branch("dRb34", &dRb34);
+	
+	glob_jet->Branch("btaggedFlavor", &btaggedFlavor);
+	glob_jet->Branch("btagProb", &btagProb);
 
 }

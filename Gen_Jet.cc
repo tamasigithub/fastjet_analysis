@@ -12,6 +12,7 @@
 #include <TChain.h>
 #include <TMath.h>
 #include <TRandom.h>
+#include <TRandom3.h>
 #include <TInterpreter.h>
 using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
@@ -32,6 +33,10 @@ int Particle_Type(int pdgId)
 
 int main() 
 {
+  
+  TRandom3 *myRNG = new TRandom3();
+  gRandom = myRNG;
+
   //bool debug = true;
   bool debug = false;
   
@@ -55,7 +60,7 @@ int main()
   //! output root file
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_2.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
@@ -68,7 +73,7 @@ int main()
   rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_NoGenCuts.v2_output.root/*.root");
   
   //! Get total no. of events
-  Long64_t nevents = 50000;
+  Long64_t nevents = 10000;
   //Long64_t nevents = rec.GetEntries();
   genOut.nevents = nevents;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl; 
@@ -134,8 +139,9 @@ int main()
 	//! TODO: call the block below just once and reset the detector for every event
 	//! right now this is not working for some reason.
 	CaloEmu caloObj;	
-	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0;
+	double phi_Rcalo = 0.0, Rad_calo = 0.0, Rad_pcle = 0.0, ChargedPcle_PtThreshold = 0.0;
 	Rad_calo = caloObj.GetCaloRadius();//in mm since pt is in MeV
+	//ChargedPcle_PtThreshold = 1.0;
 	ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
 	if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c" <<std::endl;
 
@@ -162,7 +168,7 @@ int main()
 
 		if(std::abs(pid) == 5 && status_ == 23 ) 
 		{
-			tjObj.flag = 0;
+			tjObj.flag = 5;
 			if(debug)
 			{
 				std::cout<<"b quarks" <<std::endl;
@@ -174,7 +180,7 @@ int main()
 		//else if(std::abs(pid) == 25 && barcode_ > 50)// this is true only if a heavy higgs decays to two SM higgs 
 		else if(std::abs(pid) == 25 && status_ == 22) 
 		{
-			tjObj.flag = 2;
+			tjObj.flag = 25;
 			if(debug)
 			{
 				std::cout<<"SM higgs" <<std::endl;
@@ -182,6 +188,26 @@ int main()
 			}
 
 		}// SM higgs
+		else if(std::abs(pid) == 4)
+		{
+			tjObj.flag = 4;
+			if(debug)
+			{
+				std::cout<<"c quarks" <<std::endl;
+				std::cout<<"pt, eta, phi, pid, status: " << pt << " , " << eta << " , " << phi << " , " << pid << " , " << status_ << std::endl;
+			}
+			
+		}// charm quark
+		else if(std::abs(pid) < 4)
+		{
+			tjObj.flag = 3;
+			if(debug)
+			{
+				std::cout<<"light quarks" <<std::endl;
+				std::cout<<"pt, eta, phi, pid, status: " << pt << " , " << eta << " , " << phi << " , " << pid << " , " << status_ << std::endl;
+			}
+			
+		}// light quark
 		else if(status_ != 1) continue;
 		
 		q = (*charge)[j];
@@ -190,7 +216,7 @@ int main()
 		//! calculate modified phi for particles
 		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
 		phi_Rcalo = phi;
-		if(std::abs(q) != 0 && (std::abs(pid)!= 5 || pid != 25)) //is chrarged and is not a SM higgs or bquark
+		if(std::abs(q) != 0 && (std::abs(pid) > 5 || pid != 25)) //is chrarged and is not a SM higgs or bquark or charm or any of the light quarks
 		{	
 			//! get rid of charged particles that will not make it to the calorimeter
 			if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
@@ -198,12 +224,6 @@ int main()
 			if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
 			if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
 		}
-		//TOREMOVE
-		//{	
-		//	//! get rid of charged particles that will not make it to the calorimeter
-		//	if(std::fabs(pt) < 1.2e3) continue;// Also try 5 GeV and see the difference
-		//       	
-		//}	
 
 
 		if(debug && status_ != 1)
@@ -220,7 +240,6 @@ int main()
 		//! i.e. eta and phi due to bending of charged particles in magnetic field
 		//! (eta unchanged as track is almost straight line in s-z plane)
 		tjObj.phi = phi_Rcalo;
-		//tjObj.phi = phi;//TOREMOVE
 		tjObj.zv = vz;
 		tjObj.pdg = pid;
 		tjObj.Vz0 = vz;
@@ -236,6 +255,8 @@ int main()
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_trpcle;
 	std::vector<PseudoJet> input_bquarks;
+	std::vector<PseudoJet> input_cquarks;
+	std::vector<PseudoJet> input_lightquarks;
 	std::vector<double> input_bquarks_etaVals;
 	std::vector<PseudoJet> input_SMhiggs;
 	std::vector<double> input_SMhiggs_etaVals;
@@ -245,15 +266,28 @@ int main()
 	for(int k = 0; k < trjVec.size(); ++k )
 	{
 		if(debug) std::cout<<"Create Pseudo jets \n";
-		if(trjVec[k].flag == 0)
+		if(trjVec[k].flag == 5)
 		{ 
 			if(debug) std::cout<<"Create b quarks Pseudo jets \n";
 			PseudoJet bquarks(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
 			bquarks.set_user_info(new Constituent_info(trjVec[k].pdg, trjVec[k].Vz0, trjVec[k].zv));
 			input_bquarks.push_back(bquarks);
 		}
-
-		else if(trjVec[k].flag == 2)
+		else if(trjVec[k].flag == 4)
+		{ 
+			if(debug) std::cout<<"Create charm quarks Pseudo jets \n";
+			PseudoJet cquarks(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
+			cquarks.set_user_info(new Constituent_info(trjVec[k].pdg, trjVec[k].Vz0, trjVec[k].zv));
+			input_cquarks.push_back(cquarks);
+		}
+		else if(trjVec[k].flag == 3)
+		{ 
+			if(debug) std::cout<<"Create light quarks Pseudo jets \n";
+			PseudoJet lightquarks(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
+			lightquarks.set_user_info(new Constituent_info(trjVec[k].pdg, trjVec[k].Vz0, trjVec[k].zv));
+			input_lightquarks.push_back(lightquarks);
+		}
+		else if(trjVec[k].flag == 25)
 		{	
 			if(debug) std::cout<<"Create higgs Pseudo jets \n";
 			PseudoJet SMhiggs(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
@@ -265,18 +299,18 @@ int main()
 			PseudoJet trpcle(trjVec[k].px, trjVec[k].py, trjVec[k].pz, trjVec[k].E);
 			trpcle.set_user_info(new Constituent_info(trjVec[k].pdg, trjVec[k].Vz0, trjVec[k].zv));
 			input_trpcle.push_back(trpcle);
+			////////////////////////////////////////////////////////////////
+			//           Calorimeter - realistic emulation                //
+			////////////////////////////////////////////////////////////////           
+			//! accumulate energy deposits in each calo cell
+			//! find the particles rapidity and phi, then get the detector bins(cells) and accumulate energy in this cell
+			/*std::cout<<"eta, Eta: " <<trjVec[k].eta << ", " << trpcle.eta() <<std::endl;
+			std::cout<<"phi, Phi: " <<trjVec[k].phi << ", " << trpcle.phi() <<std::endl;
+			std::cout<<"e, E: " <<trjVec[k].E << ", " << trpcle.e() <<std::endl;*/
+			//caloObj.AccumulateEnergy(trpcle.eta(), trpcle.phi(), trpcle.e());// initial eta phi
+			caloObj.AccumulateEnergy(trjVec[k].eta, trjVec[k].phi, trjVec[k].E);// modified eta phi due to bending in magnetic field
 		}
 		
-		////////////////////////////////////////////////////////////////
-		//           Calorimeter - realistic emulation                //
-		////////////////////////////////////////////////////////////////           
-		//! accumulate energy deposits in each calo cell
-                //! find the particles rapidity and phi, then get the detector bins(cells) and accumulate energy in this cell
-		/*std::cout<<"eta, Eta: " <<trjVec[k].eta << ", " << trpcle.eta() <<std::endl;
-		std::cout<<"phi, Phi: " <<trjVec[k].phi << ", " << trpcle.phi() <<std::endl;
-		std::cout<<"e, E: " <<trjVec[k].E << ", " << trpcle.e() <<std::endl;*/
-		//caloObj.AccumulateEnergy(trpcle.eta(), trpcle.phi(), trpcle.e());// initial eta phi
-		caloObj.AccumulateEnergy(trjVec[k].eta, trjVec[k].phi, trjVec[k].E);// modified eta phi due to bending in magnetic field
 	}// end of loop over all tracks trjVec
 
 	//********** Calo detector construction using a 2D histogram *****************//	
@@ -293,7 +327,7 @@ int main()
 	{
 		for(unsigned int j = 1; j <= n_ybins; j++)
 		{
-			std::vector<double> Eptetaphi = caloObj.GetCellEnergy(i, j);
+			std::vector<double> Eptetaphi = caloObj.GetCellEnergy(i, j);// this is where smearing is done
 			if(Eptetaphi[0] > caloObj.GetCellEnergyThreshold())
 			{
 				PseudoJet p(0., 0., 0., 0.);
@@ -308,13 +342,15 @@ int main()
 	}//etabins
 
 	//********************************************************************************************//
-	
+
+		
 	//***************** b quarks ********************//
 	//! push the |eta values| of the b quarks into a vector 
 	//! to sort input_bquarks(a PseudoJet) by increasing value of |eta|
 	input_bquarks_etaVals.clear();
 	std::vector<PseudoJet> incl_bquarks_eta;
 	std::vector<PseudoJet> incl_bquarks_pt;	
+	int n_bquarks = input_bquarks.size(); //TODO: Fill this in a histogram
 	if(input_bquarks.size()!=0)
 	{
 		for(int ie = 0; ie < input_bquarks.size(); ie++)
@@ -434,128 +470,32 @@ int main()
 		std::cout<<"Number of truth jets Njets : " <<genOut.Njets << std::endl;
 	}
 
-	//////////////// FIND THE BEST MATCHED BJET /////////////////
-	double dR, thisDR;
-	int bestTruthJet;
-	//! for each bquark sorted in eta (should be four per event)
-	int n_bquarks = input_bquarks.size(); //TODO: Fill this in a histogram
-	genOut.Nbquarks = n_bquarks;
-	genOut.NSMhiggs = n_SMhiggs;
-	genOut.vectorof_bJetsEta.resize(genOut.NbJETS,99.0);
-	for(unsigned ii = 0; ii < incl_bquarks_eta.size(); ii++)
-        {
-		dR = 99999.0;
-		bestTruthJet = -1;
-		for (unsigned jj = 0; jj < incl_trpclejets_eta.size(); jj++)
-		{
-			
-			thisDR = incl_trpclejets_eta[jj].delta_R(incl_bquarks_eta[ii]);
-			if(thisDR < dR)
-			{
-				dR = thisDR;
-				bestTruthJet = jj;
-			}
-		}
-		if(debug) std::cout <<"dR: " <<dR <<std::endl;
-		if(dR < 0.4)
-		{
-			//! store result, i.e. in vectorof_jetEta: keep only jets matched to b quarks 
-			//! Notice that incl_bquarks_eta is sorted hence vectorof_jetEta[ii] will also be already sorted	
-			//! at this stage vectorof_jetEta[nth_bquark] = 99 => initialised above
-			//! simple push_back should also work here
-			if(debug)
-			{ 
-			std::cout<<"\neta, phi, dR of b quarks " << incl_bquarks_eta[ii].eta() << ", " << incl_bquarks_eta[ii].phi() << ", " << dR <<std::endl;
-			std::cout<<"eta, phi, dR of jets " << incl_trpclejets_eta[bestTruthJet].eta() << ", " << incl_trpclejets_eta[bestTruthJet].phi() << ", " << dR <<std::endl;
-			}
-			//genOut.vectorof_bJetsEta.push_back(incl_trpclejets_eta[bestTruthJet].eta());
-			if(incl_trpclejets_eta[bestTruthJet].eta() < genOut.vectorof_bJetsEta[ii]) 
-			{
-				genOut.vectorof_bJetsEta[ii] = incl_trpclejets_eta[bestTruthJet].eta();
-			}
-			if(debug) std::cout<<"contents in vectorof_jetEta["<<ii<<"] = " <<genOut.vectorof_bJetsEta[ii] <<std::endl;
-			//incl_trpclejets_eta.erase(incl_trpclejets_eta.begin() + bestTruthJet);
-		}
-	}// END OF LOOP OVER SORTED in ETA bquarks
-	
-	//! FILL ETA HIST OF JETS MATCHED to b quarks 
-	genOut.Fill_bJetEta();
-
-	//! for each bquark sorted in pt (should be four per event)
-	//genOut.vectorof_bJetsPt.resize(genOut.NbJETS,0.0);
-	//genOut.v_bJetMultiplicity.resize(genOut.NbJETS,0);
-	//! create a flag for jets tagged as b or not for every event and fill it in the TTree
-	genOut.btaggedJets.resize(incl_trpclejets.size(), false);
-	genOut.b1tagJets_dR.resize(incl_trpclejets.size(), 99.0);
-	genOut.b2tagJets_dR.resize(incl_trpclejets.size(), 99.0);
-	genOut.b3tagJets_dR.resize(incl_trpclejets.size(), 99.0);
-	genOut.b4tagJets_dR.resize(incl_trpclejets.size(), 99.0);
-	genOut.btagJets_dR.resize(incl_trpclejets.size(), 99.0);
-
-	for(unsigned ii = 0; ii < incl_bquarks_pt.size(); ii++)
-        {
-		dR = 99999.0;
-		bestTruthJet = -1;
-		for (unsigned jj = 0; jj < incl_trpclejets.size(); jj++)
-		{
-			thisDR = incl_trpclejets[jj].delta_R(incl_bquarks_pt[ii]);
-			if(ii == 0) genOut.b1tagJets_dR[jj] = thisDR;
-			else if(ii == 1) genOut.b2tagJets_dR[jj] = thisDR;
-			else if(ii == 2) genOut.b3tagJets_dR[jj] = thisDR;
-			else if(ii == 3) genOut.b4tagJets_dR[jj] = thisDR;
-			//if(abs(incl_trpclejets[jj].pt() - incl_bquarks_pt[ii].pt()) > 10e3) continue;
-			if(thisDR < dR)
-			{
-				dR = thisDR;
-				bestTruthJet = jj;
-			}
-		}
-		if(debug) std::cout <<"dR: " <<dR <<std::endl;
-		if(dR < 0.4)
-		{
-			//! store result, i.e. in vectorof_bJetsPt: keep only jets matched to b quarks 
-			//! Notice that incl_bquarks_pt is sorted hence vectorof_bJetsPt[ii] will also be already sorted	
-			//! at this stage vectorof_bJetsPt[nth_bquark] = 0 => initialised above
-			//! simple push_back should also work here
-			genOut.vectorof_bJetsPt.push_back(incl_trpclejets[bestTruthJet].pt());
-			genOut.v_bJetMultiplicity.push_back(incl_trpclejets[bestTruthJet].constituents().size());
-			//if(incl_trpclejets[bestTruthJet].pt() > genOut.vectorof_bJetsPt[ii]) 
-			//{
-			//	genOut.vectorof_bJetsPt[ii] = incl_trpclejets[bestTruthJet].pt();
-			//	genOut.v_bJetMultiplicity[ii] = incl_trpclejets[bestTruthJet].constituents().size();
-			//}
-			//if(debug) std::cout<<"contents in vectorof_jetPt["<<ii<<"] = " <<genOut.vectorof_bJetsPt[ii] <<std::endl;
-			////incl_trpclejets_eta.erase(incl_trpclejets_eta.begin() + bestTruthJet);
-			////
-			genOut.btaggedJets[bestTruthJet] = true;
-			genOut.btagJets_dR[bestTruthJet] = dR;
-		}
-	}// END OF LOOP OVER SORTED in Pt bquarks
-
-	//! FILL Pt HIST OF JETS MATCHED to b quarks 
-	genOut.Fill_bJetPt();
-	//! FILL MULTIPLICITY HIST OF JETS MATCHED to b quarks 
-	genOut.Fill_bJetMultiplicity();
 
 	//! Fill eta histograms of n leading pt jets 
 	genOut.FillPt_Jets_pt(incl_trpclejets, genOut.Njet_max);
 	
 	genOut.v_JetMultiplicity.resize(genOut.Njet_max,0);
+	genOut.Ncquarks = input_cquarks.size();
+	genOut.Nlightquarks = input_lightquarks.size();
+
+	double dR, thisDR;
+	int bestTruthJet;
 	//! for each truth jet sorted in pt
 	for (unsigned ii = 0; ii < incl_trpclejets.size(); ++ii) 
 	{
 		//! smear jet energies
-		float jetE_, jetE_reso_;
-		float jetE_smeared, jetPt_smeared;
+		float jetE_;
+		//	, jetE_reso_;
+		//float jetE_smeared, jetPt_smeared;
 		jetE_ = incl_trpclejets[ii].E();
-		jetE_reso_ = SCALEfac_Ereso/sqrt(jetE_);//50% energy resolution
-		jetE_smeared = gRandom->Gaus(jetE_,jetE_reso_*jetE_);
-		jetPt_smeared = sqrt(jetE_smeared*jetE_smeared - incl_trpclejets[ii].m2() - incl_trpclejets[ii].pz()*incl_trpclejets[ii].pz());
-		
-		//! push back all the truth jet parameters here for all "ii"
-		genOut.jetPt_sm.push_back(jetPt_smeared);
-		genOut.jetE_sm.push_back(jetE_smeared);
-		genOut.jetE_reso.push_back(jetE_reso_);
+		//jetE_reso_ = SCALEfac_Ereso/sqrt(jetE_);//50% energy resolution
+		//jetE_smeared = gRandom->Gaus(jetE_,jetE_reso_*jetE_);
+		//jetPt_smeared = sqrt(jetE_smeared*jetE_smeared - incl_trpclejets[ii].m2() - incl_trpclejets[ii].pz()*incl_trpclejets[ii].pz());
+		//
+		////! push back all the truth jet parameters here for all "ii"
+		//genOut.jetPt_sm.push_back(jetPt_smeared);
+		//genOut.jetE_sm.push_back(jetE_smeared);
+		//genOut.jetE_reso.push_back(jetE_reso_);
 		
 		genOut.jetE.push_back(jetE_);
 		genOut.jetPt.push_back(incl_trpclejets[ii].pt());
@@ -608,19 +548,184 @@ int main()
 			std::cout<<"jetPt : " << genOut.jetPt[ii]  << std::endl;
 			std::cout<<"jetEta : " << genOut.jetEta[ii]  << std::endl;
 		}
+		
+		//********* tag Jets with the following probabilities: ***********//
+		//if matched to a b quark with pt > 15GeV/c, tag the jet as b-tagged with probability 0.8
+		//if matched to a c quark with pt > 15GeV/c, tag the jet as b-tagged with probability 0.1
+		//if matched to a light quark with pt > 15GeV/c, tag the jet as b-tagged with probability 0.01
+		const double MinQuarkPt = 15e3;
+		double fb = 0.8, fc= 0.1, fl = 0.01;
+		dR = 99999.0;
+		bestTruthJet = -1;
+		int btagged_flavor = 0;
+		double matchFound = 99;
+		//if(debug) std::cout<<"number of b quarks: " << 
+		//! b-jet tagging
+		if(btagged_flavor == 0 && n_bquarks !=0)
+		{
+			for(unsigned jj = 0; jj < n_bquarks; ++jj)
+			{
+				if(incl_bquarks_pt[jj].pt() < MinQuarkPt) continue;
+				thisDR = incl_trpclejets[ii].delta_R(incl_bquarks_pt[jj]);
+				if(thisDR < dR)
+				{
+					dR = thisDR;
+					bestTruthJet = jj;
+
+				}
+			}
+			if(dR < 0.4)
+			{ 
+				matchFound = gRandom->Uniform(0,1);
+				if(matchFound <= fb ) btagged_flavor = 5;
+			}
+		
+		}
+		//! b-mistag of charm-jets
+		if(btagged_flavor == 0 && genOut.Ncquarks != 0)
+		{
+			for(unsigned jj = 0; jj < genOut.Ncquarks; ++jj)
+			{
+				if(input_cquarks[jj].pt() < MinQuarkPt) continue;
+				thisDR = incl_trpclejets[ii].delta_R(input_cquarks[jj]);
+				if(thisDR < dR)
+				{
+					dR = thisDR;
+					bestTruthJet = jj;
+
+				}
+			}
+			if(dR < 0.4) 
+			{
+				matchFound = gRandom->Uniform(0,1);
+				if(matchFound <= fc) btagged_flavor = 4;
+			}
+		}
+		//! b-mistag of light-jets
+		if(btagged_flavor == 0 && genOut.Nlightquarks != 0)
+		{
+			for(unsigned jj = 0; jj < genOut.Nlightquarks; ++jj)
+			{
+				if(input_lightquarks[jj].pt() < MinQuarkPt) continue;
+				thisDR = incl_trpclejets[ii].delta_R(input_lightquarks[jj]);
+				if(thisDR < dR)
+				{
+					dR = thisDR;
+					bestTruthJet = jj;
+
+				}
+			}
+			if(dR < 0.4)
+			{
+				matchFound = gRandom->Uniform(0,1);
+				if(matchFound <= fl) btagged_flavor = 3;
+			}
+		}
+		genOut.btaggedFlavor.push_back(btagged_flavor);
+		genOut.btagProb.push_back(matchFound);
+
+
 	}// end of for loop over jet size
+	//*******************************************************************//
+
+	//********************** FIND THE BEST MATCHED BJET ****************//
+	//! for each bquark sorted in eta (should be four per event)
+	genOut.Nbquarks = n_bquarks;
+	genOut.NSMhiggs = n_SMhiggs;
+	genOut.vectorof_bJetsEta.resize(genOut.NbJETS,99.0);
+	for(unsigned ii = 0; ii < incl_bquarks_eta.size(); ii++)
+        {
+		dR = 99999.0;
+		bestTruthJet = -1;
+		for (unsigned jj = 0; jj < incl_trpclejets_eta.size(); jj++)
+		{
+			
+			thisDR = incl_trpclejets_eta[jj].delta_R(incl_bquarks_eta[ii]);
+			if(thisDR < dR)
+			{
+				dR = thisDR;
+				bestTruthJet = jj;
+			}
+		}
+		if(debug) std::cout <<"dR: " <<dR <<std::endl;
+		if(dR < 0.4)
+		{
+			//! store result, i.e. in vectorof_jetEta: keep only jets matched to b quarks 
+			//! Notice that incl_bquarks_eta is sorted hence vectorof_jetEta[ii] will also be already sorted	
+			//! at this stage vectorof_jetEta[nth_bquark] = 99 => initialised above
+			//! simple push_back should also work here
+			if(debug)
+			{ 
+			std::cout<<"\neta, phi, dR of b quarks " << incl_bquarks_eta[ii].eta() << ", " << incl_bquarks_eta[ii].phi() << ", " << dR <<std::endl;
+			std::cout<<"eta, phi, dR of jets " << incl_trpclejets_eta[bestTruthJet].eta() << ", " << incl_trpclejets_eta[bestTruthJet].phi() << ", " << dR <<std::endl;
+			}
+			//genOut.vectorof_bJetsEta.push_back(incl_trpclejets_eta[bestTruthJet].eta());
+			if(incl_trpclejets_eta[bestTruthJet].eta() < genOut.vectorof_bJetsEta[ii]) 
+			{
+				genOut.vectorof_bJetsEta[ii] = incl_trpclejets_eta[bestTruthJet].eta();
+			}
+			if(debug) std::cout<<"contents in vectorof_jetEta["<<ii<<"] = " <<genOut.vectorof_bJetsEta[ii] <<std::endl;
+			//incl_trpclejets_eta.erase(incl_trpclejets_eta.begin() + bestTruthJet);
+		}
+	}// END OF LOOP OVER SORTED in ETA bquarks
+	
+	//! FILL ETA HIST OF JETS MATCHED to b quarks 
+	genOut.Fill_bJetEta();
+
+	//! for each bquark sorted in pt (should be four per event)
+	//genOut.vectorof_bJetsPt.resize(genOut.NbJETS,0.0);
+	//genOut.v_bJetMultiplicity.resize(genOut.NbJETS,0);
+	//! create a flag for jets tagged as b or not for every event and fill it in the TTree
+	//genOut.btaggedJets.resize(incl_trpclejets.size(), false);
+	genOut.b1tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.b2tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.b3tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.b4tagJets_dR.resize(incl_trpclejets.size(), 99.0);
+	genOut.btagJets_dR.resize(incl_trpclejets.size(), 99.0);
+
+	for(unsigned ii = 0; ii < incl_bquarks_pt.size(); ii++)
+        {
+		dR = 99999.0;
+		bestTruthJet = -1;
+		for (unsigned jj = 0; jj < incl_trpclejets.size(); jj++)
+		{
+			thisDR = incl_trpclejets[jj].delta_R(incl_bquarks_pt[ii]);
+			if(ii == 0) genOut.b1tagJets_dR[jj] = thisDR;
+			else if(ii == 1) genOut.b2tagJets_dR[jj] = thisDR;
+			else if(ii == 2) genOut.b3tagJets_dR[jj] = thisDR;
+			else if(ii == 3) genOut.b4tagJets_dR[jj] = thisDR;
+			//if(abs(incl_trpclejets[jj].pt() - incl_bquarks_pt[ii].pt()) > 10e3) continue;
+			if(thisDR < dR)
+			{
+				dR = thisDR;
+				bestTruthJet = jj;
+			}
+		}
+		if(debug) std::cout <<"dR: " <<dR <<std::endl;
+		if(dR < 0.4)
+		{
+			//! store result, i.e. in vectorof_bJetsPt: keep only jets matched to b quarks 
+			//! Notice that incl_bquarks_pt is sorted hence vectorof_bJetsPt[ii] will also be already sorted	
+			//! at this stage vectorof_bJetsPt[nth_bquark] = 0 => initialised above
+			//! simple push_back should also work here
+			genOut.vectorof_bJetsPt.push_back(incl_trpclejets[bestTruthJet].pt());
+			genOut.v_bJetMultiplicity.push_back(incl_trpclejets[bestTruthJet].constituents().size());
+			//genOut.btaggedJets[bestTruthJet] = true;
+			genOut.btagJets_dR[bestTruthJet] = dR;
+		}
+	}// END OF LOOP OVER SORTED in Pt bquarks
+
+
+	//! FILL Pt HIST OF JETS MATCHED to b quarks 
+	genOut.Fill_bJetPt();
+	//! FILL MULTIPLICITY HIST OF JETS MATCHED to b quarks 
+	genOut.Fill_bJetMultiplicity();
+	//*******************************************************************************//
+	
 	genOut.glob_jet->Fill();
 
 	//! FILL MULTIPLICITY HIST OF JETS MATCHED to b quarks 
 	genOut.Fill_JetMultiplicity();
-
-	//! TODO: plot the multiplicity of the jets matched to b quarks
-	//! How can we assume the highest pt jet is a b jet??
-	//! highest pt jet can aslo be a track right?
-	//! would be nice to observe the track multiplicities of the jets matched to b quarks
-	//! since they will be for sure not a single track. and this is the reason probably because of which the signal efficiency gets better with the n constituent requirement.
-	//! PROBLEM: these jets include the neutrals.. which bdw can be eliminated easily.
-	//! TODO: Also repeat these plots for Higgs mass of 1TeV and observe the difference.
 	
 
  }// for loop over nentries

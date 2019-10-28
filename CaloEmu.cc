@@ -66,7 +66,7 @@ std::vector<double> CaloEmu::GetCellEnergy(int i, int j)
 	EPtEtaPhi.clear();
 	double	phi = -999;
 	double	eta = -999;
-	double	E = 0;
+	double	E = 0, Pt = 0;
 	//! smear jet energies
 	double E_reso_;
 	double E_smeared = 0, Pt_smeared = 0;
@@ -79,9 +79,12 @@ std::vector<double> CaloEmu::GetCellEnergy(int i, int j)
 		     E_reso_ = SCALEfac_Ereso/sqrt(E);//50% energy resolution
 		     E_smeared = gRandom->Gaus(E,E_reso_*E);
 		     Pt_smeared = E_smeared/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
+		     Pt = E/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
 
 	}
 	EPtEtaPhi.push_back(E_smeared);
+	//EPtEtaPhi.push_back(E);
+	//EPtEtaPhi.push_back(Pt);
 	EPtEtaPhi.push_back(Pt_smeared);
 	EPtEtaPhi.push_back(eta);
 	EPtEtaPhi.push_back(phi);

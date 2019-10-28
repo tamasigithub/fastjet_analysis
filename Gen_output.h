@@ -109,10 +109,12 @@ public:
 	int Njets;						// # of truth-jets
 	int Nbquarks;						// # of truth-jets
 	int NSMhiggs;						// # of truth-jets
-	std::vector<double> jetE_sm;				// truth-jet energy smeared 
-	std::vector<double> jetPt_sm;				// truth-jet pt smeared
+	int Ncquarks;						// # of truth-jets
+	int Nlightquarks;						// # of truth-jets
+	//std::vector<double> jetE_sm;				// truth-jet energy smeared 
+	//std::vector<double> jetPt_sm;				// truth-jet pt smeared
 	std::vector<double> jetE;				// truth-jet energy 
-	std::vector<double> jetE_reso;			// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
+	//std::vector<double> jetE_reso;			// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
 	std::vector<double> jetPt;				// truth-jet pt
 	std::vector<std::vector<double> > constituentPt;	// it's constituents pt
 	std::vector<double> jetPhi;                     	//  truth-jet phi
@@ -130,7 +132,6 @@ public:
 	std::vector<bool>  hasConstituents;            		// flag indicating if the truth-jet has constituents
 	std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
-	std::vector<bool>btaggedJets;				// pt sorted jets tagged with b quarks dR = 0.4 
 	std::vector<double>btagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
 	std::vector<double>b1tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
 	std::vector<double>b2tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
@@ -168,6 +169,9 @@ public:
 	double dRb23;
 	double dRb24;
 	double dRb34;
+	
+	std::vector<int>btaggedFlavor;				// Jets tagged based on matching probability: fb=0.8, fc =0.1, fl=0.01. 5: bottom, 4: charm, 3: light 
+	std::vector<double>btagProb;				// random number for the tagged b jets 
 	
 	//! Book Histogram        
 	//! Histograms of eta distributions of "jets matched to b quarks" sorted into increasing eta
