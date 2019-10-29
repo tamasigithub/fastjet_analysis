@@ -1,177 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include<math.h>
-
-#include "TROOT.h"
-#include "TFile.h"
-#include "TH1D.h"
-#include "TH2D.h"
-#include "TCanvas.h"
-#include "TTree.h"
-#include "TGraph.h"
-#include "TMultiGraph.h"
-#include "TLegend.h"
-#include "TGraphErrors.h"
-#include "TPostScript.h"
-#include "TDirectory.h"
-#include "TAxis.h"
-#include "TGaxis.h"
-#include "TF1.h"
-#include "TLatex.h"
-
-const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "ggFhh4b_2.5_1_smeared";
-
-const char *inp_file1  = "./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_1.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet_ggF_Ctr0.0_q1.2GeV_2.5_1.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet_ggF_Ctr-1.0_q1.2GeV_2.5_1.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_2.5_1.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet_ggF_Ctr2.0_q1.2GeV_2.5_1.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet_ggF_Ctr2.5_q1.2GeV_2.5_1.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet_ggF_Ctr3.0_q1.2GeV_2.5_1.root"; 
-
-TFile *f1  = nullptr;
-TFile *f0  = nullptr;
-TFile *f_1 = nullptr;
-TFile *f_2 = nullptr;
-TFile *f2  = nullptr;
-TFile *f2_5= nullptr;
-TFile *f3  = nullptr;
-
-//TTree
-TTree *t1  = nullptr;
-TTree *t0  = nullptr;
-TTree *t_1 = nullptr;
-TTree *t_2 = nullptr;
-TTree *t2  = nullptr;
-TTree *t2_5= nullptr;
-TTree *t3  = nullptr;
-
-//! Draw Legends
-TLegend *leg_higgs = nullptr;
-TLegend *leg1 = nullptr;
-TLegend *leg2 = nullptr;
-TLegend *leg3 = nullptr;
-TLegend *leg4 = nullptr;
-
-
-//! Book histograms:
-//Higgs Pt
-TH1 *higgsPt1  = nullptr;
-TH1 *higgsPt0  = nullptr;
-TH1 *higgsPt_1 = nullptr;
-TH1 *higgsPt_2 = nullptr;
-TH1 *higgsPt2  = nullptr;
-TH1 *higgsPt2_5= nullptr;
-TH1 *higgsPt3  = nullptr;
-//Higgs sub leading Pt
-TH1 *higgsNLPt1  = nullptr;
-TH1 *higgsNLPt0  = nullptr;
-TH1 *higgsNLPt_1 = nullptr;
-TH1 *higgsNLPt_2 = nullptr;
-TH1 *higgsNLPt2  = nullptr;
-TH1 *higgsNLPt2_5= nullptr;
-TH1 *higgsNLPt3  = nullptr;
-
-//b-jet leading Pt
-TH1D *bjetLPt1  = nullptr;
-TH1D *bjetLPt0  = nullptr;
-TH1D *bjetLPt_1 = nullptr;
-TH1D *bjetLPt_2 = nullptr;
-TH1D *bjetLPt2  = nullptr;
-TH1D *bjetLPt2_5= nullptr;
-TH1D *bjetLPt3  = nullptr;
-//b-jet 2nd leading Pt
-TH1D *bjet2LPt1  = nullptr;
-TH1D *bjet2LPt0  = nullptr;
-TH1D *bjet2LPt_1 = nullptr;
-TH1D *bjet2LPt_2 = nullptr;
-TH1D *bjet2LPt2  = nullptr;
-TH1D *bjet2LPt2_5= nullptr;
-TH1D *bjet2LPt3  = nullptr;
-//b-jet 3rd leading Pt
-TH1D *bjet3LPt1  = nullptr;
-TH1D *bjet3LPt0  = nullptr;
-TH1D *bjet3LPt_1 = nullptr;
-TH1D *bjet3LPt_2 = nullptr;
-TH1D *bjet3LPt2  = nullptr;
-TH1D *bjet3LPt2_5= nullptr;
-TH1D *bjet3LPt3  = nullptr;
-//b-jet 4th leading Pt
-TH1D *bjet4LPt1  = nullptr;
-TH1D *bjet4LPt0  = nullptr;
-TH1D *bjet4LPt_1 = nullptr;
-TH1D *bjet4LPt_2 = nullptr;
-TH1D *bjet4LPt2  = nullptr;
-TH1D *bjet4LPt2_5= nullptr;
-TH1D *bjet4LPt3  = nullptr;
-
-//b leading Pt
-TH1D *bLPt1  = nullptr;
-TH1D *bLPt0  = nullptr;
-TH1D *bLPt_1 = nullptr;
-TH1D *bLPt_2 = nullptr;
-TH1D *bLPt2  = nullptr;
-TH1D *bLPt2_5= nullptr;
-TH1D *bLPt3  = nullptr;
-//b 2nd leading Pt
-TH1D *b2LPt1  = nullptr;
-TH1D *b2LPt0  = nullptr;
-TH1D *b2LPt_1 = nullptr;
-TH1D *b2LPt_2 = nullptr;
-TH1D *b2LPt2  = nullptr;
-TH1D *b2LPt2_5= nullptr;
-TH1D *b2LPt3  = nullptr;
-//b 3rd leading Pt
-TH1D *b3LPt1  = nullptr;
-TH1D *b3LPt0  = nullptr;
-TH1D *b3LPt_1 = nullptr;
-TH1D *b3LPt_2 = nullptr;
-TH1D *b3LPt2  = nullptr;
-TH1D *b3LPt2_5= nullptr;
-TH1D *b3LPt3  = nullptr;
-//b 4th leading Pt
-TH1D *b4LPt1  = nullptr;
-TH1D *b4LPt0  = nullptr;
-TH1D *b4LPt_1 = nullptr;
-TH1D *b4LPt_2 = nullptr;
-TH1D *b4LPt2  = nullptr;
-TH1D *b4LPt2_5= nullptr;
-TH1D *b4LPt3  = nullptr;
-
-//b central Pt
-TH1D *bCEta1  = nullptr;
-TH1D *bCEta0  = nullptr;
-TH1D *bCEta_1 = nullptr;
-TH1D *bCEta_2 = nullptr;
-TH1D *bCEta2  = nullptr;
-TH1D *bCEta2_5= nullptr;
-TH1D *bCEta3  = nullptr;
-//b 2nd central Pt
-TH1D *b2CEta1  = nullptr;
-TH1D *b2CEta0  = nullptr;
-TH1D *b2CEta_1 = nullptr;
-TH1D *b2CEta_2 = nullptr;
-TH1D *b2CEta2  = nullptr;
-TH1D *b2CEta2_5= nullptr;
-TH1D *b2CEta3  = nullptr;
-//b 3rd central Pt
-TH1D *b3CEta1  = nullptr;
-TH1D *b3CEta0  = nullptr;
-TH1D *b3CEta_1 = nullptr;
-TH1D *b3CEta_2 = nullptr;
-TH1D *b3CEta2  = nullptr;
-TH1D *b3CEta2_5= nullptr;
-TH1D *b3CEta3  = nullptr;
-//b 4th central Pt
-TH1D *b4CEta1  = nullptr;
-TH1D *b4CEta0  = nullptr;
-TH1D *b4CEta_1 = nullptr;
-TH1D *b4CEta_2 = nullptr;
-TH1D *b4CEta2  = nullptr;
-TH1D *b4CEta2_5= nullptr;
-TH1D *b4CEta3  = nullptr;
+#include "GenAnalysis_smeared.h"
 
 void Set_higgsPtProps()
 {
@@ -225,7 +52,14 @@ void Set_higgsPtProps()
 	higgsNLPt2->SetLineWidth(2);
 	higgsNLPt2_5->SetLineWidth(2);
 	higgsNLPt3->SetLineWidth(2);
+	return;
+}
 
+void Set_jetPtProps()
+{
+	int nbins = 100;
+	float ptmin = 0;
+	float ptmax = 300;
 	//b-jet leading Pt
 	bjetLPt1  = new TH1D("bjetLPt1", "b-tagged Jet p_{t}; p_{t, leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	bjetLPt0  = new TH1D("bjetLPt0", "b-tagged Jet p_{t}; p_{t, leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
@@ -258,7 +92,57 @@ void Set_higgsPtProps()
 	bjet4LPt2  = new TH1D("bjet4LPt2", "b-tagged Jet p_{t}; p_{t, 4th leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	bjet4LPt2_5= new TH1D("bjet4LPt2_5", "b-tagged Jet p_{t}; p_{t, 4th leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	bjet4LPt3  = new TH1D("bjet4LPt3", "b-tagged Jet p_{t}; p_{t, 4th leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
+	
+	//jet leading Pt
+	jetLPt1  = new TH1D("jetLPt1", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPt0  = new TH1D("jetLPt0", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPt_1 = new TH1D("jetLPt_1", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPt_2 = new TH1D("jetLPt_2", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPt2  = new TH1D("jetLPt2", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPt2_5= new TH1D("jetLPt2_5", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPt3  = new TH1D("jetLPt3", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	//jet 2nd leading Pt
+	jet2LPt1  = new TH1D("jet2LPt1", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPt0  = new TH1D("jet2LPt0", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPt_1 = new TH1D("jet2LPt_1", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPt_2 = new TH1D("jet2LPt_2", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPt2  = new TH1D("jet2LPt2", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPt2_5= new TH1D("jet2LPt2_5", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPt3  = new TH1D("jet2LPt3", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	//jet 3rd leading Pt
+	jet3LPt1  = new TH1D("jet3LPt1", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPt0  = new TH1D("jet3LPt0", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPt_1 = new TH1D("jet3LPt_1", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPt_2 = new TH1D("jet3LPt_2", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPt2  = new TH1D("jet3LPt2", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPt2_5= new TH1D("jet3LPt2_5", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPt3  = new TH1D("jet3LPt3", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	//jet 4th leading Pt
+	jet4LPt1  = new TH1D("jet4LPt1", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPt0  = new TH1D("jet4LPt0", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPt_1 = new TH1D("jet4LPt_1", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPt_2 = new TH1D("jet4LPt_2", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPt2  = new TH1D("jet4LPt2", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPt2_5= new TH1D("jet4LPt2_5", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPt3  = new TH1D("jet4LPt3", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	return;
+}
+int get_Nentries()
+{
+	n_entries1 = t1->GetEntries();
+	n_entries2 = t0->GetEntries();
+	n_entries3 = t_1->GetEntries();
+	n_entries4 = t_2->GetEntries();
+	n_entries5 = t2->GetEntries();
+	n_entries6 = t2_5->GetEntries();
+	n_entries7 = t3->GetEntries();
+	assert (n_entries1 = n_entries2);
+	assert (n_entries2 = n_entries3);
+	assert (n_entries3 = n_entries4);
+	assert (n_entries4 = n_entries5);
+	assert (n_entries5 = n_entries6);
+	assert (n_entries6 = n_entries7);
+	return n_entries1;
 }
 void fetch_TTrees()
 {
@@ -310,6 +194,29 @@ void fetch_TTrees()
 	t2_5->SetBranchStatus("Nbquarks",1);
 	t3->SetBranchStatus("Nbquarks",1);
 	
+	t1->SetBranchStatus("Njets",1);
+	t0->SetBranchStatus("Njets",1);
+	t_1->SetBranchStatus("Njets",1);
+	t_2->SetBranchStatus("Njets",1);
+	t2->SetBranchStatus("Njets",1);
+	t2_5->SetBranchStatus("Njets",1);
+	t3->SetBranchStatus("Njets",1);
+	
+	t1->SetBranchStatus("jetPt",1);
+	t0->SetBranchStatus("jetPt",1);
+	t_1->SetBranchStatus("jetPt",1);
+	t_2->SetBranchStatus("jetPt",1);
+	t2->SetBranchStatus("jetPt",1);
+	t2_5->SetBranchStatus("jetPt",1);
+	t3->SetBranchStatus("jetPt",1);
+	t1->SetBranchAddress("jetPt",  &v1_jetPt);
+	t0->SetBranchAddress("jetPt",  &v0_jetPt);
+	t_1->SetBranchAddress("jetPt", &v_1_jetPt);
+	t_2->SetBranchAddress("jetPt", &v_2_jetPt);
+	t2->SetBranchAddress("jetPt",  &v2_jetPt);
+	t2_5->SetBranchAddress("jetPt",&v2_5_jetPt);
+	t3->SetBranchAddress("jetPt",  &v3_jetPt);
+	
 	t1->SetBranchStatus("bJetLPt",1);
 	t0->SetBranchStatus("bJetLPt",1);
 	t_1->SetBranchStatus("bJetLPt",1);
@@ -341,6 +248,61 @@ void fetch_TTrees()
 	t2->SetBranchStatus("bJetNNNLPt",1);
 	t2_5->SetBranchStatus("bJetNNNLPt",1);
 	t3->SetBranchStatus("bJetNNNLPt",1);
+	
+	return;
+}
+void Draw_Nparticles()
+{
+	int nbins = 6;
+	double nmin = 0, nmax = 6;
+	//Number of SMhiggs 
+	NSMhiggs1  = new TH1D("NSMhiggs1", "number of higgs", nbins, nmin, nmax);
+	NSMhiggs0  = new TH1D("NSMhiggs0", "number of higgs", nbins, nmin, nmax);
+	NSMhiggs_1 = new TH1D("NSMhiggs_1", "number of higgs", nbins, nmin, nmax);
+	NSMhiggs_2 = new TH1D("NSMhiggs_2", "number of higgs", nbins, nmin, nmax);
+	NSMhiggs2  = new TH1D("NSMhiggs2", "number of higgs", nbins, nmin, nmax);
+	NSMhiggs2_5= new TH1D("NSMhiggs2_5", "number of higgs", nbins, nmin, nmax);
+	NSMhiggs3  = new TH1D("NSMhiggs3", "number of higgs", nbins, nmin, nmax);
+	//Number of bquarks 
+	Nbquarks1  = new TH1D("Nbquarks1", "number of b quarks", nbins, nmin, nmax);
+	Nbquarks0  = new TH1D("Nbquarks0", "number of b quarks", nbins, nmin, nmax);
+	Nbquarks_1 = new TH1D("Nbquarks_1", "number of b quarks", nbins, nmin, nmax);
+	Nbquarks_2 = new TH1D("Nbquarks_2", "number of b quarks", nbins, nmin, nmax);
+	Nbquarks2  = new TH1D("Nbquarks2", "number of b quarks", nbins, nmin, nmax);
+	Nbquarks2_5= new TH1D("Nbquarks2_5", "number of b quarks", nbins, nmin, nmax);
+	Nbquarks3  = new TH1D("Nbquarks3", "number of b quarks", nbins, nmin, nmax);
+	
+	t1->Draw("Nbquarks>>Nbquarks1");
+	t0->Draw("Nbquarks>>Nbquarks0");
+	t_1->Draw("Nbquarks>>Nbquarks_1");
+	t_2->Draw("Nbquarks>>Nbquarks_2");
+	t2->Draw("Nbquarks>>Nbquarks2");
+	t2_5->Draw("Nbquarks>>Nbquarks2_5");
+	t3->Draw("Nbquarks>>Nbquarks3");
+
+	t1->Draw("NSMhiggs>>NSMhiggs1");
+	t0->Draw("NSMhiggs>>NSMhiggs0");
+	t_1->Draw("NSMhiggs>>NSMhiggs_1");
+	t_2->Draw("NSMhiggs>>NSMhiggs_2");
+	t2->Draw("NSMhiggs>>NSMhiggs2");
+	t2_5->Draw("NSMhiggs>>NSMhiggs2_5");
+	t3->Draw("NSMhiggs>>NSMhiggs3");
+	
+	Nbquarks1->SetLineColor(kRed);
+	Nbquarks0->SetLineColor(kBlack);
+	Nbquarks_1->SetLineColor(kYellow -9);
+	Nbquarks_2->SetLineColor(kGreen);
+	Nbquarks2->SetLineColor(kBlue);
+	Nbquarks2_5->SetLineColor(kOrange-9);
+	Nbquarks3->SetLineColor(kViolet);
+
+	NSMhiggs1->SetLineColor(kRed);
+	NSMhiggs0->SetLineColor(kBlack);
+	NSMhiggs_1->SetLineColor(kYellow -9);
+	NSMhiggs_2->SetLineColor(kGreen);
+	NSMhiggs2->SetLineColor(kBlue);
+	NSMhiggs2_5->SetLineColor(kOrange-9);
+	NSMhiggs3->SetLineColor(kViolet);
 	return;
 }
 void Draw_higgsPt()
@@ -361,6 +323,7 @@ void Draw_higgsPt()
 	t2->Draw("higgsNLPt*1e-3>>higgsNLPt2");
 	t2_5->Draw("higgsNLPt*1e-3>>higgsNLPt2_5");
 	t3->Draw("higgsNLPt*1e-3>>higgsNLPt3");
+	
 	return;
 }
 void Draw_b_jetPt()
@@ -403,42 +366,85 @@ void Draw_b_jetPt()
 
 void fetch_histos()
 {
-	//bjetLPt1  = (TH1D*)f1->Get("hbJetPt_Lpt");
-	//bjet2LPt1 = (TH1D*)f1->Get("hbJetPt_NLpt");
-	//bjet3LPt1 = (TH1D*)f1->Get("hbJetPt_NNLpt");
-	//bjet4LPt1 = (TH1D*)f1->Get("hbJetPt_NNNLpt");
+	////bjetLPt1  = (TH1D*)f1->Get("hbJetPt_Lpt");
+	////bjet2LPt1 = (TH1D*)f1->Get("hbJetPt_NLpt");
+	////bjet3LPt1 = (TH1D*)f1->Get("hbJetPt_NNLpt");
+	////bjet4LPt1 = (TH1D*)f1->Get("hbJetPt_NNNLpt");
+	////
+	////bjetLPt0  = (TH1D*)f0->Get("hbJetPt_Lpt");
+	////bjet2LPt0 = (TH1D*)f0->Get("hbJetPt_NLpt");
+	////bjet3LPt0 = (TH1D*)f0->Get("hbJetPt_NNLpt");
+	////bjet4LPt0 = (TH1D*)f0->Get("hbJetPt_NNNLpt");
+	////
+	////bjetLPt_1  = (TH1D*)f_1->Get("hbJetPt_Lpt");
+	////bjet2LPt_1 = (TH1D*)f_1->Get("hbJetPt_NLpt");
+	////bjet3LPt_1 = (TH1D*)f_1->Get("hbJetPt_NNLpt");
+	////bjet4LPt_1 = (TH1D*)f_1->Get("hbJetPt_NNNLpt");
+	////
+	////bjetLPt_2  = (TH1D*)f_2->Get("hbJetPt_Lpt");
+	////bjet2LPt_2 = (TH1D*)f_2->Get("hbJetPt_NLpt");
+	////bjet3LPt_2 = (TH1D*)f_2->Get("hbJetPt_NNLpt");
+	////bjet4LPt_2 = (TH1D*)f_2->Get("hbJetPt_NNNLpt");
+	////
+	////bjetLPt2  = (TH1D*)f2->Get("hbJetPt_Lpt");
+	////bjet2LPt2 = (TH1D*)f2->Get("hbJetPt_NLpt");
+	////bjet3LPt2 = (TH1D*)f2->Get("hbJetPt_NNLpt");
+	////bjet4LPt2 = (TH1D*)f2->Get("hbJetPt_NNNLpt");
+	////
+	////bjetLPt2_5  = (TH1D*)f2_5->Get("hbJetPt_Lpt");
+	////bjet2LPt2_5 = (TH1D*)f2_5->Get("hbJetPt_NLpt");
+	////bjet3LPt2_5 = (TH1D*)f2_5->Get("hbJetPt_NNLpt");
+	////bjet4LPt2_5 = (TH1D*)f2_5->Get("hbJetPt_NNNLpt");
+	////
+	////
+	////bjetLPt3  = (TH1D*)f3->Get("hbJetPt_Lpt");
+	////bjet2LPt3 = (TH1D*)f3->Get("hbJetPt_NLpt");
+	////bjet3LPt3 = (TH1D*)f3->Get("hbJetPt_NNLpt");
+	////bjet4LPt3 = (TH1D*)f3->Get("hbJetPt_NNNLpt");
 	//
-	//bjetLPt0  = (TH1D*)f0->Get("hbJetPt_Lpt");
-	//bjet2LPt0 = (TH1D*)f0->Get("hbJetPt_NLpt");
-	//bjet3LPt0 = (TH1D*)f0->Get("hbJetPt_NNLpt");
-	//bjet4LPt0 = (TH1D*)f0->Get("hbJetPt_NNNLpt");
+	//jetLPt1  = (TH1D*)f1->Get("hJetPt_PULpt");
+	//jet2LPt1 = (TH1D*)f1->Get("hJetPt_PUNLpt");
+	//jet3LPt1 = (TH1D*)f1->Get("hJetPt_PUNNLpt");
+	//jet4LPt1 = (TH1D*)f1->Get("hJetPt_PUNNNLpt");
+	//jet5LPt1 = (TH1D*)f1->Get("hJetPt_PUNNNNLpt");
 	//
-	//bjetLPt_1  = (TH1D*)f_1->Get("hbJetPt_Lpt");
-	//bjet2LPt_1 = (TH1D*)f_1->Get("hbJetPt_NLpt");
-	//bjet3LPt_1 = (TH1D*)f_1->Get("hbJetPt_NNLpt");
-	//bjet4LPt_1 = (TH1D*)f_1->Get("hbJetPt_NNNLpt");
+	//jetLPt0  = (TH1D*)f0->Get("hJetPt_PULpt");
+	//jet2LPt0 = (TH1D*)f0->Get("hJetPt_PUNLpt");
+	//jet3LPt0 = (TH1D*)f0->Get("hJetPt_PUNNLpt");
+	//jet4LPt0 = (TH1D*)f0->Get("hJetPt_PUNNNLpt");
+	//jet5LPt0 = (TH1D*)f0->Get("hJetPt_PUNNNNLpt");
 	//
-	//bjetLPt_2  = (TH1D*)f_2->Get("hbJetPt_Lpt");
-	//bjet2LPt_2 = (TH1D*)f_2->Get("hbJetPt_NLpt");
-	//bjet3LPt_2 = (TH1D*)f_2->Get("hbJetPt_NNLpt");
-	//bjet4LPt_2 = (TH1D*)f_2->Get("hbJetPt_NNNLpt");
+	//jetLPt_1  = (TH1D*)f_1->Get("hJetPt_PULpt");
+	//jet2LPt_1 = (TH1D*)f_1->Get("hJetPt_PUNLpt");
+	//jet3LPt_1 = (TH1D*)f_1->Get("hJetPt_PUNNLpt");
+	//jet4LPt_1 = (TH1D*)f_1->Get("hJetPt_PUNNNLpt");
+	//jet5LPt_1 = (TH1D*)f_1->Get("hJetPt_PUNNNNLpt");
 	//
-	//bjetLPt2  = (TH1D*)f2->Get("hbJetPt_Lpt");
-	//bjet2LPt2 = (TH1D*)f2->Get("hbJetPt_NLpt");
-	//bjet3LPt2 = (TH1D*)f2->Get("hbJetPt_NNLpt");
-	//bjet4LPt2 = (TH1D*)f2->Get("hbJetPt_NNNLpt");
+	//jetLPt_2  = (TH1D*)f_2->Get("hJetPt_PULpt");
+	//jet2LPt_2 = (TH1D*)f_2->Get("hJetPt_PUNLpt");
+	//jet3LPt_2 = (TH1D*)f_2->Get("hJetPt_PUNNLpt");
+	//jet4LPt_2 = (TH1D*)f_2->Get("hJetPt_PUNNNLpt");
+	//jet5LPt_2 = (TH1D*)f_2->Get("hJetPt_PUNNNNLpt");
 	//
-	//bjetLPt2_5  = (TH1D*)f2_5->Get("hbJetPt_Lpt");
-	//bjet2LPt2_5 = (TH1D*)f2_5->Get("hbJetPt_NLpt");
-	//bjet3LPt2_5 = (TH1D*)f2_5->Get("hbJetPt_NNLpt");
-	//bjet4LPt2_5 = (TH1D*)f2_5->Get("hbJetPt_NNNLpt");
+	//jetLPt2  = (TH1D*)f2->Get("hJetPt_PULpt");
+	//jet2LPt2 = (TH1D*)f2->Get("hJetPt_PUNLpt");
+	//jet3LPt2 = (TH1D*)f2->Get("hJetPt_PUNNLpt");
+	//jet4LPt2 = (TH1D*)f2->Get("hJetPt_PUNNNLpt");
+	//jet5LPt2 = (TH1D*)f2->Get("hJetPt_PUNNNNLpt");
 	//
+	//jetLPt2_5  = (TH1D*)f2_5->Get("hJetPt_PULpt");
+	//jet2LPt2_5 = (TH1D*)f2_5->Get("hJetPt_PUNLpt");
+	//jet3LPt2_5 = (TH1D*)f2_5->Get("hJetPt_PUNNLpt");
+	//jet4LPt2_5 = (TH1D*)f2_5->Get("hJetPt_PUNNNLpt");
+	//jet5LPt2_5 = (TH1D*)f2_5->Get("hJetPt_PUNNNNLpt");
 	//
-	//bjetLPt3  = (TH1D*)f3->Get("hbJetPt_Lpt");
-	//bjet2LPt3 = (TH1D*)f3->Get("hbJetPt_NLpt");
-	//bjet3LPt3 = (TH1D*)f3->Get("hbJetPt_NNLpt");
-	//bjet4LPt3 = (TH1D*)f3->Get("hbJetPt_NNNLpt");
+	//jetLPt3  = (TH1D*)f3->Get("hJetPt_PULpt");
+	//jet2LPt3 = (TH1D*)f3->Get("hJetPt_PUNLpt");
+	//jet3LPt3 = (TH1D*)f3->Get("hJetPt_PUNNLpt");
+	//jet4LPt3 = (TH1D*)f3->Get("hJetPt_PUNNNLpt");
+	//jet5LPt3 = (TH1D*)f3->Get("hJetPt_PUNNNNLpt");
 	
+
 	bLPt1  = (TH1D*)f1->Get("hbPt_Lpt");
 	b2LPt1 = (TH1D*)f1->Get("hbPt_NLpt");
 	b3LPt1 = (TH1D*)f1->Get("hbPt_NNLpt");
@@ -511,8 +517,108 @@ void fetch_histos()
 	b4CEta3 = (TH1D*)f3->Get("hbEta_NNNCeta");
 	return;
 }
+void Set_NleadingJetColors()
+{
+	jetLPt1->SetLineColor(kOrange);
+	jetLPt0->SetLineColor(kOrange);
+	jetLPt_1->SetLineColor(kOrange);
+	jetLPt_2->SetLineColor(kOrange);
+	jetLPt2->SetLineColor(kOrange);
+	jetLPt2_5->SetLineColor(kOrange);
+	jetLPt3->SetLineColor(kOrange);
+	
+	jet2LPt1->SetLineColor(kBlack);
+	jet2LPt0->SetLineColor(kBlack);
+	jet2LPt_1->SetLineColor(kBlack);
+	jet2LPt_2->SetLineColor(kBlack);
+	jet2LPt2->SetLineColor(kBlack);
+	jet2LPt2_5->SetLineColor(kBlack);
+	jet2LPt3->SetLineColor(kBlack);
+	
+	jet3LPt1->SetLineColor(kRed);
+	jet3LPt0->SetLineColor(kRed);
+	jet3LPt_1->SetLineColor(kRed);
+	jet3LPt_2->SetLineColor(kRed);
+	jet3LPt2->SetLineColor(kRed);
+	jet3LPt2_5->SetLineColor(kRed);
+	jet3LPt3->SetLineColor(kRed);
+	
+	jet4LPt1->SetLineColor(kGreen);
+	jet4LPt0->SetLineColor(kGreen);
+	jet4LPt_1->SetLineColor(kGreen);
+	jet4LPt_2->SetLineColor(kGreen);
+	jet4LPt2->SetLineColor(kGreen);
+	jet4LPt2_5->SetLineColor(kGreen);
+	jet4LPt3->SetLineColor(kGreen);
+	
+	bjetLPt1->SetLineColor(kOrange);
+	bjetLPt0->SetLineColor(kOrange);
+	bjetLPt_1->SetLineColor(kOrange);
+	bjetLPt_2->SetLineColor(kOrange);
+	bjetLPt2->SetLineColor(kOrange);
+	bjetLPt2_5->SetLineColor(kOrange);
+	bjetLPt3->SetLineColor(kOrange);
+	
+	bjet2LPt1->SetLineColor(kBlack);
+	bjet2LPt0->SetLineColor(kBlack);
+	bjet2LPt_1->SetLineColor(kBlack);
+	bjet2LPt_2->SetLineColor(kBlack);
+	bjet2LPt2->SetLineColor(kBlack);
+	bjet2LPt2_5->SetLineColor(kBlack);
+	bjet2LPt3->SetLineColor(kBlack);
+	
+	bjet3LPt1->SetLineColor(kRed);
+	bjet3LPt0->SetLineColor(kRed);
+	bjet3LPt_1->SetLineColor(kRed);
+	bjet3LPt_2->SetLineColor(kRed);
+	bjet3LPt2->SetLineColor(kRed);
+	bjet3LPt2_5->SetLineColor(kRed);
+	bjet3LPt3->SetLineColor(kRed);
+	
+	bjet4LPt1->SetLineColor(kGreen);
+	bjet4LPt0->SetLineColor(kGreen);
+	bjet4LPt_1->SetLineColor(kGreen);
+	bjet4LPt_2->SetLineColor(kGreen);
+	bjet4LPt2->SetLineColor(kGreen);
+	bjet4LPt2_5->SetLineColor(kGreen);
+	bjet4LPt3->SetLineColor(kGreen);
+
+}
 void Set_bquark_lambdaColors()
 {
+	
+	jetLPt1->SetLineColor(kRed);
+	jetLPt0->SetLineColor(kBlack);
+	jetLPt_1->SetLineColor(kYellow -9);
+	jetLPt_2->SetLineColor(kGreen);
+	jetLPt2->SetLineColor(kBlue);
+	jetLPt2_5->SetLineColor(kOrange-9);
+	jetLPt3->SetLineColor(kViolet);
+	
+	jet2LPt1->SetLineColor(kRed);
+	jet2LPt0->SetLineColor(kBlack);
+	jet2LPt_1->SetLineColor(kYellow -9);
+	jet2LPt_2->SetLineColor(kGreen);
+	jet2LPt2->SetLineColor(kBlue);
+	jet2LPt2_5->SetLineColor(kOrange-9);
+	jet2LPt3->SetLineColor(kViolet);
+	
+	jet3LPt1->SetLineColor(kRed);
+	jet3LPt0->SetLineColor(kBlack);
+	jet3LPt_1->SetLineColor(kYellow -9);
+	jet3LPt_2->SetLineColor(kGreen);
+	jet3LPt2->SetLineColor(kBlue);
+	jet3LPt2_5->SetLineColor(kOrange-9);
+	jet3LPt3->SetLineColor(kViolet);
+	
+	jet4LPt1->SetLineColor(kRed);
+	jet4LPt0->SetLineColor(kBlack);
+	jet4LPt_1->SetLineColor(kYellow -9);
+	jet4LPt_2->SetLineColor(kGreen);
+	jet4LPt2->SetLineColor(kBlue);
+	jet4LPt2_5->SetLineColor(kOrange-9);
+	jet4LPt3->SetLineColor(kViolet);
+	
 	bjetLPt1->SetLineColor(kRed);
 	bjetLPt0->SetLineColor(kBlack);
 	bjetLPt_1->SetLineColor(kYellow -9);
@@ -645,6 +751,73 @@ void Set_LegendProps()
 	return;
 }
 
+void Draw_NleadingJetPt()
+{
+	int n_entries = get_Nentries();
+	int min_Njets = 4;
+	for(int i = 0; i < n_entries; ++i)
+	{
+		t1->GetEntry(i);
+		t0->GetEntry(i);
+		t_1->GetEntry(i);
+		t_2->GetEntry(i);
+		t2->GetEntry(i);
+		t2_5->GetEntry(i);
+		t3->GetEntry(i);
+		if (v1_jetPt->size() >= min_Njets)
+		{
+			jetLPt1->Fill((*v1_jetPt)[0]*1e-3);
+			jet2LPt1->Fill((*v1_jetPt)[1]*1e-3);
+			jet3LPt1->Fill((*v1_jetPt)[2]*1e-3);
+			jet4LPt1->Fill((*v1_jetPt)[3]*1e-3);
+		}
+		if (v0_jetPt->size() >= min_Njets)
+		{
+			jetLPt0->Fill((*v0_jetPt)[0]*1e-3);
+			jet2LPt0->Fill((*v0_jetPt)[1]*1e-3);
+			jet3LPt0->Fill((*v0_jetPt)[2]*1e-3);
+			jet4LPt0->Fill((*v0_jetPt)[3]*1e-3);
+		}
+		if (v_1_jetPt->size() >= min_Njets)
+		{
+			jetLPt_1->Fill((*v_1_jetPt)[0]*1e-3);
+			jet2LPt_1->Fill((*v_1_jetPt)[1]*1e-3);
+			jet3LPt_1->Fill((*v_1_jetPt)[2]*1e-3);
+			jet4LPt_1->Fill((*v_1_jetPt)[3]*1e-3);
+		}
+		if (v_2_jetPt->size() >= min_Njets)
+		{
+			jetLPt_2->Fill((*v_2_jetPt)[0]*1e-3);
+			jet2LPt_2->Fill((*v_2_jetPt)[1]*1e-3);
+			jet3LPt_2->Fill((*v_2_jetPt)[2]*1e-3);
+			jet4LPt_2->Fill((*v_2_jetPt)[3]*1e-3);
+		}
+		if (v2_jetPt->size() >= min_Njets)
+		{
+			jetLPt2->Fill((*v2_jetPt)[0]*1e-3);
+			jet2LPt2->Fill((*v2_jetPt)[1]*1e-3);
+			jet3LPt2->Fill((*v2_jetPt)[2]*1e-3);
+			jet4LPt2->Fill((*v2_jetPt)[3]*1e-3);
+		}
+		if (v2_5_jetPt->size() >= min_Njets)
+		{
+			jetLPt2_5->Fill((*v2_5_jetPt)[0]*1e-3);
+			jet2LPt2_5->Fill((*v2_5_jetPt)[1]*1e-3);
+			jet3LPt2_5->Fill((*v2_5_jetPt)[2]*1e-3);
+			jet4LPt2_5->Fill((*v2_5_jetPt)[3]*1e-3);
+		}
+		if (v3_jetPt->size() >= min_Njets)
+		{
+			jetLPt3->Fill((*v3_jetPt)[0]*1e-3);
+			jet2LPt3->Fill((*v3_jetPt)[1]*1e-3);
+			jet3LPt3->Fill((*v3_jetPt)[2]*1e-3);
+			jet4LPt3->Fill((*v3_jetPt)[3]*1e-3);
+		}
+
+	}
+	return;
+
+}
 
 int main()
 {
@@ -659,11 +832,14 @@ int main()
         TH1::SetDefaultSumw2(true);
 	fetch_TTrees();
 	Set_higgsPtProps();
+	Set_jetPtProps();
 	Draw_higgsPt();
 	Draw_b_jetPt();
 	fetch_histos();
-
-
+	Draw_Nparticles();
+	
+	Draw_NleadingJetPt();
+	Set_NleadingJetColors(); 
 
 	//////////////////////////////////////////////////
 	//////////////// writing to pdf //////////////////
@@ -702,13 +878,13 @@ int main()
 	higgsPt2->Draw("hist same");	
 	higgsPt2_5->Draw("hist same");
 	higgsPt3->Draw("hist same");
-	leg_higgs->AddEntry(higgsPt_2, "#lambda = -2.0");
-	leg_higgs->AddEntry(higgsPt_1, "#lambda = -1.0");
-	leg_higgs->AddEntry(higgsPt0,  "#lambda =  0.0");
-	leg_higgs->AddEntry(higgsPt1,  "#lambda =  1.0");
-	leg_higgs->AddEntry(higgsPt2,  "#lambda =  2.0");
-	leg_higgs->AddEntry(higgsPt2_5,"#lambda =  2.5");
-	leg_higgs->AddEntry(higgsPt3,  "#lambda =  3.0");
+	leg_higgs->AddEntry(higgsPt_2, "k_{#lambda} = -2.0");
+	leg_higgs->AddEntry(higgsPt_1, "k_{#lambda} = -1.0");
+	leg_higgs->AddEntry(higgsPt0,  "k_{#lambda} =  0.0");
+	leg_higgs->AddEntry(higgsPt1,  "k_{#lambda} =  1.0");
+	leg_higgs->AddEntry(higgsPt2,  "k_{#lambda} =  2.0");
+	leg_higgs->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5");
+	leg_higgs->AddEntry(higgsPt3,  "k_{#lambda} =  3.0");
 	leg_higgs->Draw();
 	C->Update();
 	C->Print(out_file_open,"pdf");
@@ -725,30 +901,31 @@ int main()
 	C->Print(out_file_,"pdf");
 	
 	C->SetLogy(0);
-	t1->Draw("NSMhiggs","");
-	t0->Draw("NSMhiggs","","same");
-	t_1->Draw("NSMhiggs","","same");
-	t_2->Draw("NSMhiggs","","same");
-	t2->Draw("NSMhiggs","","same");
-	t2_5->Draw("NSMhiggs","","same");
-	t3->Draw("NSMhiggs","","same");
+	NSMhiggs1->Draw("hist");
+	NSMhiggs0->Draw("hist same");
+	NSMhiggs_1->Draw("hist same");
+	NSMhiggs_2->Draw("hist same");
+	NSMhiggs2->Draw("hist same");
+	NSMhiggs2_5->Draw("hist same");
+	NSMhiggs3->Draw("hist same");
 	leg_higgs->Draw();
 	C->Print(out_file_,"pdf");
 
-	t1->Draw("Nbquarks","");
-	t0->Draw("Nbquarks","","same");
-	t_1->Draw("Nbquarks","","same");
-	t_2->Draw("Nbquarks","","same");
-	t2->Draw("Nbquarks","","same");
-	t2_5->Draw("Nbquarks","","same");
-	t3->Draw("Nbquarks","","same");
+	Nbquarks1->Draw("hist");
+	Nbquarks0->Draw("hist same");
+	Nbquarks_1->Draw("hist same");
+	Nbquarks_2->Draw("hist same");
+	Nbquarks2->Draw("hist same");
+	Nbquarks2_5->Draw("hist same");
+	Nbquarks3->Draw("hist same");
 	leg_higgs->Draw();
+	C->Update();
 	C->Print(out_file_,"pdf");
 
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
-	b4LPt1->SetTitle("#lambda = 1.0");
+	b4LPt1->SetTitle("k_{#lambda} = 1.0");
 	b4LPt1->Draw("hist");
 	b3LPt1->Draw("hist same");
 	b2LPt1->Draw("hist same");
@@ -760,7 +937,7 @@ int main()
 	leg1->Draw();
 
 	C->cd(2);	
-	b4LPt0->SetTitle("#lambda = 0.0");
+	b4LPt0->SetTitle("k_{#lambda} = 0.0");
 	b4LPt0->Draw("hist");
 	b3LPt0->Draw("hist same");
 	b2LPt0->Draw("hist same");
@@ -768,7 +945,7 @@ int main()
 	leg1->Draw();
 
 	C->cd(3);	
-	b4LPt_1->SetTitle("#lambda = -1.0");
+	b4LPt_1->SetTitle("k_{#lambda} = -1.0");
 	b4LPt_1->Draw("hist");
 	b3LPt_1->Draw("hist same");
 	b2LPt_1->Draw("hist same");
@@ -776,7 +953,7 @@ int main()
 	leg1->Draw();
 
 	C->cd(4);	
-	b4LPt_2->SetTitle("#lambda = -2.0");
+	b4LPt_2->SetTitle("k_{#lambda} = -2.0");
 	b4LPt_2->Draw("hist");
 	b3LPt_2->Draw("hist same");
 	b2LPt_2->Draw("hist same");
@@ -787,7 +964,7 @@ int main()
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
-	b4LPt1->SetTitle("#lambda = 1.0");
+	b4LPt1->SetTitle("k_{#lambda} = 1.0");
 	b4LPt1->Draw("hist");
 	b3LPt1->Draw("hist same");
 	b2LPt1->Draw("hist same");
@@ -795,7 +972,7 @@ int main()
 	leg1->Draw();
 	
 	C->cd(2);
-	b4LPt2->SetTitle("#lambda = 2.0");
+	b4LPt2->SetTitle("k_{#lambda} = 2.0");
 	b4LPt2->Draw("hist");
 	b3LPt2->Draw("hist same");
 	b2LPt2->Draw("hist same");
@@ -803,7 +980,7 @@ int main()
 	leg1->Draw();
 	
 	C->cd(3);
-	b4LPt2_5->SetTitle("#lambda = 2.5");
+	b4LPt2_5->SetTitle("k_{#lambda} = 2.5");
 	b4LPt2_5->Draw("hist");
 	b3LPt2_5->Draw("hist same");
 	b2LPt2_5->Draw("hist same");
@@ -811,12 +988,183 @@ int main()
 	leg1->Draw();
 	
 	C->cd(4);
-	b4LPt3->SetTitle("#lambda = 3.0");
+	b4LPt3->SetTitle("k_{#lambda} = 3.0");
 	b4LPt3->Draw("hist");
 	b3LPt3->Draw("hist same");
 	b2LPt3->Draw("hist same");
 	bLPt3->Draw("hist same");
 	leg1->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! 4 leading b-Jets
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt1->Draw("hist");
+	bjet3LPt1->Draw("hist same");
+	bjet2LPt1->Draw("hist same");
+	bjetLPt1->Draw("hist same");
+	leg1->Draw();
+
+	C->cd(2);	
+	bjet4LPt0->SetTitle("k_{#lambda} = 0.0");
+	bjet4LPt0->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt0->Draw("hist");
+	bjet3LPt0->Draw("hist same");
+	bjet2LPt0->Draw("hist same");
+	bjetLPt0->Draw("hist same");
+	leg1->Draw();
+
+	C->cd(3);	
+	bjet4LPt_1->SetTitle("k_{#lambda} = -1.0");
+	bjet4LPt_1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt_1->Draw("hist");
+	bjet3LPt_1->Draw("hist same");
+	bjet2LPt_1->Draw("hist same");
+	bjetLPt_1->Draw("hist same");
+	leg1->Draw();
+
+	C->cd(4);	
+	bjet4LPt_2->SetTitle("k_{#lambda} = -2.0");
+	bjet4LPt_2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt_2->Draw("hist");
+	bjet3LPt_2->Draw("hist same");
+	bjet2LPt_2->Draw("hist same");
+	bjetLPt_2->Draw("hist same");
+	leg1->Draw();
+	C->Print(out_file_,"pdf");
+	
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt1->Draw("hist same");
+	bjet3LPt1->Draw("hist same");
+	bjet2LPt1->Draw("hist same");
+	bjetLPt1->Draw("hist same");
+	leg1->Draw();
+	
+	C->cd(2);
+	bjet4LPt2->SetTitle("k_{#lambda} = 2.0");
+	bjet4LPt2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt2->Draw("hist");
+	bjet3LPt2->Draw("hist same");
+	bjet2LPt2->Draw("hist same");
+	bjetLPt2->Draw("hist same");
+	leg1->Draw();
+	
+	C->cd(3);
+	bjet4LPt2_5->SetTitle("k_{#lambda} = 2.5");
+	bjet4LPt2_5->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt2_5->Draw("hist");
+	bjet3LPt2_5->Draw("hist same");
+	bjet2LPt2_5->Draw("hist same");
+	bjetLPt2_5->Draw("hist same");
+	leg1->Draw();
+	
+	C->cd(4);
+	bjet4LPt3->SetTitle("k_{#lambda} = 3.0");
+	bjet4LPt3->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt3->Draw("hist");
+	bjet3LPt3->Draw("hist same");
+	bjet2LPt3->Draw("hist same");
+	bjetLPt3->Draw("hist same");
+	leg1->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! 5 leading Jets
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	jet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	jet4LPt1->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt1->Draw("hist");
+	jet4LPt1->Draw("hist");
+	jet3LPt1->Draw("hist same");
+	jet2LPt1->Draw("hist same");
+	jetLPt1->Draw("hist same");
+	leg2->AddEntry(jetLPt1, "leading");
+	leg2->AddEntry(jet2LPt1, "sub-leading");
+	leg2->AddEntry(jet3LPt1, "3^{rd} leading");
+	leg2->AddEntry(jet4LPt1, "4^{th} leading");
+	//leg2->AddEntry(jet5LPt1, "5^{th} leading");
+	leg2->Draw();
+
+	C->cd(2);	
+	jet4LPt0->SetTitle("k_{#lambda} = 0.0");
+	jet4LPt0->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt0->Draw("hist");
+	jet4LPt0->Draw("hist");
+	jet3LPt0->Draw("hist same");
+	jet2LPt0->Draw("hist same");
+	jetLPt0->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(3);	
+	jet4LPt_1->SetTitle("k_{#lambda} = -1.0");
+	jet4LPt_1->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt_1->Draw("hist");
+	jet4LPt_1->Draw("hist");
+	jet3LPt_1->Draw("hist same");
+	jet2LPt_1->Draw("hist same");
+	jetLPt_1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(4);	
+	jet4LPt_2->SetTitle("k_{#lambda} = -2.0");
+	jet4LPt_2->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt_2->Draw("hist");
+	jet4LPt_2->Draw("hist");
+	jet3LPt_2->Draw("hist same");
+	jet2LPt_2->Draw("hist same");
+	jetLPt_2->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+	
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	jet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	jet4LPt1->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt1->Draw("hist");
+	jet4LPt1->Draw("hist same");
+	jet3LPt1->Draw("hist same");
+	jet2LPt1->Draw("hist same");
+	jetLPt1->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(2);
+	jet4LPt2->SetTitle("k_{#lambda} = 2.0");
+	jet4LPt2->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt2->Draw("hist");
+	jet4LPt2->Draw("hist");
+	jet3LPt2->Draw("hist same");
+	jet2LPt2->Draw("hist same");
+	jetLPt2->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(3);
+	jet4LPt2_5->SetTitle("k_{#lambda} = 2.5");
+	jet4LPt2_5->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt2_5->Draw("hist");
+	jet4LPt2_5->Draw("hist");
+	jet3LPt2_5->Draw("hist same");
+	jet2LPt2_5->Draw("hist same");
+	jetLPt2_5->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(4);
+	jet4LPt3->SetTitle("k_{#lambda} = 3.0");
+	jet4LPt3->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	//jet5LPt3->Draw("hist");
+	jet4LPt3->Draw("hist");
+	jet3LPt3->Draw("hist same");
+	jet2LPt3->Draw("hist same");
+	jetLPt3->Draw("hist same");
+	leg2->Draw();
 	C->Print(out_file_,"pdf");
 
 
@@ -876,26 +1224,26 @@ int main()
 	//! b-jet sub leading for various lambda, 
 	//! b-jet 3rd leading for various lambda, 
 	//! b-jet 4th leading for various lambda,
-	Set_bquark_lambdaColors(); 
+	//Set_bquark_lambdaColors(); 
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
 	bjetLPt_2->Draw("hist");
-	bjetLPt1->Draw("hist same");
 	bjetLPt2->Draw("hist same");
 	bjetLPt2_5->Draw("hist same");
 	bjetLPt3->Draw("hist same");
 	bjetLPt_1->Draw("hist same");
+	bjetLPt1->Draw("hist same");
 	bjetLPt0->Draw("hist same");
 	leg_higgs->Draw();
 	
 	C->cd(2);
 	bjet2LPt_2->Draw("hist");
-	bjet2LPt1->Draw("hist same");
 	bjet2LPt2->Draw("hist same");
 	bjet2LPt2_5->Draw("hist same");
 	bjet2LPt3->Draw("hist same");
 	bjet2LPt_1->Draw("hist same");
+	bjet2LPt1->Draw("hist same");
 	bjet2LPt0->Draw("hist same");
 	leg_higgs->Draw();
 	
@@ -903,23 +1251,73 @@ int main()
 	bjet3LPt_2->GetXaxis()->SetRangeUser(0,250);
 	bjet3LPt_2->Draw("hist");
 	bjet3LPt3->Draw("hist same");
-	bjet3LPt1->Draw("hist same");
 	bjet3LPt2->Draw("hist same");
 	bjet3LPt2_5->Draw("hist same");
 	bjet3LPt_1->Draw("hist same");
+	bjet3LPt1->Draw("hist same");
 	bjet3LPt0->Draw("hist same");
 	leg_higgs->Draw();
 	
 	C->cd(4);
 	bjet4LPt_2->GetXaxis()->SetRangeUser(0,150);
 	
-	bjet4LPt_2->Draw("hist");
-	bjet4LPt1->Draw("hist same");
+	bjet4LPt_2->Draw("hist same");
 	bjet4LPt2->Draw("hist same");
 	bjet4LPt2_5->Draw("hist same");
 	bjet4LPt3->Draw("hist same");
 	bjet4LPt_1->Draw("hist same");
+	bjet4LPt1->Draw("hist same");
 	bjet4LPt0->Draw("hist same");
+	leg_higgs->Draw();
+	C->Print(out_file_,"pdf");
+	//! jet leading for various lambda, 
+	//! jet sub leading for various lambda, 
+	//! jet 3rd leading for various lambda, 
+	//! jet 4th leading for various lambda,
+	//Set_bquark_lambdaColors(); 
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	jetLPt_2->Draw("hist");
+	jetLPt2->Draw("hist same");
+	jetLPt2_5->Draw("hist same");
+	jetLPt3->Draw("hist same");
+	jetLPt_1->Draw("hist same");
+	jetLPt1->Draw("hist same");
+	jetLPt0->Draw("hist same");
+	leg_higgs->Draw();
+	
+	C->cd(2);
+	jet2LPt_2->Draw("hist");
+	jet2LPt2->Draw("hist same");
+	jet2LPt2_5->Draw("hist same");
+	jet2LPt3->Draw("hist same");
+	jet2LPt_1->Draw("hist same");
+	jet2LPt1->Draw("hist same");
+	jet2LPt0->Draw("hist same");
+	leg_higgs->Draw();
+	
+	C->cd(3);
+	jet3LPt_2->GetXaxis()->SetRangeUser(0,250);
+	jet3LPt_2->Draw("hist");
+	jet3LPt3->Draw("hist same");
+	jet3LPt2->Draw("hist same");
+	jet3LPt2_5->Draw("hist same");
+	jet3LPt_1->Draw("hist same");
+	jet3LPt1->Draw("hist same");
+	jet3LPt0->Draw("hist same");
+	leg_higgs->Draw();
+	
+	C->cd(4);
+	jet4LPt_2->GetXaxis()->SetRangeUser(0,150);
+	
+	jet4LPt_2->Draw("hist same");
+	jet4LPt2->Draw("hist same");
+	jet4LPt2_5->Draw("hist same");
+	jet4LPt3->Draw("hist same");
+	jet4LPt_1->Draw("hist same");
+	jet4LPt1->Draw("hist same");
+	jet4LPt0->Draw("hist same");
 	leg_higgs->Draw();
 	C->Print(out_file_,"pdf");
 	//! bquark central for various lambda, 
