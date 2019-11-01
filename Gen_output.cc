@@ -545,10 +545,10 @@ void Gen_output::Clear_OutVars()
 	NSMhiggs = 0;
 	Ncquarks = 0;
 	Nlightquarks = 0;
-	//jetE_sm.clear();
-	//jetPt_sm.clear();
+	jetE_sm.clear();
+	jetPt_sm.clear();
 	jetE.clear();
-	//jetE_reso.clear();
+	jetE_reso.clear();
 	jetPt.clear();
 	constituentPt.clear();
 	jetPhi.clear();
@@ -617,10 +617,10 @@ void Gen_output::Branch_OutTree()
 	glob_jet->Branch("NSMhiggs",&NSMhiggs);
 	glob_jet->Branch("Ncquarks",&Ncquarks);
 	glob_jet->Branch("Nlightquarks",&Nlightquarks);
-	//glob_jet->Branch("jetE_sm",&jetE_sm);
-	//glob_jet->Branch("jetPt_sm",&jetPt_sm);
+	glob_jet->Branch("jetE_sm",&jetE_sm);
+	glob_jet->Branch("jetPt_sm",&jetPt_sm);
 	glob_jet->Branch("jetE",&jetE);
-	//glob_jet->Branch("jetE_reso",&jetE_reso);
+	glob_jet->Branch("jetE_reso",&jetE_reso);
 	glob_jet->Branch("jetPt",&jetPt);
 	glob_jet->Branch("jetConstPt",&constituentPt);
 	glob_jet->Branch("jetPhi",&jetPhi);

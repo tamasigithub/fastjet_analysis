@@ -111,10 +111,10 @@ public:
 	int NSMhiggs;						// # of truth-jets
 	int Ncquarks;						// # of truth-jets
 	int Nlightquarks;						// # of truth-jets
-	//std::vector<double> jetE_sm;				// truth-jet energy smeared 
-	//std::vector<double> jetPt_sm;				// truth-jet pt smeared
+	std::vector<double> jetE_sm;				// truth-jet energy smeared 
+	std::vector<double> jetPt_sm;				// truth-jet pt smeared
 	std::vector<double> jetE;				// truth-jet energy 
-	//std::vector<double> jetE_reso;			// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
+	std::vector<double> jetE_reso;				// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
 	std::vector<double> jetPt;				// truth-jet pt
 	std::vector<std::vector<double> > constituentPt;	// it's constituents pt
 	std::vector<double> jetPhi;                     	//  truth-jet phi
@@ -133,10 +133,10 @@ public:
 	std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
 	std::vector<double>btagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
-	std::vector<double>b1tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
-	std::vector<double>b2tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
-	std::vector<double>b3tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
-	std::vector<double>b4tagJets_dR;				// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b1tagJets_dR;			// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b2tagJets_dR;			// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b3tagJets_dR;			// dR of the btagged jets w.r.t the b quarks 
+	std::vector<double>b4tagJets_dR;			// dR of the btagged jets w.r.t the b quarks 
 	
 	//! init vector to a high eta value
 	std::vector<double>vectorof_bJetsEta;			// jets matched to b quarks sorted in eta, dR = 0.4
