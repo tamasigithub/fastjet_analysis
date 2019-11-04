@@ -60,7 +60,7 @@ int main()
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
   TFile *f_out = new TFile("./fastjet_output/Genjet_pp4b_q1.2GeV_2.5_4.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_2.5_3.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_2.5.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
@@ -74,8 +74,8 @@ int main()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
   
   //! Get total no. of events
-  //Long64_t nevents = 50000;
-  Long64_t nevents = rec.GetEntries();
+  Long64_t nevents = 100000;
+  //Long64_t nevents = rec.GetEntries();
   genOut.nevents = nevents;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl; 
   
@@ -404,6 +404,13 @@ int main()
 	std::vector<PseudoJet> incl_trpclejets = sorted_by_pt(cs_trpcle.inclusive_jets(PTMINJET));
 	std::vector<PseudoJet> incl_trpclejets_eta = sorted_by_rapidity(cs_trpcle.inclusive_jets(PTMINJET));
 	genOut.Njets = incl_trpclejets.size();
+	//Store only leading 4 jets
+	int Max_NLeadingJets = 4;
+	if (genOut.Njets < Max_NLeadingJets) 
+	{
+		if(genOut.Njets == 4) Max_NLeadingJets = 4;
+		else continue;
+	}
 
 	if(debug)
 	{
@@ -423,20 +430,25 @@ int main()
 	double dR, thisDR;
 	int bestTruthJet;
 	//! for each truth jet sorted in pt
-	for (unsigned ii = 0; ii < incl_trpclejets.size(); ++ii) 
+	//for (unsigned ii = 0; ii < incl_trpclejets.size(); ++ii) 
+	for (unsigned ii = 0; ii < Max_NLeadingJets; ++ii) 
 	{
+		////! attempt to tag only the first 5 leading pt jets
+		//if(ii > 3) continue;
 		//! smear jet energies
 		float jetE_, jetE_reso_;
-		float jetE_smeared, jetPt_smeared;
+		float jetE_smeared, jetPt_smeared, jetMt2_smeared;
 		jetE_ = incl_trpclejets[ii].E();
 		jetE_reso_ = SCALEfac_Ereso/sqrt(jetE_);//50% energy resolution
 		jetE_smeared = gRandom->Gaus(jetE_,jetE_reso_*jetE_);
 		jetPt_smeared = sqrt(jetE_smeared*jetE_smeared - incl_trpclejets[ii].m2() - incl_trpclejets[ii].pz()*incl_trpclejets[ii].pz());
+		jetMt2_smeared = (jetE_smeared + incl_trpclejets[ii].pz()) * (jetE_smeared - incl_trpclejets[ii].pz());
 		
 		//! push back all the truth jet parameters here for all "ii"
 		genOut.jetPt_sm.push_back(jetPt_smeared);
 		genOut.jetE_sm.push_back(jetE_smeared);
 		genOut.jetE_reso.push_back(jetE_reso_);
+		genOut.jetMt2_sm.push_back(jetMt2_smeared);
 		
 		genOut.jetE.push_back(jetE_);
 		genOut.jetPt.push_back(incl_trpclejets[ii].pt());
@@ -490,8 +502,6 @@ int main()
 			std::cout<<"jetEta : " << genOut.jetEta[ii]  << std::endl;
 		}
 	
-		//! attempt to tag only the first 5 leading pt jets
-		if(ii > 3) continue;
 		//********* tag Jets with the following probabilities: ***********//
 		//if matched to a b quark with pt > 15GeV/c, tag the jet as b-tagged with probability 0.8
 		//if matched to a c quark with pt > 15GeV/c, tag the jet as b-tagged with probability 0.1
@@ -569,6 +579,14 @@ int main()
 
 
 	}// end of for loop over jet size
+	//! calculate the number of b-tags per event
+	int Nbtags_ = 0;
+	for(int ii = 0; ii < genOut.btaggedFlavor.size(); ii++)
+	{
+		if(genOut.btaggedFlavor[ii] == 0) continue;
+		else Nbtags_++;
+	}
+	genOut.Nbtags = Nbtags_;
 	//*******************************************************************//
 
 	//********************** FIND THE BEST MATCHED BJET ****************//

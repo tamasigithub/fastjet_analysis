@@ -541,12 +541,14 @@ void Gen_output::Clear_OutVars()
 {
 	eventNo = 0;
 	Njets = 0;
+	Nbtags = 0;
 	Nbquarks = 0;
 	NSMhiggs = 0;
 	Ncquarks = 0;
 	Nlightquarks = 0;
 	jetE_sm.clear();
 	jetPt_sm.clear();
+	jetMt2_sm.clear();
 	jetE.clear();
 	jetE_reso.clear();
 	jetPt.clear();
@@ -613,12 +615,14 @@ void Gen_output::Branch_OutTree()
 {
 	glob_jet->Branch("event",&eventNo);
 	glob_jet->Branch("Njets",&Njets);
+	glob_jet->Branch("Nbtags",&Nbtags);
 	glob_jet->Branch("Nbquarks",&Nbquarks);
 	glob_jet->Branch("NSMhiggs",&NSMhiggs);
 	glob_jet->Branch("Ncquarks",&Ncquarks);
 	glob_jet->Branch("Nlightquarks",&Nlightquarks);
 	glob_jet->Branch("jetE_sm",&jetE_sm);
 	glob_jet->Branch("jetPt_sm",&jetPt_sm);
+	glob_jet->Branch("jetMt2_sm",&jetMt2_sm);
 	glob_jet->Branch("jetE",&jetE);
 	glob_jet->Branch("jetE_reso",&jetE_reso);
 	glob_jet->Branch("jetPt",&jetPt);

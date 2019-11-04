@@ -107,12 +107,14 @@ public:
 	//! output variables 
 	int eventNo;
 	int Njets;						// # of truth-jets
+	int Nbtags;						// # of truth-jets
 	int Nbquarks;						// # of truth-jets
 	int NSMhiggs;						// # of truth-jets
 	int Ncquarks;						// # of truth-jets
 	int Nlightquarks;						// # of truth-jets
 	std::vector<double> jetE_sm;				// truth-jet energy smeared 
 	std::vector<double> jetPt_sm;				// truth-jet pt smeared
+	std::vector<double> jetMt2_sm;				// truth-jet mt2 smeared
 	std::vector<double> jetE;				// truth-jet energy 
 	std::vector<double> jetE_reso;				// x% of truth-jet energy resolution e.g. 50%/sqrt(E)
 	std::vector<double> jetPt;				// truth-jet pt
