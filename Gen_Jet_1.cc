@@ -59,7 +59,7 @@ int main()
   //! output root file
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet_pp4b_q1.2GeV_2.5_4.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet_pp4b_q1.2GeV_2.5_5NoSmear.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_2.5.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
@@ -405,7 +405,11 @@ int main()
 	std::vector<PseudoJet> incl_trpclejets_eta = sorted_by_rapidity(cs_trpcle.inclusive_jets(PTMINJET));
 	genOut.Njets = incl_trpclejets.size();
 	//Store only leading 4 jets
-	int Max_NLeadingJets = 4;
+	//int Max_NLeadingJets = 4;
+	//Store only events with 5 or 4 leading jets
+	int Max_NLeadingJets = 5;
+	//Store all events
+	//int Max_NLeadingJets =  genOut.Njets;
 	if (genOut.Njets < Max_NLeadingJets) 
 	{
 		if(genOut.Njets == 4) Max_NLeadingJets = 4;
@@ -445,6 +449,15 @@ int main()
 		jetMt2_smeared = (jetE_smeared + incl_trpclejets[ii].pz()) * (jetE_smeared - incl_trpclejets[ii].pz());
 		
 		//! push back all the truth jet parameters here for all "ii"
+		//genOut.jetPt.push_back(jetPt_smeared);
+		//genOut.jetE.push_back(jetE_smeared);
+		//genOut.jetE_reso.push_back(jetE_reso_);
+		//genOut.jetMt2.push_back(jetMt2_smeared);
+		//
+		//genOut.jetE_sm.push_back(jetE_);
+		//genOut.jetPt_sm.push_back(incl_trpclejets[ii].pt());
+                //genOut.jetMt2_sm.push_back(incl_trpclejets[ii].mt2());
+		
 		genOut.jetPt_sm.push_back(jetPt_smeared);
 		genOut.jetE_sm.push_back(jetE_smeared);
 		genOut.jetE_reso.push_back(jetE_reso_);
@@ -452,11 +465,12 @@ int main()
 		
 		genOut.jetE.push_back(jetE_);
 		genOut.jetPt.push_back(incl_trpclejets[ii].pt());
+                genOut.jetMt2.push_back(incl_trpclejets[ii].mt2());
+		
 		genOut.jetPhi.push_back(incl_trpclejets[ii].phi());
 		genOut.jetTheta.push_back(incl_trpclejets[ii].theta());
                 genOut.jetEta.push_back(incl_trpclejets[ii].eta());
                 genOut.jetEt.push_back(incl_trpclejets[ii].Et());
-                genOut.jetMt2.push_back(incl_trpclejets[ii].mt2());
 		genOut.hasConstituents.push_back(incl_trpclejets[ii].has_constituents());
 		genOut.constituentPt.push_back(std::vector<double>());
 		genOut.constituentPhi.push_back(std::vector<double>());

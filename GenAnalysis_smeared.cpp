@@ -52,6 +52,60 @@ void Set_higgsPtProps()
 	higgsNLPt2->SetLineWidth(2);
 	higgsNLPt2_5->SetLineWidth(2);
 	higgsNLPt3->SetLineWidth(2);
+	
+	M_Lhiggs1  = new TH1D("M_Lhiggs1",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs0  = new TH1D("M_Lhiggs0",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs_1 = new TH1D("M_Lhiggs_1", "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs_2 = new TH1D("M_Lhiggs_2", "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs2  = new TH1D("M_Lhiggs2",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs2_5= new TH1D("M_Lhiggs2_5","Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs3  = new TH1D("M_Lhiggs3",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_LhiggsB  = new TH1D("M_LhiggsB",  "BackGround Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+
+	M_Lhiggs1->SetLineColor(kRed);
+	M_Lhiggs0->SetLineColor(kBlack);
+	M_Lhiggs_1->SetLineColor(kYellow -9);
+	M_Lhiggs_2->SetLineColor(kGreen);
+	M_Lhiggs2->SetLineColor(kBlue);
+	M_Lhiggs2_5->SetLineColor(kOrange-9);
+	M_Lhiggs3->SetLineColor(kViolet);
+	M_LhiggsB->SetLineColor(kCyan);
+	
+	M_Lhiggs1->SetLineWidth(2);
+	M_Lhiggs0->SetLineWidth(2);
+	M_Lhiggs_1->SetLineWidth(2);
+	M_Lhiggs_2->SetLineWidth(2);
+	M_Lhiggs2->SetLineWidth(2);
+	M_Lhiggs2_5->SetLineWidth(2);
+	M_Lhiggs3->SetLineWidth(2);
+	M_LhiggsB->SetLineWidth(2);
+	
+	M_NLhiggs1  = new TH1D("M_NLhiggs1",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs0  = new TH1D("M_NLhiggs0",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs_1 = new TH1D("M_NLhiggs_1", "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs_2 = new TH1D("M_NLhiggs_2", "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs2  = new TH1D("M_NLhiggs2",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs2_5= new TH1D("M_NLhiggs2_5","Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs3  = new TH1D("M_NLhiggs3",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggsB  = new TH1D("M_NLhiggsB",  "Background Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+
+	M_NLhiggs1->SetLineColor(kRed);
+	M_NLhiggs0->SetLineColor(kBlack);
+	M_NLhiggs_1->SetLineColor(kYellow -9);
+	M_NLhiggs_2->SetLineColor(kGreen);
+	M_NLhiggs2->SetLineColor(kBlue);
+	M_NLhiggs2_5->SetLineColor(kOrange-9);
+	M_NLhiggs3->SetLineColor(kViolet);
+	M_NLhiggsB->SetLineColor(kViolet);
+	
+	M_NLhiggs1->SetLineWidth(2);
+	M_NLhiggs0->SetLineWidth(2);
+	M_NLhiggs_1->SetLineWidth(2);
+	M_NLhiggs_2->SetLineWidth(2);
+	M_NLhiggs2->SetLineWidth(2);
+	M_NLhiggs2_5->SetLineWidth(2);
+	M_NLhiggs3->SetLineWidth(2);
+	M_NLhiggsB->SetLineWidth(2);
 	return;
 }
 
@@ -60,6 +114,8 @@ void Set_jetPtProps()
 	int nbins = 100;
 	float ptmin = 0;
 	float ptmax = 300;
+	float dptmin = 0;
+	float dptmax = 300;
 	//b-jet leading Pt
 	bjetLPt1  = new TH1D("bjetLPt1", "b-tagged Jet p_{t}; p_{t, leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	bjetLPt0  = new TH1D("bjetLPt0", "b-tagged Jet p_{t}; p_{t, leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
@@ -133,26 +189,107 @@ void Set_jetPtProps()
 	jet4LPt2_5= new TH1D("jet4LPt2_5", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	jet4LPt3  = new TH1D("jet4LPt3", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	jet4LPtB  = new TH1D("jet4LPtB", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	
+	//jet leading M
+	jetLM1  = new TH1D("jetLM1", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLM0  = new TH1D("jetLM0", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLM_1 = new TH1D("jetLM_1", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLM_2 = new TH1D("jetLM_2", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLM2  = new TH1D("jetLM2", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLM2_5= new TH1D("jetLM2_5", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLM3  = new TH1D("jetLM3", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	jetLMB  = new TH1D("jetLMB", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
+	//jet 2nd leading M
+	jet2LM1  = new TH1D("jet2LM1", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LM0  = new TH1D("jet2LM0", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LM_1 = new TH1D("jet2LM_1", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LM_2 = new TH1D("jet2LM_2", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LM2  = new TH1D("jet2LM2", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LM2_5= new TH1D("jet2LM2_5", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LM3  = new TH1D("jet2LM3", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet2LMB  = new TH1D("jet2LMB", "Jet invariant mass; m_{ sub leading jet} [GeV];", nbins, ptmin, ptmax);
+	//jet 3rd leading M
+	jet3LM1  = new TH1D("jet3LM1", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LM0  = new TH1D("jet3LM0", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LM_1 = new TH1D("jet3LM_1", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LM_2 = new TH1D("jet3LM_2", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LM2  = new TH1D("jet3LM2", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LM2_5= new TH1D("jet3LM2_5", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LM3  = new TH1D("jet3LM3", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet3LMB  = new TH1D("jet3LMB", "Jet invariant mass; m_{ 3rd leading jet} [GeV];", nbins, ptmin, ptmax);
+	//jet 4th leading M
+	jet4LM1  = new TH1D("jet4LM1", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LM0  = new TH1D("jet4LM0", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LM_1 = new TH1D("jet4LM_1", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LM_2 = new TH1D("jet4LM_2", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LM2  = new TH1D("jet4LM2", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LM2_5= new TH1D("jet4LM2_5", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LM3  = new TH1D("jet4LM3", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	jet4LMB  = new TH1D("jet4LMB", "Jet invariant mass; m_{ 4th leading jet} [GeV];", nbins, ptmin, ptmax);
+	
+	//bjet leading M
+	bjetLM1  = new TH1D("bjetLM1", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLM0  = new TH1D("bjetLM0", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLM_1 = new TH1D("bjetLM_1", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLM_2 = new TH1D("bjetLM_2", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLM2  = new TH1D("bjetLM2", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLM2_5= new TH1D("bjetLM2_5", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLM3  = new TH1D("bjetLM3", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjetLMB  = new TH1D("bjetLMB", "Jet invariant mass; m_{ leading bjet} [GeV];", nbins, ptmin, ptmax);
+	//bjet 2nd leading M
+	bjet2LM1  = new TH1D("bjet2LM1", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LM0  = new TH1D("bjet2LM0", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LM_1 = new TH1D("bjet2LM_1", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LM_2 = new TH1D("bjet2LM_2", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LM2  = new TH1D("bjet2LM2", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LM2_5= new TH1D("bjet2LM2_5", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LM3  = new TH1D("bjet2LM3", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet2LMB  = new TH1D("bjet2LMB", "Jet invariant mass; m_{ sub leading bjet} [GeV];", nbins, ptmin, ptmax);
+	//bjet 3rd leading M
+	bjet3LM1  = new TH1D("bjet3LM1", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LM0  = new TH1D("bjet3LM0", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LM_1 = new TH1D("bjet3LM_1", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LM_2 = new TH1D("bjet3LM_2", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LM2  = new TH1D("bjet3LM2", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LM2_5= new TH1D("bjet3LM2_5", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LM3  = new TH1D("bjet3LM3", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet3LMB  = new TH1D("bjet3LMB", "Jet invariant mass; m_{ 3rd leading bjet} [GeV];", nbins, ptmin, ptmax);
+	//bjet 4th leading M
+	bjet4LM1  = new TH1D("bjet4LM1", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LM0  = new TH1D("bjet4LM0", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LM_1 = new TH1D("bjet4LM_1", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LM_2 = new TH1D("bjet4LM_2", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LM2  = new TH1D("bjet4LM2", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LM2_5= new TH1D("bjet4LM2_5", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LM3  = new TH1D("bjet4LM3", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	bjet4LMB  = new TH1D("bjet4LMB", "Jet invariant mass; m_{ 4th leading bjet} [GeV];", nbins, ptmin, ptmax);
+	
+	// invariant mass of a pair of b's, ctr = 1.0
+	M_b1b2_1 = new TH1D("M_b1b2_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 12} [GeV];", nbins, ptmin, ptmax);
+	M_b1b3_1 = new TH1D("M_b1b3_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 13} [GeV];", nbins, ptmin, ptmax);
+	M_b1b4_1 = new TH1D("M_b1b4_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 14} [GeV];", nbins, ptmin, ptmax);
+	M_b2b3_1 = new TH1D("M_b2b3_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 23} [GeV];", nbins, ptmin, ptmax);
+	M_b2b4_1 = new TH1D("M_b2b4_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 24} [GeV];", nbins, ptmin, ptmax);
+	M_b3b4_1 = new TH1D("M_b3b4_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 34} [GeV];", nbins, ptmin, ptmax);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_1 = new TH1D("dM_b1b2_b3b4_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1234} [GeV];", nbins, dptmin, dptmax);
+	dM_b1b3_b2b4_1 = new TH1D("dM_b1b3_b2b4_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1324} [GeV];", nbins, dptmin, dptmax);
+	dM_b1b4_b2b3_1 = new TH1D("dM_b1b4_b2b3_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1423} [GeV];", nbins, dptmin, dptmax);
+
+	// invariant mass of a pair of b's, pp->4b
+	M_b1b2_B = new TH1D("M_b1b2_B", "Background, Invariant mass of the higgs candidates; m_{higgs candidate, 12} [GeV];", nbins, ptmin, ptmax);
+	M_b1b3_B = new TH1D("M_b1b3_B", "Background, Invariant mass of the higgs candidates; m_{higgs candidate, 13} [GeV];", nbins, ptmin, ptmax);
+	M_b1b4_B = new TH1D("M_b1b4_B", "Background, Invariant mass of the higgs candidates; m_{higgs candidate, 14} [GeV];", nbins, ptmin, ptmax);
+	M_b2b3_B = new TH1D("M_b2b3_B", "Background, Invariant mass of the higgs candidates; m_{higgs candidate, 23} [GeV];", nbins, ptmin, ptmax);
+	M_b2b4_B = new TH1D("M_b2b4_B", "Background, Invariant mass of the higgs candidates; m_{higgs candidate, 24} [GeV];", nbins, ptmin, ptmax);
+	M_b3b4_B = new TH1D("M_b3b4_B", "Background, Invariant mass of the higgs candidates; m_{higgs candidate, 34} [GeV];", nbins, ptmin, ptmax);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_B = new TH1D("dM_b1b2_b3b4_B", "Background, Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1234} [GeV];", nbins, dptmin, dptmax);
+	dM_b1b3_b2b4_B = new TH1D("dM_b1b3_b2b4_B", "Background, Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1324} [GeV];", nbins, dptmin, dptmax);
+	dM_b1b4_b2b3_B = new TH1D("dM_b1b4_b2b3_B", "Background, Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1423} [GeV];", nbins, dptmin, dptmax);
 	return;
-}
-int get_Nentries()
-{
-	n_entries1 = t1->GetEntries();
-	n_entries2 = t0->GetEntries();
-	n_entries3 = t_1->GetEntries();
-	n_entries4 = t_2->GetEntries();
-	n_entries5 = t2->GetEntries();
-	n_entries6 = t2_5->GetEntries();
-	n_entries7 = t3->GetEntries();
-	n_entries8 = tB->GetEntries();
-	assert (n_entries1 == n_entries2);
-	assert (n_entries2 == n_entries3);
-	assert (n_entries3 == n_entries4);
-	assert (n_entries4 == n_entries5);
-	assert (n_entries5 == n_entries6);
-	assert (n_entries6 == n_entries7);
-	assert (n_entries7 == n_entriesB);
-	return n_entries1;
 }
 void fetch_TTrees()
 {
@@ -216,22 +353,39 @@ void fetch_TTrees()
 	t3->SetBranchStatus("Njets",1);
 	tB->SetBranchStatus("Njets",1);
 	
-	t1->SetBranchStatus("jetPt",1);
-	t0->SetBranchStatus("jetPt",1);
-	t_1->SetBranchStatus("jetPt",1);
-	t_2->SetBranchStatus("jetPt",1);
-	t2->SetBranchStatus("jetPt",1);
-	t2_5->SetBranchStatus("jetPt",1);
-	t3->SetBranchStatus("jetPt",1);
-	tB->SetBranchStatus("jetPt",1);
-	t1->SetBranchAddress("jetPt",  &v1_jetPt);
-	t0->SetBranchAddress("jetPt",  &v0_jetPt);
-	t_1->SetBranchAddress("jetPt", &v_1_jetPt);
-	t_2->SetBranchAddress("jetPt", &v_2_jetPt);
-	t2->SetBranchAddress("jetPt",  &v2_jetPt);
-	t2_5->SetBranchAddress("jetPt",&v2_5_jetPt);
-	t3->SetBranchAddress("jetPt",  &v3_jetPt);
-	tB->SetBranchAddress("jetPt",  &vB_jetPt);
+	t1->SetBranchStatus("jetPt_sm",1);
+	t0->SetBranchStatus("jetPt_sm",1);
+	t_1->SetBranchStatus("jetPt_sm",1);
+	t_2->SetBranchStatus("jetPt_sm",1);
+	t2->SetBranchStatus("jetPt_sm",1);
+	t2_5->SetBranchStatus("jetPt_sm",1);
+	t3->SetBranchStatus("jetPt_sm",1);
+	tB->SetBranchStatus("jetPt_sm",1);
+	t1->SetBranchAddress("jetPt_sm",  &v1_jetPt);
+	t0->SetBranchAddress("jetPt_sm",  &v0_jetPt);
+	t_1->SetBranchAddress("jetPt_sm", &v_1_jetPt);
+	t_2->SetBranchAddress("jetPt_sm", &v_2_jetPt);
+	t2->SetBranchAddress("jetPt_sm",  &v2_jetPt);
+	t2_5->SetBranchAddress("jetPt_sm",&v2_5_jetPt);
+	t3->SetBranchAddress("jetPt_sm",  &v3_jetPt);
+	tB->SetBranchAddress("jetPt_sm",  &vB_jetPt);
+	
+	t1->SetBranchStatus("jetMt2_sm",1);
+	t0->SetBranchStatus("jetMt2_sm",1);
+	t_1->SetBranchStatus("jetMt2_sm",1);
+	t_2->SetBranchStatus("jetMt2_sm",1);
+	t2->SetBranchStatus("jetMt2_sm",1);
+	t2_5->SetBranchStatus("jetMt2_sm",1);
+	t3->SetBranchStatus("jetMt2_sm",1);
+	tB->SetBranchStatus("jetMt2_sm",1);
+	t1->SetBranchAddress("jetMt2_sm",  &v1_jetMt2);
+	t0->SetBranchAddress("jetMt2_sm",  &v0_jetMt2);
+	t_1->SetBranchAddress("jetMt2_sm", &v_1_jetMt2);
+	t_2->SetBranchAddress("jetMt2_sm", &v_2_jetMt2);
+	t2->SetBranchAddress("jetMt2_sm",  &v2_jetMt2);
+	t2_5->SetBranchAddress("jetMt2_sm",&v2_5_jetMt2);
+	t3->SetBranchAddress("jetMt2_sm",  &v3_jetMt2);
+	tB->SetBranchAddress("jetMt2_sm",  &vB_jetMt2);
 
 	t1->SetBranchStatus("btaggedFlavor",1);
 	t0->SetBranchStatus("btaggedFlavor",1);
@@ -286,6 +440,23 @@ void fetch_TTrees()
 	t3->SetBranchStatus("bJetNNNLPt",1);
 	tB->SetBranchStatus("bJetNNNLPt",1);
 	
+	t1->SetBranchStatus("Nbtags",1);
+	t0->SetBranchStatus("Nbtags",1);
+	t_1->SetBranchStatus("Nbtags",1);
+	t_2->SetBranchStatus("Nbtags",1);
+	t2->SetBranchStatus("Nbtags",1);
+	t2_5->SetBranchStatus("Nbtags",1);
+	t3->SetBranchStatus("Nbtags",1);
+	tB->SetBranchStatus("Nbtags",1);
+	
+	t1->SetBranchAddress("Nbtags",&n1_btags);
+	t0->SetBranchAddress("Nbtags",&n0_btags);
+	t_1->SetBranchAddress("Nbtags",&n_1_btags);
+	t_2->SetBranchAddress("Nbtags",&n_2_btags);
+	t2->SetBranchAddress("Nbtags",&n2_btags);
+	t2_5->SetBranchAddress("Nbtags",&n2_5_btags);
+	t3->SetBranchAddress("Nbtags",&n3_btags);
+	tB->SetBranchAddress("Nbtags",&nB_btags);
 	return;
 }
 void Draw_Nparticles()
@@ -573,6 +744,78 @@ void fetch_histos()
 }
 void Set_NleadingJetColors()
 {
+	bjetLM1->SetLineColor(kOrange);
+	bjetLM0->SetLineColor(kOrange);
+	bjetLM_1->SetLineColor(kOrange);
+	bjetLM_2->SetLineColor(kOrange);
+	bjetLM2->SetLineColor(kOrange);
+	bjetLM2_5->SetLineColor(kOrange);
+	bjetLM3->SetLineColor(kOrange);
+	bjetLMB->SetLineColor(kOrange);
+	
+	bjet2LM1->SetLineColor(kBlack);
+	bjet2LM0->SetLineColor(kBlack);
+	bjet2LM_1->SetLineColor(kBlack);
+	bjet2LM_2->SetLineColor(kBlack);
+	bjet2LM2->SetLineColor(kBlack);
+	bjet2LM2_5->SetLineColor(kBlack);
+	bjet2LM3->SetLineColor(kBlack);
+	bjet2LMB->SetLineColor(kBlack);
+	
+	bjet3LM1->SetLineColor(kRed);
+	bjet3LM0->SetLineColor(kRed);
+	bjet3LM_1->SetLineColor(kRed);
+	bjet3LM_2->SetLineColor(kRed);
+	bjet3LM2->SetLineColor(kRed);
+	bjet3LM2_5->SetLineColor(kRed);
+	bjet3LM3->SetLineColor(kRed);
+	bjet3LMB->SetLineColor(kRed);
+	
+	bjet4LM1->SetLineColor(kGreen);
+	bjet4LM0->SetLineColor(kGreen);
+	bjet4LM_1->SetLineColor(kGreen);
+	bjet4LM_2->SetLineColor(kGreen);
+	bjet4LM2->SetLineColor(kGreen);
+	bjet4LM2_5->SetLineColor(kGreen);
+	bjet4LM3->SetLineColor(kGreen);
+	bjet4LMB->SetLineColor(kGreen);
+	
+	jetLM1->SetLineColor(kOrange);
+	jetLM0->SetLineColor(kOrange);
+	jetLM_1->SetLineColor(kOrange);
+	jetLM_2->SetLineColor(kOrange);
+	jetLM2->SetLineColor(kOrange);
+	jetLM2_5->SetLineColor(kOrange);
+	jetLM3->SetLineColor(kOrange);
+	jetLMB->SetLineColor(kOrange);
+	
+	jet2LM1->SetLineColor(kBlack);
+	jet2LM0->SetLineColor(kBlack);
+	jet2LM_1->SetLineColor(kBlack);
+	jet2LM_2->SetLineColor(kBlack);
+	jet2LM2->SetLineColor(kBlack);
+	jet2LM2_5->SetLineColor(kBlack);
+	jet2LM3->SetLineColor(kBlack);
+	jet2LMB->SetLineColor(kBlack);
+	
+	jet3LM1->SetLineColor(kRed);
+	jet3LM0->SetLineColor(kRed);
+	jet3LM_1->SetLineColor(kRed);
+	jet3LM_2->SetLineColor(kRed);
+	jet3LM2->SetLineColor(kRed);
+	jet3LM2_5->SetLineColor(kRed);
+	jet3LM3->SetLineColor(kRed);
+	jet3LMB->SetLineColor(kRed);
+	
+	jet4LM1->SetLineColor(kGreen);
+	jet4LM0->SetLineColor(kGreen);
+	jet4LM_1->SetLineColor(kGreen);
+	jet4LM_2->SetLineColor(kGreen);
+	jet4LM2->SetLineColor(kGreen);
+	jet4LM2_5->SetLineColor(kGreen);
+	jet4LM3->SetLineColor(kGreen);
+	jet4LMB->SetLineColor(kGreen);
+	
 	jetLPt1->SetLineColor(kOrange);
 	jetLPt0->SetLineColor(kOrange);
 	jetLPt_1->SetLineColor(kOrange);
@@ -646,8 +889,129 @@ void Set_NleadingJetColors()
 	bjet4LPtB->SetLineColor(kGreen);
 
 }
+
+void Set_FinalbJetColors()
+{
+	// invariant mass of a pair of b's, ctr = 1.0
+	M_b1b2_1->SetLineColor(kRed);
+	M_b1b3_1->SetLineColor(kBlack);
+	M_b1b4_1->SetLineColor(kGreen);
+	M_b2b3_1->SetLineColor(kBlue);
+	M_b2b4_1->SetLineColor(kOrange - 9);
+	M_b3b4_1->SetLineColor(kViolet);    
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_1->SetLineColor(kRed);
+	dM_b1b3_b2b4_1->SetLineColor(kBlack);
+	dM_b1b4_b2b3_1->SetLineColor(kGreen);
+
+	// invariant mass of a pair of b's, pp->4b
+	M_b1b2_B->SetLineColor(kRed);        
+	M_b1b3_B->SetLineColor(kBlack);      
+	M_b1b4_B->SetLineColor(kGreen);      
+	M_b2b3_B->SetLineColor(kBlue);       
+	M_b2b4_B->SetLineColor(kOrange - 9); 
+	M_b3b4_B->SetLineColor(kViolet);     
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_B->SetLineColor(kRed);  
+	dM_b1b3_b2b4_B->SetLineColor(kBlack);
+	dM_b1b4_b2b3_B->SetLineColor(kGreen);
+
+}
+
 void Set_bquark_lambdaColors()
 {
+	
+	M_Lhiggs1->SetLineColor(kRed);
+	M_Lhiggs0->SetLineColor(kBlack);
+	M_Lhiggs_1->SetLineColor(kYellow -9);
+	M_Lhiggs_2->SetLineColor(kGreen);
+	M_Lhiggs2->SetLineColor(kBlue);
+	M_Lhiggs2_5->SetLineColor(kOrange-9);
+	M_Lhiggs3->SetLineColor(kViolet);
+	M_LhiggsB->SetLineColor(kCyan);
+	
+	M_NLhiggs1->SetLineColor(kRed);
+	M_NLhiggs0->SetLineColor(kBlack);
+	M_NLhiggs_1->SetLineColor(kYellow -9);
+	M_NLhiggs_2->SetLineColor(kGreen);
+	M_NLhiggs2->SetLineColor(kBlue);
+	M_NLhiggs2_5->SetLineColor(kOrange-9);
+	M_NLhiggs3->SetLineColor(kViolet);
+	M_NLhiggsB->SetLineColor(kCyan);
+	
+	bjetLM1->SetLineColor(kRed);
+	bjetLM0->SetLineColor(kBlack);
+	bjetLM_1->SetLineColor(kYellow -9);
+	bjetLM_2->SetLineColor(kGreen);
+	bjetLM2->SetLineColor(kBlue);
+	bjetLM2_5->SetLineColor(kOrange-9);
+	bjetLM3->SetLineColor(kViolet);
+	bjetLMB->SetLineColor(kCyan);
+	
+	bjet2LM1->SetLineColor(kRed);
+	bjet2LM0->SetLineColor(kBlack);
+	bjet2LM_1->SetLineColor(kYellow -9);
+	bjet2LM_2->SetLineColor(kGreen);
+	bjet2LM2->SetLineColor(kBlue);
+	bjet2LM2_5->SetLineColor(kOrange-9);
+	bjet2LM3->SetLineColor(kViolet);
+	bjet2LMB->SetLineColor(kCyan);
+	
+	bjet3LM1->SetLineColor(kRed);
+	bjet3LM0->SetLineColor(kBlack);
+	bjet3LM_1->SetLineColor(kYellow -9);
+	bjet3LM_2->SetLineColor(kGreen);
+	bjet3LM2->SetLineColor(kBlue);
+	bjet3LM2_5->SetLineColor(kOrange-9);
+	bjet3LM3->SetLineColor(kViolet);
+	bjet3LMB->SetLineColor(kCyan);
+	
+	bjet4LM1->SetLineColor(kRed);
+	bjet4LM0->SetLineColor(kBlack);
+	bjet4LM_1->SetLineColor(kYellow -9);
+	bjet4LM_2->SetLineColor(kGreen);
+	bjet4LM2->SetLineColor(kBlue);
+	bjet4LM2_5->SetLineColor(kOrange-9);
+	bjet4LM3->SetLineColor(kViolet);
+	bjet4LMB->SetLineColor(kCyan);
+	
+	jetLM1->SetLineColor(kRed);
+	jetLM0->SetLineColor(kBlack);
+	jetLM_1->SetLineColor(kYellow -9);
+	jetLM_2->SetLineColor(kGreen);
+	jetLM2->SetLineColor(kBlue);
+	jetLM2_5->SetLineColor(kOrange-9);
+	jetLM3->SetLineColor(kViolet);
+	jetLMB->SetLineColor(kCyan);
+	
+	jet2LM1->SetLineColor(kRed);
+	jet2LM0->SetLineColor(kBlack);
+	jet2LM_1->SetLineColor(kYellow -9);
+	jet2LM_2->SetLineColor(kGreen);
+	jet2LM2->SetLineColor(kBlue);
+	jet2LM2_5->SetLineColor(kOrange-9);
+	jet2LM3->SetLineColor(kViolet);
+	jet2LMB->SetLineColor(kCyan);
+	
+	jet3LM1->SetLineColor(kRed);
+	jet3LM0->SetLineColor(kBlack);
+	jet3LM_1->SetLineColor(kYellow -9);
+	jet3LM_2->SetLineColor(kGreen);
+	jet3LM2->SetLineColor(kBlue);
+	jet3LM2_5->SetLineColor(kOrange-9);
+	jet3LM3->SetLineColor(kViolet);
+	jet3LMB->SetLineColor(kCyan);
+	
+	jet4LM1->SetLineColor(kRed);
+	jet4LM0->SetLineColor(kBlack);
+	jet4LM_1->SetLineColor(kYellow -9);
+	jet4LM_2->SetLineColor(kGreen);
+	jet4LM2->SetLineColor(kBlue);
+	jet4LM2_5->SetLineColor(kOrange-9);
+	jet4LM3->SetLineColor(kViolet);
+	jet4LMB->SetLineColor(kCyan);
 	
 	jetLPt1->SetLineColor(kRed);
 	jetLPt0->SetLineColor(kBlack);
@@ -841,86 +1205,620 @@ void Set_LegendProps()
 	return;
 }
 
-void Draw_NleadingJetPt()
+void Draw_NleadingJetPt(double minLeadingPt, double minSubLeadingPt)
 {
-	int n_entries = get_Nentries();
 	int min_Njets = 4;
-	for(int i = 0; i < n_entries; ++i)
+	int n1 = 0, n0 = 0, n_1 = 0, n_2 = 0, n2 = 0, n2_5 = 0, n3 = 0, nB = 0;
+	int nb1 = 0, nb0 = 0, nb_1 = 0, nb_2 = 0, nb2 = 0, nb2_5 = 0, nb3 = 0, nbB = 0;
+	int nh1 = 0, nhB = 0;
+	for(int i = 0; i < t1->GetEntries(); ++i)
 	{
 		t1->GetEntry(i);
-		t0->GetEntry(i);
-		t_1->GetEntry(i);
-		t_2->GetEntry(i);
-		t2->GetEntry(i);
-		t2_5->GetEntry(i);
-		t3->GetEntry(i);
-		tB->GetEntry(i);
+		double mb1b2 = 0, mb1b3 = 0, mb1b4 = 0, mb2b3 = 0, mb2b4 = 0, mb3b4 = 0;
+		double dm_12_34 = 0, dm_13_24 = 0, dm_14_23 = 0;
+		double sum_Mt = 0, sum_Pt = 0;
+		v1_bjetPt.clear();
+		v1_bjetMt2.clear();
 		if (v1_jetPt->size() >= min_Njets)
 		{
+			if((*v1_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
+
 			jetLPt1->Fill((*v1_jetPt)[0]*1e-3);
 			jet2LPt1->Fill((*v1_jetPt)[1]*1e-3);
 			jet3LPt1->Fill((*v1_jetPt)[2]*1e-3);
 			jet4LPt1->Fill((*v1_jetPt)[3]*1e-3);
+			
+			jetLM1->Fill( std::sqrt((*v1_jetMt2)[0] - std::pow((*v1_jetPt)[0], 2))*1e-3);
+			jet2LM1->Fill(std::sqrt((*v1_jetMt2)[1] - std::pow((*v1_jetPt)[1], 2))*1e-3);
+			jet3LM1->Fill(std::sqrt((*v1_jetMt2)[2] - std::pow((*v1_jetPt)[2], 2))*1e-3);
+			jet4LM1->Fill(std::sqrt((*v1_jetMt2)[3] - std::pow((*v1_jetPt)[3], 2))*1e-3);
+			n1++;
+			if(n1_btags < 4) continue;
+			for(int j = 0; j < v1_tagFlavor->size(); j++)
+			{
+				if((*v1_tagFlavor)[j] != 5) continue;
+				v1_bjetPt.push_back((*v1_jetPt)[j]);
+				v1_bjetMt2.push_back((*v1_jetMt2)[j]);
+
+			}
+
+			bjetLPt1->Fill(v1_bjetPt[0]*1e-3);
+			bjet2LPt1->Fill(v1_bjetPt[1]*1e-3);
+			bjet3LPt1->Fill(v1_bjetPt[2]*1e-3);
+			bjet4LPt1->Fill(v1_bjetPt[3]*1e-3);
+
+			bjetLM1->Fill( std::sqrt(v1_bjetMt2[0] - std::pow(v1_bjetPt[0], 2))*1e-3);
+			bjet2LM1->Fill(std::sqrt(v1_bjetMt2[1] - std::pow(v1_bjetPt[1], 2))*1e-3);
+			bjet3LM1->Fill(std::sqrt(v1_bjetMt2[2] - std::pow(v1_bjetPt[2], 2))*1e-3);
+			bjet4LM1->Fill(std::sqrt(v1_bjetMt2[3] - std::pow(v1_bjetPt[3], 2))*1e-3);
+			nb1++;
+
+			sum_Mt = std::sqrt(v1_bjetMt2[0]) + std::sqrt(v1_bjetMt2[1]);
+			sum_Pt = v1_bjetPt[0] + v1_bjetPt[1];
+			mb1b2 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b1b2_1->Fill(mb1b2);
+
+			sum_Mt = std::sqrt(v1_bjetMt2[0]) + std::sqrt(v1_bjetMt2[2]);
+			sum_Pt = v1_bjetPt[0] + v1_bjetPt[2];
+			mb1b3 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b1b3_1->Fill(mb1b3);
+			
+			sum_Mt = std::sqrt(v1_bjetMt2[0]) + std::sqrt(v1_bjetMt2[3]);
+			sum_Pt = v1_bjetPt[0] + v1_bjetPt[3];
+			mb1b4 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b1b4_1->Fill(mb1b4);
+			
+			sum_Mt = std::sqrt(v1_bjetMt2[1]) + std::sqrt(v1_bjetMt2[2]);
+			sum_Pt = v1_bjetPt[1] + v1_bjetPt[2];
+			mb2b3 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b2b3_1->Fill(mb2b3);
+			
+			sum_Mt = std::sqrt(v1_bjetMt2[1]) + std::sqrt(v1_bjetMt2[3]);
+			sum_Pt = v1_bjetPt[1] + v1_bjetPt[3];
+			mb2b4 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b2b4_1->Fill(mb2b4);
+			
+			sum_Mt = std::sqrt(v1_bjetMt2[2]) + std::sqrt(v1_bjetMt2[3]);
+			sum_Pt = v1_bjetPt[2] + v1_bjetPt[3];
+			mb3b4 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b3b4_1->Fill(mb3b4);
+			
+			//! Relative difference between the bjet pairs, from amongst the possible three combinations
+			dm_12_34 = std::fabs(mb1b2 - mb3b4);
+			dm_13_24 = std::fabs(mb1b3 - mb2b4);
+			dm_14_23 = std::fabs(mb1b4 - mb2b3);	
+			dM_b1b2_b3b4_1->Fill(dm_12_34);	
+			dM_b1b3_b2b4_1->Fill(dm_13_24);	
+			dM_b1b4_b2b3_1->Fill(dm_14_23);	
+
+			//! Higgs Candidate
+			int higgs_candidates = 1234;
+			int min_diffCombi = dm_12_34;
+			if(dm_13_24 < min_diffCombi) 
+			{
+				min_diffCombi = dm_13_24;
+				higgs_candidates = 1324;
+			}
+			if(dm_14_23 < min_diffCombi)
+			{
+				min_diffCombi = dm_14_23;
+				higgs_candidates = 1423;
+			}
+
+			//! choose the b-jet pair which is closest to the higgs mass
+			int higgs_cand = 1234;
+			int min_uncertainty = std::fabs(mb1b2 - HiggsMass);
+			if(std::fabs(mb1b3 - HiggsMass) < min_uncertainty) 
+			{
+				min_uncertainty = std::fabs(mb1b3 - HiggsMass);
+				higgs_cand = 1324;
+			}
+			if(std::fabs(mb1b4 - HiggsMass) < min_uncertainty) 
+			{
+				min_uncertainty = std::fabs(mb1b4 - HiggsMass);
+				higgs_cand = 1423;
+			}
+
+			//! Check if the mass of the bjet pairs satisfy
+			//! |mbxby - 125| < 40
+			//! if not, record a loss of signal events
+			if(higgs_candidates == 1234)
+			//if(higgs_cand == 1234)
+			{
+				if((std::fabs(mb1b2 - HiggsMass) < 0.5 * MassWidth || std::fabs(mb3b4 - HiggsMass) < 0.5 * MassWidth))
+				{
+					nh1++;
+					if(mb1b2 < mb3b4)
+					{
+						M_Lhiggs1->Fill(mb3b4);
+						M_NLhiggs1->Fill(mb1b2);
+					}
+					else
+					{
+						M_Lhiggs1->Fill(mb1b2);
+						M_NLhiggs1->Fill(mb3b4);
+					
+					}
+				}
+				else continue;
+			
+			}
+			else if(higgs_candidates == 1324)
+			//else if(higgs_cand == 1324)
+			{
+				if((std::fabs(mb1b3 - HiggsMass) < 0.5 * MassWidth || std::fabs(mb2b4 - HiggsMass) < 0.5 * MassWidth))
+				{
+					nh1++;
+					if(mb1b3 < mb2b4)
+					{
+						M_Lhiggs1->Fill(mb2b4);
+						M_NLhiggs1->Fill(mb1b3);
+					}
+					else
+					{
+						M_Lhiggs1->Fill(mb1b3);
+						M_NLhiggs1->Fill(mb2b4);
+					
+					}
+				}
+				else continue;
+			
+			}
+			else if(higgs_candidates == 1423)
+			//else if(higgs_cand == 1423)
+			{
+				if((std::fabs(mb1b4 - HiggsMass) < 0.5 * MassWidth || std::fabs(mb3b4 - HiggsMass) < 0.5 * MassWidth))
+				{
+					nh1++;
+					if(mb1b4 < mb3b4)
+					{
+						M_Lhiggs1->Fill(mb3b4);
+						M_NLhiggs1->Fill(mb1b4);
+					}
+					else
+					{
+						M_Lhiggs1->Fill(mb1b4);
+						M_NLhiggs1->Fill(mb3b4);
+					
+					}
+				}
+				else continue;
+			
+			}
+
 		}
+	}
+	for(int i = 0; i < t0->GetEntries(); ++i)
+	{
+		t0->GetEntry(i);
+		v0_bjetPt.clear();
+		v0_bjetMt2.clear();
 		if (v0_jetPt->size() >= min_Njets)
 		{
+			if((*v0_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v0_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPt0->Fill((*v0_jetPt)[0]*1e-3);
 			jet2LPt0->Fill((*v0_jetPt)[1]*1e-3);
 			jet3LPt0->Fill((*v0_jetPt)[2]*1e-3);
 			jet4LPt0->Fill((*v0_jetPt)[3]*1e-3);
+
+			jetLM0->Fill( std::sqrt((*v0_jetMt2)[0] - std::pow((*v0_jetPt)[0], 2))*1e-3);
+			jet2LM0->Fill(std::sqrt((*v0_jetMt2)[1] - std::pow((*v0_jetPt)[1], 2))*1e-3);
+			jet3LM0->Fill(std::sqrt((*v0_jetMt2)[2] - std::pow((*v0_jetPt)[2], 2))*1e-3);
+			jet4LM0->Fill(std::sqrt((*v0_jetMt2)[3] - std::pow((*v0_jetPt)[3], 2))*1e-3);
+			n0++;
+			if(n0_btags < 4) continue;
+			for(int j = 0; j < v0_tagFlavor->size(); j++)
+			{
+				if((*v0_tagFlavor)[j] != 5) continue;
+				v0_bjetPt.push_back((*v0_jetPt)[j]);
+				v0_bjetMt2.push_back((*v0_jetMt2)[j]);
+
+			}
+
+			bjetLPt0->Fill(v0_bjetPt[0]*1e-3);
+			bjet2LPt0->Fill(v0_bjetPt[1]*1e-3);
+			bjet3LPt0->Fill(v0_bjetPt[2]*1e-3);
+			bjet4LPt0->Fill(v0_bjetPt[3]*1e-3);
+			
+			bjetLM0->Fill( std::sqrt(v0_bjetMt2[0] - std::pow(v0_bjetPt[0], 2))*1e-3);
+			bjet2LM0->Fill(std::sqrt(v0_bjetMt2[1] - std::pow(v0_bjetPt[1], 2))*1e-3);
+			bjet3LM0->Fill(std::sqrt(v0_bjetMt2[2] - std::pow(v0_bjetPt[2], 2))*1e-3);
+			bjet4LM0->Fill(std::sqrt(v0_bjetMt2[3] - std::pow(v0_bjetPt[3], 2))*1e-3);
+			nb0++;
 		}
+	}
+	for(int i = 0; i < t_1->GetEntries(); ++i)
+	{
+		t_1->GetEntry(i);
+		v_1_bjetPt.clear();
+		v_1_bjetMt2.clear();
 		if (v_1_jetPt->size() >= min_Njets)
 		{
+			if((*v_1_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v_1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPt_1->Fill((*v_1_jetPt)[0]*1e-3);
 			jet2LPt_1->Fill((*v_1_jetPt)[1]*1e-3);
 			jet3LPt_1->Fill((*v_1_jetPt)[2]*1e-3);
 			jet4LPt_1->Fill((*v_1_jetPt)[3]*1e-3);
+
+			jetLM_1->Fill( std::sqrt((*v_1_jetMt2)[0] - std::pow((*v_1_jetPt)[0], 2))*1e-3);
+			jet2LM_1->Fill(std::sqrt((*v_1_jetMt2)[1] - std::pow((*v_1_jetPt)[1], 2))*1e-3);
+			jet3LM_1->Fill(std::sqrt((*v_1_jetMt2)[2] - std::pow((*v_1_jetPt)[2], 2))*1e-3);
+			jet4LM_1->Fill(std::sqrt((*v_1_jetMt2)[3] - std::pow((*v_1_jetPt)[3], 2))*1e-3);
+			n_1++;
+			if(n_1_btags < 4) continue;
+			for(int j = 0; j < v_1_tagFlavor->size(); j++)
+			{
+				if((*v_1_tagFlavor)[j] != 5) continue;
+				v_1_bjetPt.push_back((*v_1_jetPt)[j]);
+				v_1_bjetMt2.push_back((*v_1_jetMt2)[j]);
+
+			}
+
+			bjetLPt_1->Fill(v_1_bjetPt[0]*1e-3);
+			bjet2LPt_1->Fill(v_1_bjetPt[1]*1e-3);
+			bjet3LPt_1->Fill(v_1_bjetPt[2]*1e-3);
+			bjet4LPt_1->Fill(v_1_bjetPt[3]*1e-3);
+
+			bjetLM_1->Fill( std::sqrt(v_1_bjetMt2[0] - std::pow(v_1_bjetPt[0], 2))*1e-3);
+			bjet2LM_1->Fill(std::sqrt(v_1_bjetMt2[1] - std::pow(v_1_bjetPt[1], 2))*1e-3);
+			bjet3LM_1->Fill(std::sqrt(v_1_bjetMt2[2] - std::pow(v_1_bjetPt[2], 2))*1e-3);
+			bjet4LM_1->Fill(std::sqrt(v_1_bjetMt2[3] - std::pow(v_1_bjetPt[3], 2))*1e-3);
+			nb_1++;
 		}
+	}
+	for(int i = 0; i < t_2->GetEntries(); ++i)
+	{
+		t_2->GetEntry(i);
+		v_2_bjetPt.clear();
+		v_2_bjetMt2.clear();
 		if (v_2_jetPt->size() >= min_Njets)
 		{
+			if((*v_2_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v_2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPt_2->Fill((*v_2_jetPt)[0]*1e-3);
 			jet2LPt_2->Fill((*v_2_jetPt)[1]*1e-3);
 			jet3LPt_2->Fill((*v_2_jetPt)[2]*1e-3);
 			jet4LPt_2->Fill((*v_2_jetPt)[3]*1e-3);
+
+			jetLM_2->Fill( std::sqrt((*v_2_jetMt2)[0] - std::pow((*v_2_jetPt)[0], 2))*1e-3);
+			jet2LM_2->Fill(std::sqrt((*v_2_jetMt2)[1] - std::pow((*v_2_jetPt)[1], 2))*1e-3);
+			jet3LM_2->Fill(std::sqrt((*v_2_jetMt2)[2] - std::pow((*v_2_jetPt)[2], 2))*1e-3);
+			jet4LM_2->Fill(std::sqrt((*v_2_jetMt2)[3] - std::pow((*v_2_jetPt)[3], 2))*1e-3);
+			n_2++;
+			if(n_2_btags < 4) continue;
+			for(int j = 0; j < v_2_tagFlavor->size(); j++)
+			{
+				if((*v_2_tagFlavor)[j] != 5) continue;
+				v_2_bjetPt.push_back((*v_2_jetPt)[j]);
+				v_2_bjetMt2.push_back((*v_2_jetMt2)[j]);
+
+			}
+
+			bjetLPt_2->Fill(v_2_bjetPt[0]*1e-3);
+			bjet2LPt_2->Fill(v_2_bjetPt[1]*1e-3);
+			bjet3LPt_2->Fill(v_2_bjetPt[2]*1e-3);
+			bjet4LPt_2->Fill(v_2_bjetPt[3]*1e-3);
+
+			bjetLM_2->Fill( std::sqrt(v_2_bjetMt2[0] - std::pow(v_2_bjetPt[0], 2))*1e-3);
+			bjet2LM_2->Fill(std::sqrt(v_2_bjetMt2[1] - std::pow(v_2_bjetPt[1], 2))*1e-3);
+			bjet3LM_2->Fill(std::sqrt(v_2_bjetMt2[2] - std::pow(v_2_bjetPt[2], 2))*1e-3);
+			bjet4LM_2->Fill(std::sqrt(v_2_bjetMt2[3] - std::pow(v_2_bjetPt[3], 2))*1e-3);
+			nb_2++;
 		}
+	}
+	for(int i = 0; i < t2->GetEntries(); ++i)
+	{
+		t2->GetEntry(i);
+		v2_bjetPt.clear();
+		v2_bjetMt2.clear();
 		if (v2_jetPt->size() >= min_Njets)
 		{
+			if((*v2_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPt2->Fill((*v2_jetPt)[0]*1e-3);
 			jet2LPt2->Fill((*v2_jetPt)[1]*1e-3);
 			jet3LPt2->Fill((*v2_jetPt)[2]*1e-3);
 			jet4LPt2->Fill((*v2_jetPt)[3]*1e-3);
+
+			jetLM2->Fill( std::sqrt((*v2_jetMt2)[0] - std::pow((*v2_jetPt)[0], 2))*1e-3);
+			jet2LM2->Fill(std::sqrt((*v2_jetMt2)[1] - std::pow((*v2_jetPt)[1], 2))*1e-3);
+			jet3LM2->Fill(std::sqrt((*v2_jetMt2)[2] - std::pow((*v2_jetPt)[2], 2))*1e-3);
+			jet4LM2->Fill(std::sqrt((*v2_jetMt2)[3] - std::pow((*v2_jetPt)[3], 2))*1e-3);
+			n2++;
+			if(n2_btags < 4) continue;
+			for(int j = 0; j < v2_tagFlavor->size(); j++)
+			{
+				if((*v2_tagFlavor)[j] != 5) continue;
+				v2_bjetPt.push_back((*v2_jetPt)[j]);
+				v2_bjetMt2.push_back((*v2_jetMt2)[j]);
+
+			}
+
+			bjetLPt2->Fill(v2_bjetPt[0]*1e-3);
+			bjet2LPt2->Fill(v2_bjetPt[1]*1e-3);
+			bjet3LPt2->Fill(v2_bjetPt[2]*1e-3);
+			bjet4LPt2->Fill(v2_bjetPt[3]*1e-3);
+
+			bjetLM2->Fill( std::sqrt(v2_bjetMt2[0] - std::pow(v2_bjetPt[0], 2))*1e-3);
+			bjet2LM2->Fill(std::sqrt(v2_bjetMt2[1] - std::pow(v2_bjetPt[1], 2))*1e-3);
+			bjet3LM2->Fill(std::sqrt(v2_bjetMt2[2] - std::pow(v2_bjetPt[2], 2))*1e-3);
+			bjet4LM2->Fill(std::sqrt(v2_bjetMt2[3] - std::pow(v2_bjetPt[3], 2))*1e-3);
+			nb2++;
 		}
+	}
+	for(int i = 0; i < t2_5->GetEntries(); ++i)
+	{
+		t2_5->GetEntry(i);
+		v2_5_bjetPt.clear();
+		v2_5_bjetMt2.clear();
 		if (v2_5_jetPt->size() >= min_Njets)
 		{
+			if((*v2_5_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v2_5_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPt2_5->Fill((*v2_5_jetPt)[0]*1e-3);
 			jet2LPt2_5->Fill((*v2_5_jetPt)[1]*1e-3);
 			jet3LPt2_5->Fill((*v2_5_jetPt)[2]*1e-3);
 			jet4LPt2_5->Fill((*v2_5_jetPt)[3]*1e-3);
+
+			jetLM2_5->Fill( std::sqrt((*v2_5_jetMt2)[0] - std::pow((*v2_5_jetPt)[0], 2))*1e-3);
+			jet2LM2_5->Fill(std::sqrt((*v2_5_jetMt2)[1] - std::pow((*v2_5_jetPt)[1], 2))*1e-3);
+			jet3LM2_5->Fill(std::sqrt((*v2_5_jetMt2)[2] - std::pow((*v2_5_jetPt)[2], 2))*1e-3);
+			jet4LM2_5->Fill(std::sqrt((*v2_5_jetMt2)[3] - std::pow((*v2_5_jetPt)[3], 2))*1e-3);
+			n2_5++;
+			if(n2_5_btags < 4) continue;
+			for(int j = 0; j < v2_5_tagFlavor->size(); j++)
+			{
+				if((*v2_5_tagFlavor)[j] != 5) continue;
+				v2_5_bjetPt.push_back((*v2_5_jetPt)[j]);
+				v2_5_bjetMt2.push_back((*v2_5_jetMt2)[j]);
+
+			}
+
+			bjetLPt2_5->Fill(v2_5_bjetPt[0]*1e-3);
+			bjet2LPt2_5->Fill(v2_5_bjetPt[1]*1e-3);
+			bjet3LPt2_5->Fill(v2_5_bjetPt[2]*1e-3);
+			bjet4LPt2_5->Fill(v2_5_bjetPt[3]*1e-3);
+
+			bjetLM2_5->Fill( std::sqrt(v2_5_bjetMt2[0] - std::pow(v2_5_bjetPt[0], 2))*1e-3);
+			bjet2LM2_5->Fill(std::sqrt(v2_5_bjetMt2[1] - std::pow(v2_5_bjetPt[1], 2))*1e-3);
+			bjet3LM2_5->Fill(std::sqrt(v2_5_bjetMt2[2] - std::pow(v2_5_bjetPt[2], 2))*1e-3);
+			bjet4LM2_5->Fill(std::sqrt(v2_5_bjetMt2[3] - std::pow(v2_5_bjetPt[3], 2))*1e-3);
+			nb2_5++;
 		}
+	}
+	for(int i = 0; i < t3->GetEntries(); ++i)
+	{
+		t3->GetEntry(i);
+		v3_bjetPt.clear();
+		v3_bjetMt2.clear();
 		if (v3_jetPt->size() >= min_Njets)
 		{
+			if((*v3_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*v3_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPt3->Fill((*v3_jetPt)[0]*1e-3);
 			jet2LPt3->Fill((*v3_jetPt)[1]*1e-3);
 			jet3LPt3->Fill((*v3_jetPt)[2]*1e-3);
 			jet4LPt3->Fill((*v3_jetPt)[3]*1e-3);
+
+			jetLM3->Fill( std::sqrt((*v3_jetMt2)[0] - std::pow((*v3_jetPt)[0], 2))*1e-3);
+			jet2LM3->Fill(std::sqrt((*v3_jetMt2)[1] - std::pow((*v3_jetPt)[1], 2))*1e-3);
+			jet3LM3->Fill(std::sqrt((*v3_jetMt2)[2] - std::pow((*v3_jetPt)[2], 2))*1e-3);
+			jet4LM3->Fill(std::sqrt((*v3_jetMt2)[3] - std::pow((*v3_jetPt)[3], 2))*1e-3);
+			n3++;
+			if(n3_btags < 4) continue;
+			for(int j = 0; j < v3_tagFlavor->size(); j++)
+			{
+				if((*v3_tagFlavor)[j] != 5) continue;
+				v3_bjetPt.push_back((*v3_jetPt)[j]);
+				v3_bjetMt2.push_back((*v3_jetMt2)[j]);
+
+			}
+
+			bjetLPt3->Fill(v3_bjetPt[0]*1e-3);
+			bjet2LPt3->Fill(v3_bjetPt[1]*1e-3);
+			bjet3LPt3->Fill(v3_bjetPt[2]*1e-3);
+			bjet4LPt3->Fill(v3_bjetPt[3]*1e-3);
+
+			bjetLM3->Fill( std::sqrt(v3_bjetMt2[0] - std::pow(v3_bjetPt[0], 2))*1e-3);
+			bjet2LM3->Fill(std::sqrt(v3_bjetMt2[1] - std::pow(v3_bjetPt[1], 2))*1e-3);
+			bjet3LM3->Fill(std::sqrt(v3_bjetMt2[2] - std::pow(v3_bjetPt[2], 2))*1e-3);
+			bjet4LM3->Fill(std::sqrt(v3_bjetMt2[3] - std::pow(v3_bjetPt[3], 2))*1e-3);
+			nb3++;
 		}
+	}
+	for(int i = 0; i < tB->GetEntries(); ++i)
+	{
+		tB->GetEntry(i);
+		double mb1b2 = 0, mb1b3 = 0, mb1b4 = 0, mb2b3 = 0, mb2b4 = 0, mb3b4 = 0;
+		double dm_12_34 = 0, dm_13_24 = 0, dm_14_23 = 0;
+		double sum_Mt = 0, sum_Pt = 0;
+		vB_bjetPt.clear();
+		vB_bjetMt2.clear();
 		if (vB_jetPt->size() >= min_Njets)
 		{
+			if((*vB_jetPt)[0]*1e-3 < minLeadingPt) continue;
+			if((*vB_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 			jetLPtB->Fill((*vB_jetPt)[0]*1e-3);
 			jet2LPtB->Fill((*vB_jetPt)[1]*1e-3);
 			jet3LPtB->Fill((*vB_jetPt)[2]*1e-3);
 			jet4LPtB->Fill((*vB_jetPt)[3]*1e-3);
+
+			jetLMB->Fill( std::sqrt((*vB_jetMt2)[0] - std::pow((*vB_jetPt)[0], 2))*1e-3);
+			jet2LMB->Fill(std::sqrt((*vB_jetMt2)[1] - std::pow((*vB_jetPt)[1], 2))*1e-3);
+			jet3LMB->Fill(std::sqrt((*vB_jetMt2)[2] - std::pow((*vB_jetPt)[2], 2))*1e-3);
+			jet4LMB->Fill(std::sqrt((*vB_jetMt2)[3] - std::pow((*vB_jetPt)[3], 2))*1e-3);
+			nB++;
+			if(nB_btags < 4) continue;
+			for(int j = 0; j < vB_tagFlavor->size(); j++)
+			{
+				if((*vB_tagFlavor)[j] != 5) continue;
+				vB_bjetPt.push_back((*vB_jetPt)[j]);
+				vB_bjetMt2.push_back((*vB_jetMt2)[j]);
+
+			}
+
+			bjetLPtB->Fill(vB_bjetPt[0]*1e-3);
+			bjet2LPtB->Fill(vB_bjetPt[1]*1e-3);
+			bjet3LPtB->Fill(vB_bjetPt[2]*1e-3);
+			bjet4LPtB->Fill(vB_bjetPt[3]*1e-3);
+
+			bjetLMB->Fill( std::sqrt(vB_bjetMt2[0] - std::pow(vB_bjetPt[0], 2))*1e-3);
+			bjet2LMB->Fill(std::sqrt(vB_bjetMt2[1] - std::pow(vB_bjetPt[1], 2))*1e-3);
+			bjet3LMB->Fill(std::sqrt(vB_bjetMt2[2] - std::pow(vB_bjetPt[2], 2))*1e-3);
+			bjet4LMB->Fill(std::sqrt(vB_bjetMt2[3] - std::pow(vB_bjetPt[3], 2))*1e-3);
+			nbB++;
+
+			sum_Mt = std::sqrt(vB_bjetMt2[0]) + std::sqrt(vB_bjetMt2[1]);
+			sum_Pt = vB_bjetPt[0] + vB_bjetPt[1];
+			mb1b2 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b1b2_B->Fill(mb1b2);
+
+			sum_Mt = std::sqrt(vB_bjetMt2[0]) + std::sqrt(vB_bjetMt2[2]);
+			sum_Pt = vB_bjetPt[0] + vB_bjetPt[2];
+			mb1b3 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b1b3_B->Fill(mb1b3);
+			
+			sum_Mt = std::sqrt(vB_bjetMt2[0]) + std::sqrt(vB_bjetMt2[3]);
+			sum_Pt = vB_bjetPt[0] + vB_bjetPt[3];
+			mb1b4 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b1b4_B->Fill(mb1b4);
+			
+			sum_Mt = std::sqrt(vB_bjetMt2[1]) + std::sqrt(vB_bjetMt2[2]);
+			sum_Pt = vB_bjetPt[1] + vB_bjetPt[2];
+			mb2b3 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b2b3_B->Fill(mb2b3);
+			
+			sum_Mt = std::sqrt(vB_bjetMt2[1]) + std::sqrt(vB_bjetMt2[3]);
+			sum_Pt = vB_bjetPt[1] + vB_bjetPt[3];
+			mb2b4 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b2b4_B->Fill(mb2b4);
+			
+			sum_Mt = std::sqrt(vB_bjetMt2[2]) + std::sqrt(vB_bjetMt2[3]);
+			sum_Pt = vB_bjetPt[2] + vB_bjetPt[3];
+			mb3b4 = std::sqrt(std::pow(sum_Mt,2) - std::pow(sum_Pt,2)) * 1e-3;
+			M_b3b4_B->Fill(mb3b4);
+			
+			//! Relative difference between the bjet pairs, from amongst the possible three combinations
+			dm_12_34 = std::fabs(mb1b2 - mb3b4);
+			dm_13_24 = std::fabs(mb1b3 - mb2b4);
+			dm_14_23 = std::fabs(mb1b4 - mb2b3);	
+			dM_b1b2_b3b4_B->Fill(dm_12_34);	
+			dM_b1b3_b2b4_B->Fill(dm_13_24);	
+			dM_b1b4_b2b3_B->Fill(dm_14_23);	
+
+			//! Higgs Candidate
+			int higgs_candidates = 1234;
+			int min_diffCombi = dm_12_34;
+			if(dm_13_24 < min_diffCombi) 
+			{
+				min_diffCombi = dm_13_24;
+				higgs_candidates = 1324;
+			}
+			if(dm_14_23 < min_diffCombi)
+			{
+				min_diffCombi = dm_14_23;
+				higgs_candidates = 1423;
+			}
+
+			//! choose the b-jet pair which is closest to the higgs mass
+			int higgs_cand = 1234;
+			int min_uncertainty = std::fabs(mb1b2 - HiggsMass);
+			if(std::fabs(mb1b3 - HiggsMass) < min_uncertainty) 
+			{
+				min_uncertainty = std::fabs(mb1b3 - HiggsMass);
+				higgs_cand = 1324;
+			}
+			if(std::fabs(mb1b4 - HiggsMass) < min_uncertainty) 
+			{
+				min_uncertainty = std::fabs(mb1b4 - HiggsMass);
+				higgs_cand = 1423;
+			}
+			//! Check if the mass of the bjet pairs satisfy
+			//! |mbxby - 125| < 40
+			//! if not, record a loss of signal events
+			if(higgs_candidates == 1234)
+			//if(higgs_cand == 1234)
+			{
+				if((std::fabs(mb1b2 - HiggsMass) < 0.5 * MassWidth || std::fabs(mb3b4 - HiggsMass) < 0.5 * MassWidth))
+				{
+					nhB++;
+					if(mb1b2 < mb3b4)
+					{
+						M_LhiggsB->Fill(mb3b4);
+						M_NLhiggsB->Fill(mb1b2);
+					}
+					else
+					{
+						M_LhiggsB->Fill(mb1b2);
+						M_NLhiggsB->Fill(mb3b4);
+					
+					}
+				}
+				else continue;
+			
+			}
+			else if(higgs_candidates == 1324)
+			//else if(higgs_cand == 1324)
+			{
+				if((std::fabs(mb1b3 - HiggsMass) < 0.5 * MassWidth || std::fabs(mb2b4 - HiggsMass) < 0.5 * MassWidth))
+				{
+					nhB++;
+					if(mb1b3 < mb2b4)
+					{
+						M_LhiggsB->Fill(mb2b4);
+						M_NLhiggsB->Fill(mb1b3);
+					}
+					else
+					{
+						M_LhiggsB->Fill(mb1b3);
+						M_NLhiggsB->Fill(mb2b4);
+					
+					}
+				}
+				else continue;
+			
+			}
+			else if(higgs_candidates == 1423)
+			//else if(higgs_cand == 1423)
+			{
+				if((std::fabs(mb1b4 - HiggsMass) < 0.5 * MassWidth || std::fabs(mb3b4 - HiggsMass) < 0.5 * MassWidth))
+				{
+					nhB++;
+					if(mb1b4 < mb3b4)
+					{
+						M_LhiggsB->Fill(mb3b4);
+						M_NLhiggsB->Fill(mb1b4);
+					}
+					else
+					{
+						M_LhiggsB->Fill(mb1b4);
+						M_NLhiggsB->Fill(mb3b4);
+					
+					}
+				}
+				else continue;
+			
+			}
 		}
 
 	}
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = 1.0   is " << n1   <<", " << nb1 <<", " << nh1  <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = 0.0   is " << n0   <<", " << nb0   <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = -1.0  is " << n_1  <<", " << nb_1  <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = -2.0  is " << n_2  <<", " << nb_2  <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = 2.0   is " << n2   <<", " << nb2   <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = 2.5   is " << n2_5 <<", " << nb2_5 <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for ctr = 3.0   is " << n3   <<", " << nb3   <<std::endl;
+	std::cout<<"Number of events with atleast 4 jets, 4 btags, 2 higgs for pp4b bckgnd is " << nB   <<", " << nbB <<", " << nhB  <<std::endl;
 	return;
 
 }
 void Draw_Number_bTags()
 {
-	int n_entries = get_Nentries();
 
-	std::cout<<"total number of entires: " <<n_entries <<std::endl;
 	h_NbTags1 = new TH1D("h_NbTags1", "number of b tagged jets, #lambda =1.0", 6, 0, 6);
 	h_NbTags0 = new TH1D("h_NbTags0", "number of b tagged jets, #lambda =0.0", 6, 0, 6);
 	h_NbTags_1 = new TH1D("h_NbTags_1", "number of b tagged jets, #lambda =-1.0", 6, 0, 6);
@@ -930,66 +1828,27 @@ void Draw_Number_bTags()
 	h_NbTags3 = new TH1D("h_NbTags3", "number of b tagged jets, #lambda =3.0", 6, 0, 6);
 	h_NbTagsB = new TH1D("h_NbTagsB", "number of b tagged jets, pp->4b", 6, 0, 6);
 
-	for(int i = 0; i < n_entries; ++i)
-	{
-		t1->GetEntry(i);
-		t0->GetEntry(i);
-		t_1->GetEntry(i);
-		t_2->GetEntry(i);
-		t2->GetEntry(i);
-		t2_5->GetEntry(i);
-		t3->GetEntry(i);
-		tB->GetEntry(i);
-		
-		int n1 = 0, n0 = 0, n_1 = 0, n_2 = 0, n2 = 0, n2_5 = 0, n3 = 0, nB = 0;
-		for(int j = 0; j < v1_tagFlavor->size(); ++j)
-		{
-			if((*v1_tagFlavor)[j] == 5 ) n1++;
-		}
-		h_NbTags1->Fill(n1);
-		for(int j = 0; j < v0_tagFlavor->size(); ++j)
-		{
-			if((*v0_tagFlavor)[j] == 5 ) n0++;
-		}
-		h_NbTags0->Fill(n0);
-		for(int j = 0; j < v_1_tagFlavor->size(); ++j)
-		{
-			if((*v_1_tagFlavor)[j] == 5 ) n_1++;
-		}
-		h_NbTags_1->Fill(n_1);
-		for(int j = 0; j < v_2_tagFlavor->size(); ++j)
-		{
-			if((*v_2_tagFlavor)[j] == 5 ) n_2++;
-		}
-		h_NbTags_2->Fill(n_2);
-		for(int j = 0; j < v2_tagFlavor->size(); ++j)
-		{
-			if((*v2_tagFlavor)[j] == 5 ) n2++;
-		}
-		h_NbTags2->Fill(n2);
-		for(int j = 0; j < v2_5_tagFlavor->size(); ++j)
-		{
-			if((*v2_5_tagFlavor)[j] == 5 ) n2_5++;
-		}
-		h_NbTags2_5->Fill(n2_5);
-		for(int j = 0; j < v3_tagFlavor->size(); ++j)
-		{
-			if((*v3_tagFlavor)[j] == 5 ) n3++;
-		}
-		h_NbTags3->Fill(n3);
-		for(int j = 0; j < vB_tagFlavor->size(); ++j)
-		{
-			if((*vB_tagFlavor)[j] == 5 ) nB++;
-		}
-		h_NbTagsB->Fill(nB);
-
-		
-	}
+	t1->Draw("Nbtags>>h_NbTags1");
+	t0->Draw("Nbtags>>h_NbTags0");
+	t_1->Draw("Nbtags>>h_NbTags_1");
+	t_2->Draw("Nbtags>>h_NbTags_2");
+	t2->Draw("Nbtags>>h_NbTags2");
+	t2_5->Draw("Nbtags>>h_NbTags2_5");
+	t3->Draw("Nbtags>>h_NbTags3");
+	tB->Draw("Nbtags>>h_NbTagsB");
 	return;
 }
 void Scale_signalHistos(double norm)
 {
 
+	//Number of btags 
+	h_NbTags1->Scale(norm);
+	h_NbTags0->Scale(norm);
+	h_NbTags_1->Scale(norm);
+	h_NbTags_2->Scale(norm);
+	h_NbTags2->Scale(norm);
+	h_NbTags2_5->Scale(norm);
+	h_NbTags3->Scale(norm);
 	//Number of SMhiggs 
 	NSMhiggs1->Scale(norm);
 	NSMhiggs0->Scale(norm);
@@ -1023,7 +1882,102 @@ void Scale_signalHistos(double norm)
 	higgsNLPt2->Scale(norm);
 	higgsNLPt2_5->Scale(norm);
 	higgsNLPt3->Scale(norm);
+	//reconstructed leading Higgs M
+	M_Lhiggs1->Scale(norm);
+	M_Lhiggs0->Scale(norm);
+	M_Lhiggs_1->Scale(norm);
+	M_Lhiggs_2->Scale(norm);
+	M_Lhiggs2->Scale(norm);
+	M_Lhiggs2_5->Scale(norm);
+	M_Lhiggs3->Scale(norm);
+	//reconstructed sub leading Higgs M
+	M_NLhiggs1->Scale(norm);
+	M_NLhiggs0->Scale(norm);
+	M_NLhiggs_1->Scale(norm);
+	M_NLhiggs_2->Scale(norm);
+	M_NLhiggs2->Scale(norm);
+	M_NLhiggs2_5->Scale(norm);
+	M_NLhiggs3->Scale(norm);
 
+	// invariant mass of a pair of b's, ctr = 1.0
+	M_b1b2_1->Scale(norm);
+	M_b1b3_1->Scale(norm);
+	M_b1b4_1->Scale(norm);
+	M_b2b3_1->Scale(norm);
+	M_b2b4_1->Scale(norm);
+	M_b3b4_1->Scale(norm);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_1->Scale(norm);
+	dM_b1b3_b2b4_1->Scale(norm);
+	dM_b1b4_b2b3_1->Scale(norm);
+	
+	//bjet leading M
+	bjetLM1->Scale(norm);
+	bjetLM0->Scale(norm);
+	bjetLM_1->Scale(norm);
+	bjetLM_2->Scale(norm);
+	bjetLM2->Scale(norm);
+	bjetLM2_5->Scale(norm);
+	bjetLM3->Scale(norm);
+	//bjet 2nd leading M
+	bjet2LM1->Scale(norm);
+	bjet2LM0->Scale(norm);
+	bjet2LM_1->Scale(norm);
+	bjet2LM_2->Scale(norm);
+	bjet2LM2->Scale(norm);
+	bjet2LM2_5->Scale(norm);
+	bjet2LM3->Scale(norm);
+	//bjet 3rd leading M
+	bjet3LM1->Scale(norm);
+	bjet3LM0->Scale(norm);
+	bjet3LM_1->Scale(norm);
+	bjet3LM_2->Scale(norm);
+	bjet3LM2->Scale(norm);
+	bjet3LM2_5->Scale(norm);
+	bjet3LM3->Scale(norm);
+	//bjet 4th leading M
+	bjet4LM1->Scale(norm);
+	bjet4LM0->Scale(norm);
+	bjet4LM_1->Scale(norm);
+	bjet4LM_2->Scale(norm);
+	bjet4LM2->Scale(norm);
+	bjet4LM2_5->Scale(norm);
+	bjet4LM3->Scale(norm);
+	
+	//jet leading M
+	jetLM1->Scale(norm);
+	jetLM0->Scale(norm);
+	jetLM_1->Scale(norm);
+	jetLM_2->Scale(norm);
+	jetLM2->Scale(norm);
+	jetLM2_5->Scale(norm);
+	jetLM3->Scale(norm);
+	//jet 2nd leading M
+	jet2LM1->Scale(norm);
+	jet2LM0->Scale(norm);
+	jet2LM_1->Scale(norm);
+	jet2LM_2->Scale(norm);
+	jet2LM2->Scale(norm);
+	jet2LM2_5->Scale(norm);
+	jet2LM3->Scale(norm);
+	//jet 3rd leading M
+	jet3LM1->Scale(norm);
+	jet3LM0->Scale(norm);
+	jet3LM_1->Scale(norm);
+	jet3LM_2->Scale(norm);
+	jet3LM2->Scale(norm);
+	jet3LM2_5->Scale(norm);
+	jet3LM3->Scale(norm);
+	//jet 4th leading M
+	jet4LM1->Scale(norm);
+	jet4LM0->Scale(norm);
+	jet4LM_1->Scale(norm);
+	jet4LM_2->Scale(norm);
+	jet4LM2->Scale(norm);
+	jet4LM2_5->Scale(norm);
+	jet4LM3->Scale(norm);
+	
 	//jet leading Pt
 	jetLPt1->Scale(norm);
 	jetLPt0->Scale(norm);
@@ -1168,9 +2122,41 @@ void Scale_signalHistos(double norm)
 void Scale_bckgndHistos(double norm)
 {
 
+	//Number of btags 
+	h_NbTagsB->Scale(norm);
 	//Number of bquarks 
 	NbquarksB->Scale(norm);
+	//reconstructed leading Higgs mass 
+	M_LhiggsB->Scale(norm);
+	//reconstructed sub-leading Higgs mass 
+	M_NLhiggsB->Scale(norm);
 
+	// invariant mass of a pair of b's, pp->4b
+	M_b1b2_B->Scale(norm);
+	M_b1b3_B->Scale(norm);
+	M_b1b4_B->Scale(norm);
+	M_b2b3_B->Scale(norm);
+	M_b2b4_B->Scale(norm);
+	M_b3b4_B->Scale(norm);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_B->Scale(norm);
+	dM_b1b3_b2b4_B->Scale(norm);
+	dM_b1b4_b2b3_B->Scale(norm);
+	
+	
+	
+	//jet leading M
+	jetLMB->Scale(norm);
+	//jet 2nd leading M
+	jet2LMB->Scale(norm);
+	//jet 3rd leading M
+	jet3LMB->Scale(norm);
+	//jet 4th leading M
+	jet4LMB->Scale(norm);
+	//jet 5th leading M
+	//jet5LMB->Scale(norm);
+	
 	//jet leading Pt
 	jetLPtB->Scale(norm);
 	//jet 2nd leading Pt
@@ -1182,6 +2168,17 @@ void Scale_bckgndHistos(double norm)
 	//jet 5th leading Pt
 	//jet5LPtB->Scale(norm);
 
+	//bjet leading M
+	bjetLMB->Scale(norm);
+	//bjet 2nd leading M
+	bjet2LMB->Scale(norm);
+	//bjet 3rd leading M
+	bjet3LMB->Scale(norm);
+	//bjet 4th leading M
+	bjet4LMB->Scale(norm);
+	//bjet 5th leading M
+	//bjet5LMB->Scale(norm);
+	
 	//b-jet leading Pt
 	bjetLPtB->Scale(norm);
 	//b-jet 2nd leading Pt
@@ -1225,7 +2222,9 @@ int main()
         TH1::SetDefaultSumw2(true);
 	fetch_TTrees();
 	//! get the normalization for an integrated luminosity of 10 ab-1 data
-	int tot_MCevents = get_Nentries();
+	//int tot_MCevents = get_Nentries();
+	//int tot_MCevents = get_Nentries();
+	int tot_MCevents = 1e5;
 	double norm_signal = (IntLumi * ggFhhXsec)/tot_MCevents;
 	double norm_bckgnd = (IntLumi * pp4bXsec)/tot_MCevents;
 	std::cout<<"Number of signal and background events used =  " << tot_MCevents <<std::endl;
@@ -1236,12 +2235,13 @@ int main()
 	Set_higgsPtProps();
 	Set_jetPtProps();
 	Draw_higgsPt();
-	Draw_b_jetPt();
+	//Draw_b_jetPt();
 	fetch_histos();
 	Draw_Nparticles();
 	
-	Draw_NleadingJetPt();
+	Draw_NleadingJetPt(55.0, 40.0);
 	Set_NleadingJetColors();
+	Set_FinalbJetColors();
 
 	Draw_Number_bTags();
 
@@ -1440,37 +2440,37 @@ int main()
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
-	bjet3LPt1->SetTitle("k_{#lambda} = 1.0");
-	bjet3LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt1->Draw("hist");
-	bjet4LPt1->Draw("hist same");
+	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt1->Draw("hist");
+	bjet3LPt1->Draw("hist same");
 	bjet2LPt1->Draw("hist same");
 	bjetLPt1->Draw("hist same");
 	leg1->Draw();
 
 	C->cd(2);	
-	bjet3LPt0->SetTitle("k_{#lambda} = 0.0");
-	bjet3LPt0->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt0->Draw("hist");
-	bjet4LPt0->Draw("hist same");
+	bjet4LPt0->SetTitle("k_{#lambda} = 0.0");
+	bjet4LPt0->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt0->Draw("hist");
+	bjet3LPt0->Draw("hist same");
 	bjet2LPt0->Draw("hist same");
 	bjetLPt0->Draw("hist same");
 	leg1->Draw();
 
 	C->cd(3);	
-	bjet3LPt_1->SetTitle("k_{#lambda} = -1.0");
-	bjet3LPt_1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt_1->Draw("hist");
-	bjet4LPt_1->Draw("hist same");
+	bjet4LPt_1->SetTitle("k_{#lambda} = -1.0");
+	bjet4LPt_1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt_1->Draw("hist");
+	bjet3LPt_1->Draw("hist same");
 	bjet2LPt_1->Draw("hist same");
 	bjetLPt_1->Draw("hist same");
 	leg1->Draw();
 
 	C->cd(4);	
-	bjet3LPt_2->SetTitle("k_{#lambda} = -2.0");
-	bjet3LPt_2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt_2->Draw("hist");
-	bjet4LPt_2->Draw("hist same");
+	bjet4LPt_2->SetTitle("k_{#lambda} = -2.0");
+	bjet4LPt_2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt_2->Draw("hist");
+	bjet3LPt_2->Draw("hist same");
 	bjet2LPt_2->Draw("hist same");
 	bjetLPt_2->Draw("hist same");
 	leg1->Draw();
@@ -1480,37 +2480,37 @@ int main()
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
-	bjet3LPt1->SetTitle("k_{#lambda} = 1.0");
-	bjet3LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt1->Draw("hist same");
+	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
 	bjet4LPt1->Draw("hist same");
+	bjet3LPt1->Draw("hist same");
 	bjet2LPt1->Draw("hist same");
 	bjetLPt1->Draw("hist same");
 	leg1->Draw();
 	
 	C->cd(2);
-	bjet3LPt2->SetTitle("k_{#lambda} = 2.0");
-	bjet3LPt2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt2->Draw("hist");
-	bjet4LPt2->Draw("hist same");
+	bjet4LPt2->SetTitle("k_{#lambda} = 2.0");
+	bjet4LPt2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt2->Draw("hist");
+	bjet3LPt2->Draw("hist same");
 	bjet2LPt2->Draw("hist same");
 	bjetLPt2->Draw("hist same");
 	leg1->Draw();
 	
 	C->cd(3);
-	bjet3LPt2_5->SetTitle("k_{#lambda} = 2.5");
-	bjet3LPt2_5->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt2_5->Draw("hist");
-	bjet4LPt2_5->Draw("hist same");
+	bjet4LPt2_5->SetTitle("k_{#lambda} = 2.5");
+	bjet4LPt2_5->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt2_5->Draw("hist");
+	bjet3LPt2_5->Draw("hist same");
 	bjet2LPt2_5->Draw("hist same");
 	bjetLPt2_5->Draw("hist same");
 	leg1->Draw();
 	
 	C->cd(4);
-	bjet3LPt3->SetTitle("k_{#lambda} = 3.0");
-	bjet3LPt3->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
-	bjet3LPt3->Draw("hist");
-	bjet4LPt3->Draw("hist same");
+	bjet4LPt3->SetTitle("k_{#lambda} = 3.0");
+	bjet4LPt3->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt3->Draw("hist");
+	bjet3LPt3->Draw("hist same");
 	bjet2LPt3->Draw("hist same");
 	bjetLPt3->Draw("hist same");
 	leg1->Draw();
@@ -1520,24 +2520,24 @@ int main()
 	C->Clear();
 	C->Divide(1,2);
 	C->cd(1);
-	bjet3LPt1->SetTitle("k_{#lambda} = 1.0");
-	bjet3LPt1->Draw("hist");
-	bjet4LPt1->Draw("hist same");
+	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LPt1->Draw("hist");
+	bjet3LPt1->Draw("hist same");
 	bjet2LPt1->Draw("hist same");
 	bjetLPt1->Draw("hist same");
 	leg1->Draw();
 
 	C->cd(2);
-	bjet2LPtB->SetTitle("pp->4b");
-	bjet2LPtB->Draw("hist");
-	bjet4LPtB->Draw("hist same");
+	bjet4LPtB->SetTitle("pp->4b");
+	bjet4LPtB->Draw("hist");
+	bjet2LPtB->Draw("hist same");
 	bjetLPtB->Draw("hist same");
 	bjet3LPtB->Draw("hist same");
 	leg1->Draw();
 	C->Print(out_file_,"pdf");
 	
 	//! page12
-	//! 5 leading Jets
+	//! 4 leading Jets
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
@@ -1650,8 +2650,247 @@ int main()
 	jetLPtB->Draw("hist same");
 	leg2->Draw();
 	C->Print(out_file_,"pdf");
-
 	//! page15
+	//! 4 leading Jets invariant mass
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	jet4LM1->SetTitle("k_{#lambda} = 1.0");
+	jet4LM1->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM1->Draw("hist");
+	jet4LM1->Draw("hist");
+	jet3LM1->Draw("hist same");
+	jet2LM1->Draw("hist same");
+	jetLM1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(2);	
+	gPad->SetLogy();
+	jet4LM0->SetTitle("k_{#lambda} = 0.0");
+	jet4LM0->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM0->Draw("hist");
+	jet4LM0->Draw("hist");
+	jet3LM0->Draw("hist same");
+	jet2LM0->Draw("hist same");
+	jetLM0->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(3);	
+	gPad->SetLogy();
+	jet4LM_1->SetTitle("k_{#lambda} = -1.0");
+	jet4LM_1->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM_1->Draw("hist");
+	jet4LM_1->Draw("hist");
+	jet3LM_1->Draw("hist same");
+	jet2LM_1->Draw("hist same");
+	jetLM_1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(4);	
+	gPad->SetLogy();
+	jet4LM_2->SetTitle("k_{#lambda} = -2.0");
+	jet4LM_2->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM_2->Draw("hist");
+	jet4LM_2->Draw("hist");
+	jet3LM_2->Draw("hist same");
+	jet2LM_2->Draw("hist same");
+	jetLM_2->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! page16
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	jet4LM1->SetTitle("k_{#lambda} = 1.0");
+	jet4LM1->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM1->Draw("hist");
+	jet4LM1->Draw("hist same");
+	jet3LM1->Draw("hist same");
+	jet2LM1->Draw("hist same");
+	jetLM1->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(2);
+	gPad->SetLogy();
+	jet4LM2->SetTitle("k_{#lambda} = 2.0");
+	jet4LM2->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM2->Draw("hist");
+	jet4LM2->Draw("hist");
+	jet3LM2->Draw("hist same");
+	jet2LM2->Draw("hist same");
+	jetLM2->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(3);
+	gPad->SetLogy();
+	jet4LM2_5->SetTitle("k_{#lambda} = 2.5");
+	jet4LM2_5->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM2_5->Draw("hist");
+	jet4LM2_5->Draw("hist");
+	jet3LM2_5->Draw("hist same");
+	jet2LM2_5->Draw("hist same");
+	jetLM2_5->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(4);
+	gPad->SetLogy();
+	jet4LM3->SetTitle("k_{#lambda} = 3.0");
+	jet4LM3->GetXaxis()->SetTitle("m_{j} [GeV]");
+	//jet5LM3->Draw("hist");
+	jet4LM3->Draw("hist");
+	jet3LM3->Draw("hist same");
+	jet2LM3->Draw("hist same");
+	jetLM3->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! page17
+	C->Clear();
+	C->Divide(1,2);
+	C->cd(1);
+	gPad->SetLogy();
+	jet4LM1->SetTitle("k_{#lambda} = 1.0");
+	jet4LM1->Draw("hist");
+	jet3LM1->Draw("hist same");
+	jet2LM1->Draw("hist same");
+	jetLM1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(2);
+	gPad->SetLogy();
+	jet4LMB->SetTitle("pp->4b");
+	jet4LMB->GetXaxis()->SetTitle("m_{j} [GeV]");
+	jet4LMB->Draw("hist");
+	jet3LMB->Draw("hist same");
+	jet2LMB->Draw("hist same");
+	jetLMB->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+
+	//! page18
+	//! 4 leading Jets invariant mass
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	bjet4LM1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LM1->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM1->Draw("hist");
+	bjet4LM1->Draw("hist");
+	bjet3LM1->Draw("hist same");
+	bjet2LM1->Draw("hist same");
+	bjetLM1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(2);	
+	gPad->SetLogy();
+	bjet4LM0->SetTitle("k_{#lambda} = 0.0");
+	bjet4LM0->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM0->Draw("hist");
+	bjet4LM0->Draw("hist");
+	bjet3LM0->Draw("hist same");
+	bjet2LM0->Draw("hist same");
+	bjetLM0->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(3);	
+	gPad->SetLogy();
+	bjet4LM_1->SetTitle("k_{#lambda} = -1.0");
+	bjet4LM_1->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM_1->Draw("hist");
+	bjet4LM_1->Draw("hist");
+	bjet3LM_1->Draw("hist same");
+	bjet2LM_1->Draw("hist same");
+	bjetLM_1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(4);	
+	gPad->SetLogy();
+	bjet4LM_2->SetTitle("k_{#lambda} = -2.0");
+	bjet4LM_2->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM_2->Draw("hist");
+	bjet4LM_2->Draw("hist");
+	bjet3LM_2->Draw("hist same");
+	bjet2LM_2->Draw("hist same");
+	bjetLM_2->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! page19
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	bjet4LM1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LM1->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM1->Draw("hist");
+	bjet4LM1->Draw("hist same");
+	bjet3LM1->Draw("hist same");
+	bjet2LM1->Draw("hist same");
+	bjetLM1->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(2);
+	gPad->SetLogy();
+	bjet4LM2->SetTitle("k_{#lambda} = 2.0");
+	bjet4LM2->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM2->Draw("hist");
+	bjet4LM2->Draw("hist");
+	bjet3LM2->Draw("hist same");
+	bjet2LM2->Draw("hist same");
+	bjetLM2->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(3);
+	gPad->SetLogy();
+	bjet4LM2_5->SetTitle("k_{#lambda} = 2.5");
+	bjet4LM2_5->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM2_5->Draw("hist");
+	bjet4LM2_5->Draw("hist");
+	bjet3LM2_5->Draw("hist same");
+	bjet2LM2_5->Draw("hist same");
+	bjetLM2_5->Draw("hist same");
+	leg2->Draw();
+	
+	C->cd(4);
+	gPad->SetLogy();
+	bjet4LM3->SetTitle("k_{#lambda} = 3.0");
+	bjet4LM3->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	//bjet5LM3->Draw("hist");
+	bjet4LM3->Draw("hist");
+	bjet3LM3->Draw("hist same");
+	bjet2LM3->Draw("hist same");
+	bjetLM3->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! page20
+	C->Clear();
+	C->Divide(1,2);
+	C->cd(1);
+	gPad->SetLogy();
+	bjet4LM1->SetTitle("k_{#lambda} = 1.0");
+	bjet4LM1->Draw("hist");
+	bjet3LM1->Draw("hist same");
+	bjet2LM1->Draw("hist same");
+	bjetLM1->Draw("hist same");
+	leg2->Draw();
+
+	C->cd(2);
+	gPad->SetLogy();
+	bjet4LMB->SetTitle("pp->4b");
+	bjet4LMB->GetXaxis()->SetTitle("m_{bjet} [GeV]");
+	bjet4LMB->Draw("hist");
+	bjet3LMB->Draw("hist same");
+	bjet2LMB->Draw("hist same");
+	bjetLMB->Draw("hist same");
+	leg2->Draw();
+	C->Print(out_file_,"pdf");
+
+	//! page21
 	//! bquark leading for various lambda, 
 	//! bquark sub leading for various lambda, 
 	//! bquark 3rd leading for various lambda, 
@@ -1661,7 +2900,7 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	gPad->SetLogy();
-	bLPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	bLPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	bLPtB->Draw("hist ");
 	bLPt3->Draw("hist same");
 	bLPt1->Draw("hist same");
@@ -1674,7 +2913,7 @@ int main()
 	
 	C->cd(2);
 	gPad->SetLogy();
-	b2LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	b2LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	b2LPtB->Draw("hist");
 	b2LPt3->Draw("hist same");
 	b2LPt1->Draw("hist same");
@@ -1688,7 +2927,7 @@ int main()
 	C->cd(3);
 	gPad->SetLogy();
 	b3LPtB->GetXaxis()->SetRangeUser(0,250);
-	b3LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	b3LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	b3LPtB->Draw("hist");
 	b3LPt_2->Draw("hist same");
 	b3LPt3->Draw("hist same");
@@ -1703,7 +2942,7 @@ int main()
 	gPad->SetLogy();
 	b4LPtB->SetTitle("P_{t} of 4th leading b quark");
 	b4LPtB->GetXaxis()->SetRangeUser(0,150);
-	b4LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	b4LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	
 	b4LPtB->Draw("hist");
 	b4LPt_2->Draw("hist same");
@@ -1716,7 +2955,7 @@ int main()
 	leg_higgs->Draw();
 	C->Print(out_file_,"pdf");
 
-	//! page16
+	//! page22
 	//! b-jet leading for various lambda, 
 	//! b-jet sub leading for various lambda, 
 	//! b-jet 3rd leading for various lambda, 
@@ -1726,7 +2965,7 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	gPad->SetLogy();
-	bjetLPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	bjetLPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	bjetLPtB->Draw("hist");
 	bjetLPt_2->Draw("hist same");
 	bjetLPt2->Draw("hist same");
@@ -1739,7 +2978,7 @@ int main()
 	
 	C->cd(2);
 	gPad->SetLogy();
-	bjet2LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	bjet2LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	bjet2LPtB->Draw("hist");
 	bjet2LPt_2->Draw("hist same");
 	bjet2LPt2->Draw("hist same");
@@ -1753,7 +2992,7 @@ int main()
 	C->cd(3);
 	gPad->SetLogy();
 	bjet3LPtB->GetXaxis()->SetRangeUser(0,250);
-	bjet3LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	bjet3LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	bjet3LPtB->Draw("hist");
 	bjet3LPt_2->Draw("hist same");
 	bjet3LPt3->Draw("hist same");
@@ -1767,7 +3006,7 @@ int main()
 	C->cd(4);
 	gPad->SetLogy();
 	bjet4LPtB->GetXaxis()->SetRangeUser(0,150);
-	bjet4LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	bjet4LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	
 	bjet4LPtB->Draw("hist");
 	bjet4LPt_2->Draw("hist same");
@@ -1780,7 +3019,7 @@ int main()
 	leg_higgs->Draw();
 	C->Print(out_file_,"pdf");
 	
-	//! page17
+	//! page23
 	//! jet leading for various lambda, 
 	//! jet sub leading for various lambda, 
 	//! jet 3rd leading for various lambda, 
@@ -1790,7 +3029,7 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	gPad->SetLogy();
-	jetLPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	jetLPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	jetLPtB->Draw("hist");
 	jetLPt_2->Draw("hist same");
 	jetLPt2->Draw("hist same");
@@ -1803,7 +3042,7 @@ int main()
 	
 	C->cd(2);
 	gPad->SetLogy();
-	jet2LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	jet2LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	jet2LPtB->Draw("hist");
 	jet2LPt_2->Draw("hist same");
 	jet2LPt2->Draw("hist same");
@@ -1817,7 +3056,7 @@ int main()
 	C->cd(3);
 	gPad->SetLogy();
 	jet3LPtB->GetXaxis()->SetRangeUser(0,250);
-	jet3LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	jet3LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	jet3LPtB->Draw("hist");
 	jet3LPt_2->Draw("hist same");
 	jet3LPt3->Draw("hist same");
@@ -1831,7 +3070,7 @@ int main()
 	C->cd(4);
 	gPad->SetLogy();
 	jet4LPtB->GetXaxis()->SetRangeUser(0,150);
-	jet4LPtB->GetYaxis()->SetRangeUser(1e3,5e10);
+	jet4LPtB->GetYaxis()->SetRangeUser(1e2,5e10);
 	
 	jet4LPtB->Draw("hist");
 	jet4LPt_2->Draw("hist same");
@@ -1844,7 +3083,7 @@ int main()
 	leg_higgs->Draw();
 	C->Print(out_file_,"pdf");
 	
-	//! page18
+	//! page24
 	//! bquark central for various lambda, 
 	//! bquark sub Central for various lambda, 
 	//! bquark 3rd Central for various lambda, 
@@ -1854,7 +3093,7 @@ int main()
 	C->cd(1);
 	//C->SetLogy(0);
 	gPad->SetLogy();
-	bCEtaB->GetYaxis()->SetRangeUser(1e3,5e10);
+	bCEtaB->GetYaxis()->SetRangeUser(1e2,5e10);
 	bCEtaB->Draw("hist ");
 	bCEta3->Draw("hist same");
 	bCEta1->Draw("hist same");
@@ -1867,7 +3106,7 @@ int main()
 	
 	C->cd(2);
 	gPad->SetLogy();
-	b2CEtaB->GetYaxis()->SetRangeUser(1e3,5e10);
+	b2CEtaB->GetYaxis()->SetRangeUser(1e2,5e10);
 	b2CEtaB->Draw("hist");
 	b2CEta3->Draw("hist same");
 	b2CEta1->Draw("hist same");
@@ -1880,7 +3119,7 @@ int main()
 	
 	C->cd(3);
 	gPad->SetLogy();
-	b3CEtaB->GetYaxis()->SetRangeUser(1e3,5e10);
+	b3CEtaB->GetYaxis()->SetRangeUser(1e2,5e10);
 	b3CEtaB->Draw("hist");
 	b3CEta_2->Draw("hist same");
 	b3CEta3->Draw("hist same");
@@ -1893,7 +3132,7 @@ int main()
 	
 	C->cd(4);
 	gPad->SetLogy();
-	b4CEtaB->GetYaxis()->SetRangeUser(1e3,5e10);
+	b4CEtaB->GetYaxis()->SetRangeUser(1e2,5e10);
 	b4CEtaB->Draw("hist");
 	b4CEta_2->Draw("hist same");
 	b4CEta1->Draw("hist same");
@@ -1905,7 +3144,7 @@ int main()
 	leg_higgs->Draw();
 	C->Print(out_file_,"pdf");
 
-	//! page19
+	//! page25
 	//! Number of b tagged jets in an event
 	C->Clear();
 	C->Divide(2,2);
@@ -1938,7 +3177,7 @@ int main()
 	leg6->Draw();
 	C->Print(out_file_,"pdf");
 
-	//! page20
+	//! page26
 	C->Clear();
 	C->Divide(2,2);
 	leg3->Clear();
@@ -1973,6 +3212,97 @@ int main()
 	leg6->AddEntry((TObject*)0,Form("4btags = %f",h_NbTagsB->Integral(0,5) - h_NbTagsB->Integral(0,4)),"");
 	leg6->AddEntry((TObject*)0,Form("3btags = %f",h_NbTagsB->Integral(0,4) - h_NbTagsB->Integral(0,3)),"");
 	leg6->Draw();
+	C->Print(out_file_,"pdf");
+
+	//! page27
+	C->Clear();
+	C->Divide(2,3);
+	C->cd(1);
+	gPad->SetLogy();
+	M_b1b2_1->Draw("hist");
+	C->cd(2);
+	gPad->SetLogy();
+	M_b1b3_1->Draw("hist");
+	C->cd(3);
+	gPad->SetLogy();
+	M_b1b4_1->Draw("hist");
+	C->cd(4);
+	gPad->SetLogy();
+	M_b2b3_1->Draw("hist");
+	C->cd(5);
+	gPad->SetLogy();
+	M_b2b4_1->Draw("hist");
+	C->cd(6);
+	gPad->SetLogy();
+	M_b3b4_1->Draw("hist");
+	C->Print(out_file_,"pdf");
+
+	//! page28
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	C->Clear();
+	C->Divide(1,3);
+	C->cd(1);
+	gPad->SetLogy();
+	dM_b1b2_b3b4_1->Draw("hist");
+	C->cd(2);
+	gPad->SetLogy();
+	dM_b1b3_b2b4_1->Draw("hist");
+	C->cd(3);
+	gPad->SetLogy();
+	dM_b1b4_b2b3_1->Draw("hist");
+	C->Print(out_file_,"pdf");
+
+	//! page29
+	// invariant mass of a pair of b's, pp->4b
+	C->Clear();
+	C->Divide(2,3);
+	C->cd(1);
+	gPad->SetLogy();
+	M_b1b2_B->Draw("hist");
+	C->cd(2);
+	gPad->SetLogy();
+	M_b1b3_B->Draw("hist");
+	C->cd(3);
+	gPad->SetLogy();
+	M_b1b4_B->Draw("hist");
+	C->cd(4);
+	gPad->SetLogy();
+	M_b2b3_B->Draw("hist");
+	C->cd(5);
+	gPad->SetLogy();
+	M_b2b4_B->Draw("hist");
+	C->cd(6);
+	gPad->SetLogy();
+	M_b3b4_B->Draw("hist");
+	C->Print(out_file_,"pdf");
+
+	//! page30
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	C->Clear();
+	C->Divide(1,3);
+	C->cd(1);
+	gPad->SetLogy();
+	dM_b1b2_b3b4_B->Draw("hist");
+	C->cd(2);
+	gPad->SetLogy();
+	dM_b1b3_b2b4_B->Draw("hist");
+	C->cd(3);
+	gPad->SetLogy();
+	dM_b1b4_b2b3_B->Draw("hist");
+	C->Print(out_file_,"pdf");
+
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	M_Lhiggs1->Draw("hist");
+	C->cd(2);
+	M_NLhiggs1->Draw("hist");
+	C->cd(3);
+	M_LhiggsB->Draw("hist");
+	C->cd(4);
+	M_NLhiggsB->Draw("hist");
 	C->Print(out_file_close,"pdf");
 	return 0;
 }
