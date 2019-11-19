@@ -20,24 +20,33 @@
 #include "TF1.h"
 #include "TLatex.h"
 
+const int min_Njets = 4;
+const double minLeadingPt = 55.0;//GeV
+const double minSubLeadingPt = 40.0;//GeV
 const double HiggsMass = 125.0;//GeV
 const double MassWidth = 80.0;//GeV
 
-const double IntLumi   = 1e4;//fb-1 -> 10 ab-1
-const double pp4bXsec  = 23.283e6;//fb, NLO Xsection
-const double ggFhhXsec = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+const double IntLumi      = 1e4;//fb-1 -> 10 ab-1
+const double pp4bXsec     = 23.283e6;//fb, NLO Xsection
+const double ggFhhXsec1   = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+const double ggFhhXsec0   = 2340.91;
+const double ggFhhXsec_1  = 3986.84;
+const double ggFhhXsec_2  = 6157.58;
+const double ggFhhXsec2   = 624.195;
+const double ggFhhXsec2_5 = 522.665;
+const double ggFhhXsec3   = 551.980;
 
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "ggFhh4b_2.5_5_1Norm_smeared";
+const char *output_file_name = "GenJet4b2_2.5_4";
 
-const char *inp_file1  = "./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_5.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet_ggF_Ctr0.0_q1.2GeV_2.5_5.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet_ggF_Ctr-1.0_q1.2GeV_2.5_5.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet_ggF_Ctr-2.0_q1.2GeV_2.5_5.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet_ggF_Ctr2.0_q1.2GeV_2.5_5.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet_ggF_Ctr2.5_q1.2GeV_2.5_5.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet_ggF_Ctr3.0_q1.2GeV_2.5_5.root"; 
-const char *inp_fileB  = "./fastjet_output/Genjet_pp4b_q1.2GeV_2.5_5.root"; 
+const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_4.root"; 
+const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_4.root"; 
+const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_4.root"; 
+const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_4.root"; 
+const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_4.root"; 
+const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_4.root"; 
+const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_4.root"; 
+const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_4.root"; 
 
 TFile *f1  = nullptr;
 TFile *f0  = nullptr;
@@ -67,15 +76,189 @@ TLegend *leg4 = nullptr;
 TLegend *leg5 = nullptr;
 TLegend *leg6 = nullptr;
 
-//! Get bjetMt2 in locally defined std::vector
-std::vector<double> v1_bjetMt2;
-std::vector<double> v0_bjetMt2;
-std::vector<double> v_1_bjetMt2;
-std::vector<double> v_2_bjetMt2;
-std::vector<double> v2_bjetMt2;
-std::vector<double> v2_5_bjetMt2;
-std::vector<double> v3_bjetMt2;
-std::vector<double> vB_bjetMt2;
+std::vector<double> *v1_higgsPt  = nullptr;
+std::vector<double> *v1_higgsEta = nullptr;
+std::vector<double> *v1_higgsPhi = nullptr;
+std::vector<double> *v1_higgsM   = nullptr;
+
+std::vector<double> *v0_higgsPt  = nullptr;
+std::vector<double> *v0_higgsEta = nullptr;
+std::vector<double> *v0_higgsPhi = nullptr;
+std::vector<double> *v0_higgsM   = nullptr;
+
+std::vector<double> *v_1_higgsPt  = nullptr;
+std::vector<double> *v_1_higgsEta = nullptr;
+std::vector<double> *v_1_higgsPhi = nullptr;
+std::vector<double> *v_1_higgsM   = nullptr;
+
+std::vector<double> *v_2_higgsPt  = nullptr;
+std::vector<double> *v_2_higgsEta = nullptr;
+std::vector<double> *v_2_higgsPhi = nullptr;
+std::vector<double> *v_2_higgsM   = nullptr;
+
+std::vector<double> *v2_higgsPt  = nullptr;
+std::vector<double> *v2_higgsEta = nullptr;
+std::vector<double> *v2_higgsPhi = nullptr;
+std::vector<double> *v2_higgsM   = nullptr;
+
+std::vector<double> *v2_5_higgsPt  = nullptr;
+std::vector<double> *v2_5_higgsEta = nullptr;
+std::vector<double> *v2_5_higgsPhi = nullptr;
+std::vector<double> *v2_5_higgsM   = nullptr;
+
+std::vector<double> *v3_higgsPt  = nullptr;
+std::vector<double> *v3_higgsEta = nullptr;
+std::vector<double> *v3_higgsPhi = nullptr;
+std::vector<double> *v3_higgsM   = nullptr;
+
+TLorentzVector higgs1_1, higgs2_1, H1H2_1;
+TLorentzVector higgs1_0, higgs2_0, H1H2_0;
+TLorentzVector higgs1__1, higgs2__1, H1H2__1;
+TLorentzVector higgs1__2, higgs2__2, H1H2__2;
+TLorentzVector higgs1_2, higgs2_2, H1H2_2;
+TLorentzVector higgs1_2_5, higgs2_2_5, H1H2_2_5;
+TLorentzVector higgs1_3, higgs2_3, H1H2_3;
+
+TH1D *MH1H2_1 = nullptr; 
+TH1D *MH1H2_0 = nullptr; 
+TH1D *MH1H2__1 = nullptr; 
+TH1D *MH1H2__2 = nullptr; 
+TH1D *MH1H2_2 = nullptr; 
+TH1D *MH1H2_2_5 = nullptr; 
+TH1D *MH1H2_3 = nullptr; 
+
+std::vector<double> *v1_bPt  = nullptr;
+std::vector<double> *v1_bEta = nullptr;
+std::vector<double> *v1_bPhi = nullptr;
+std::vector<double> *v1_bM   = nullptr;
+
+std::vector<double> *v0_bPt  = nullptr;
+std::vector<double> *v0_bEta = nullptr;
+std::vector<double> *v0_bPhi = nullptr;
+std::vector<double> *v0_bM   = nullptr;
+
+std::vector<double> *v_1_bPt  = nullptr;
+std::vector<double> *v_1_bEta = nullptr;
+std::vector<double> *v_1_bPhi = nullptr;
+std::vector<double> *v_1_bM   = nullptr;
+
+std::vector<double> *v_2_bPt  = nullptr;
+std::vector<double> *v_2_bEta = nullptr;
+std::vector<double> *v_2_bPhi = nullptr;
+std::vector<double> *v_2_bM   = nullptr;
+
+std::vector<double> *v2_bPt  = nullptr;
+std::vector<double> *v2_bEta = nullptr;
+std::vector<double> *v2_bPhi = nullptr;
+std::vector<double> *v2_bM   = nullptr;
+
+std::vector<double> *v2_5_bPt  = nullptr;
+std::vector<double> *v2_5_bEta = nullptr;
+std::vector<double> *v2_5_bPhi = nullptr;
+std::vector<double> *v2_5_bM   = nullptr;
+
+std::vector<double> *v3_bPt  = nullptr;
+std::vector<double> *v3_bEta = nullptr;
+std::vector<double> *v3_bPhi = nullptr;
+std::vector<double> *v3_bM   = nullptr;
+
+std::vector<double> *vB_bPt  = nullptr;
+std::vector<double> *vB_bEta = nullptr;
+std::vector<double> *vB_bPhi = nullptr;
+std::vector<double> *vB_bM   = nullptr;
+
+TLorentzVector b1_1, b2_1, b3_1, b4_1;
+TLorentzVector b1b2_1, b1b3_1, b1b4_1, b2b3_1, b2b4_1, b3b4_1;
+TLorentzVector b1_0, b2_0, b3_0, b4_0;
+TLorentzVector b1b2_0, b1b3_0, b1b4_0, b2b3_0, b2b4_0, b3b4_0;
+TLorentzVector b1__1, b2__1, b3__1, b4__1;
+TLorentzVector b1b2__1, b1b3__1, b1b4__1, b2b3__1, b2b4__1, b3b4__1;
+TLorentzVector b1__2, b2__2, b3__2, b4__2;
+TLorentzVector b1b2__2, b1b3__2, b1b4__2, b2b3__2, b2b4__2, b3b4__2;
+TLorentzVector b1_2, b2_2, b3_2, b4_2;
+TLorentzVector b1b2_2, b1b3_2, b1b4_2, b2b3_2, b2b4_2, b3b4_2;
+TLorentzVector b1_2_5, b2_2_5, b3_2_5, b4_2_5;
+TLorentzVector b1b2_2_5, b1b3_2_5, b1b4_2_5, b2b3_2_5, b2b4_2_5, b3b4_2_5;
+TLorentzVector b1_3, b2_3, b3_3, b4_3;
+TLorentzVector b1b2_3, b1b3_3, b1b4_3, b2b3_3, b2b4_3, b3b4_3;
+
+TLorentzVector b1_B, b2_B, b3_B, b4_B;
+TLorentzVector b1b2_B, b1b3_B, b1b4_B, b2b3_B, b2b4_B, b3b4_B;
+
+TH1D *Mb1b2_1 = nullptr; 
+TH1D *Mb1b3_1 = nullptr;
+TH1D *Mb1b4_1 = nullptr;
+TH1D *Mb2b3_1 = nullptr;
+TH1D *Mb2b4_1 = nullptr;
+TH1D *Mb3b4_1 = nullptr;
+
+TH1D *Mb1b2_0 = nullptr; 
+TH1D *Mb1b3_0 = nullptr;
+TH1D *Mb1b4_0 = nullptr;
+TH1D *Mb2b3_0 = nullptr;
+TH1D *Mb2b4_0 = nullptr;
+TH1D *Mb3b4_0 = nullptr;
+
+TH1D *Mb1b2__1 = nullptr; 
+TH1D *Mb1b3__1 = nullptr;
+TH1D *Mb1b4__1 = nullptr;
+TH1D *Mb2b3__1 = nullptr;
+TH1D *Mb2b4__1 = nullptr;
+TH1D *Mb3b4__1 = nullptr;
+
+TH1D *Mb1b2__2 = nullptr; 
+TH1D *Mb1b3__2 = nullptr;
+TH1D *Mb1b4__2 = nullptr;
+TH1D *Mb2b3__2 = nullptr;
+TH1D *Mb2b4__2 = nullptr;
+TH1D *Mb3b4__2 = nullptr;
+
+TH1D *Mb1b2_2 = nullptr; 
+TH1D *Mb1b3_2 = nullptr;
+TH1D *Mb1b4_2 = nullptr;
+TH1D *Mb2b3_2 = nullptr;
+TH1D *Mb2b4_2 = nullptr;
+TH1D *Mb3b4_2 = nullptr;
+
+TH1D *Mb1b2_2_5 = nullptr; 
+TH1D *Mb1b3_2_5 = nullptr;
+TH1D *Mb1b4_2_5 = nullptr;
+TH1D *Mb2b3_2_5 = nullptr;
+TH1D *Mb2b4_2_5 = nullptr;
+TH1D *Mb3b4_2_5 = nullptr;
+
+TH1D *Mb1b2_3 = nullptr; 
+TH1D *Mb1b3_3 = nullptr;
+TH1D *Mb1b4_3 = nullptr;
+TH1D *Mb2b3_3 = nullptr;
+TH1D *Mb2b4_3 = nullptr;
+TH1D *Mb3b4_3 = nullptr;
+
+TH1D *Mb1b2_B = nullptr; 
+TH1D *Mb1b3_B = nullptr;
+TH1D *Mb1b4_B = nullptr;
+TH1D *Mb2b3_B = nullptr;
+TH1D *Mb2b4_B = nullptr;
+TH1D *Mb3b4_B = nullptr;
+
+TLorentzVector bJ1_1, bJ2_1, bJ3_1, bJ4_1;
+TLorentzVector bJ1bJ2_1, bJ1bJ3_1, bJ1bJ4_1, bJ2bJ3_1, bJ2bJ4_1, bJ3bJ4_1;
+TLorentzVector bJ1_0, bJ2_0, bJ3_0, bJ4_0;
+TLorentzVector bJ1bJ2_0, bJ1bJ3_0, bJ1bJ4_0, bJ2bJ3_0, bJ2bJ4_0, bJ3bJ4_0;
+TLorentzVector bJ1__1, bJ2__1, bJ3__1, bJ4__1;
+TLorentzVector bJ1bJ2__1, bJ1bJ3__1, bJ1bJ4__1, bJ2bJ3__1, bJ2bJ4__1, bJ3bJ4__1;
+TLorentzVector bJ1__2, bJ2__2, bJ3__2, bJ4__2;
+TLorentzVector bJ1bJ2__2, bJ1bJ3__2, bJ1bJ4__2, bJ2bJ3__2, bJ2bJ4__2, bJ3bJ4__2;
+TLorentzVector bJ1_2, bJ2_2, bJ3_2, bJ4_2;
+TLorentzVector bJ1bJ2_2, bJ1bJ3_2, bJ1bJ4_2, bJ2bJ3_2, bJ2bJ4_2, bJ3bJ4_2;
+TLorentzVector bJ1_2_5, bJ2_2_5, bJ3_2_5, bJ4_2_5;
+TLorentzVector bJ1bJ2_2_5, bJ1bJ3_2_5, bJ1bJ4_2_5, bJ2bJ3_2_5, bJ2bJ4_2_5, bJ3bJ4_2_5;
+TLorentzVector bJ1_3, bJ2_3, bJ3_3, bJ4_3;
+TLorentzVector bJ1bJ2_3, bJ1bJ3_3, bJ1bJ4_3, bJ2bJ3_3, bJ2bJ4_3, bJ3bJ4_3;
+
+TLorentzVector bJ1_B, bJ2_B, bJ3_B, bJ4_B;
+TLorentzVector bJ1bJ2_B, bJ1bJ3_B, bJ1bJ4_B, bJ2bJ3_B, bJ2bJ4_B, bJ3bJ4_B;
+
 //! Get bjetPt in locally defined std::vector
 std::vector<double> v1_bjetPt;
 std::vector<double> v0_bjetPt;
@@ -85,6 +268,33 @@ std::vector<double> v2_bjetPt;
 std::vector<double> v2_5_bjetPt;
 std::vector<double> v3_bjetPt;
 std::vector<double> vB_bjetPt;
+//! Get bjetEta in locally defined std::vector
+std::vector<double> v1_bjetEta;
+std::vector<double> v0_bjetEta;
+std::vector<double> v_1_bjetEta;
+std::vector<double> v_2_bjetEta;
+std::vector<double> v2_bjetEta;
+std::vector<double> v2_5_bjetEta;
+std::vector<double> v3_bjetEta;
+std::vector<double> vB_bjetEta;
+//! Get bjetPhi in locally defined std::vector
+std::vector<double> v1_bjetPhi;
+std::vector<double> v0_bjetPhi;
+std::vector<double> v_1_bjetPhi;
+std::vector<double> v_2_bjetPhi;
+std::vector<double> v2_bjetPhi;
+std::vector<double> v2_5_bjetPhi;
+std::vector<double> v3_bjetPhi;
+std::vector<double> vB_bjetPhi;
+//! Get bjetMt2 in locally defined std::vector
+std::vector<double> v1_bjetM;
+std::vector<double> v0_bjetM;
+std::vector<double> v_1_bjetM;
+std::vector<double> v_2_bjetM;
+std::vector<double> v2_bjetM;
+std::vector<double> v2_5_bjetM;
+std::vector<double> v3_bjetM;
+std::vector<double> vB_bjetM;
 //! Get invariant mass of combinations of bjets  in locally defined std::vector
 //! there are 4 bjets in an event => 6 combination of 2 bjets are possible
 std::vector<double> v1_bibjM;
@@ -95,15 +305,15 @@ std::vector<double> v2_bibjM;
 std::vector<double> v2_5_bibjM;
 std::vector<double> v3_bibjM;
 std::vector<double> vB_bibjM;
-//! Get jetPt in locally defined std::vector
-std::vector<double> *v1_jetMt2 = nullptr;
-std::vector<double> *v0_jetMt2 = nullptr;
-std::vector<double> *v_1_jetMt2 = nullptr;
-std::vector<double> *v_2_jetMt2 = nullptr;
-std::vector<double> *v2_jetMt2 = nullptr;
-std::vector<double> *v2_5_jetMt2 = nullptr;
-std::vector<double> *v3_jetMt2 = nullptr;
-std::vector<double> *vB_jetMt2 = nullptr;
+//! Get jetM in locally defined std::vector
+std::vector<double> *v1_jetM = nullptr;
+std::vector<double> *v0_jetM = nullptr;
+std::vector<double> *v_1_jetM = nullptr;
+std::vector<double> *v_2_jetM = nullptr;
+std::vector<double> *v2_jetM = nullptr;
+std::vector<double> *v2_5_jetM = nullptr;
+std::vector<double> *v3_jetM = nullptr;
+std::vector<double> *vB_jetM = nullptr;
 //! Get jetPt in locally defined std::vector
 std::vector<double> *v1_jetPt = nullptr;
 std::vector<double> *v0_jetPt = nullptr;
@@ -113,6 +323,24 @@ std::vector<double> *v2_jetPt = nullptr;
 std::vector<double> *v2_5_jetPt = nullptr;
 std::vector<double> *v3_jetPt = nullptr;
 std::vector<double> *vB_jetPt = nullptr;
+//! Get jetPhi in locally defined std::vector
+std::vector<double> *v1_jetPhi = nullptr;
+std::vector<double> *v0_jetPhi = nullptr;
+std::vector<double> *v_1_jetPhi = nullptr;
+std::vector<double> *v_2_jetPhi = nullptr;
+std::vector<double> *v2_jetPhi = nullptr;
+std::vector<double> *v2_5_jetPhi = nullptr;
+std::vector<double> *v3_jetPhi = nullptr;
+std::vector<double> *vB_jetPhi = nullptr;
+//! Get jetEta in locally defined std::vector
+std::vector<double> *v1_jetEta = nullptr;
+std::vector<double> *v0_jetEta = nullptr;
+std::vector<double> *v_1_jetEta = nullptr;
+std::vector<double> *v_2_jetEta = nullptr;
+std::vector<double> *v2_jetEta = nullptr;
+std::vector<double> *v2_5_jetEta = nullptr;
+std::vector<double> *v3_jetEta = nullptr;
+std::vector<double> *vB_jetEta = nullptr;
 //! Get tagged flavor of the jets in locally defined std::vector
 std::vector<int> *v1_tagFlavor = nullptr;
 std::vector<int> *v0_tagFlavor = nullptr;
@@ -207,6 +435,84 @@ TH1D *M_b3b4_1 = nullptr;
 TH1D *dM_b1b2_b3b4_1 = nullptr;
 TH1D *dM_b1b3_b2b4_1 = nullptr;
 TH1D *dM_b1b4_b2b3_1 = nullptr;
+
+// invariant mass of a pair of b's, ctr = 0.0
+TH1D *M_b1b2_0 = nullptr;
+TH1D *M_b1b3_0 = nullptr;
+TH1D *M_b1b4_0 = nullptr;
+TH1D *M_b2b3_0 = nullptr;
+TH1D *M_b2b4_0 = nullptr;
+TH1D *M_b3b4_0 = nullptr;
+//relative difference of the jet pairs
+//only 3 combination of jet pairs possible
+TH1D *dM_b1b2_b3b4_0 = nullptr;
+TH1D *dM_b1b3_b2b4_0 = nullptr;
+TH1D *dM_b1b4_b2b3_0 = nullptr;
+
+// invariant mass of a pair of b's, ctr = -1.0
+TH1D *M_b1b2__1 = nullptr;
+TH1D *M_b1b3__1 = nullptr;
+TH1D *M_b1b4__1 = nullptr;
+TH1D *M_b2b3__1 = nullptr;
+TH1D *M_b2b4__1 = nullptr;
+TH1D *M_b3b4__1 = nullptr;
+//relative difference of the jet pairs
+//only 3 combination of jet pairs possible
+TH1D *dM_b1b2_b3b4__1 = nullptr;
+TH1D *dM_b1b3_b2b4__1 = nullptr;
+TH1D *dM_b1b4_b2b3__1 = nullptr;
+
+// invariant mass of a pair of b's, ctr = -2.0
+TH1D *M_b1b2__2 = nullptr;
+TH1D *M_b1b3__2 = nullptr;
+TH1D *M_b1b4__2 = nullptr;
+TH1D *M_b2b3__2 = nullptr;
+TH1D *M_b2b4__2 = nullptr;
+TH1D *M_b3b4__2 = nullptr;
+//relative difference of the jet pairs
+//only 3 combination of jet pairs possible
+TH1D *dM_b1b2_b3b4__2 = nullptr;
+TH1D *dM_b1b3_b2b4__2 = nullptr;
+TH1D *dM_b1b4_b2b3__2 = nullptr;
+
+// invariant mass of a pair of b's, ctr = 2.0
+TH1D *M_b1b2_2 = nullptr;
+TH1D *M_b1b3_2 = nullptr;
+TH1D *M_b1b4_2 = nullptr;
+TH1D *M_b2b3_2 = nullptr;
+TH1D *M_b2b4_2 = nullptr;
+TH1D *M_b3b4_2 = nullptr;
+//relative difference of the jet pairs
+//only 3 combination of jet pairs possible
+TH1D *dM_b1b2_b3b4_2 = nullptr;
+TH1D *dM_b1b3_b2b4_2 = nullptr;
+TH1D *dM_b1b4_b2b3_2 = nullptr;
+
+// invariant mass of a pair of b's, ctr = 2.5
+TH1D *M_b1b2_2_5 = nullptr;
+TH1D *M_b1b3_2_5 = nullptr;
+TH1D *M_b1b4_2_5 = nullptr;
+TH1D *M_b2b3_2_5 = nullptr;
+TH1D *M_b2b4_2_5 = nullptr;
+TH1D *M_b3b4_2_5 = nullptr;
+//relative difference of the jet pairs
+//only 3 combination of jet pairs possible
+TH1D *dM_b1b2_b3b4_2_5 = nullptr;
+TH1D *dM_b1b3_b2b4_2_5 = nullptr;
+TH1D *dM_b1b4_b2b3_2_5 = nullptr;
+
+// invariant mass of a pair of b's, ctr = 3.0
+TH1D *M_b1b2_3 = nullptr;
+TH1D *M_b1b3_3 = nullptr;
+TH1D *M_b1b4_3 = nullptr;
+TH1D *M_b2b3_3 = nullptr;
+TH1D *M_b2b4_3 = nullptr;
+TH1D *M_b3b4_3 = nullptr;
+//relative difference of the jet pairs
+//only 3 combination of jet pairs possible
+TH1D *dM_b1b2_b3b4_3 = nullptr;
+TH1D *dM_b1b3_b2b4_3 = nullptr;
+TH1D *dM_b1b4_b2b3_3 = nullptr;
 
 // invariant mass of a pair of b's, pp->4b
 TH1D *M_b1b2_B = nullptr;
