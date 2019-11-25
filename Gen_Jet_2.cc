@@ -29,9 +29,9 @@ int main()
   const double SCALEfac_Ereso 		= 0.5; //50%
   const double TrackerAcceptance 	= 2.5;
 
-  const double R 			= 0.4;
+  const double R 			= 0.2;
   const double PTMINJET 		= 25.0e3;//MeV
-  int MAX_NLEADINGJETS 			= 5;// number of jets to be b-tagged-> 99 for all
+  int MAX_NLEADINGJETS 			= 99;// number of jets to be b-tagged-> 99 for all
 
   //! b-tag info
   const double MinQuarkPt = 15e3;//MeV
@@ -53,16 +53,16 @@ int main()
 
   //! store results in an output root file 
   //TFile *f_out = new TFile("./fastjet_output/test_all.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_2.5_4.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_5.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.2.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
  
   //! open input trees 
   TChain rec("CollectionTree");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_4bQCD_pythia82_GenCuts.v3_output.root/*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_4bQCD_pythia82_GenCuts.v3_output.root/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
   
   //! Get total no. of events
   Long64_t nevents = 500000;
@@ -510,7 +510,7 @@ int main()
 
 				}
 			}
-			if(dR < 0.4)
+			if(dR < R)
 			{ 
 				matchFound = gRandom->Uniform(0,1);
 				if(matchFound <= fb ) btagged_flavor = 5;
@@ -531,7 +531,7 @@ int main()
 
 				}
 			}
-			if(dR < 0.4) 
+			if(dR < R) 
 			{
 				matchFound = gRandom->Uniform(0,1);
 				if(matchFound <= fc) btagged_flavor = 4;
@@ -551,7 +551,7 @@ int main()
 
 				}
 			}
-			if(dR < 0.4)
+			if(dR < R)
 			{
 				matchFound = gRandom->Uniform(0,1);
 				if(matchFound <= fl) btagged_flavor = 3;
@@ -594,7 +594,7 @@ int main()
 			}
 		}
 		if(debug) std::cout <<"dR: " <<dR <<std::endl;
-		if(dR < 0.4)
+		if(dR < R)
 		{
 			//! store result, i.e. in vectorof_jetEta: keep only jets matched to b quarks 
 			//! Notice that incl_bquarks_eta is sorted hence vectorof_jetEta[ii] will also be already sorted	
@@ -649,7 +649,7 @@ int main()
 			}
 		}
 		if(debug) std::cout <<"dR: " <<dR <<std::endl;
-		if(dR < 0.4)
+		if(dR < R)
 		{
 			//! store result, i.e. in vectorof_bJetsPt: keep only jets matched to b quarks 
 			//! Notice that incl_bquarks_pt is sorted hence vectorof_bJetsPt[ii] will also be already sorted	

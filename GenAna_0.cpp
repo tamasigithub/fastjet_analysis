@@ -73,7 +73,7 @@ void Set_higgsPtProps_0()
 	
 	M_NLhiggs0->SetLineWidth(2);
 	
-	MH1H2_0  = new TH1D("MH1H2_0",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, Mmin, Mmax);
+	MH1H2_0  = new TH1D("MH1H2_0",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
 
 	MH1H2_0->SetLineColor(kBlack);
 	
@@ -337,6 +337,70 @@ void Fill_bjetPtM_0(int &nhiggs)
 	return;
 }
 
+void SetLineWidth0() 
+{
+	MH1H2_0->SetLineWidth(2); 
+
+	Mb1b2_0->SetLineWidth(2); 
+	Mb1b3_0->SetLineWidth(2);
+	Mb1b4_0->SetLineWidth(2);
+	Mb2b3_0->SetLineWidth(2);
+	Mb2b4_0->SetLineWidth(2);
+	Mb3b4_0->SetLineWidth(2);
+
+	h_NbTags0->SetLineWidth(2);
+	NSMhiggs0->SetLineWidth(2);
+	Nbquarks0->SetLineWidth(2);
+	Njets0->SetLineWidth(2);
+	higgsPt0->SetLineWidth(2);
+	higgsNLPt0->SetLineWidth(2);
+	M_Lhiggs0->SetLineWidth(2);
+	M_NLhiggs0->SetLineWidth(2);
+	
+	// invariant mass of a pair of b's, ctr = 0.0
+	M_b1b2_0->SetLineWidth(2);
+	M_b1b3_0->SetLineWidth(2);
+	M_b1b4_0->SetLineWidth(2);
+	M_b2b3_0->SetLineWidth(2);
+	M_b2b4_0->SetLineWidth(2);
+	M_b3b4_0->SetLineWidth(2);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_0->SetLineWidth(2);
+	dM_b1b3_b2b4_0->SetLineWidth(2);
+	dM_b1b4_b2b3_0->SetLineWidth(2);
+
+	jetLM0->SetLineWidth(2);
+	jet2LM0->SetLineWidth(2);
+	jet3LM0->SetLineWidth(2);
+	jet4LM0->SetLineWidth(2);
+
+	bjetLM0->SetLineWidth(2);
+	bjet2LM0->SetLineWidth(2);
+	bjet3LM0->SetLineWidth(2);
+	bjet4LM0->SetLineWidth(2);
+
+	jetLPt0->SetLineWidth(2);
+	jet2LPt0->SetLineWidth(2);
+	jet3LPt0->SetLineWidth(2);
+	jet4LPt0->SetLineWidth(2);
+
+	bjetLPt0->SetLineWidth(2);
+	bjet2LPt0->SetLineWidth(2);
+	bjet3LPt0->SetLineWidth(2);
+	bjet4LPt0->SetLineWidth(2);
+
+	bLPt0->SetLineWidth(2);
+	b2LPt0->SetLineWidth(2);
+	b3LPt0->SetLineWidth(2);
+	b4LPt0->SetLineWidth(2);
+
+	bCEta0->SetLineWidth(2);
+	b2CEta0->SetLineWidth(2);
+	b3CEta0->SetLineWidth(2);
+	b4CEta0->SetLineWidth(2);
+	return;
+}
 void Scale_signalHistos0(double norm) 
 {
 	MH1H2_0->Scale(norm); 
@@ -351,6 +415,7 @@ void Scale_signalHistos0(double norm)
 	h_NbTags0->Scale(norm);
 	NSMhiggs0->Scale(norm);
 	Nbquarks0->Scale(norm);
+	Njets0->Scale(norm);
 	higgsPt0->Scale(norm);
 	higgsNLPt0->Scale(norm);
 	M_Lhiggs0->Scale(norm);

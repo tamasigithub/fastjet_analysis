@@ -25,17 +25,24 @@ int nbins = 100;
 double ptmin = 0;
 double ptmax = 500;
 
-TH1D *Mb1b2 = new TH1D("Mb1b2","Invariant Mass b1b2; m_{b1b2} [GeV/c];", nbins, ptmin, ptmax);
-TH1D *Mb1b3 = new TH1D("Mb1b3","Invariant Mass b1b3; m_{b1b3} [GeV/c];", nbins, ptmin, ptmax);
-TH1D *Mb1b4 = new TH1D("Mb1b4","Invariant Mass b1b4; m_{b1b4} [GeV/c];", nbins, ptmin, ptmax);
-TH1D *Mb2b3 = new TH1D("Mb2b3","Invariant Mass b2b3; m_{b2b3} [GeV/c];", nbins, ptmin, ptmax);
-TH1D *Mb2b4 = new TH1D("Mb2b4","Invariant Mass b2b4; m_{b2b4} [GeV/c];", nbins, ptmin, ptmax);
-TH1D *Mb3b4 = new TH1D("Mb3b4","Invariant Mass b3b4; m_{b3b4} [GeV/c];", nbins, ptmin, ptmax);
+TH1D *Mb1b2 = new TH1D("Mb1b2","Invariant Mass b1b2; m_{b1b2} [GeV];", nbins, ptmin, ptmax);
+TH1D *Mb1b3 = new TH1D("Mb1b3","Invariant Mass b1b3; m_{b1b3} [GeV];", nbins, ptmin, ptmax);
+TH1D *Mb1b4 = new TH1D("Mb1b4","Invariant Mass b1b4; m_{b1b4} [GeV];", nbins, ptmin, ptmax);
+TH1D *Mb2b3 = new TH1D("Mb2b3","Invariant Mass b2b3; m_{b2b3} [GeV];", nbins, ptmin, ptmax);
+TH1D *Mb2b4 = new TH1D("Mb2b4","Invariant Mass b2b4; m_{b2b4} [GeV];", nbins, ptmin, ptmax);
+TH1D *Mb3b4 = new TH1D("Mb3b4","Invariant Mass b3b4; m_{b3b4} [GeV];", nbins, ptmin, ptmax);
+
+TH1D *Ptb1b2 = new TH1D("Ptb1b2","Pt b1b2; pt_{b1b2} [GeV/c];", nbins, ptmin, ptmax);
+TH1D *Ptb1b3 = new TH1D("Ptb1b3","Pt b1b3; pt_{b1b3} [GeV/c];", nbins, ptmin, ptmax);
+TH1D *Ptb1b4 = new TH1D("Ptb1b4","Pt b1b4; pt_{b1b4} [GeV/c];", nbins, ptmin, ptmax);
+TH1D *Ptb2b3 = new TH1D("Ptb2b3","Pt b2b3; pt_{b2b3} [GeV/c];", nbins, ptmin, ptmax);
+TH1D *Ptb2b4 = new TH1D("Ptb2b4","Pt b2b4; pt_{b2b4} [GeV/c];", nbins, ptmin, ptmax);
+TH1D *Ptb3b4 = new TH1D("Ptb3b4","Pt b3b4; pt_{b3b4} [GeV/c];", nbins, ptmin, ptmax);
 
 int invariant_mass()
 {
 
-	f = new TFile("./fastjet_output/Genjet2_ggF_Ctr1.0_q1.2GeV_2.5_5.root","READ");
+	f = new TFile("./fastjet_output/fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_5.root","READ");
 	t = (TTree*)f->Get("glob_jet");
 
 	t->SetBranchAddress("jetPt", &v_bPt);
@@ -85,6 +92,13 @@ int invariant_mass()
 		Mb2b3->Fill(b2b3.M()*1e-3);
 		Mb2b4->Fill(b2b4.M()*1e-3);
 		Mb3b4->Fill(b3b4.M()*1e-3);
+		
+		Ptb1b2->Fill(b1b2.Pt()*1e-3);
+		Ptb1b3->Fill(b1b3.Pt()*1e-3);
+		Ptb1b4->Fill(b1b4.Pt()*1e-3);
+		Ptb2b3->Fill(b2b3.Pt()*1e-3);
+		Ptb2b4->Fill(b2b4.Pt()*1e-3);
+		Ptb3b4->Fill(b3b4.Pt()*1e-3);
 	}
 
 	Mb1b2->Write();
@@ -93,6 +107,13 @@ int invariant_mass()
 	Mb2b3->Write();
 	Mb2b4->Write();
 	Mb3b4->Write();
+	
+	Ptb1b2->Write();
+	Ptb1b3->Write();
+	Ptb1b4->Write();
+	Ptb2b3->Write();
+	Ptb2b4->Write();
+	Ptb3b4->Write();
 	fout->Close();
 	return 0;
 }

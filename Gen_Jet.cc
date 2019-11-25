@@ -60,7 +60,8 @@ int main()
   //! output root file
   //TFile *f_out = new TFile("Genjet_PU0hh4b_m260_q1.2GeV_1.root","RECREATE");
   //TFile *f_out = new TFile("GenjetCharged_PU0hh4b_m1000_q1.2GeV_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr1.0_q1.2GeV_2.5_2.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/Genjet_pp4b_q1.2GeV_2.5_2.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet_ggF_Ctr5.0_q1.2GeV_2.5_2.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
@@ -70,10 +71,11 @@ int main()
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_VBF_H_260_hh_4b_pythia82_shower_nopileup.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.dferreir.pp_VBF_H_1000_hh_4b_pythia82_shower.v8_output.root/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/user.tkar.pp_ggF_hh_4b_pythia82_shower.v2_output.root/*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_NoGenCuts.v2_output.root/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_4bQCD_pythia82_GenCuts.v3_output.root/*.root");
+  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr5.0hh_pythia82_GenCuts.v1_output.root/*.root");
   
   //! Get total no. of events
-  Long64_t nevents = 10000;
+  Long64_t nevents = 50000;
   //Long64_t nevents = rec.GetEntries();
   genOut.nevents = nevents;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl; 

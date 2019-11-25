@@ -11,8 +11,8 @@
 
 void Draw_Nparticles()
 {
-	int nbins = 6;
-	double nmin = 0, nmax = 6;
+	int nbins = 6, nbins_1 = 20;
+	double nmin = 0, nmax = 6, nmax_1 = 20;
 	//Number of SMhiggs 
 	NSMhiggs1  = new TH1D("NSMhiggs1", "number of higgs", nbins, nmin, nmax);
 	NSMhiggs0  = new TH1D("NSMhiggs0", "number of higgs", nbins, nmin, nmax);
@@ -30,15 +30,16 @@ void Draw_Nparticles()
 	Nbquarks2_5= new TH1D("Nbquarks2_5", "number of b quarks", nbins, nmin, nmax);
 	Nbquarks3  = new TH1D("Nbquarks3", "number of b quarks", nbins, nmin, nmax);
 	NbquarksB  = new TH1D("NbquarksB", "number of b quarks", nbins, nmin, nmax);
+	//Number of jets  
+	Njets1  = new TH1D("Njets1", "number of jets", nbins_1, nmin, nmax_1);
+	Njets0  = new TH1D("Njets0", "number of jets", nbins_1, nmin, nmax_1);
+	Njets_1 = new TH1D("Njets_1", "number of jets", nbins_1, nmin, nmax_1);
+	Njets_2 = new TH1D("Njets_2", "number of jets", nbins_1, nmin, nmax_1);
+	Njets2  = new TH1D("Njets2", "number of jets", nbins_1, nmin, nmax_1);
+	Njets2_5= new TH1D("Njets2_5", "number of jets", nbins_1, nmin, nmax_1);
+	Njets3  = new TH1D("Njets3", "number of jets", nbins_1, nmin, nmax_1);
+	NjetsB  = new TH1D("NjetsB", "number of jets", nbins_1, nmin, nmax_1);
 	
-	t1->Draw("Nbquarks>>Nbquarks1");
-	t0->Draw("Nbquarks>>Nbquarks0");
-	t_1->Draw("Nbquarks>>Nbquarks_1");
-	t_2->Draw("Nbquarks>>Nbquarks_2");
-	t2->Draw("Nbquarks>>Nbquarks2");
-	t2_5->Draw("Nbquarks>>Nbquarks2_5");
-	t3->Draw("Nbquarks>>Nbquarks3");
-	tB->Draw("Nbquarks>>NbquarksB");
 
 	t1->Draw("NSMhiggs>>NSMhiggs1");
 	t0->Draw("NSMhiggs>>NSMhiggs0");
@@ -47,7 +48,34 @@ void Draw_Nparticles()
 	t2->Draw("NSMhiggs>>NSMhiggs2");
 	t2_5->Draw("NSMhiggs>>NSMhiggs2_5");
 	t3->Draw("NSMhiggs>>NSMhiggs3");
+
+	t1->Draw("Nbquarks>>Nbquarks1");
+	t0->Draw("Nbquarks>>Nbquarks0");
+	t_1->Draw("Nbquarks>>Nbquarks_1");
+	t_2->Draw("Nbquarks>>Nbquarks_2");
+	t2->Draw("Nbquarks>>Nbquarks2");
+	t2_5->Draw("Nbquarks>>Nbquarks2_5");
+	t3->Draw("Nbquarks>>Nbquarks3");
+	tB->Draw("Nbquarks>>NbquarksB");
 	
+	t1->Draw("Njets>>Njets1");
+	t0->Draw("Njets>>Njets0");
+	t_1->Draw("Njets>>Njets_1");
+	t_2->Draw("Njets>>Njets_2");
+	t2->Draw("Njets>>Njets2");
+	t2_5->Draw("Njets>>Njets2_5");
+	t3->Draw("Njets>>Njets3");
+	tB->Draw("Njets>>NjetsB");
+	
+
+	NSMhiggs1->SetLineColor(kRed);
+	NSMhiggs0->SetLineColor(kBlack);
+	NSMhiggs_1->SetLineColor(kYellow -9);
+	NSMhiggs_2->SetLineColor(kGreen);
+	NSMhiggs2->SetLineColor(kBlue);
+	NSMhiggs2_5->SetLineColor(kOrange-9);
+	NSMhiggs3->SetLineColor(kViolet);
+
 	Nbquarks1->SetLineColor(kRed);
 	Nbquarks0->SetLineColor(kBlack);
 	Nbquarks_1->SetLineColor(kYellow -9);
@@ -57,13 +85,14 @@ void Draw_Nparticles()
 	Nbquarks3->SetLineColor(kViolet);
 	NbquarksB->SetLineColor(kCyan);
 
-	NSMhiggs1->SetLineColor(kRed);
-	NSMhiggs0->SetLineColor(kBlack);
-	NSMhiggs_1->SetLineColor(kYellow -9);
-	NSMhiggs_2->SetLineColor(kGreen);
-	NSMhiggs2->SetLineColor(kBlue);
-	NSMhiggs2_5->SetLineColor(kOrange-9);
-	NSMhiggs3->SetLineColor(kViolet);
+	Njets1->SetLineColor(kRed);
+	Njets0->SetLineColor(kBlack);
+	Njets_1->SetLineColor(kYellow -9);
+	Njets_2->SetLineColor(kGreen);
+	Njets2->SetLineColor(kBlue);
+	Njets2_5->SetLineColor(kOrange-9);
+	Njets3->SetLineColor(kViolet);
+	NjetsB->SetLineColor(kCyan);
 	return;
 }
 void Draw_higgsPt()
@@ -633,6 +662,12 @@ void Set_bquark_lambdaColors()
 void Set_LegendProps()
 {
 
+	leg_higgs_1->SetFillStyle(0);
+	leg_higgs_1->SetBorderSize(0);
+	leg_higgs_1->SetTextAlign(32);
+	leg_higgs_1->SetTextFont(62);
+	leg_higgs_1->SetTextSize(0.055);
+	
 	leg_higgs->SetFillStyle(0);
 	leg_higgs->SetBorderSize(0);
 	leg_higgs->SetTextAlign(32);
@@ -715,6 +750,7 @@ void Scale_bckgndHistos(double norm)
 	h_NbTagsB->Scale(norm);
 	//Number of bquarks 
 	NbquarksB->Scale(norm);
+	NjetsB->Scale(norm);
 	//reconstructed leading Higgs mass 
 	M_LhiggsB->Scale(norm);
 	//reconstructed sub-leading Higgs mass 
@@ -885,6 +921,7 @@ int main()
 	std::cout<<"N entries in tB: " <<tB->GetEntries() <<std::endl;
 		
 	for(int i = 0; i < t1->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t1->GetEntry(i);
 		Draw_InvariantMass_1();
@@ -910,6 +947,7 @@ int main()
 	std::cout<<"nh1 : " << nh1 <<std::endl;
 
 	for(int i = 0; i < t0->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t0->GetEntry(i);
 		Draw_InvariantMass_0();
@@ -935,6 +973,7 @@ int main()
 	std::cout<<"nh0 : " << nh0 <<std::endl;
 	
 	for(int i = 0; i < t_1->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t_1->GetEntry(i);
 		Draw_InvariantMass__1();
@@ -960,6 +999,7 @@ int main()
 	std::cout<<"nh_1 : " << nh_1 <<std::endl;
 	
 	for(int i = 0; i < t_2->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t_2->GetEntry(i);
 		Draw_InvariantMass__2();
@@ -985,6 +1025,7 @@ int main()
 	std::cout<<"nh_2 : " << nh_2 <<std::endl;
 	
 	for(int i = 0; i < t2->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t2->GetEntry(i);
 		Draw_InvariantMass_2();
@@ -1010,6 +1051,7 @@ int main()
 	std::cout<<"nh2 : " << nh2 <<std::endl;
 	
 	for(int i = 0; i < t2_5->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t2_5->GetEntry(i);
 		Draw_InvariantMass_2_5();
@@ -1035,6 +1077,7 @@ int main()
 	std::cout<<"nh2_5 : " << nh2_5 <<std::endl;
 	
 	for(int i = 0; i < t3->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		t3->GetEntry(i);
 		Draw_InvariantMass_3();
@@ -1060,6 +1103,7 @@ int main()
 	std::cout<<"nh3 : " << nh3 <<std::endl;
 	
 	for(int i = 0; i < tB->GetEntries(); i++)
+	//for(int i = 0; i < 50; i++)
 	{
 		tB->GetEntry(i);
 		Draw_InvariantMass_B();
@@ -1092,6 +1136,15 @@ int main()
 	Scale_signalHistos2(norm_signal2);
 	Scale_signalHistos2_5(norm_signal2_5);
 	Scale_signalHistos3(norm_signal3);
+	
+	SetLineWidthB();	
+	SetLineWidth1();
+	SetLineWidth0();
+	SetLineWidth_1();
+	SetLineWidth_2();
+	SetLineWidth2();
+	SetLineWidth2_5();
+	SetLineWidth3();
 	//////////////////////////////////////////////////
 	//////////////// writing to pdf //////////////////
 	//////////////////////////////////////////////////
@@ -1104,6 +1157,7 @@ int main()
 
 	Double_t x1 = 0.71, y1 = 0.71, x2 = 0.89, y2 = 0.89;
 
+	leg_higgs_1 = new TLegend(0.5, 0.2, 0.9, 0.9, "");
 	leg_higgs = new TLegend(x1, y1, x2, y2, "");
 	leg1 = new TLegend(x1, y1, x2, y2, "");
 	leg2 = new TLegend(x1, y1, x2, y2, "");
@@ -1123,7 +1177,7 @@ int main()
 	C->SetTickx();
 	C->SetTicky();
 	//C->SetLogy();
-	//! page0
+	//! page1
 	TLatex lat;
 	lat.SetTextSize(0.03);
 	lat.SetTextAlign(12);
@@ -1267,14 +1321,17 @@ int main()
 	lat.DrawLatex(X9lat, Ylat, Form("%.3e", (nh3*norm_signal3)/(nhB*norm_bckgnd)));
 	C->Print(out_file_open,"pdf");
 	
-	//! page1
-	higgsPt_2->Draw("hist");	
-	higgsPt0->Draw("hist same");	
-	higgsPt_1->Draw("hist same");	
-	higgsPt1->Draw("hist same");	
-	higgsPt2->Draw("hist same");	
-	higgsPt2_5->Draw("hist same");
-	higgsPt3->Draw("hist same");
+	//! page2
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	Nbquarks_2->Draw("hist");
+	Nbquarks0->Draw("hist same");
+	Nbquarks_1->Draw("hist same");
+	Nbquarks1->Draw("hist same");
+	Nbquarks2->Draw("hist same");
+	Nbquarks2_5->Draw("hist same");
+	Nbquarks3->Draw("hist same");
 	leg_higgs->AddEntry(higgsPt_2, "k_{#lambda} = -2.0");
 	leg_higgs->AddEntry(higgsPt_1, "k_{#lambda} = -1.0");
 	leg_higgs->AddEntry(higgsPt0,  "k_{#lambda} =  0.0");
@@ -1282,11 +1339,121 @@ int main()
 	leg_higgs->AddEntry(higgsPt2,  "k_{#lambda} =  2.0");
 	leg_higgs->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5");
 	leg_higgs->AddEntry(higgsPt3,  "k_{#lambda} =  3.0");
+
+	leg_higgs_1->AddEntry(higgsPt_2, "k_{#lambda} = -2.0");
+	leg_higgs_1->AddEntry(higgsPt_1, "k_{#lambda} = -1.0");
+	leg_higgs_1->AddEntry(higgsPt0,  "k_{#lambda} =  0.0");
+	leg_higgs_1->AddEntry(higgsPt1,  "k_{#lambda} =  1.0");
+	leg_higgs_1->AddEntry(higgsPt2,  "k_{#lambda} =  2.0");
+	leg_higgs_1->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5");
+	leg_higgs_1->AddEntry(higgsPt3,  "k_{#lambda} =  3.0");
+	leg_higgs_1->AddEntry(NbquarksB, "pp #rightarrow 4b");
+	//leg_higgs->Draw();
+	C->Update();
+	
+	C->cd(2);
+	//leg_higgs->Draw();
+	NbquarksB->Draw("hist");
+	C->Update();
+
+	C->cd(3);
+	gPad->SetLogy();
+	NjetsB->GetYaxis()->SetRangeUser(1e2,15e10);
+	NjetsB->Draw("hist");
+	Njets_2->Draw("hist same");
+	Njets0->Draw("hist same");
+	Njets_1->Draw("hist same");
+	Njets1->Draw("hist same");
+	Njets2->Draw("hist same");
+	Njets2_5->Draw("hist same");
+	Njets3->Draw("hist same");
+	C->Update();
+
+	C->cd(4);
+	leg_higgs_1->Draw();
+	C->Print(out_file_,"pdf");
+	
+	//! page3
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	// invariant mass of di-higgs system
+	MH1H2__2->SetTitle("Di-higgs Invariant Mass");
+	MH1H2__2->GetXaxis()->SetTitle("M_{truth,h1h2}");
+	MH1H2__2->Draw("hist");
+	MH1H2_0->Draw("hist same");
+	MH1H2__1->Draw("hist same");
+	MH1H2_3->Draw("hist same");
+	MH1H2_2->Draw("hist same");
+	MH1H2_2_5->Draw("hist same");
+	MH1H2_1->Draw("hist same");
+	C->Update();
+
+	C->cd(2);
+	gPad->SetLogy();
+	MH1H2__2->SetTitle("Di-higgs Invariant Mass");
+	MH1H2__2->GetXaxis()->SetTitle("M_{truth,h1h2}");
+	MH1H2__2->GetYaxis()->SetRangeUser(1e2, 3.5e6);
+	MH1H2__2->Draw("hist");
+	MH1H2_0->Draw("hist same");
+	MH1H2__1->Draw("hist same");
+	MH1H2_3->Draw("hist same");
+	MH1H2_2->Draw("hist same");
+	MH1H2_2_5->Draw("hist same");
+	MH1H2_1->Draw("hist same");
+	
+	C->cd(3);
+	NSMhiggs_2->Draw("hist");
+	NSMhiggs0->Draw("hist same");
+	NSMhiggs_1->Draw("hist same");
+	NSMhiggs1->Draw("hist same");
+	NSMhiggs2->Draw("hist same");
+	NSMhiggs2_5->Draw("hist same");
+	NSMhiggs3->Draw("hist same");
+
+	C->cd(4);
+	leg_higgs_1->Draw();
+	C->Print(out_file_,"pdf");
+	
+
+	//! page4
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	higgsPt_2->Draw("hist");	
+	higgsPt0->Draw("hist same");	
+	higgsPt_1->Draw("hist same");	
+	higgsPt1->Draw("hist same");	
+	higgsPt2->Draw("hist same");	
+	higgsPt2_5->Draw("hist same");
+	higgsPt3->Draw("hist same");
+	C->Update();
+
+	C->cd(2);
+	higgsNLPt_2->Draw("hist");	
+	higgsNLPt0->Draw("hist same");	
+	higgsNLPt_1->Draw("hist same");	
+	higgsNLPt1->Draw("hist same");	
+	higgsNLPt2->Draw("hist same");	
+	higgsNLPt2_5->Draw("hist same");
+	higgsNLPt3->Draw("hist same");
 	leg_higgs->Draw();
 	C->Update();
-	C->Print(out_file_,"pdf");
 
-	//! page2
+	C->cd(3);
+	gPad->SetLogy();
+	higgsPt_2->Draw("hist");	
+	higgsPt0->Draw("hist same");	
+	higgsPt_1->Draw("hist same");	
+	higgsPt1->Draw("hist same");	
+	higgsPt2->Draw("hist same");	
+	higgsPt2_5->Draw("hist same");
+	higgsPt3->Draw("hist same");
+	leg_higgs->Draw();
+	C->Update();
+
+	C->cd(4);
+	gPad->SetLogy();
 	higgsNLPt_2->Draw("hist");	
 	higgsNLPt0->Draw("hist same");	
 	higgsNLPt_1->Draw("hist same");	
@@ -1297,36 +1464,8 @@ int main()
 	leg_higgs->Draw();
 	C->Update();
 	C->Print(out_file_,"pdf");
-	
-	//! page3
-	C->SetLogy(0);
-	NSMhiggs_2->Draw("hist");
-	NSMhiggs0->Draw("hist same");
-	NSMhiggs_1->Draw("hist same");
-	NSMhiggs1->Draw("hist same");
-	NSMhiggs2->Draw("hist same");
-	NSMhiggs2_5->Draw("hist same");
-	NSMhiggs3->Draw("hist same");
-	leg_higgs->Draw();
-	C->Print(out_file_,"pdf");
-
-	//! page4
-	Nbquarks_2->Draw("hist");
-	Nbquarks0->Draw("hist same");
-	Nbquarks_1->Draw("hist same");
-	Nbquarks1->Draw("hist same");
-	Nbquarks2->Draw("hist same");
-	Nbquarks2_5->Draw("hist same");
-	Nbquarks3->Draw("hist same");
-	leg_higgs->Draw();
-	C->Update();
-	C->Print(out_file_,"pdf");
 
 	//! page5
-	NbquarksB->Draw("hist");
-	C->Update();
-	C->Print(out_file_,"pdf");
-
 	//! page6
 	C->Clear();
 	C->Divide(2,2);
@@ -2483,20 +2622,14 @@ int main()
 	C->cd(6);
 	gPad->SetLogy();
 	Mb3b4_3->Draw("hist");
-	C->Print(out_file_,"pdf");
+//	C->Print(out_file_,"pdf");
 
 	//! page39
+
+	//! page40
 	// invariant mass of di-higgs system
-	C->Clear();
-	MH1H2__2->SetTitle("Di-higgs Invariant Mass");
-	MH1H2__2->GetXaxis()->SetTitle("M_{rec,h1h2}");
-	MH1H2__2->Draw("hist");
-	MH1H2_0->Draw("hist same");
-	MH1H2__1->Draw("hist same");
-	MH1H2_3->Draw("hist same");
-	MH1H2_2->Draw("hist same");
-	MH1H2_2_5->Draw("hist same");
-	MH1H2_1->Draw("hist same");
+//	C->Clear();
+//	C->SetLogy();
 	C->Print(out_file_close,"pdf");
 	return 0;
 }

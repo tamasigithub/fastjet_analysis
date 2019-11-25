@@ -73,7 +73,7 @@ void Set_higgsPtProps_1()
 	
 	M_NLhiggs1->SetLineWidth(2);
 	
-	MH1H2_1  = new TH1D("MH1H2_1",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, Mmin, Mmax);
+	MH1H2_1  = new TH1D("MH1H2_1",  "Invariant di-higgs mass;m_{truth, h1h2} [GeV];", nbins, Mmin, Mmax);
 
 	MH1H2_1->SetLineColor(kRed);
 	
@@ -339,6 +339,80 @@ void Fill_bjetPtM_1(int &nhiggs)
 
 	return;
 }
+void SetLineWidth1()
+{
+
+
+	MH1H2_1->SetLineWidth(2); 
+	
+	Mb1b2_1->SetLineWidth(2); 
+	Mb1b3_1->SetLineWidth(2);
+	Mb1b4_1->SetLineWidth(2);
+	Mb2b3_1->SetLineWidth(2);
+	Mb2b4_1->SetLineWidth(2);
+	Mb3b4_1->SetLineWidth(2);
+
+	h_NbTags1->SetLineWidth(2);
+
+	NSMhiggs1->SetLineWidth(2);
+	Nbquarks1->SetLineWidth(2);
+	Njets1->SetLineWidth(2);
+	
+	higgsPt1->SetLineWidth(2);
+	higgsNLPt1->SetLineWidth(2);
+	
+	M_Lhiggs1->SetLineWidth(2);
+	M_NLhiggs1->SetLineWidth(2);
+	// invariant mass of a pair of b's, ctr = 1.0
+	M_b1b2_1->SetLineWidth(2);
+	M_b1b3_1->SetLineWidth(2);
+	M_b1b4_1->SetLineWidth(2);
+	M_b2b3_1->SetLineWidth(2);
+	M_b2b4_1->SetLineWidth(2);
+	M_b3b4_1->SetLineWidth(2);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_1->SetLineWidth(2);
+	dM_b1b3_b2b4_1->SetLineWidth(2);
+	dM_b1b4_b2b3_1->SetLineWidth(2);
+	
+	//jet leading M
+	jetLM1->SetLineWidth(2);
+	jet2LM1->SetLineWidth(2);
+	jet3LM1->SetLineWidth(2);
+	jet4LM1->SetLineWidth(2);
+	
+	//bjet leading M
+	bjetLM1->SetLineWidth(2);
+	bjet2LM1->SetLineWidth(2);
+	bjet3LM1->SetLineWidth(2);
+	bjet4LM1->SetLineWidth(2);
+	
+	//jet leading Pt
+	jetLPt1->SetLineWidth(2);
+	jet2LPt1->SetLineWidth(2);
+	jet3LPt1->SetLineWidth(2);
+	jet4LPt1->SetLineWidth(2);
+	
+	//b-jet leading Pt
+	bjetLPt1->SetLineWidth(2);
+	bjet2LPt1->SetLineWidth(2);
+	bjet3LPt1->SetLineWidth(2);
+	bjet4LPt1->SetLineWidth(2);
+	
+	//b leading Pt
+	bLPt1->SetLineWidth(2);
+	b2LPt1->SetLineWidth(2);
+	b3LPt1->SetLineWidth(2);
+	b4LPt1->SetLineWidth(2);
+	
+	//b central Pt
+	bCEta1->SetLineWidth(2);
+	b2CEta1->SetLineWidth(2);
+	b3CEta1->SetLineWidth(2);
+	b4CEta1->SetLineWidth(2);
+	return;
+}
 void Scale_signalHistos1(double norm)
 {
 
@@ -356,6 +430,7 @@ void Scale_signalHistos1(double norm)
 
 	NSMhiggs1->Scale(norm);
 	Nbquarks1->Scale(norm);
+	Njets1->Scale(norm);
 	
 	higgsPt1->Scale(norm);
 	higgsNLPt1->Scale(norm);

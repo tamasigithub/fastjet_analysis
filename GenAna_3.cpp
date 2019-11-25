@@ -76,7 +76,7 @@ void Set_higgsPtProps_3()
 	
 	M_NLhiggs3->SetLineWidth(2);
 	
-	MH1H2_3  = new TH1D("MH1H2_3",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, Mmin, Mmax);
+	MH1H2_3  = new TH1D("MH1H2_3",  "Invariant di-higgs mass;m_{truth, h1h2} [GeV];", nbins, Mmin, Mmax);
 
 	MH1H2_3->SetLineColor(kViolet);
 	
@@ -341,6 +341,98 @@ void Fill_bjetPtM_3(int &nhiggs)
 
 	return;
 }
+void SetLineWidth3()
+{
+
+	MH1H2_3->SetLineWidth(2); 
+
+	Mb1b2_3->SetLineWidth(2); 
+	Mb1b3_3->SetLineWidth(2);
+	Mb1b4_3->SetLineWidth(2);
+	Mb2b3_3->SetLineWidth(2);
+	Mb2b4_3->SetLineWidth(2);
+	Mb3b4_3->SetLineWidth(2);
+
+	//Number of btags 
+	h_NbTags3->SetLineWidth(2);
+	//Number of SMhiggs 
+	NSMhiggs3->SetLineWidth(2);
+	//Number of bquarks 
+	Nbquarks3->SetLineWidth(2);
+	Njets3->SetLineWidth(2);
+	//! Book histograms:
+	//Higgs Pt
+	higgsPt3->SetLineWidth(2);
+	//Higgs sub leading Pt
+	higgsNLPt3->SetLineWidth(2);
+	//reconstructed leading Higgs M
+	M_Lhiggs3->SetLineWidth(2);
+	//reconstructed sub leading Higgs M
+	M_NLhiggs3->SetLineWidth(2);
+
+	// invariant mass of a pair of b's, ctr = 3.0
+	M_b1b2_3->SetLineWidth(2);
+	M_b1b3_3->SetLineWidth(2);
+	M_b1b4_3->SetLineWidth(2);
+	M_b2b3_3->SetLineWidth(2);
+	M_b2b4_3->SetLineWidth(2);
+	M_b3b4_3->SetLineWidth(2);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_3->SetLineWidth(2);
+	dM_b1b3_b2b4_3->SetLineWidth(2);
+	dM_b1b4_b2b3_3->SetLineWidth(2);
+	
+	jetLM3->SetLineWidth(2);
+	//jet 2nd leading M
+	jet2LM3->SetLineWidth(2);
+	//jet 3rd leading M
+	jet3LM3->SetLineWidth(2);
+	//jet 4th leading M
+	jet4LM3->SetLineWidth(2);
+	
+	bjetLM3->SetLineWidth(2);
+	//bjet 2nd leading M
+	bjet2LM3->SetLineWidth(2);
+	//bjet 3rd leading M
+	bjet3LM3->SetLineWidth(2);
+	//bjet 4th leading M
+	bjet4LM3->SetLineWidth(2);
+	
+	jetLPt3->SetLineWidth(2);
+	//jet 2nd leading Pt
+	jet2LPt3->SetLineWidth(2);
+	//jet 3rd leading Pt
+	jet3LPt3->SetLineWidth(2);
+	//jet 4th leading Pt
+	jet4LPt3->SetLineWidth(2);
+
+	bjetLPt3->SetLineWidth(2);
+	//b-jet 2nd leading Pt
+	bjet2LPt3->SetLineWidth(2);
+	//b-jet 3rd leading Pt
+	bjet3LPt3->SetLineWidth(2);
+	//b-jet 4th leading Pt
+	bjet4LPt3->SetLineWidth(2);
+
+	bLPt3->SetLineWidth(2);
+	//b 2nd leading Pt
+	b2LPt3->SetLineWidth(2);
+	//b 3rd leading Pt
+	b3LPt3->SetLineWidth(2);
+	//b 4th leading Pt
+	b4LPt3->SetLineWidth(2);
+
+	bCEta3->SetLineWidth(2);
+	//b 2nd central Pt
+	b2CEta3->SetLineWidth(2);
+	//b 3rd central Pt
+	b3CEta3->SetLineWidth(2);
+	//b 4th central Pt
+	b4CEta3->SetLineWidth(2);
+	return;
+
+}
 void Scale_signalHistos3(double norm)
 {
 
@@ -359,6 +451,7 @@ void Scale_signalHistos3(double norm)
 	NSMhiggs3->Scale(norm);
 	//Number of bquarks 
 	Nbquarks3->Scale(norm);
+	Njets3->Scale(norm);
 	//! Book histograms:
 	//Higgs Pt
 	higgsPt3->Scale(norm);

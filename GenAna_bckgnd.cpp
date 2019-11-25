@@ -303,3 +303,98 @@ void Fill_bjetPtM_B(int &nhiggs)
 
 	return;
 }
+
+void SetLineWidthB()
+{
+	Mb1b2_B->SetLineWidth(2); 
+	Mb1b3_B->SetLineWidth(2);
+	Mb1b4_B->SetLineWidth(2);
+	Mb2b3_B->SetLineWidth(2);
+	Mb2b4_B->SetLineWidth(2);
+	Mb3b4_B->SetLineWidth(2);
+
+	//Number of btags 
+	h_NbTagsB->SetLineWidth(2);
+	//Number of bquarks 
+	NbquarksB->SetLineWidth(2);
+	//reconstructed leading Higgs mass 
+	M_LhiggsB->SetLineWidth(2);
+	//reconstructed sub-leading Higgs mass 
+	M_NLhiggsB->SetLineWidth(2);
+
+	// invariant mass of a pair of b's, pp->4b
+	M_b1b2_B->SetLineWidth(2);
+	M_b1b3_B->SetLineWidth(2);
+	M_b1b4_B->SetLineWidth(2);
+	M_b2b3_B->SetLineWidth(2);
+	M_b2b4_B->SetLineWidth(2);
+	M_b3b4_B->SetLineWidth(2);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_B->SetLineWidth(2);
+	dM_b1b3_b2b4_B->SetLineWidth(2);
+	dM_b1b4_b2b3_B->SetLineWidth(2);
+	
+	
+	
+	//jet leading M
+	jetLMB->SetLineWidth(2);
+	//jet 2nd leading M
+	jet2LMB->SetLineWidth(2);
+	//jet 3rd leading M
+	jet3LMB->SetLineWidth(2);
+	//jet 4th leading M
+	jet4LMB->SetLineWidth(2);
+	//jet 5th leading M
+	//jet5LMB->SetLineWidth(2);
+	
+	//jet leading Pt
+	jetLPtB->SetLineWidth(2);
+	//jet 2nd leading Pt
+	jet2LPtB->SetLineWidth(2);
+	//jet 3rd leading Pt
+	jet3LPtB->SetLineWidth(2);
+	//jet 4th leading Pt
+	jet4LPtB->SetLineWidth(2);
+	//jet 5th leading Pt
+	//jet5LPtB->SetLineWidth(2);
+
+	//bjet leading M
+	bjetLMB->SetLineWidth(2);
+	//bjet 2nd leading M
+	bjet2LMB->SetLineWidth(2);
+	//bjet 3rd leading M
+	bjet3LMB->SetLineWidth(2);
+	//bjet 4th leading M
+	bjet4LMB->SetLineWidth(2);
+	//bjet 5th leading M
+	//bjet5LMB->SetLineWidth(2);
+	
+	//b-jet leading Pt
+	bjetLPtB->SetLineWidth(2);
+	//b-jet 2nd leading Pt
+	bjet2LPtB->SetLineWidth(2);
+	//b-jet 3rd leading Pt
+	bjet3LPtB->SetLineWidth(2);
+	//b-jet 4th leading Pt
+	bjet4LPtB->SetLineWidth(2);
+
+	//b leading Pt
+	bLPtB->SetLineWidth(2);
+	//b 2nd leading Pt
+	b2LPtB->SetLineWidth(2);
+	//b 3rd leading Pt
+	b3LPtB->SetLineWidth(2);
+	//b 4th leading Pt
+	b4LPtB->SetLineWidth(2);
+
+	//b central Pt
+	bCEtaB->SetLineWidth(2);
+	//b 2nd central Pt
+	b2CEtaB->SetLineWidth(2);
+	//b 3rd central Pt
+	b3CEtaB->SetLineWidth(2);
+	//b 4th central Pt
+	b4CEtaB->SetLineWidth(2);
+	return;
+}

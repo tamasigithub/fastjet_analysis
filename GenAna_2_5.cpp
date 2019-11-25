@@ -73,7 +73,7 @@ void Set_higgsPtProps_2_5()
 	
 	M_NLhiggs2_5->SetLineWidth(2);
 	
-	MH1H2_2_5= new TH1D("MH1H2_2_5","Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, Mmin, Mmax);
+	MH1H2_2_5= new TH1D("MH1H2_2_5","Invariant di-higgs mass;m_{truth, h1h2} [GeV];", nbins, Mmin, Mmax);
 
 	MH1H2_2_5->SetLineColor(kOrange-9);
 	
@@ -336,6 +336,72 @@ void Fill_bjetPtM_2_5(int &nhiggs)
 
 	return;
 }
+void SetLineWidth2_5()
+{
+
+	MH1H2_2_5->SetLineWidth(2); 
+
+	Mb1b2_2_5->SetLineWidth(2); 
+	Mb1b3_2_5->SetLineWidth(2);
+	Mb1b4_2_5->SetLineWidth(2);
+	Mb2b3_2_5->SetLineWidth(2);
+	Mb2b4_2_5->SetLineWidth(2);
+	Mb3b4_2_5->SetLineWidth(2);
+
+	h_NbTags2_5->SetLineWidth(2);
+	NSMhiggs2_5->SetLineWidth(2);
+	Nbquarks2_5->SetLineWidth(2);
+	Njets2_5->SetLineWidth(2);
+	higgsPt2_5->SetLineWidth(2);
+	higgsNLPt2_5->SetLineWidth(2);
+	M_Lhiggs2_5->SetLineWidth(2);
+	M_NLhiggs2_5->SetLineWidth(2);
+
+	// invariant mass of a pair of b's, ctr = 2.5
+	M_b1b2_2_5->SetLineWidth(2);
+	M_b1b3_2_5->SetLineWidth(2);
+	M_b1b4_2_5->SetLineWidth(2);
+	M_b2b3_2_5->SetLineWidth(2);
+	M_b2b4_2_5->SetLineWidth(2);
+	M_b3b4_2_5->SetLineWidth(2);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_2_5->SetLineWidth(2);
+	dM_b1b3_b2b4_2_5->SetLineWidth(2);
+	dM_b1b4_b2b3_2_5->SetLineWidth(2);
+
+	jetLM2_5->SetLineWidth(2);
+	jet2LM2_5->SetLineWidth(2);
+	jet3LM2_5->SetLineWidth(2);
+	jet4LM2_5->SetLineWidth(2);
+
+	bjetLM2_5->SetLineWidth(2);
+	bjet2LM2_5->SetLineWidth(2);
+	bjet3LM2_5->SetLineWidth(2);
+	bjet4LM2_5->SetLineWidth(2);
+
+	jetLPt2_5->SetLineWidth(2);
+	jet2LPt2_5->SetLineWidth(2);
+	jet3LPt2_5->SetLineWidth(2);
+	jet4LPt2_5->SetLineWidth(2);
+
+	bjetLPt2_5->SetLineWidth(2);
+	bjet2LPt2_5->SetLineWidth(2);
+	bjet3LPt2_5->SetLineWidth(2);
+	bjet4LPt2_5->SetLineWidth(2);
+
+	bLPt2_5->SetLineWidth(2);
+	b2LPt2_5->SetLineWidth(2);
+	b3LPt2_5->SetLineWidth(2);
+	b4LPt2_5->SetLineWidth(2);
+
+	bCEta2_5->SetLineWidth(2);
+	b2CEta2_5->SetLineWidth(2);
+	b3CEta2_5->SetLineWidth(2);
+	b4CEta2_5->SetLineWidth(2);
+
+	return;
+}
 void Scale_signalHistos2_5(double norm)
 {
 
@@ -351,6 +417,7 @@ void Scale_signalHistos2_5(double norm)
 	h_NbTags2_5->Scale(norm);
 	NSMhiggs2_5->Scale(norm);
 	Nbquarks2_5->Scale(norm);
+	Njets2_5->Scale(norm);
 	higgsPt2_5->Scale(norm);
 	higgsNLPt2_5->Scale(norm);
 	M_Lhiggs2_5->Scale(norm);
