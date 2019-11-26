@@ -1,3 +1,50 @@
+void fetch_histos__2()
+{
+
+	bLPt_2  = (TH1D*)f_2->Get("hbPt_Lpt");
+	b2LPt_2 = (TH1D*)f_2->Get("hbPt_NLpt");
+	b3LPt_2 = (TH1D*)f_2->Get("hbPt_NNLpt");
+	b4LPt_2 = (TH1D*)f_2->Get("hbPt_NNNLpt");
+	
+	bCEta_2  = (TH1D*)f_2->Get("hbEta_Ceta");
+	b2CEta_2 = (TH1D*)f_2->Get("hbEta_NCeta");
+	b3CEta_2 = (TH1D*)f_2->Get("hbEta_NNCeta");
+	b4CEta_2 = (TH1D*)f_2->Get("hbEta_NNNCeta");
+	
+	return;
+}
+void Draw_b_jetPt__2()
+{
+	t_2->Draw("bJetLPt>>bjetLPt_2");
+	t_2->Draw("bJetNLPt>>bjet2LPt_2");
+	t_2->Draw("bJetNNLPt>>bjet3LPt_2");
+	t_2->Draw("bJetNNNLPt>>bjet4LPt_2");
+	
+	return;
+}
+void Draw_higgsPt__2()
+{
+	
+	t_2->Draw("higgsLPt*1e-3>>higgsPt_2");
+	t_2->Draw("higgsNLPt*1e-3>>higgsNLPt_2");
+	
+	return;
+}
+void Draw_Nparticles__2()
+{
+	int nbins = 6, nbins_1 = 20;
+	double nmin = 0, nmax = 6, nmax_1 = 20;
+	NSMhiggs_2 = new TH1D("NSMhiggs_2", "number of higgs", nbins, nmin, nmax);
+	Nbquarks_2 = new TH1D("Nbquarks_2", "number of b quarks", nbins, nmin, nmax);
+	Njets_2 = new TH1D("Njets_2", "number of jets", nbins_1, nmin, nmax_1);
+	t_2->Draw("NSMhiggs>>NSMhiggs_2");
+	t_2->Draw("Nbquarks>>Nbquarks_2");
+	t_2->Draw("Njets>>Njets_2");
+	NSMhiggs_2->SetLineColor(kGreen);
+	Nbquarks_2->SetLineColor(kGreen);
+	Njets_2->SetLineColor(kGreen);
+	return;
+}
 void fetch_TTrees__2()
 {
 	t_2  = (TTree*)f_2->Get("glob_jet");
@@ -470,3 +517,64 @@ void Scale_signalHistos_2(double norm)
 
 	return;
 }
+void Set_NleadingJetColors__2()
+{
+
+	bjetLM_2->SetLineColor(kOrange);
+	bjet2LM_2->SetLineColor(kBlack);
+	bjet3LM_2->SetLineColor(kRed);
+	bjet4LM_2->SetLineColor(kGreen);
+	jetLM_2->SetLineColor(kOrange);
+	jet2LM_2->SetLineColor(kBlack);
+	jet3LM_2->SetLineColor(kRed);
+	jet4LM_2->SetLineColor(kGreen);
+	bjetLPt_2->SetLineColor(kOrange);
+	bjet2LPt_2->SetLineColor(kBlack);
+	bjet3LPt_2->SetLineColor(kRed);
+	bjet4LPt_2->SetLineColor(kGreen);
+	jetLPt_2->SetLineColor(kOrange);
+	jet2LPt_2->SetLineColor(kBlack);
+	jet3LPt_2->SetLineColor(kRed);
+	jet4LPt_2->SetLineColor(kGreen);
+	return;
+}
+void Set_bquark_lambdaColors__2()
+{
+	
+
+	M_Lhiggs_2->SetLineColor(kGreen);
+	M_NLhiggs_2->SetLineColor(kGreen);
+	bjetLM_2->SetLineColor(kGreen);
+	bjet2LM_2->SetLineColor(kGreen);
+	bjet3LM_2->SetLineColor(kGreen);
+	bjet4LM_2->SetLineColor(kGreen);
+	jetLM_2->SetLineColor(kGreen);
+	jet2LM_2->SetLineColor(kGreen);
+	jet3LM_2->SetLineColor(kGreen);
+	jet4LM_2->SetLineColor(kGreen);
+	jetLPt_2->SetLineColor(kGreen);
+	jet2LPt_2->SetLineColor(kGreen);
+	jet3LPt_2->SetLineColor(kGreen);
+	jet4LPt_2->SetLineColor(kGreen);
+	bjetLPt_2->SetLineColor(kGreen);
+	bjet2LPt_2->SetLineColor(kGreen);
+	bjet3LPt_2->SetLineColor(kGreen);
+	bjet4LPt_2->SetLineColor(kGreen);
+	bLPt_2->SetLineColor(kGreen);
+	b2LPt_2->SetLineColor(kGreen);
+	b3LPt_2->SetLineColor(kGreen);
+	b4LPt_2->SetLineColor(kGreen);
+	bCEta_2->SetLineColor(kGreen);
+	b2CEta_2->SetLineColor(kGreen);
+	b3CEta_2->SetLineColor(kGreen);
+	b4CEta_2->SetLineColor(kGreen);
+	return;
+}
+void Draw_Number_bTags__2()
+{
+	h_NbTags_2 = new TH1D("h_NbTags_2", "number of b tagged jets, #lambda =-2.0", 6, 0, 6);
+	t_2->Draw("Nbtags>>h_NbTags_2");
+	return;
+}
+
+

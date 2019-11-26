@@ -1,3 +1,38 @@
+void fetch_histos_B()
+{
+
+	bLPtB  = (TH1D*)fB->Get("hbPt_Lpt");
+	b2LPtB = (TH1D*)fB->Get("hbPt_NLpt");
+	b3LPtB = (TH1D*)fB->Get("hbPt_NNLpt");
+	b4LPtB = (TH1D*)fB->Get("hbPt_NNNLpt");
+
+	bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
+	b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
+	b3CEtaB = (TH1D*)fB->Get("hbEta_NNCeta");
+	b4CEtaB = (TH1D*)fB->Get("hbEta_NNNCeta");
+	return;
+}
+void Draw_b_jetPt_B()
+{
+	tB->Draw("bJetLPt>>bjetLPtB");
+	tB->Draw("bJetNLPt>>bjet2LPtB");
+	tB->Draw("bJetNNLPt>>bjet3LPtB");
+	tB->Draw("bJetNNNLPt>>bjet4LPtB");
+
+	return;
+}
+void Draw_Nparticles_B()
+{
+	int nbins = 6, nbins_1 = 20;
+	double nmin = 0, nmax = 6, nmax_1 = 20;
+	NbquarksB  = new TH1D("NbquarksB", "number of b quarks", nbins, nmin, nmax);
+	NjetsB  = new TH1D("NjetsB", "number of jets", nbins_1, nmin, nmax_1);
+	tB->Draw("Nbquarks>>NbquarksB");
+	tB->Draw("Njets>>NjetsB");
+	NbquarksB->SetLineColor(kCyan);
+	NjetsB->SetLineColor(kCyan);
+	return;
+}
 void fetch_TTrees_B()
 {
 	tB   = (TTree*)fB->Get("glob_jet");
@@ -396,5 +431,162 @@ void SetLineWidthB()
 	b3CEtaB->SetLineWidth(2);
 	//b 4th central Pt
 	b4CEtaB->SetLineWidth(2);
+	return;
+}
+void Scale_bckgndHistos(double norm)
+{
+	Mb1b2_B->Scale(norm); 
+	Mb1b3_B->Scale(norm);
+	Mb1b4_B->Scale(norm);
+	Mb2b3_B->Scale(norm);
+	Mb2b4_B->Scale(norm);
+	Mb3b4_B->Scale(norm);
+
+	//Number of btags 
+	h_NbTagsB->Scale(norm);
+	//Number of bquarks 
+	NbquarksB->Scale(norm);
+	NjetsB->Scale(norm);
+	//reconstructed leading Higgs mass 
+	M_LhiggsB->Scale(norm);
+	//reconstructed sub-leading Higgs mass 
+	M_NLhiggsB->Scale(norm);
+
+	// invariant mass of a pair of b's, pp->4b
+	M_b1b2_B->Scale(norm);
+	M_b1b3_B->Scale(norm);
+	M_b1b4_B->Scale(norm);
+	M_b2b3_B->Scale(norm);
+	M_b2b4_B->Scale(norm);
+	M_b3b4_B->Scale(norm);
+	//relative difference of the jet pairs
+	//only 3 combination of jet pairs possible
+	dM_b1b2_b3b4_B->Scale(norm);
+	dM_b1b3_b2b4_B->Scale(norm);
+	dM_b1b4_b2b3_B->Scale(norm);
+	
+	
+	
+	//jet leading M
+	jetLMB->Scale(norm);
+	//jet 2nd leading M
+	jet2LMB->Scale(norm);
+	//jet 3rd leading M
+	jet3LMB->Scale(norm);
+	//jet 4th leading M
+	jet4LMB->Scale(norm);
+	//jet 5th leading M
+	//jet5LMB->Scale(norm);
+	
+	//jet leading Pt
+	jetLPtB->Scale(norm);
+	//jet 2nd leading Pt
+	jet2LPtB->Scale(norm);
+	//jet 3rd leading Pt
+	jet3LPtB->Scale(norm);
+	//jet 4th leading Pt
+	jet4LPtB->Scale(norm);
+	//jet 5th leading Pt
+	//jet5LPtB->Scale(norm);
+
+	//bjet leading M
+	bjetLMB->Scale(norm);
+	//bjet 2nd leading M
+	bjet2LMB->Scale(norm);
+	//bjet 3rd leading M
+	bjet3LMB->Scale(norm);
+	//bjet 4th leading M
+	bjet4LMB->Scale(norm);
+	//bjet 5th leading M
+	//bjet5LMB->Scale(norm);
+	
+	//b-jet leading Pt
+	bjetLPtB->Scale(norm);
+	//b-jet 2nd leading Pt
+	bjet2LPtB->Scale(norm);
+	//b-jet 3rd leading Pt
+	bjet3LPtB->Scale(norm);
+	//b-jet 4th leading Pt
+	bjet4LPtB->Scale(norm);
+
+	//b leading Pt
+	bLPtB->Scale(norm);
+	//b 2nd leading Pt
+	b2LPtB->Scale(norm);
+	//b 3rd leading Pt
+	b3LPtB->Scale(norm);
+	//b 4th leading Pt
+	b4LPtB->Scale(norm);
+
+	//b central Pt
+	bCEtaB->Scale(norm);
+	//b 2nd central Pt
+	b2CEtaB->Scale(norm);
+	//b 3rd central Pt
+	b3CEtaB->Scale(norm);
+	//b 4th central Pt
+	b4CEtaB->Scale(norm);
+	return;
+}
+void Set_NleadingJetColors_B()
+{
+
+	bjetLMB->SetLineColor(kOrange);
+	bjet2LMB->SetLineColor(kBlack);
+	bjet3LMB->SetLineColor(kRed);
+	bjet4LMB->SetLineColor(kGreen);
+	jetLMB->SetLineColor(kOrange);
+	jet2LMB->SetLineColor(kBlack);
+	jet3LMB->SetLineColor(kRed);
+	jet4LMB->SetLineColor(kGreen);
+	bjetLPtB->SetLineColor(kOrange);
+	bjet2LPtB->SetLineColor(kBlack);
+	bjet3LPtB->SetLineColor(kRed);
+	bjet4LPtB->SetLineColor(kGreen);
+	jetLPtB->SetLineColor(kOrange);
+	jet2LPtB->SetLineColor(kBlack);
+	jet3LPtB->SetLineColor(kRed);
+	jet4LPtB->SetLineColor(kGreen);
+	return;
+	
+}
+
+void Set_bquark_lambdaColors_B()
+{
+
+	M_LhiggsB->SetLineColor(kCyan);
+	M_NLhiggsB->SetLineColor(kCyan);
+	bjetLMB->SetLineColor(kCyan);
+	bjet2LMB->SetLineColor(kCyan);
+	bjet3LMB->SetLineColor(kCyan);
+	bjet4LMB->SetLineColor(kCyan);
+	jetLMB->SetLineColor(kCyan);
+	jet2LMB->SetLineColor(kCyan);
+	jet3LMB->SetLineColor(kCyan);
+	jet4LMB->SetLineColor(kCyan);
+	jetLPtB->SetLineColor(kCyan);
+	jet2LPtB->SetLineColor(kCyan);
+	jet3LPtB->SetLineColor(kCyan);
+	jet4LPtB->SetLineColor(kCyan);
+	bjetLPtB->SetLineColor(kCyan);
+	bjet2LPtB->SetLineColor(kCyan);
+	bjet3LPtB->SetLineColor(kCyan);
+	bjet4LPtB->SetLineColor(kCyan);
+	bLPtB->SetLineColor(kCyan);
+	b2LPtB->SetLineColor(kCyan);
+	b3LPtB->SetLineColor(kCyan);
+	b4LPtB->SetLineColor(kCyan);
+	bCEtaB->SetLineColor(kCyan);
+	b2CEtaB->SetLineColor(kCyan);
+	b3CEtaB->SetLineColor(kCyan);
+	b4CEtaB->SetLineColor(kCyan);
+	return;
+}
+
+void Draw_Number_bTags_B()
+{
+
+	h_NbTagsB = new TH1D("h_NbTagsB", "number of b tagged jets, pp->4b", 6, 0, 6);
+	tB->Draw("Nbtags>>h_NbTagsB");
 	return;
 }

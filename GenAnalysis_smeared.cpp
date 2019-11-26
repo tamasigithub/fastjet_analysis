@@ -9,388 +9,6 @@
 #include "GenAna_bckgnd.cpp"
 
 
-void Draw_Nparticles()
-{
-	int nbins = 6, nbins_1 = 20;
-	double nmin = 0, nmax = 6, nmax_1 = 20;
-	//Number of SMhiggs 
-	NSMhiggs1  = new TH1D("NSMhiggs1", "number of higgs", nbins, nmin, nmax);
-	NSMhiggs0  = new TH1D("NSMhiggs0", "number of higgs", nbins, nmin, nmax);
-	NSMhiggs_1 = new TH1D("NSMhiggs_1", "number of higgs", nbins, nmin, nmax);
-	NSMhiggs_2 = new TH1D("NSMhiggs_2", "number of higgs", nbins, nmin, nmax);
-	NSMhiggs2  = new TH1D("NSMhiggs2", "number of higgs", nbins, nmin, nmax);
-	NSMhiggs2_5= new TH1D("NSMhiggs2_5", "number of higgs", nbins, nmin, nmax);
-	NSMhiggs3  = new TH1D("NSMhiggs3", "number of higgs", nbins, nmin, nmax);
-	//Number of bquarks 
-	Nbquarks1  = new TH1D("Nbquarks1", "number of b quarks", nbins, nmin, nmax);
-	Nbquarks0  = new TH1D("Nbquarks0", "number of b quarks", nbins, nmin, nmax);
-	Nbquarks_1 = new TH1D("Nbquarks_1", "number of b quarks", nbins, nmin, nmax);
-	Nbquarks_2 = new TH1D("Nbquarks_2", "number of b quarks", nbins, nmin, nmax);
-	Nbquarks2  = new TH1D("Nbquarks2", "number of b quarks", nbins, nmin, nmax);
-	Nbquarks2_5= new TH1D("Nbquarks2_5", "number of b quarks", nbins, nmin, nmax);
-	Nbquarks3  = new TH1D("Nbquarks3", "number of b quarks", nbins, nmin, nmax);
-	NbquarksB  = new TH1D("NbquarksB", "number of b quarks", nbins, nmin, nmax);
-	//Number of jets  
-	Njets1  = new TH1D("Njets1", "number of jets", nbins_1, nmin, nmax_1);
-	Njets0  = new TH1D("Njets0", "number of jets", nbins_1, nmin, nmax_1);
-	Njets_1 = new TH1D("Njets_1", "number of jets", nbins_1, nmin, nmax_1);
-	Njets_2 = new TH1D("Njets_2", "number of jets", nbins_1, nmin, nmax_1);
-	Njets2  = new TH1D("Njets2", "number of jets", nbins_1, nmin, nmax_1);
-	Njets2_5= new TH1D("Njets2_5", "number of jets", nbins_1, nmin, nmax_1);
-	Njets3  = new TH1D("Njets3", "number of jets", nbins_1, nmin, nmax_1);
-	NjetsB  = new TH1D("NjetsB", "number of jets", nbins_1, nmin, nmax_1);
-	
-
-	t1->Draw("NSMhiggs>>NSMhiggs1");
-	t0->Draw("NSMhiggs>>NSMhiggs0");
-	t_1->Draw("NSMhiggs>>NSMhiggs_1");
-	t_2->Draw("NSMhiggs>>NSMhiggs_2");
-	t2->Draw("NSMhiggs>>NSMhiggs2");
-	t2_5->Draw("NSMhiggs>>NSMhiggs2_5");
-	t3->Draw("NSMhiggs>>NSMhiggs3");
-
-	t1->Draw("Nbquarks>>Nbquarks1");
-	t0->Draw("Nbquarks>>Nbquarks0");
-	t_1->Draw("Nbquarks>>Nbquarks_1");
-	t_2->Draw("Nbquarks>>Nbquarks_2");
-	t2->Draw("Nbquarks>>Nbquarks2");
-	t2_5->Draw("Nbquarks>>Nbquarks2_5");
-	t3->Draw("Nbquarks>>Nbquarks3");
-	tB->Draw("Nbquarks>>NbquarksB");
-	
-	t1->Draw("Njets>>Njets1");
-	t0->Draw("Njets>>Njets0");
-	t_1->Draw("Njets>>Njets_1");
-	t_2->Draw("Njets>>Njets_2");
-	t2->Draw("Njets>>Njets2");
-	t2_5->Draw("Njets>>Njets2_5");
-	t3->Draw("Njets>>Njets3");
-	tB->Draw("Njets>>NjetsB");
-	
-
-	NSMhiggs1->SetLineColor(kRed);
-	NSMhiggs0->SetLineColor(kBlack);
-	NSMhiggs_1->SetLineColor(kYellow -9);
-	NSMhiggs_2->SetLineColor(kGreen);
-	NSMhiggs2->SetLineColor(kBlue);
-	NSMhiggs2_5->SetLineColor(kOrange-9);
-	NSMhiggs3->SetLineColor(kViolet);
-
-	Nbquarks1->SetLineColor(kRed);
-	Nbquarks0->SetLineColor(kBlack);
-	Nbquarks_1->SetLineColor(kYellow -9);
-	Nbquarks_2->SetLineColor(kGreen);
-	Nbquarks2->SetLineColor(kBlue);
-	Nbquarks2_5->SetLineColor(kOrange-9);
-	Nbquarks3->SetLineColor(kViolet);
-	NbquarksB->SetLineColor(kCyan);
-
-	Njets1->SetLineColor(kRed);
-	Njets0->SetLineColor(kBlack);
-	Njets_1->SetLineColor(kYellow -9);
-	Njets_2->SetLineColor(kGreen);
-	Njets2->SetLineColor(kBlue);
-	Njets2_5->SetLineColor(kOrange-9);
-	Njets3->SetLineColor(kViolet);
-	NjetsB->SetLineColor(kCyan);
-	return;
-}
-void Draw_higgsPt()
-{
-	
-	t1->Draw("higgsLPt*1e-3>>higgsPt1");
-	t0->Draw("higgsLPt*1e-3>>higgsPt0");
-	t_1->Draw("higgsLPt*1e-3>>higgsPt_1");
-	t_2->Draw("higgsLPt*1e-3>>higgsPt_2");
-	t2->Draw("higgsLPt*1e-3>>higgsPt2");
-	t2_5->Draw("higgsLPt*1e-3>>higgsPt2_5");
-	t3->Draw("higgsLPt*1e-3>>higgsPt3");
-
-	t1->Draw("higgsNLPt*1e-3>>higgsNLPt1");
-	t0->Draw("higgsNLPt*1e-3>>higgsNLPt0");
-	t_1->Draw("higgsNLPt*1e-3>>higgsNLPt_1");
-	t_2->Draw("higgsNLPt*1e-3>>higgsNLPt_2");
-	t2->Draw("higgsNLPt*1e-3>>higgsNLPt2");
-	t2_5->Draw("higgsNLPt*1e-3>>higgsNLPt2_5");
-	t3->Draw("higgsNLPt*1e-3>>higgsNLPt3");
-	
-	return;
-}
-void Draw_b_jetPt()
-{
-	
-	t1->Draw("bJetLPt>>bjetLPt1");
-	t0->Draw("bJetLPt>>bjetLPt0");
-	t_1->Draw("bJetLPt>>bjetLPt_1");
-	t_2->Draw("bJetLPt>>bjetLPt_2");
-	t2->Draw("bJetLPt>>bjetLPt2");
-	t2_5->Draw("bJetLPt>>bjetLPt2_5");
-	t3->Draw("bJetLPt>>bjetLPt3");
-	tB->Draw("bJetLPt>>bjetLPtB");
-	
-	t1->Draw("bJetNLPt>>bjet2LPt1");
-	t0->Draw("bJetNLPt>>bjet2LPt0");
-	t_1->Draw("bJetNLPt>>bjet2LPt_1");
-	t_2->Draw("bJetNLPt>>bjet2LPt_2");
-	t2->Draw("bJetNLPt>>bjet2LPt2");
-	t2_5->Draw("bJetNLPt>>bjet2LPt2_5");
-	t3->Draw("bJetNLPt>>bjet2LPt3");
-	tB->Draw("bJetNLPt>>bjet2LPtB");
-	
-	t1->Draw("bJetNNLPt>>bjet3LPt1");
-	t0->Draw("bJetNNLPt>>bjet3LPt0");
-	t_1->Draw("bJetNNLPt>>bjet3LPt_1");
-	t_2->Draw("bJetNNLPt>>bjet3LPt_2");
-	t2->Draw("bJetNNLPt>>bjet3LPt2");
-	t2_5->Draw("bJetNNLPt>>bjet3LPt2_5");
-	t3->Draw("bJetNNLPt>>bjet3LPt3");
-	tB->Draw("bJetNNLPt>>bjet3LPtB");
-	
-	t1->Draw("bJetNNNLPt>>bjet4LPt1");
-	t0->Draw("bJetNNNLPt>>bjet4LPt0");
-	t_1->Draw("bJetNNNLPt>>bjet4LPt_1");
-	t_2->Draw("bJetNNNLPt>>bjet4LPt_2");
-	t2->Draw("bJetNNNLPt>>bjet4LPt2");
-	t2_5->Draw("bJetNNNLPt>>bjet4LPt2_5");
-	t3->Draw("bJetNNNLPt>>bjet4LPt3");
-	tB->Draw("bJetNNNLPt>>bjet4LPtB");
-
-	return;
-}
-
-void fetch_histos()
-{
-
-	bLPt1  = (TH1D*)f1->Get("hbPt_Lpt");
-	b2LPt1 = (TH1D*)f1->Get("hbPt_NLpt");
-	b3LPt1 = (TH1D*)f1->Get("hbPt_NNLpt");
-	b4LPt1 = (TH1D*)f1->Get("hbPt_NNNLpt");
-	
-	bLPt0  = (TH1D*)f0->Get("hbPt_Lpt");
-	b2LPt0 = (TH1D*)f0->Get("hbPt_NLpt");
-	b3LPt0 = (TH1D*)f0->Get("hbPt_NNLpt");
-	b4LPt0 = (TH1D*)f0->Get("hbPt_NNNLpt");
-	
-	bLPt_1  = (TH1D*)f_1->Get("hbPt_Lpt");
-	b2LPt_1 = (TH1D*)f_1->Get("hbPt_NLpt");
-	b3LPt_1 = (TH1D*)f_1->Get("hbPt_NNLpt");
-	b4LPt_1 = (TH1D*)f_1->Get("hbPt_NNNLpt");
-	
-	bLPt_2  = (TH1D*)f_2->Get("hbPt_Lpt");
-	b2LPt_2 = (TH1D*)f_2->Get("hbPt_NLpt");
-	b3LPt_2 = (TH1D*)f_2->Get("hbPt_NNLpt");
-	b4LPt_2 = (TH1D*)f_2->Get("hbPt_NNNLpt");
-	
-	bLPt2  = (TH1D*)f2->Get("hbPt_Lpt");
-	b2LPt2 = (TH1D*)f2->Get("hbPt_NLpt");
-	b3LPt2 = (TH1D*)f2->Get("hbPt_NNLpt");
-	b4LPt2 = (TH1D*)f2->Get("hbPt_NNNLpt");
-	
-	bLPt2_5  = (TH1D*)f2_5->Get("hbPt_Lpt");
-	b2LPt2_5 = (TH1D*)f2_5->Get("hbPt_NLpt");
-	b3LPt2_5 = (TH1D*)f2_5->Get("hbPt_NNLpt");
-	b4LPt2_5 = (TH1D*)f2_5->Get("hbPt_NNNLpt");
-	
-	bLPt3  = (TH1D*)f3->Get("hbPt_Lpt");
-	b2LPt3 = (TH1D*)f3->Get("hbPt_NLpt");
-	b3LPt3 = (TH1D*)f3->Get("hbPt_NNLpt");
-	b4LPt3 = (TH1D*)f3->Get("hbPt_NNNLpt");
-	
-	bLPtB  = (TH1D*)fB->Get("hbPt_Lpt");
-	b2LPtB = (TH1D*)fB->Get("hbPt_NLpt");
-	b3LPtB = (TH1D*)fB->Get("hbPt_NNLpt");
-	b4LPtB = (TH1D*)fB->Get("hbPt_NNNLpt");
-	
-	
-	bCEta1  = (TH1D*)f1->Get("hbEta_Ceta");
-	b2CEta1 = (TH1D*)f1->Get("hbEta_NCeta");
-	b3CEta1 = (TH1D*)f1->Get("hbEta_NNCeta");
-	b4CEta1 = (TH1D*)f1->Get("hbEta_NNNCeta");
-	
-	bCEta0  = (TH1D*)f0->Get("hbEta_Ceta");
-	b2CEta0 = (TH1D*)f0->Get("hbEta_NCeta");
-	b3CEta0 = (TH1D*)f0->Get("hbEta_NNCeta");
-	b4CEta0 = (TH1D*)f0->Get("hbEta_NNNCeta");
-	
-	bCEta_1  = (TH1D*)f_1->Get("hbEta_Ceta");
-	b2CEta_1 = (TH1D*)f_1->Get("hbEta_NCeta");
-	b3CEta_1 = (TH1D*)f_1->Get("hbEta_NNCeta");
-	b4CEta_1 = (TH1D*)f_1->Get("hbEta_NNNCeta");
-	
-	bCEta_2  = (TH1D*)f_2->Get("hbEta_Ceta");
-	b2CEta_2 = (TH1D*)f_2->Get("hbEta_NCeta");
-	b3CEta_2 = (TH1D*)f_2->Get("hbEta_NNCeta");
-	b4CEta_2 = (TH1D*)f_2->Get("hbEta_NNNCeta");
-	
-	bCEta2  = (TH1D*)f2->Get("hbEta_Ceta");
-	b2CEta2 = (TH1D*)f2->Get("hbEta_NCeta");
-	b3CEta2 = (TH1D*)f2->Get("hbEta_NNCeta");
-	b4CEta2 = (TH1D*)f2->Get("hbEta_NNNCeta");
-	
-	bCEta2_5  = (TH1D*)f2_5->Get("hbEta_Ceta");
-	b2CEta2_5 = (TH1D*)f2_5->Get("hbEta_NCeta");
-	b3CEta2_5 = (TH1D*)f2_5->Get("hbEta_NNCeta");
-	b4CEta2_5 = (TH1D*)f2_5->Get("hbEta_NNNCeta");
-	
-	bCEta3  = (TH1D*)f3->Get("hbEta_Ceta");
-	b2CEta3 = (TH1D*)f3->Get("hbEta_NCeta");
-	b3CEta3 = (TH1D*)f3->Get("hbEta_NNCeta");
-	b4CEta3 = (TH1D*)f3->Get("hbEta_NNNCeta");
-
-	bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
-	b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
-	b3CEtaB = (TH1D*)fB->Get("hbEta_NNCeta");
-	b4CEtaB = (TH1D*)fB->Get("hbEta_NNNCeta");
-	return;
-}
-void Set_NleadingJetColors()
-{
-	bjetLM1->SetLineColor(kOrange);
-	bjetLM0->SetLineColor(kOrange);
-	bjetLM_1->SetLineColor(kOrange);
-	bjetLM_2->SetLineColor(kOrange);
-	bjetLM2->SetLineColor(kOrange);
-	bjetLM2_5->SetLineColor(kOrange);
-	bjetLM3->SetLineColor(kOrange);
-	bjetLMB->SetLineColor(kOrange);
-	
-	bjet2LM1->SetLineColor(kBlack);
-	bjet2LM0->SetLineColor(kBlack);
-	bjet2LM_1->SetLineColor(kBlack);
-	bjet2LM_2->SetLineColor(kBlack);
-	bjet2LM2->SetLineColor(kBlack);
-	bjet2LM2_5->SetLineColor(kBlack);
-	bjet2LM3->SetLineColor(kBlack);
-	bjet2LMB->SetLineColor(kBlack);
-	
-	bjet3LM1->SetLineColor(kRed);
-	bjet3LM0->SetLineColor(kRed);
-	bjet3LM_1->SetLineColor(kRed);
-	bjet3LM_2->SetLineColor(kRed);
-	bjet3LM2->SetLineColor(kRed);
-	bjet3LM2_5->SetLineColor(kRed);
-	bjet3LM3->SetLineColor(kRed);
-	bjet3LMB->SetLineColor(kRed);
-	
-	bjet4LM1->SetLineColor(kGreen);
-	bjet4LM0->SetLineColor(kGreen);
-	bjet4LM_1->SetLineColor(kGreen);
-	bjet4LM_2->SetLineColor(kGreen);
-	bjet4LM2->SetLineColor(kGreen);
-	bjet4LM2_5->SetLineColor(kGreen);
-	bjet4LM3->SetLineColor(kGreen);
-	bjet4LMB->SetLineColor(kGreen);
-	
-	jetLM1->SetLineColor(kOrange);
-	jetLM0->SetLineColor(kOrange);
-	jetLM_1->SetLineColor(kOrange);
-	jetLM_2->SetLineColor(kOrange);
-	jetLM2->SetLineColor(kOrange);
-	jetLM2_5->SetLineColor(kOrange);
-	jetLM3->SetLineColor(kOrange);
-	jetLMB->SetLineColor(kOrange);
-	
-	jet2LM1->SetLineColor(kBlack);
-	jet2LM0->SetLineColor(kBlack);
-	jet2LM_1->SetLineColor(kBlack);
-	jet2LM_2->SetLineColor(kBlack);
-	jet2LM2->SetLineColor(kBlack);
-	jet2LM2_5->SetLineColor(kBlack);
-	jet2LM3->SetLineColor(kBlack);
-	jet2LMB->SetLineColor(kBlack);
-	
-	jet3LM1->SetLineColor(kRed);
-	jet3LM0->SetLineColor(kRed);
-	jet3LM_1->SetLineColor(kRed);
-	jet3LM_2->SetLineColor(kRed);
-	jet3LM2->SetLineColor(kRed);
-	jet3LM2_5->SetLineColor(kRed);
-	jet3LM3->SetLineColor(kRed);
-	jet3LMB->SetLineColor(kRed);
-	
-	jet4LM1->SetLineColor(kGreen);
-	jet4LM0->SetLineColor(kGreen);
-	jet4LM_1->SetLineColor(kGreen);
-	jet4LM_2->SetLineColor(kGreen);
-	jet4LM2->SetLineColor(kGreen);
-	jet4LM2_5->SetLineColor(kGreen);
-	jet4LM3->SetLineColor(kGreen);
-	jet4LMB->SetLineColor(kGreen);
-	
-	jetLPt1->SetLineColor(kOrange);
-	jetLPt0->SetLineColor(kOrange);
-	jetLPt_1->SetLineColor(kOrange);
-	jetLPt_2->SetLineColor(kOrange);
-	jetLPt2->SetLineColor(kOrange);
-	jetLPt2_5->SetLineColor(kOrange);
-	jetLPt3->SetLineColor(kOrange);
-	jetLPtB->SetLineColor(kOrange);
-	
-	jet2LPt1->SetLineColor(kBlack);
-	jet2LPt0->SetLineColor(kBlack);
-	jet2LPt_1->SetLineColor(kBlack);
-	jet2LPt_2->SetLineColor(kBlack);
-	jet2LPt2->SetLineColor(kBlack);
-	jet2LPt2_5->SetLineColor(kBlack);
-	jet2LPt3->SetLineColor(kBlack);
-	jet2LPtB->SetLineColor(kBlack);
-	
-	jet3LPt1->SetLineColor(kRed);
-	jet3LPt0->SetLineColor(kRed);
-	jet3LPt_1->SetLineColor(kRed);
-	jet3LPt_2->SetLineColor(kRed);
-	jet3LPt2->SetLineColor(kRed);
-	jet3LPt2_5->SetLineColor(kRed);
-	jet3LPt3->SetLineColor(kRed);
-	jet3LPtB->SetLineColor(kRed);
-	
-	jet4LPt1->SetLineColor(kGreen);
-	jet4LPt0->SetLineColor(kGreen);
-	jet4LPt_1->SetLineColor(kGreen);
-	jet4LPt_2->SetLineColor(kGreen);
-	jet4LPt2->SetLineColor(kGreen);
-	jet4LPt2_5->SetLineColor(kGreen);
-	jet4LPt3->SetLineColor(kGreen);
-	jet4LPtB->SetLineColor(kGreen);
-	
-	bjetLPt1->SetLineColor(kOrange);
-	bjetLPt0->SetLineColor(kOrange);
-	bjetLPt_1->SetLineColor(kOrange);
-	bjetLPt_2->SetLineColor(kOrange);
-	bjetLPt2->SetLineColor(kOrange);
-	bjetLPt2_5->SetLineColor(kOrange);
-	bjetLPt3->SetLineColor(kOrange);
-	bjetLPtB->SetLineColor(kOrange);
-	
-	bjet2LPt1->SetLineColor(kBlack);
-	bjet2LPt0->SetLineColor(kBlack);
-	bjet2LPt_1->SetLineColor(kBlack);
-	bjet2LPt_2->SetLineColor(kBlack);
-	bjet2LPt2->SetLineColor(kBlack);
-	bjet2LPt2_5->SetLineColor(kBlack);
-	bjet2LPt3->SetLineColor(kBlack);
-	bjet2LPtB->SetLineColor(kBlack);
-	
-	bjet3LPt1->SetLineColor(kRed);
-	bjet3LPt0->SetLineColor(kRed);
-	bjet3LPt_1->SetLineColor(kRed);
-	bjet3LPt_2->SetLineColor(kRed);
-	bjet3LPt2->SetLineColor(kRed);
-	bjet3LPt2_5->SetLineColor(kRed);
-	bjet3LPt3->SetLineColor(kRed);
-	bjet3LPtB->SetLineColor(kRed);
-	
-	bjet4LPt1->SetLineColor(kGreen);
-	bjet4LPt0->SetLineColor(kGreen);
-	bjet4LPt_1->SetLineColor(kGreen);
-	bjet4LPt_2->SetLineColor(kGreen);
-	bjet4LPt2->SetLineColor(kGreen);
-	bjet4LPt2_5->SetLineColor(kGreen);
-	bjet4LPt3->SetLineColor(kGreen);
-	bjet4LPtB->SetLineColor(kGreen);
-
-}
-
 void Set_FinalbJetColors()
 {
 	// invariant mass of a pair of b's, ctr = 1.0
@@ -421,244 +39,6 @@ void Set_FinalbJetColors()
 
 }
 
-void Set_bquark_lambdaColors()
-{
-	
-	M_Lhiggs1->SetLineColor(kRed);
-	M_Lhiggs0->SetLineColor(kBlack);
-	M_Lhiggs_1->SetLineColor(kYellow -9);
-	M_Lhiggs_2->SetLineColor(kGreen);
-	M_Lhiggs2->SetLineColor(kBlue);
-	M_Lhiggs2_5->SetLineColor(kOrange-9);
-	M_Lhiggs3->SetLineColor(kViolet);
-	M_LhiggsB->SetLineColor(kCyan);
-	
-	M_NLhiggs1->SetLineColor(kRed);
-	M_NLhiggs0->SetLineColor(kBlack);
-	M_NLhiggs_1->SetLineColor(kYellow -9);
-	M_NLhiggs_2->SetLineColor(kGreen);
-	M_NLhiggs2->SetLineColor(kBlue);
-	M_NLhiggs2_5->SetLineColor(kOrange-9);
-	M_NLhiggs3->SetLineColor(kViolet);
-	M_NLhiggsB->SetLineColor(kCyan);
-	
-	bjetLM1->SetLineColor(kRed);
-	bjetLM0->SetLineColor(kBlack);
-	bjetLM_1->SetLineColor(kYellow -9);
-	bjetLM_2->SetLineColor(kGreen);
-	bjetLM2->SetLineColor(kBlue);
-	bjetLM2_5->SetLineColor(kOrange-9);
-	bjetLM3->SetLineColor(kViolet);
-	bjetLMB->SetLineColor(kCyan);
-	
-	bjet2LM1->SetLineColor(kRed);
-	bjet2LM0->SetLineColor(kBlack);
-	bjet2LM_1->SetLineColor(kYellow -9);
-	bjet2LM_2->SetLineColor(kGreen);
-	bjet2LM2->SetLineColor(kBlue);
-	bjet2LM2_5->SetLineColor(kOrange-9);
-	bjet2LM3->SetLineColor(kViolet);
-	bjet2LMB->SetLineColor(kCyan);
-	
-	bjet3LM1->SetLineColor(kRed);
-	bjet3LM0->SetLineColor(kBlack);
-	bjet3LM_1->SetLineColor(kYellow -9);
-	bjet3LM_2->SetLineColor(kGreen);
-	bjet3LM2->SetLineColor(kBlue);
-	bjet3LM2_5->SetLineColor(kOrange-9);
-	bjet3LM3->SetLineColor(kViolet);
-	bjet3LMB->SetLineColor(kCyan);
-	
-	bjet4LM1->SetLineColor(kRed);
-	bjet4LM0->SetLineColor(kBlack);
-	bjet4LM_1->SetLineColor(kYellow -9);
-	bjet4LM_2->SetLineColor(kGreen);
-	bjet4LM2->SetLineColor(kBlue);
-	bjet4LM2_5->SetLineColor(kOrange-9);
-	bjet4LM3->SetLineColor(kViolet);
-	bjet4LMB->SetLineColor(kCyan);
-	
-	jetLM1->SetLineColor(kRed);
-	jetLM0->SetLineColor(kBlack);
-	jetLM_1->SetLineColor(kYellow -9);
-	jetLM_2->SetLineColor(kGreen);
-	jetLM2->SetLineColor(kBlue);
-	jetLM2_5->SetLineColor(kOrange-9);
-	jetLM3->SetLineColor(kViolet);
-	jetLMB->SetLineColor(kCyan);
-	
-	jet2LM1->SetLineColor(kRed);
-	jet2LM0->SetLineColor(kBlack);
-	jet2LM_1->SetLineColor(kYellow -9);
-	jet2LM_2->SetLineColor(kGreen);
-	jet2LM2->SetLineColor(kBlue);
-	jet2LM2_5->SetLineColor(kOrange-9);
-	jet2LM3->SetLineColor(kViolet);
-	jet2LMB->SetLineColor(kCyan);
-	
-	jet3LM1->SetLineColor(kRed);
-	jet3LM0->SetLineColor(kBlack);
-	jet3LM_1->SetLineColor(kYellow -9);
-	jet3LM_2->SetLineColor(kGreen);
-	jet3LM2->SetLineColor(kBlue);
-	jet3LM2_5->SetLineColor(kOrange-9);
-	jet3LM3->SetLineColor(kViolet);
-	jet3LMB->SetLineColor(kCyan);
-	
-	jet4LM1->SetLineColor(kRed);
-	jet4LM0->SetLineColor(kBlack);
-	jet4LM_1->SetLineColor(kYellow -9);
-	jet4LM_2->SetLineColor(kGreen);
-	jet4LM2->SetLineColor(kBlue);
-	jet4LM2_5->SetLineColor(kOrange-9);
-	jet4LM3->SetLineColor(kViolet);
-	jet4LMB->SetLineColor(kCyan);
-	
-	jetLPt1->SetLineColor(kRed);
-	jetLPt0->SetLineColor(kBlack);
-	jetLPt_1->SetLineColor(kYellow -9);
-	jetLPt_2->SetLineColor(kGreen);
-	jetLPt2->SetLineColor(kBlue);
-	jetLPt2_5->SetLineColor(kOrange-9);
-	jetLPt3->SetLineColor(kViolet);
-	jetLPtB->SetLineColor(kCyan);
-	
-	jet2LPt1->SetLineColor(kRed);
-	jet2LPt0->SetLineColor(kBlack);
-	jet2LPt_1->SetLineColor(kYellow -9);
-	jet2LPt_2->SetLineColor(kGreen);
-	jet2LPt2->SetLineColor(kBlue);
-	jet2LPt2_5->SetLineColor(kOrange-9);
-	jet2LPt3->SetLineColor(kViolet);
-	jet2LPtB->SetLineColor(kCyan);
-	
-	jet3LPt1->SetLineColor(kRed);
-	jet3LPt0->SetLineColor(kBlack);
-	jet3LPt_1->SetLineColor(kYellow -9);
-	jet3LPt_2->SetLineColor(kGreen);
-	jet3LPt2->SetLineColor(kBlue);
-	jet3LPt2_5->SetLineColor(kOrange-9);
-	jet3LPt3->SetLineColor(kViolet);
-	jet3LPtB->SetLineColor(kCyan);
-	
-	jet4LPt1->SetLineColor(kRed);
-	jet4LPt0->SetLineColor(kBlack);
-	jet4LPt_1->SetLineColor(kYellow -9);
-	jet4LPt_2->SetLineColor(kGreen);
-	jet4LPt2->SetLineColor(kBlue);
-	jet4LPt2_5->SetLineColor(kOrange-9);
-	jet4LPt3->SetLineColor(kViolet);
-	jet4LPtB->SetLineColor(kCyan);
-	
-	bjetLPt1->SetLineColor(kRed);
-	bjetLPt0->SetLineColor(kBlack);
-	bjetLPt_1->SetLineColor(kYellow -9);
-	bjetLPt_2->SetLineColor(kGreen);
-	bjetLPt2->SetLineColor(kBlue);
-	bjetLPt2_5->SetLineColor(kOrange-9);
-	bjetLPt3->SetLineColor(kViolet);
-	bjetLPtB->SetLineColor(kCyan);
-	
-	bjet2LPt1->SetLineColor(kRed);
-	bjet2LPt0->SetLineColor(kBlack);
-	bjet2LPt_1->SetLineColor(kYellow -9);
-	bjet2LPt_2->SetLineColor(kGreen);
-	bjet2LPt2->SetLineColor(kBlue);
-	bjet2LPt2_5->SetLineColor(kOrange-9);
-	bjet2LPt3->SetLineColor(kViolet);
-	bjet2LPtB->SetLineColor(kCyan);
-	
-	bjet3LPt1->SetLineColor(kRed);
-	bjet3LPt0->SetLineColor(kBlack);
-	bjet3LPt_1->SetLineColor(kYellow -9);
-	bjet3LPt_2->SetLineColor(kGreen);
-	bjet3LPt2->SetLineColor(kBlue);
-	bjet3LPt2_5->SetLineColor(kOrange-9);
-	bjet3LPt3->SetLineColor(kViolet);
-	bjet3LPtB->SetLineColor(kCyan);
-	
-	bjet4LPt1->SetLineColor(kRed);
-	bjet4LPt0->SetLineColor(kBlack);
-	bjet4LPt_1->SetLineColor(kYellow -9);
-	bjet4LPt_2->SetLineColor(kGreen);
-	bjet4LPt2->SetLineColor(kBlue);
-	bjet4LPt2_5->SetLineColor(kOrange-9);
-	bjet4LPt3->SetLineColor(kViolet);
-	bjet4LPtB->SetLineColor(kCyan);
-
-	bLPt1->SetLineColor(kRed);
-	bLPt0->SetLineColor(kBlack);
-	bLPt_1->SetLineColor(kYellow -9);
-	bLPt_2->SetLineColor(kGreen);
-	bLPt2->SetLineColor(kBlue);
-	bLPt2_5->SetLineColor(kOrange-9);
-	bLPt3->SetLineColor(kViolet);
-	bLPtB->SetLineColor(kCyan);
-	
-	b2LPt1->SetLineColor(kRed);
-	b2LPt0->SetLineColor(kBlack);
-	b2LPt_1->SetLineColor(kYellow -9);
-	b2LPt_2->SetLineColor(kGreen);
-	b2LPt2->SetLineColor(kBlue);
-	b2LPt2_5->SetLineColor(kOrange-9);
-	b2LPt3->SetLineColor(kViolet);
-	b2LPtB->SetLineColor(kCyan);
-	
-	b3LPt1->SetLineColor(kRed);
-	b3LPt0->SetLineColor(kBlack);
-	b3LPt_1->SetLineColor(kYellow -9);
-	b3LPt_2->SetLineColor(kGreen);
-	b3LPt2->SetLineColor(kBlue);
-	b3LPt2_5->SetLineColor(kOrange-9);
-	b3LPt3->SetLineColor(kViolet);
-	b3LPtB->SetLineColor(kCyan);
-	
-	b4LPt1->SetLineColor(kRed);
-	b4LPt0->SetLineColor(kBlack);
-	b4LPt_1->SetLineColor(kYellow -9);
-	b4LPt_2->SetLineColor(kGreen);
-	b4LPt2->SetLineColor(kBlue);
-	b4LPt2_5->SetLineColor(kOrange-9);
-	b4LPt3->SetLineColor(kViolet);
-	b4LPtB->SetLineColor(kCyan);
-	
-	bCEta1->SetLineColor(kRed);
-	bCEta0->SetLineColor(kBlack);
-	bCEta_1->SetLineColor(kYellow -9);
-	bCEta_2->SetLineColor(kGreen);
-	bCEta2->SetLineColor(kBlue);
-	bCEta2_5->SetLineColor(kOrange-9);
-	bCEta3->SetLineColor(kViolet);
-	bCEtaB->SetLineColor(kCyan);
-	
-	b2CEta1->SetLineColor(kRed);
-	b2CEta0->SetLineColor(kBlack);
-	b2CEta_1->SetLineColor(kYellow -9);
-	b2CEta_2->SetLineColor(kGreen);
-	b2CEta2->SetLineColor(kBlue);
-	b2CEta2_5->SetLineColor(kOrange-9);
-	b2CEta3->SetLineColor(kViolet);
-	b2CEtaB->SetLineColor(kCyan);
-	
-	b3CEta1->SetLineColor(kRed);
-	b3CEta0->SetLineColor(kBlack);
-	b3CEta_1->SetLineColor(kYellow -9);
-	b3CEta_2->SetLineColor(kGreen);
-	b3CEta2->SetLineColor(kBlue);
-	b3CEta2_5->SetLineColor(kOrange-9);
-	b3CEta3->SetLineColor(kViolet);
-	b3CEtaB->SetLineColor(kCyan);
-	
-	b4CEta1->SetLineColor(kRed);
-	b4CEta0->SetLineColor(kBlack);
-	b4CEta_1->SetLineColor(kYellow -9);
-	b4CEta_2->SetLineColor(kGreen);
-	b4CEta2->SetLineColor(kBlue);
-	b4CEta2_5->SetLineColor(kOrange-9);
-	b4CEta3->SetLineColor(kViolet);
-	b4CEtaB->SetLineColor(kCyan);
-	return;
-}
 void Set_LegendProps()
 {
 
@@ -715,123 +95,6 @@ void Set_LegendProps()
 
 
 
-void Draw_Number_bTags()
-{
-
-	h_NbTags1 = new TH1D("h_NbTags1", "number of b tagged jets, #lambda =1.0", 6, 0, 6);
-	h_NbTags0 = new TH1D("h_NbTags0", "number of b tagged jets, #lambda =0.0", 6, 0, 6);
-	h_NbTags_1 = new TH1D("h_NbTags_1", "number of b tagged jets, #lambda =-1.0", 6, 0, 6);
-	h_NbTags_2 = new TH1D("h_NbTags_2", "number of b tagged jets, #lambda =-2.0", 6, 0, 6);
-	h_NbTags2 = new TH1D("h_NbTags2", "number of b tagged jets, #lambda =2.0", 6, 0, 6);
-	h_NbTags2_5 = new TH1D("h_NbTags2_5", "number of b tagged jets, #lambda =2.5", 6, 0, 6);
-	h_NbTags3 = new TH1D("h_NbTags3", "number of b tagged jets, #lambda =3.0", 6, 0, 6);
-	h_NbTagsB = new TH1D("h_NbTagsB", "number of b tagged jets, pp->4b", 6, 0, 6);
-
-	t1->Draw("Nbtags>>h_NbTags1");
-	t0->Draw("Nbtags>>h_NbTags0");
-	t_1->Draw("Nbtags>>h_NbTags_1");
-	t_2->Draw("Nbtags>>h_NbTags_2");
-	t2->Draw("Nbtags>>h_NbTags2");
-	t2_5->Draw("Nbtags>>h_NbTags2_5");
-	t3->Draw("Nbtags>>h_NbTags3");
-	tB->Draw("Nbtags>>h_NbTagsB");
-	return;
-}
-void Scale_bckgndHistos(double norm)
-{
-	Mb1b2_B->Scale(norm); 
-	Mb1b3_B->Scale(norm);
-	Mb1b4_B->Scale(norm);
-	Mb2b3_B->Scale(norm);
-	Mb2b4_B->Scale(norm);
-	Mb3b4_B->Scale(norm);
-
-	//Number of btags 
-	h_NbTagsB->Scale(norm);
-	//Number of bquarks 
-	NbquarksB->Scale(norm);
-	NjetsB->Scale(norm);
-	//reconstructed leading Higgs mass 
-	M_LhiggsB->Scale(norm);
-	//reconstructed sub-leading Higgs mass 
-	M_NLhiggsB->Scale(norm);
-
-	// invariant mass of a pair of b's, pp->4b
-	M_b1b2_B->Scale(norm);
-	M_b1b3_B->Scale(norm);
-	M_b1b4_B->Scale(norm);
-	M_b2b3_B->Scale(norm);
-	M_b2b4_B->Scale(norm);
-	M_b3b4_B->Scale(norm);
-	//relative difference of the jet pairs
-	//only 3 combination of jet pairs possible
-	dM_b1b2_b3b4_B->Scale(norm);
-	dM_b1b3_b2b4_B->Scale(norm);
-	dM_b1b4_b2b3_B->Scale(norm);
-	
-	
-	
-	//jet leading M
-	jetLMB->Scale(norm);
-	//jet 2nd leading M
-	jet2LMB->Scale(norm);
-	//jet 3rd leading M
-	jet3LMB->Scale(norm);
-	//jet 4th leading M
-	jet4LMB->Scale(norm);
-	//jet 5th leading M
-	//jet5LMB->Scale(norm);
-	
-	//jet leading Pt
-	jetLPtB->Scale(norm);
-	//jet 2nd leading Pt
-	jet2LPtB->Scale(norm);
-	//jet 3rd leading Pt
-	jet3LPtB->Scale(norm);
-	//jet 4th leading Pt
-	jet4LPtB->Scale(norm);
-	//jet 5th leading Pt
-	//jet5LPtB->Scale(norm);
-
-	//bjet leading M
-	bjetLMB->Scale(norm);
-	//bjet 2nd leading M
-	bjet2LMB->Scale(norm);
-	//bjet 3rd leading M
-	bjet3LMB->Scale(norm);
-	//bjet 4th leading M
-	bjet4LMB->Scale(norm);
-	//bjet 5th leading M
-	//bjet5LMB->Scale(norm);
-	
-	//b-jet leading Pt
-	bjetLPtB->Scale(norm);
-	//b-jet 2nd leading Pt
-	bjet2LPtB->Scale(norm);
-	//b-jet 3rd leading Pt
-	bjet3LPtB->Scale(norm);
-	//b-jet 4th leading Pt
-	bjet4LPtB->Scale(norm);
-
-	//b leading Pt
-	bLPtB->Scale(norm);
-	//b 2nd leading Pt
-	b2LPtB->Scale(norm);
-	//b 3rd leading Pt
-	b3LPtB->Scale(norm);
-	//b 4th leading Pt
-	b4LPtB->Scale(norm);
-
-	//b central Pt
-	bCEtaB->Scale(norm);
-	//b 2nd central Pt
-	b2CEtaB->Scale(norm);
-	//b 3rd central Pt
-	b3CEtaB->Scale(norm);
-	//b 4th central Pt
-	b4CEtaB->Scale(norm);
-	return;
-}
 int main()
 {
 	
@@ -895,15 +158,59 @@ int main()
 	Set_jetPtProps_3();
 	Set_jetPtProps_B();
 	
-	Draw_higgsPt();
+	Draw_higgsPt_1();
+	Draw_higgsPt_0();
+	Draw_higgsPt__1();
+	Draw_higgsPt__2();
+	Draw_higgsPt_2();
+	Draw_higgsPt_2_5();
+	Draw_higgsPt_3();
 	//Draw_b_jetPt();
-	fetch_histos();
-	Draw_Nparticles();
 	
-	Set_NleadingJetColors();
-	Set_FinalbJetColors();
+	fetch_histos_1();
+	fetch_histos_0();
+	fetch_histos__1();
+	fetch_histos__2();
+	fetch_histos_2();
+	fetch_histos_2_5();
+	fetch_histos_3();
+	fetch_histos_B();
+	
+	Draw_Nparticles_1();
+	Draw_Nparticles_0();
+	Draw_Nparticles__1();
+	Draw_Nparticles__2();
+	Draw_Nparticles_2();
+	Draw_Nparticles_2_5();
+	Draw_Nparticles_3();
+	Draw_Nparticles_B();
+	
+	Set_NleadingJetColors_1();
+	Set_NleadingJetColors_0();
+	Set_NleadingJetColors__1();
+	Set_NleadingJetColors__2();
+	Set_NleadingJetColors_2();
+	Set_NleadingJetColors_2_5();
+	Set_NleadingJetColors_3();
+	Set_NleadingJetColors_B();
 
-	Draw_Number_bTags();
+	Set_FinalbJetColors();
+	//Set_FinalbJetColors_0();
+	//Set_FinalbJetColors__1();
+	//Set_FinalbJetColors__2();
+	//Set_FinalbJetColors_2();
+	//Set_FinalbJetColors_2_5();
+	//Set_FinalbJetColors_3();
+	//Set_FinalbJetColors_B();
+
+	Draw_Number_bTags_1();
+	Draw_Number_bTags_0();
+	Draw_Number_bTags__1();
+	Draw_Number_bTags__2();
+	Draw_Number_bTags_2();
+	Draw_Number_bTags_2_5();
+	Draw_Number_bTags_3();
+	Draw_Number_bTags_B();
 
 	int n1 = 0, n0 = 0, n_1 = 0, n_2 = 0, n2 = 0, n2_5 = 0, n3 = 0, nB = 0;
 	int nL1 = 0, nL0 = 0, nL_1 = 0, nL_2 = 0, nL2 = 0, nL2_5 = 0, nL3 = 0, nLB = 0;
@@ -2022,7 +1329,14 @@ int main()
 	//! bquark sub leading for various lambda, 
 	//! bquark 3rd leading for various lambda, 
 	//! bquark 4th leading for various lambda,
-	Set_bquark_lambdaColors(); 
+	Set_bquark_lambdaColors_1(); 
+	Set_bquark_lambdaColors_0(); 
+	Set_bquark_lambdaColors__1(); 
+	Set_bquark_lambdaColors__2(); 
+	Set_bquark_lambdaColors_2(); 
+	Set_bquark_lambdaColors_2_5(); 
+	Set_bquark_lambdaColors_3(); 
+	Set_bquark_lambdaColors_B(); 
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
