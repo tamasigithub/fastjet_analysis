@@ -18,7 +18,7 @@
 #include <string>
 #include <math.h>
 const char* out_path = "/eos/user/t/tkar/www/TTT/plots/trackJet";
-int write_topdf(const char* output_file_name = "tJrate_LptMB")
+int write_to_pdf(const char* output_file_name = "tJrate_LptMB2")
 {
 
 	char out_file_open[1023];
@@ -28,7 +28,7 @@ int write_topdf(const char* output_file_name = "tJrate_LptMB")
         char out_file_close[1023];
         sprintf(out_file_close,"%s/%s.pdf)",out_path,output_file_name);
 	
-	TFile* f1 = TFile::Open("jetout_LptMB1_3rec.root");
+	TFile* f1 = TFile::Open("jetout_LptMB2_3rec.root");
 	TH1F* hpp1	= (TH1F*)f1->Get("h_pur_vs_ptPU");
 	TH1F* hpe1	= (TH1F*)f1->Get("h_pur_vs_etaPU");
 	//! no binning
@@ -50,7 +50,7 @@ int write_topdf(const char* output_file_name = "tJrate_LptMB")
 	TH1D* hr_ac4	= (TH1D*)f1->Get("h_PUNNNLpt");
 	TH1D* hr_ac5	= (TH1D*)f1->Get("h_PUNNNNLpt");
 
-	TFile* f2 = TFile::Open("jetout_LptMB1_5rec.root");
+	TFile* f2 = TFile::Open("jetout_LptMB2_5rec.root");
 	TH1F* hpp2	= (TH1F*)f2->Get("h_pur_vs_ptPU");
 	TH1F* hpe2	= (TH1F*)f2->Get("h_pur_vs_etaPU");
 	//! no binning
@@ -72,7 +72,7 @@ int write_topdf(const char* output_file_name = "tJrate_LptMB")
 	TH1D* hr_bc4	= (TH1D*)f2->Get("h_PUNNNLpt");
 	TH1D* hr_bc5	= (TH1D*)f2->Get("h_PUNNNNLpt");
 	
-	TFile* f3 = TFile::Open("jetout_LptMB1_noKaprec.root");
+	TFile* f3 = TFile::Open("jetout_LptMB2_noKaprec.root");
 	TH1F* hpp3	= (TH1F*)f3->Get("h_pur_vs_ptPU");
 	TH1F* hpe3	= (TH1F*)f3->Get("h_pur_vs_etaPU");
 	//! no binning
@@ -94,7 +94,7 @@ int write_topdf(const char* output_file_name = "tJrate_LptMB")
 	TH1D* hr_cc4	= (TH1D*)f3->Get("h_PUNNNLpt");
 	TH1D* hr_cc5	= (TH1D*)f3->Get("h_PUNNNNLpt");
 	
-	TFile* f4= TFile::Open("jetout_LptMB1_looserec.root");
+	TFile* f4= TFile::Open("jetout_LptMB2_looserec.root");
 	TH1F* hpp4	= (TH1F*)f4->Get("h_pur_vs_ptPU");
 	TH1F* hpe4	= (TH1F*)f4->Get("h_pur_vs_etaPU");
 	//! no binning

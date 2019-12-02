@@ -87,10 +87,10 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("jetout_LptMB1_3rec.root","RECREATE");
-  //TFile *f_out = new TFile("jetout_LptMB1_5rec.root","RECREATE");
-  //TFile *f_out = new TFile("jetout_LptMB1_noKaprec.root","RECREATE");
-  //TFile *f_out = new TFile("jetout_LptMB1_looserec.root","RECREATE");
+  //TFile *f_out = new TFile("jetout_LptMB2_3rec.root","RECREATE");
+  //TFile *f_out = new TFile("jetout_LptMB2_5rec.root","RECREATE");
+  TFile *f_out = new TFile("jetout_LptMB2_noKaprec.root","RECREATE");
+  //TFile *f_out = new TFile("jetout_LptMB2_looserec.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -141,11 +141,11 @@ int main ()
   //! high pt min bias sample sigma = 3
   //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119996.MBRootOpt3_1_MYSTREAM/user.tkar.16621546.MYSTREAM/*.root");
   //!low pt min bias sample sigma=3
-  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt3_1_MYSTREAM/*.root");
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt3_1_MYSTREAM/*.root");
   //!low pt min bias sample sigma=5
   //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOpt5_1_MYSTREAM/*.root");
   //!low pt min bias sample without kappa cut
-  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptnoKap_1_MYSTREAM/*.root");
+  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptnoKap_1_MYSTREAM/*.root");
   //!low pt min bias sample without kappa, dphi2 and dz2 cuts
   //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.tkar119995.MBRootOptloose_1_MYSTREAM/*.root");
   //rec.Add("/afs/cern.ch/work/t/tkar/testarea/20.20.10.1/WorkArea/run/rec_outputs/hh4b_opt/user.tkar.309527VBF_2HDM_H_m1000_hh4bRoot2_MYSTREAM/*.root");
@@ -306,7 +306,9 @@ int main ()
 		else if(tid < -1)tjObj.flag = -1;//dc tracks
 
 		//! veto fake and dc tracks?
-		if(tjObj.flag!=1) continue;
+		//if(tjObj.flag!=1) continue;
+		//! veto only dc tracks
+		if(tjObj.flag < 0) continue;
 
 		tjObj.px = pt*cos(phi);
 		tjObj.py = pt*sin(phi);
