@@ -686,5 +686,17 @@ genOut.SetMultiplicityHist_props();
 genOut.WriteMultiplicity();
 genOut.glob_jet->Write();
 f_out->Close();
+delete f_out;
+delete px_tru;
+delete py_tru;
+delete pz_tru;
+delete vz_tru;
+delete energy;
+delete charge;
+delete mass;
+delete pdg;
+delete status;
+delete barcode;
+
 return 0;
 }
