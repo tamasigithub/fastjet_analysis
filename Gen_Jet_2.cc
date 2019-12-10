@@ -676,7 +676,6 @@ int main()
 
  // for debug
  // hunt for memory leak
- delete f_out;
  delete px_tru;
  delete py_tru;
  delete pz_tru;
@@ -687,6 +686,17 @@ int main()
  delete pdg;
  delete status;
  delete barcode;
+
+ px_tru = 0;
+ py_tru = 0;
+ pz_tru = 0;
+ vz_tru = 0;
+ energy = 0;
+ charge = 0;
+ mass = 0;
+ pdg = 0;
+ status = 0;
+ barcode = 0;
 
  }// for loop over nentries
 std::cout <<"total number of events used " <<genOut.nevents <<std::endl;
@@ -699,6 +709,8 @@ genOut.SetMultiplicityHist_props();
 genOut.WriteMultiplicity();
 genOut.glob_jet->Write();
 f_out->Close();
+
+//delete f_out; <--- I think, TFile:Close frees allocated memory. This could cause seg. fault
 
 return 0;
 }
