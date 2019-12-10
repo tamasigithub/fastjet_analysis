@@ -39,14 +39,14 @@ const double ggFhhXsec3   = 551.980;
 const char *out_path = "./analysis_plots/pdf"; 
 const char *output_file_name = "GenJet4b2_2.5_allR0.2";
 
-const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file1  = "../fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file0  = "../fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file_1 = "../fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file_2 = "../fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file2  = "../fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file2_5= "../fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file3  = "../fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_fileB  = "../fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4.root"; 
 
 TFile *f1  = nullptr;
 TFile *f0  = nullptr;

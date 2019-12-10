@@ -29,7 +29,7 @@ int main()
   const double SCALEfac_Ereso 		= 0.5; //50%
   const double TrackerAcceptance 	= 2.5;
 
-  const double R 			= 0.2;
+  const double R 			= 0.4;
   const double PTMINJET 		= 25.0e3;//MeV
   int MAX_NLEADINGJETS 			= 99;// number of jets to be b-tagged-> 99 for all
 
@@ -52,20 +52,21 @@ int main()
   gInterpreter->GenerateDictionary("vector<vector<int>>","vector");
 
   //! store results in an output root file 
-  //TFile *f_out = new TFile("./fastjet_output/test_all.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.2.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/test_all.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.4.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();
  
   //! open input trees 
   TChain rec("CollectionTree");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_4bQCD_pythia82_GenCuts.v3_output.root/*.root");
-  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/data_files/user.tkar.pp_ggF_Ctr-2.0hh_pythia82_GenCuts.v3_output.root/*.root");
+  //rec.Add("/eos/user/t/tkar/grid_files/user.tkar.pp_4bQCD_pythia82_GenCuts.v4_output.root/*.root");
+  rec.Add("/eos/user/t/tkar/grid_files/user.tkar.pp_ggF_Ctr2.5hh_pythia82_GenCuts.v4_output.root/*.root");
   
   //! Get total no. of events
-  Long64_t nevents = 500000;
+  //Long64_t nevents = 50;
+  Long64_t nevents = 5000000;
   //Long64_t nevents = rec.GetEntries();
   genOut.nevents = nevents;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl; 
@@ -158,7 +159,7 @@ int main()
 			tjObj.flag = 5;
 
 		}// b quark
-		else if(std::abs(pid) == 25 && status_ == 22) 
+		else if(std::abs(pid) == 25 && status_ == 62) 
 		{
 			tjObj.flag = 25;
 
@@ -168,11 +169,11 @@ int main()
 			tjObj.flag = 4;
 			
 		}// charm quark
-		else if(std::abs(pid) < 4)
-		{
-			tjObj.flag = 3;
-			
-		}// light quark
+		//else if(std::abs(pid) < 4)
+		//{
+		//	tjObj.flag = 3;
+		//	
+		//}// light quark
 		else if(status_ != 1) continue;
 		//*******************************************************//
 		
@@ -686,5 +687,16 @@ genOut.SetMultiplicityHist_props();
 genOut.WriteMultiplicity();
 genOut.glob_jet->Write();
 f_out->Close();
+delete f_out;
+delete px_tru;
+delete py_tru;
+delete pz_tru;
+delete vz_tru;
+delete energy;
+delete charge;
+delete mass;
+delete pdg;
+delete status;
+delete barcode;
 return 0;
 }
