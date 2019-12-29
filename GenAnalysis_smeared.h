@@ -20,6 +20,7 @@
 #include "TF1.h"
 #include "TLatex.h"
 
+
 const int min_Njets = 4;
 const double minLeadingPt = 55.0;//GeV
 const double minSubLeadingPt = 40.0;//GeV
@@ -36,17 +37,18 @@ const double ggFhhXsec2   = 624.195;
 const double ggFhhXsec2_5 = 522.665;
 const double ggFhhXsec3   = 551.980;
 
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.2";
+const char *output_file_name = "GenJet4b2_2.5_allR0.4";
 
-const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.4.root"; 
+const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.4.root"; 
+const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4.root"; 
 
 TFile *f1  = nullptr;
 TFile *f0  = nullptr;
@@ -67,15 +69,6 @@ TTree *t2_5= nullptr;
 TTree *t3  = nullptr;
 TTree *tB  = nullptr;
 
-//! Draw Legends
-TLegend *leg_higgs_1 = nullptr;
-TLegend *leg_higgs   = nullptr;
-TLegend *leg1 = nullptr;
-TLegend *leg2 = nullptr;
-TLegend *leg3 = nullptr;
-TLegend *leg4 = nullptr;
-TLegend *leg5 = nullptr;
-TLegend *leg6 = nullptr;
 
 std::vector<double> *v1_higgsPt  = nullptr;
 std::vector<double> *v1_higgsEta = nullptr;
@@ -127,6 +120,22 @@ TH1D *MH1H2__2 = nullptr;
 TH1D *MH1H2_2 = nullptr; 
 TH1D *MH1H2_2_5 = nullptr; 
 TH1D *MH1H2_3 = nullptr; 
+
+TH1D *RecMH1H2_1 = nullptr; 
+TH1D *RecMH1H2_0 = nullptr; 
+TH1D *RecMH1H2__1 = nullptr; 
+TH1D *RecMH1H2__2 = nullptr; 
+TH1D *RecMH1H2_2 = nullptr; 
+TH1D *RecMH1H2_2_5 = nullptr; 
+TH1D *RecMH1H2_3 = nullptr; 
+
+TH1D *PtH1H2_1 = nullptr; 
+TH1D *PtH1H2_0 = nullptr; 
+TH1D *PtH1H2__1 = nullptr; 
+TH1D *PtH1H2__2 = nullptr; 
+TH1D *PtH1H2_2 = nullptr; 
+TH1D *PtH1H2_2_5 = nullptr; 
+TH1D *PtH1H2_3 = nullptr; 
 
 std::vector<double> *v1_bPt  = nullptr;
 std::vector<double> *v1_bEta = nullptr;
@@ -785,3 +794,27 @@ TH1D *b4CEta2  = nullptr;
 TH1D *b4CEta2_5= nullptr;
 TH1D *b4CEta3  = nullptr;
 TH1D *b4CEtaB  = nullptr;
+
+Float_t LINE_WIDTH = 2.5;
+Float_t TITLE_SIZE = 0.045;
+Float_t AXISTITLE_OFFSET = 0.8;
+
+//********** Legend Properties ************//
+//! Draw Legends
+TLegend *leg_higgs_1 = nullptr;
+TLegend *leg_higgs   = nullptr;
+TLegend *leg1 = nullptr;
+TLegend *leg2 = nullptr;
+TLegend *leg3 = nullptr;
+TLegend *leg4 = nullptr;
+TLegend *leg5 = nullptr;
+TLegend *leg6 = nullptr;
+
+Float_t ENTRY_SEP = 0.1;
+Float_t FILL_STYLE = 0;
+Float_t BORDER_SIZE = 0;
+Float_t TEXT_ALIGN = 32;
+Float_t TEXT_ALIGN_1 = 12;
+Float_t TEXT_FONT = 62;
+Float_t TEXT_SIZE = 0.03;
+Float_t TEXT_SIZE_1 = 0.05;

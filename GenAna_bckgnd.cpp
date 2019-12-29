@@ -79,13 +79,13 @@ void Set_higgsPtProps_B()
 
 	M_LhiggsB->SetLineColor(kCyan);
 	
-	M_LhiggsB->SetLineWidth(2);
+	M_LhiggsB->SetLineWidth(LINE_WIDTH);
 	
 	M_NLhiggsB  = new TH1D("M_NLhiggsB",  "Background Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
 
 	M_NLhiggsB->SetLineColor(kViolet);
 	
-	M_NLhiggsB->SetLineWidth(2);
+	M_NLhiggsB->SetLineWidth(LINE_WIDTH);
 	
 
 	// invariant mass of a pair of b's, pp->4b
@@ -341,96 +341,97 @@ void Fill_bjetPtM_B(int &nhiggs)
 
 void SetLineWidthB()
 {
-	Mb1b2_B->SetLineWidth(2); 
-	Mb1b3_B->SetLineWidth(2);
-	Mb1b4_B->SetLineWidth(2);
-	Mb2b3_B->SetLineWidth(2);
-	Mb2b4_B->SetLineWidth(2);
-	Mb3b4_B->SetLineWidth(2);
+	Mb1b2_B->SetLineWidth(LINE_WIDTH); 
+	Mb1b3_B->SetLineWidth(LINE_WIDTH);
+	Mb1b4_B->SetLineWidth(LINE_WIDTH);
+	Mb2b3_B->SetLineWidth(LINE_WIDTH);
+	Mb2b4_B->SetLineWidth(LINE_WIDTH);
+	Mb3b4_B->SetLineWidth(LINE_WIDTH);
 
 	//Number of btags 
-	h_NbTagsB->SetLineWidth(2);
+	h_NbTagsB->SetLineWidth(LINE_WIDTH);
 	//Number of bquarks 
-	NbquarksB->SetLineWidth(2);
+	NbquarksB->SetLineWidth(LINE_WIDTH);
+	NjetsB->SetLineWidth(LINE_WIDTH);
 	//reconstructed leading Higgs mass 
-	M_LhiggsB->SetLineWidth(2);
+	M_LhiggsB->SetLineWidth(LINE_WIDTH);
 	//reconstructed sub-leading Higgs mass 
-	M_NLhiggsB->SetLineWidth(2);
+	M_NLhiggsB->SetLineWidth(LINE_WIDTH);
 
 	// invariant mass of a pair of b's, pp->4b
-	M_b1b2_B->SetLineWidth(2);
-	M_b1b3_B->SetLineWidth(2);
-	M_b1b4_B->SetLineWidth(2);
-	M_b2b3_B->SetLineWidth(2);
-	M_b2b4_B->SetLineWidth(2);
-	M_b3b4_B->SetLineWidth(2);
+	M_b1b2_B->SetLineWidth(LINE_WIDTH);
+	M_b1b3_B->SetLineWidth(LINE_WIDTH);
+	M_b1b4_B->SetLineWidth(LINE_WIDTH);
+	M_b2b3_B->SetLineWidth(LINE_WIDTH);
+	M_b2b4_B->SetLineWidth(LINE_WIDTH);
+	M_b3b4_B->SetLineWidth(LINE_WIDTH);
 	//relative difference of the jet pairs
 	//only 3 combination of jet pairs possible
-	dM_b1b2_b3b4_B->SetLineWidth(2);
-	dM_b1b3_b2b4_B->SetLineWidth(2);
-	dM_b1b4_b2b3_B->SetLineWidth(2);
+	dM_b1b2_b3b4_B->SetLineWidth(LINE_WIDTH);
+	dM_b1b3_b2b4_B->SetLineWidth(LINE_WIDTH);
+	dM_b1b4_b2b3_B->SetLineWidth(LINE_WIDTH);
 	
 	
 	
 	//jet leading M
-	jetLMB->SetLineWidth(2);
+	jetLMB->SetLineWidth(LINE_WIDTH);
 	//jet 2nd leading M
-	jet2LMB->SetLineWidth(2);
+	jet2LMB->SetLineWidth(LINE_WIDTH);
 	//jet 3rd leading M
-	jet3LMB->SetLineWidth(2);
+	jet3LMB->SetLineWidth(LINE_WIDTH);
 	//jet 4th leading M
-	jet4LMB->SetLineWidth(2);
+	jet4LMB->SetLineWidth(LINE_WIDTH);
 	//jet 5th leading M
-	//jet5LMB->SetLineWidth(2);
+	//jet5LMB->SetLineWidth(LINE_WIDTH);
 	
 	//jet leading Pt
-	jetLPtB->SetLineWidth(2);
+	jetLPtB->SetLineWidth(LINE_WIDTH);
 	//jet 2nd leading Pt
-	jet2LPtB->SetLineWidth(2);
+	jet2LPtB->SetLineWidth(LINE_WIDTH);
 	//jet 3rd leading Pt
-	jet3LPtB->SetLineWidth(2);
+	jet3LPtB->SetLineWidth(LINE_WIDTH);
 	//jet 4th leading Pt
-	jet4LPtB->SetLineWidth(2);
+	jet4LPtB->SetLineWidth(LINE_WIDTH);
 	//jet 5th leading Pt
-	//jet5LPtB->SetLineWidth(2);
+	//jet5LPtB->SetLineWidth(LINE_WIDTH);
 
 	//bjet leading M
-	bjetLMB->SetLineWidth(2);
+	bjetLMB->SetLineWidth(LINE_WIDTH);
 	//bjet 2nd leading M
-	bjet2LMB->SetLineWidth(2);
+	bjet2LMB->SetLineWidth(LINE_WIDTH);
 	//bjet 3rd leading M
-	bjet3LMB->SetLineWidth(2);
+	bjet3LMB->SetLineWidth(LINE_WIDTH);
 	//bjet 4th leading M
-	bjet4LMB->SetLineWidth(2);
+	bjet4LMB->SetLineWidth(LINE_WIDTH);
 	//bjet 5th leading M
-	//bjet5LMB->SetLineWidth(2);
+	//bjet5LMB->SetLineWidth(LINE_WIDTH);
 	
 	//b-jet leading Pt
-	bjetLPtB->SetLineWidth(2);
+	bjetLPtB->SetLineWidth(LINE_WIDTH);
 	//b-jet 2nd leading Pt
-	bjet2LPtB->SetLineWidth(2);
+	bjet2LPtB->SetLineWidth(LINE_WIDTH);
 	//b-jet 3rd leading Pt
-	bjet3LPtB->SetLineWidth(2);
+	bjet3LPtB->SetLineWidth(LINE_WIDTH);
 	//b-jet 4th leading Pt
-	bjet4LPtB->SetLineWidth(2);
+	bjet4LPtB->SetLineWidth(LINE_WIDTH);
 
 	//b leading Pt
-	bLPtB->SetLineWidth(2);
+	bLPtB->SetLineWidth(LINE_WIDTH);
 	//b 2nd leading Pt
-	b2LPtB->SetLineWidth(2);
+	b2LPtB->SetLineWidth(LINE_WIDTH);
 	//b 3rd leading Pt
-	b3LPtB->SetLineWidth(2);
+	b3LPtB->SetLineWidth(LINE_WIDTH);
 	//b 4th leading Pt
-	b4LPtB->SetLineWidth(2);
+	b4LPtB->SetLineWidth(LINE_WIDTH);
 
 	//b central Pt
-	bCEtaB->SetLineWidth(2);
+	bCEtaB->SetLineWidth(LINE_WIDTH);
 	//b 2nd central Pt
-	b2CEtaB->SetLineWidth(2);
+	b2CEtaB->SetLineWidth(LINE_WIDTH);
 	//b 3rd central Pt
-	b3CEtaB->SetLineWidth(2);
+	b3CEtaB->SetLineWidth(LINE_WIDTH);
 	//b 4th central Pt
-	b4CEtaB->SetLineWidth(2);
+	b4CEtaB->SetLineWidth(LINE_WIDTH);
 	return;
 }
 void Scale_bckgndHistos(double norm)

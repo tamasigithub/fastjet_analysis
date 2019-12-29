@@ -100,31 +100,37 @@ void Set_higgsPtProps_0()
 
 	higgsPt0->SetLineColor(kBlack);
 	
-	higgsPt0->SetLineWidth(2);
+	higgsPt0->SetLineWidth(LINE_WIDTH);
 	
 	higgsNLPt0  = new TH1D("higgsNLPt0",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 
 	higgsNLPt0->SetLineColor(kBlack);
 	
-	higgsNLPt0->SetLineWidth(2);
+	higgsNLPt0->SetLineWidth(LINE_WIDTH);
 	
 	M_Lhiggs0  = new TH1D("M_Lhiggs0",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
 
 	M_Lhiggs0->SetLineColor(kBlack);
 	
-	M_Lhiggs0->SetLineWidth(2);
+	M_Lhiggs0->SetLineWidth(LINE_WIDTH);
 	
 	M_NLhiggs0  = new TH1D("M_NLhiggs0",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
 
 	M_NLhiggs0->SetLineColor(kBlack);
 	
-	M_NLhiggs0->SetLineWidth(2);
+	M_NLhiggs0->SetLineWidth(LINE_WIDTH);
 	
 	MH1H2_0  = new TH1D("MH1H2_0",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
 
 	MH1H2_0->SetLineColor(kBlack);
 	
-	MH1H2_0->SetLineWidth(2);
+	MH1H2_0->SetLineWidth(LINE_WIDTH);
+
+	PtH1H2_0  = new TH1D("PtH1H2_0",  "Transverse momentum of the di-higgs system;p_{T, truth, h1,h2} [GeV/c];", nbins, ptmin, ptmax);
+
+	PtH1H2_0->SetLineColor(kBlack);
+	
+	PtH1H2_0->SetLineWidth(LINE_WIDTH);
 
 	// invariant mass of a pair of b's, ctr = 0.0
 	Mb1b2_0 = new TH1D("Mb1b2_0", "#lambda = 0.0, Truth Invariant mass of the higgs candidates; m_{higgs candidate, 12} [GeV];", nbins, ptmin, ptmax);
@@ -231,6 +237,7 @@ void Fill_InvariantMass_0()
 	Mb3b4_0->Fill(b3b4_0.M()*1e-3);
 
 	MH1H2_0->Fill(H1H2_0.M()*1e-3);
+	PtH1H2_0->Fill(H1H2_0.Pt()*1e-3);
 	return;
 }
 void Fill_NLeadingJetPtM_0()
@@ -386,71 +393,73 @@ void Fill_bjetPtM_0(int &nhiggs)
 
 void SetLineWidth0() 
 {
-	MH1H2_0->SetLineWidth(2); 
+	MH1H2_0->SetLineWidth(LINE_WIDTH); 
+	PtH1H2_0->SetLineWidth(LINE_WIDTH); 
 
-	Mb1b2_0->SetLineWidth(2); 
-	Mb1b3_0->SetLineWidth(2);
-	Mb1b4_0->SetLineWidth(2);
-	Mb2b3_0->SetLineWidth(2);
-	Mb2b4_0->SetLineWidth(2);
-	Mb3b4_0->SetLineWidth(2);
+	Mb1b2_0->SetLineWidth(LINE_WIDTH); 
+	Mb1b3_0->SetLineWidth(LINE_WIDTH);
+	Mb1b4_0->SetLineWidth(LINE_WIDTH);
+	Mb2b3_0->SetLineWidth(LINE_WIDTH);
+	Mb2b4_0->SetLineWidth(LINE_WIDTH);
+	Mb3b4_0->SetLineWidth(LINE_WIDTH);
 
-	h_NbTags0->SetLineWidth(2);
-	NSMhiggs0->SetLineWidth(2);
-	Nbquarks0->SetLineWidth(2);
-	Njets0->SetLineWidth(2);
-	higgsPt0->SetLineWidth(2);
-	higgsNLPt0->SetLineWidth(2);
-	M_Lhiggs0->SetLineWidth(2);
-	M_NLhiggs0->SetLineWidth(2);
+	h_NbTags0->SetLineWidth(LINE_WIDTH);
+	NSMhiggs0->SetLineWidth(LINE_WIDTH);
+	Nbquarks0->SetLineWidth(LINE_WIDTH);
+	Njets0->SetLineWidth(LINE_WIDTH);
+	higgsPt0->SetLineWidth(LINE_WIDTH);
+	higgsNLPt0->SetLineWidth(LINE_WIDTH);
+	M_Lhiggs0->SetLineWidth(LINE_WIDTH);
+	M_NLhiggs0->SetLineWidth(LINE_WIDTH);
 	
 	// invariant mass of a pair of b's, ctr = 0.0
-	M_b1b2_0->SetLineWidth(2);
-	M_b1b3_0->SetLineWidth(2);
-	M_b1b4_0->SetLineWidth(2);
-	M_b2b3_0->SetLineWidth(2);
-	M_b2b4_0->SetLineWidth(2);
-	M_b3b4_0->SetLineWidth(2);
+	M_b1b2_0->SetLineWidth(LINE_WIDTH);
+	M_b1b3_0->SetLineWidth(LINE_WIDTH);
+	M_b1b4_0->SetLineWidth(LINE_WIDTH);
+	M_b2b3_0->SetLineWidth(LINE_WIDTH);
+	M_b2b4_0->SetLineWidth(LINE_WIDTH);
+	M_b3b4_0->SetLineWidth(LINE_WIDTH);
 	//relative difference of the jet pairs
 	//only 3 combination of jet pairs possible
-	dM_b1b2_b3b4_0->SetLineWidth(2);
-	dM_b1b3_b2b4_0->SetLineWidth(2);
-	dM_b1b4_b2b3_0->SetLineWidth(2);
+	dM_b1b2_b3b4_0->SetLineWidth(LINE_WIDTH);
+	dM_b1b3_b2b4_0->SetLineWidth(LINE_WIDTH);
+	dM_b1b4_b2b3_0->SetLineWidth(LINE_WIDTH);
 
-	jetLM0->SetLineWidth(2);
-	jet2LM0->SetLineWidth(2);
-	jet3LM0->SetLineWidth(2);
-	jet4LM0->SetLineWidth(2);
+	jetLM0->SetLineWidth(LINE_WIDTH);
+	jet2LM0->SetLineWidth(LINE_WIDTH);
+	jet3LM0->SetLineWidth(LINE_WIDTH);
+	jet4LM0->SetLineWidth(LINE_WIDTH);
 
-	bjetLM0->SetLineWidth(2);
-	bjet2LM0->SetLineWidth(2);
-	bjet3LM0->SetLineWidth(2);
-	bjet4LM0->SetLineWidth(2);
+	bjetLM0->SetLineWidth(LINE_WIDTH);
+	bjet2LM0->SetLineWidth(LINE_WIDTH);
+	bjet3LM0->SetLineWidth(LINE_WIDTH);
+	bjet4LM0->SetLineWidth(LINE_WIDTH);
 
-	jetLPt0->SetLineWidth(2);
-	jet2LPt0->SetLineWidth(2);
-	jet3LPt0->SetLineWidth(2);
-	jet4LPt0->SetLineWidth(2);
+	jetLPt0->SetLineWidth(LINE_WIDTH);
+	jet2LPt0->SetLineWidth(LINE_WIDTH);
+	jet3LPt0->SetLineWidth(LINE_WIDTH);
+	jet4LPt0->SetLineWidth(LINE_WIDTH);
 
-	bjetLPt0->SetLineWidth(2);
-	bjet2LPt0->SetLineWidth(2);
-	bjet3LPt0->SetLineWidth(2);
-	bjet4LPt0->SetLineWidth(2);
+	bjetLPt0->SetLineWidth(LINE_WIDTH);
+	bjet2LPt0->SetLineWidth(LINE_WIDTH);
+	bjet3LPt0->SetLineWidth(LINE_WIDTH);
+	bjet4LPt0->SetLineWidth(LINE_WIDTH);
 
-	bLPt0->SetLineWidth(2);
-	b2LPt0->SetLineWidth(2);
-	b3LPt0->SetLineWidth(2);
-	b4LPt0->SetLineWidth(2);
+	bLPt0->SetLineWidth(LINE_WIDTH);
+	b2LPt0->SetLineWidth(LINE_WIDTH);
+	b3LPt0->SetLineWidth(LINE_WIDTH);
+	b4LPt0->SetLineWidth(LINE_WIDTH);
 
-	bCEta0->SetLineWidth(2);
-	b2CEta0->SetLineWidth(2);
-	b3CEta0->SetLineWidth(2);
-	b4CEta0->SetLineWidth(2);
+	bCEta0->SetLineWidth(LINE_WIDTH);
+	b2CEta0->SetLineWidth(LINE_WIDTH);
+	b3CEta0->SetLineWidth(LINE_WIDTH);
+	b4CEta0->SetLineWidth(LINE_WIDTH);
 	return;
 }
 void Scale_signalHistos0(double norm) 
 {
 	MH1H2_0->Scale(norm); 
+	PtH1H2_0->Scale(norm); 
 
 	Mb1b2_0->Scale(norm); 
 	Mb1b3_0->Scale(norm);

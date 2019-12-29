@@ -7,6 +7,7 @@
 #include "GenAna_2_5.cpp"
 #include "GenAna_3.cpp"
 #include "GenAna_bckgnd.cpp"
+#include "SetAxix_Props.cpp"
 
 
 void Set_FinalbJetColors()
@@ -42,60 +43,60 @@ void Set_FinalbJetColors()
 void Set_LegendProps()
 {
 
-	leg_higgs_1->SetFillStyle(0);
-	leg_higgs_1->SetBorderSize(0);
-	leg_higgs_1->SetTextAlign(32);
-	leg_higgs_1->SetTextFont(62);
+	leg_higgs_1->SetFillStyle(FILL_STYLE);
+	leg_higgs_1->SetBorderSize(BORDER_SIZE);
+	leg_higgs_1->SetTextAlign(TEXT_ALIGN);
+	leg_higgs_1->SetTextFont(TEXT_FONT);
 	leg_higgs_1->SetTextSize(0.055);
 	
-	leg_higgs->SetFillStyle(0);
-	leg_higgs->SetBorderSize(0);
-	leg_higgs->SetTextAlign(32);
-	leg_higgs->SetTextFont(62);
-	leg_higgs->SetTextSize(0.035);
+	leg_higgs->SetFillStyle(FILL_STYLE);
+	leg_higgs->SetBorderSize(BORDER_SIZE);
+	leg_higgs->SetTextAlign(TEXT_ALIGN);
+	leg_higgs->SetTextFont(TEXT_FONT);
+	leg_higgs->SetTextSize(TEXT_SIZE);
 
-	leg1->SetFillStyle(0);
-	leg1->SetBorderSize(0);
-	leg1->SetTextAlign(32);
-	leg1->SetTextFont(62);
-	leg1->SetTextSize(0.035);
+	leg1->SetFillStyle(FILL_STYLE);
+	leg1->SetBorderSize(BORDER_SIZE);
+	leg1->SetTextAlign(TEXT_ALIGN);
+	leg1->SetTextFont(TEXT_FONT);
+	leg1->SetTextSize(TEXT_SIZE);
 
-	leg2->SetFillStyle(0);
-	leg2->SetBorderSize(0);
-	leg2->SetTextAlign(32);
-	leg2->SetTextFont(62);
-	leg2->SetTextSize(0.035);
+	leg2->SetFillStyle(FILL_STYLE);
+	leg2->SetBorderSize(BORDER_SIZE);
+	leg2->SetTextAlign(TEXT_ALIGN);
+	leg2->SetTextFont(TEXT_FONT);
+	leg2->SetTextSize(TEXT_SIZE);
 
-	leg3->SetFillStyle(0);
-	leg3->SetBorderSize(0);
-	leg3->SetTextAlign(32);
-	leg3->SetTextFont(62);
-	leg3->SetTextSize(0.035);
+	leg3->SetFillStyle(FILL_STYLE);
+	leg3->SetBorderSize(BORDER_SIZE);
+	leg3->SetTextAlign(TEXT_ALIGN);
+	leg3->SetTextFont(TEXT_FONT);
+	leg3->SetTextSize(TEXT_SIZE);
 
-	leg4->SetFillStyle(0);
-	leg4->SetBorderSize(0);
-	leg4->SetTextAlign(32);
-	leg4->SetTextFont(62);
-	leg4->SetTextSize(0.035);
+	leg4->SetFillStyle(FILL_STYLE);
+	leg4->SetBorderSize(BORDER_SIZE);
+	leg4->SetTextAlign(TEXT_ALIGN);
+	leg4->SetTextFont(TEXT_FONT);
+	leg4->SetTextSize(TEXT_SIZE);
 	
-	leg5->SetFillStyle(0);
-	leg5->SetBorderSize(0);
-	leg5->SetTextAlign(32);
-	leg5->SetTextFont(62);
-	leg5->SetTextSize(0.035);
+	leg5->SetFillStyle(FILL_STYLE);
+	leg5->SetBorderSize(BORDER_SIZE);
+	leg5->SetTextAlign(TEXT_ALIGN);
+	leg5->SetTextFont(TEXT_FONT);
+	leg5->SetTextSize(TEXT_SIZE);
 	
-	leg6->SetFillStyle(0);
-	leg6->SetBorderSize(0);
-	leg6->SetTextAlign(32);
-	leg6->SetTextFont(62);
-	leg6->SetTextSize(0.035);
+	leg6->SetFillStyle(FILL_STYLE);
+	leg6->SetBorderSize(BORDER_SIZE);
+	leg6->SetTextAlign(TEXT_ALIGN);
+	leg6->SetTextFont(TEXT_FONT);
+	leg6->SetTextSize(TEXT_SIZE);
 	return;
 }
 
 
 
 
-int main()
+void plot()
 {
 	
 	f1  = new TFile(inp_file1,"READ");
@@ -452,6 +453,9 @@ int main()
 	SetLineWidth2();
 	SetLineWidth2_5();
 	SetLineWidth3();
+
+	SetXaxisTITLE_SIZE();
+	SetYaxisTITLE_SIZE();
 	//////////////////////////////////////////////////
 	//////////////// writing to pdf //////////////////
 	//////////////////////////////////////////////////
@@ -475,8 +479,10 @@ int main()
 
 	Set_LegendProps();
 
+	TFile *f_out = new TFile(root_out_name,"RECREATE");
+	gROOT->ForceStyle(0);
+	TCanvas * CW = new TCanvas("CW","CW",800,800);
 	TCanvas * C = new TCanvas();
-	//TCanvas * C = new TCanvas("C","C",800,800);
 	gStyle->SetOptStat(0);
 	//TGaxis::SetMaxDigits(2);
 	C->SetGridx();
@@ -486,8 +492,8 @@ int main()
 	//C->SetLogy();
 	//! page1
 	TLatex lat;
-	lat.SetTextSize(0.03);
-	lat.SetTextAlign(12);
+	lat.SetTextSize(TEXT_SIZE);
+	lat.SetTextAlign(TEXT_ALIGN_1);
 	float Ylat, X1lat, X2lat, X3lat, X4lat, X5lat, X6lat, X7lat, X8lat, X9lat;
 	float step = 0.06;
 	Ylat = 0.96; 
@@ -627,7 +633,9 @@ int main()
 	lat.DrawLatex(X8lat, Ylat, Form("%.3e", (nh2_5*norm_signal2_5)/(nhB*norm_bckgnd)));
 	lat.DrawLatex(X9lat, Ylat, Form("%.3e", (nh3*norm_signal3)/(nhB*norm_bckgnd)));
 	C->Print(out_file_open,"pdf");
-	
+	C->Print("./analysis_plots/tex/1.tex");
+	C->Write("c1");
+
 	//! page2
 	C->Clear();
 	C->Divide(2,2);
@@ -639,29 +647,36 @@ int main()
 	Nbquarks2->Draw("hist same");
 	Nbquarks2_5->Draw("hist same");
 	Nbquarks3->Draw("hist same");
-	leg_higgs->AddEntry(higgsPt_2, "k_{#lambda} = -2.0");
-	leg_higgs->AddEntry(higgsPt_1, "k_{#lambda} = -1.0");
-	leg_higgs->AddEntry(higgsPt0,  "k_{#lambda} =  0.0");
-	leg_higgs->AddEntry(higgsPt1,  "k_{#lambda} =  1.0");
-	leg_higgs->AddEntry(higgsPt2,  "k_{#lambda} =  2.0");
-	leg_higgs->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5");
-	leg_higgs->AddEntry(higgsPt3,  "k_{#lambda} =  3.0");
+	leg_higgs->AddEntry(higgsPt_2, "k_{#lambda} = -2.0", "l");
+	leg_higgs->AddEntry(higgsPt_1, "k_{#lambda} = -1.0", "l");
+	leg_higgs->AddEntry(higgsPt0,  "k_{#lambda} =  0.0", "l");
+	leg_higgs->AddEntry(higgsPt1,  "k_{#lambda} =  1.0", "l");
+	leg_higgs->AddEntry(higgsPt2,  "k_{#lambda} =  2.0", "l");
+	leg_higgs->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5", "l");
+	leg_higgs->AddEntry(higgsPt3,  "k_{#lambda} =  3.0", "l");
+	leg_higgs->SetEntrySeparation(ENTRY_SEP);
 
-	leg_higgs_1->AddEntry(higgsPt_2, "k_{#lambda} = -2.0");
-	leg_higgs_1->AddEntry(higgsPt_1, "k_{#lambda} = -1.0");
-	leg_higgs_1->AddEntry(higgsPt0,  "k_{#lambda} =  0.0");
-	leg_higgs_1->AddEntry(higgsPt1,  "k_{#lambda} =  1.0");
-	leg_higgs_1->AddEntry(higgsPt2,  "k_{#lambda} =  2.0");
-	leg_higgs_1->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5");
-	leg_higgs_1->AddEntry(higgsPt3,  "k_{#lambda} =  3.0");
-	leg_higgs_1->AddEntry(NbquarksB, "pp #rightarrow 4b");
+	leg_higgs_1->AddEntry(higgsPt_2, "k_{#lambda} = -2.0", "l");
+	leg_higgs_1->AddEntry(higgsPt_1, "k_{#lambda} = -1.0", "l");
+	leg_higgs_1->AddEntry(higgsPt0,  "k_{#lambda} =  0.0", "l");
+	leg_higgs_1->AddEntry(higgsPt1,  "k_{#lambda} =  1.0", "l");
+	leg_higgs_1->AddEntry(higgsPt2,  "k_{#lambda} =  2.0", "l");
+	leg_higgs_1->AddEntry(higgsPt2_5,"k_{#lambda} =  2.5", "l");
+	leg_higgs_1->AddEntry(higgsPt3,  "k_{#lambda} =  3.0", "l");
+	leg_higgs_1->AddEntry(NbquarksB, "pp #rightarrow 4b", "l");
+	leg_higgs_1->SetEntrySeparation(ENTRY_SEP);
 	//leg_higgs->Draw();
 	C->Update();
+
+	gPad->Print("./analysis_plots/tex/2_a.tex");
+	gPad->Write("c2_a");
 	
 	C->cd(2);
 	//leg_higgs->Draw();
 	NbquarksB->Draw("hist");
 	C->Update();
+	gPad->Print("./analysis_plots/tex/2_b.tex");
+	gPad->Write("c2_b");
 
 	C->cd(3);
 	gPad->SetLogy();
@@ -675,10 +690,14 @@ int main()
 	Njets2_5->Draw("hist same");
 	Njets3->Draw("hist same");
 	C->Update();
+	//gPad->Print("./analysis_plots/tex/2_b.tex");
+	gPad->Write("c2_c");
 
 	C->cd(4);
 	leg_higgs_1->Draw();
+	gPad->Write("c2_d");
 	C->Print(out_file_,"pdf");
+
 	
 	//! page3
 	C->Clear();
@@ -695,6 +714,7 @@ int main()
 	MH1H2_2_5->Draw("hist same");
 	MH1H2_1->Draw("hist same");
 	C->Update();
+	gPad->Write("c3_a");
 
 	C->cd(2);
 	gPad->SetLogy();
@@ -708,6 +728,53 @@ int main()
 	MH1H2_2->Draw("hist same");
 	MH1H2_2_5->Draw("hist same");
 	MH1H2_1->Draw("hist same");
+	gPad->Write("c3_b");
+	
+	C->cd(3);
+	NSMhiggs_2->Draw("hist");
+	NSMhiggs0->Draw("hist same");
+	NSMhiggs_1->Draw("hist same");
+	NSMhiggs1->Draw("hist same");
+	NSMhiggs2->Draw("hist same");
+	NSMhiggs2_5->Draw("hist same");
+	NSMhiggs3->Draw("hist same");
+	gPad->Write("c3_c");
+
+	C->cd(4);
+	leg_higgs_1->Draw();
+	C->Update();
+	C->Print(out_file_,"pdf");
+	
+	//! page4
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	// invariant mass of di-higgs system
+	PtH1H2__2->SetTitle("Transverse Momentum of the di-Higgs system");
+	PtH1H2__2->GetXaxis()->SetTitle("P_{T, truth,h1h2}");
+	PtH1H2__2->Draw("hist");
+	PtH1H2_0->Draw("hist same");
+	PtH1H2__1->Draw("hist same");
+	PtH1H2_3->Draw("hist same");
+	PtH1H2_2->Draw("hist same");
+	PtH1H2_2_5->Draw("hist same");
+	PtH1H2_1->Draw("hist same");
+	C->Update();
+	gPad->Write("c4_a");
+
+	C->cd(2);
+	gPad->SetLogy();
+	PtH1H2__2->SetTitle("Transverse Momentum of the di-Higgs system");
+	PtH1H2__2->GetXaxis()->SetTitle("P_{T, truth,h1h2}");
+	PtH1H2__2->GetYaxis()->SetRangeUser(1e2, 3.5e6);
+	PtH1H2__2->Draw("hist");
+	PtH1H2_0->Draw("hist same");
+	PtH1H2__1->Draw("hist same");
+	PtH1H2_3->Draw("hist same");
+	PtH1H2_2->Draw("hist same");
+	PtH1H2_2_5->Draw("hist same");
+	PtH1H2_1->Draw("hist same");
+	gPad->Write("c4_b");
 	
 	C->cd(3);
 	NSMhiggs_2->Draw("hist");
@@ -723,7 +790,7 @@ int main()
 	C->Print(out_file_,"pdf");
 	
 
-	//! page4
+	//! page5
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
@@ -735,6 +802,7 @@ int main()
 	higgsPt2_5->Draw("hist same");
 	higgsPt3->Draw("hist same");
 	C->Update();
+	gPad->Write("c5_a");
 
 	C->cd(2);
 	higgsNLPt_2->Draw("hist");	
@@ -746,6 +814,7 @@ int main()
 	higgsNLPt3->Draw("hist same");
 	leg_higgs->Draw();
 	C->Update();
+	gPad->Write("c5_b");
 
 	C->cd(3);
 	gPad->SetLogy();
@@ -772,7 +841,6 @@ int main()
 	C->Update();
 	C->Print(out_file_,"pdf");
 
-	//! page5
 	//! page6
 	C->Clear();
 	C->Divide(2,2);
@@ -782,11 +850,13 @@ int main()
 	b3LPt1->Draw("hist same");
 	b2LPt1->Draw("hist same");
 	bLPt1->Draw("hist same");
-	leg1->AddEntry(bLPt1, "leading");
-	leg1->AddEntry(b2LPt1, "sub-leading");
-	leg1->AddEntry(b3LPt1, "3^{rd} leading");
-	leg1->AddEntry(b4LPt1, "4^{th} leading");
+	leg1->AddEntry(bLPt1, "leading", "l");
+	leg1->AddEntry(b2LPt1, "sub-leading", "l");
+	leg1->AddEntry(b3LPt1, "3^{rd} leading", "l");
+	leg1->AddEntry(b4LPt1, "4^{th} leading", "l");
+	leg1->SetEntrySeparation(ENTRY_SEP);
 	leg1->Draw();
+	gPad->Write("c6_a");
 
 	C->cd(2);	
 	b4LPt0->SetTitle("k_{#lambda} = 0.0");
@@ -795,6 +865,7 @@ int main()
 	b2LPt0->Draw("hist same");
 	bLPt0->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c6_b");
 
 	C->cd(3);	
 	b4LPt_1->SetTitle("k_{#lambda} = -1.0");
@@ -803,6 +874,7 @@ int main()
 	b2LPt_1->Draw("hist same");
 	bLPt_1->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c6_c");
 
 	C->cd(4);	
 	b4LPt_2->SetTitle("k_{#lambda} = -2.0");
@@ -812,6 +884,7 @@ int main()
 	bLPt_2->Draw("hist same");
 	leg1->Draw();
 	C->Print(out_file_,"pdf");
+	gPad->Write("c6_d");
 	
 	//! page7
 	C->Clear();
@@ -831,6 +904,7 @@ int main()
 	b2LPt2->Draw("hist same");
 	bLPt2->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c7_b");
 	
 	C->cd(3);
 	b4LPt2_5->SetTitle("k_{#lambda} = 2.5");
@@ -839,6 +913,7 @@ int main()
 	b2LPt2_5->Draw("hist same");
 	bLPt2_5->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c7_c");
 	
 	C->cd(4);
 	b4LPt3->SetTitle("k_{#lambda} = 3.0");
@@ -847,6 +922,7 @@ int main()
 	b2LPt3->Draw("hist same");
 	bLPt3->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c7_d");
 	C->Print(out_file_,"pdf");
 	
 	//! page8
@@ -867,6 +943,7 @@ int main()
 	b2LPtB->Draw("hist same");
 	bLPtB->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c8_b");
 	C->Print(out_file_,"pdf");
 	
 	//! page9
@@ -875,39 +952,43 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
-	bjet4LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt1->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt1->Draw("hist");
 	bjet3LPt1->Draw("hist same");
 	bjet2LPt1->Draw("hist same");
 	bjetLPt1->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c9_a");
 
 	C->cd(2);	
 	bjet4LPt0->SetTitle("k_{#lambda} = 0.0");
-	bjet4LPt0->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt0->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt0->Draw("hist");
 	bjet3LPt0->Draw("hist same");
 	bjet2LPt0->Draw("hist same");
 	bjetLPt0->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c9_b");
 
 	C->cd(3);	
 	bjet4LPt_1->SetTitle("k_{#lambda} = -1.0");
-	bjet4LPt_1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt_1->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt_1->Draw("hist");
 	bjet3LPt_1->Draw("hist same");
 	bjet2LPt_1->Draw("hist same");
 	bjetLPt_1->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c9_c");
 
 	C->cd(4);	
 	bjet4LPt_2->SetTitle("k_{#lambda} = -2.0");
-	bjet4LPt_2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt_2->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt_2->Draw("hist");
 	bjet3LPt_2->Draw("hist same");
 	bjet2LPt_2->Draw("hist same");
 	bjetLPt_2->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c9_d");
 	C->Print(out_file_,"pdf");
 	
 	//! page10
@@ -915,7 +996,7 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	bjet4LPt1->SetTitle("k_{#lambda} = 1.0");
-	bjet4LPt1->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt1->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt1->Draw("hist same");
 	bjet3LPt1->Draw("hist same");
 	bjet2LPt1->Draw("hist same");
@@ -924,30 +1005,33 @@ int main()
 	
 	C->cd(2);
 	bjet4LPt2->SetTitle("k_{#lambda} = 2.0");
-	bjet4LPt2->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt2->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt2->Draw("hist");
 	bjet3LPt2->Draw("hist same");
 	bjet2LPt2->Draw("hist same");
 	bjetLPt2->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c10b");
 	
 	C->cd(3);
 	bjet4LPt2_5->SetTitle("k_{#lambda} = 2.5");
-	bjet4LPt2_5->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt2_5->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt2_5->Draw("hist");
 	bjet3LPt2_5->Draw("hist same");
 	bjet2LPt2_5->Draw("hist same");
 	bjetLPt2_5->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c10c");
 	
 	C->cd(4);
 	bjet4LPt3->SetTitle("k_{#lambda} = 3.0");
-	bjet4LPt3->GetXaxis()->SetTitle("p_{t,b-jet} [GeV/c]");
+	bjet4LPt3->GetXaxis()->SetTitle("p_{T,b-jet} [GeV/c]");
 	bjet4LPt3->Draw("hist");
 	bjet3LPt3->Draw("hist same");
 	bjet2LPt3->Draw("hist same");
 	bjetLPt3->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c10d");
 	C->Print(out_file_,"pdf");
 	
 	//! page11
@@ -968,6 +1052,7 @@ int main()
 	bjetLPtB->Draw("hist same");
 	bjet3LPtB->Draw("hist same");
 	leg1->Draw();
+	gPad->Write("c11b");
 	C->Print(out_file_,"pdf");
 	
 	//! page12
@@ -976,48 +1061,52 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	jet4LPt1->SetTitle("k_{#lambda} = 1.0");
-	jet4LPt1->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt1->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt1->Draw("hist");
 	jet4LPt1->Draw("hist");
 	jet3LPt1->Draw("hist same");
 	jet2LPt1->Draw("hist same");
 	jetLPt1->Draw("hist same");
-	leg2->AddEntry(jetLPt1, "leading");
-	leg2->AddEntry(jet2LPt1, "sub-leading");
-	leg2->AddEntry(jet3LPt1, "3^{rd} leading");
-	leg2->AddEntry(jet4LPt1, "4^{th} leading");
+	leg2->AddEntry(jetLPt1, "leading", "l");
+	leg2->AddEntry(jet2LPt1, "sub-leading", "l");
+	leg2->AddEntry(jet3LPt1, "3^{rd} leading", "l");
+	leg2->AddEntry(jet4LPt1, "4^{th} leading", "l");
 	//leg2->AddEntry(jet5LPt1, "5^{th} leading");
 	leg2->Draw();
+	gPad->Write("c12a");
 
 	C->cd(2);	
 	jet4LPt0->SetTitle("k_{#lambda} = 0.0");
-	jet4LPt0->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt0->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt0->Draw("hist");
 	jet4LPt0->Draw("hist");
 	jet3LPt0->Draw("hist same");
 	jet2LPt0->Draw("hist same");
 	jetLPt0->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c12b");
 
 	C->cd(3);	
 	jet4LPt_1->SetTitle("k_{#lambda} = -1.0");
-	jet4LPt_1->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt_1->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt_1->Draw("hist");
 	jet4LPt_1->Draw("hist");
 	jet3LPt_1->Draw("hist same");
 	jet2LPt_1->Draw("hist same");
 	jetLPt_1->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c12c");
 
 	C->cd(4);	
 	jet4LPt_2->SetTitle("k_{#lambda} = -2.0");
-	jet4LPt_2->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt_2->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt_2->Draw("hist");
 	jet4LPt_2->Draw("hist");
 	jet3LPt_2->Draw("hist same");
 	jet2LPt_2->Draw("hist same");
 	jetLPt_2->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c12d");
 	C->Print(out_file_,"pdf");
 	
 	//! page13
@@ -1025,7 +1114,7 @@ int main()
 	C->Divide(2,2);
 	C->cd(1);
 	jet4LPt1->SetTitle("k_{#lambda} = 1.0");
-	jet4LPt1->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt1->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt1->Draw("hist");
 	jet4LPt1->Draw("hist same");
 	jet3LPt1->Draw("hist same");
@@ -1035,33 +1124,36 @@ int main()
 	
 	C->cd(2);
 	jet4LPt2->SetTitle("k_{#lambda} = 2.0");
-	jet4LPt2->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt2->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt2->Draw("hist");
 	jet4LPt2->Draw("hist");
 	jet3LPt2->Draw("hist same");
 	jet2LPt2->Draw("hist same");
 	jetLPt2->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c13b");
 	
 	C->cd(3);
 	jet4LPt2_5->SetTitle("k_{#lambda} = 2.5");
-	jet4LPt2_5->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt2_5->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt2_5->Draw("hist");
 	jet4LPt2_5->Draw("hist");
 	jet3LPt2_5->Draw("hist same");
 	jet2LPt2_5->Draw("hist same");
 	jetLPt2_5->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c13c");
 	
 	C->cd(4);
 	jet4LPt3->SetTitle("k_{#lambda} = 3.0");
-	jet4LPt3->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPt3->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	//jet5LPt3->Draw("hist");
 	jet4LPt3->Draw("hist");
 	jet3LPt3->Draw("hist same");
 	jet2LPt3->Draw("hist same");
 	jetLPt3->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c13d");
 	C->Print(out_file_,"pdf");
 
 	//! page14
@@ -1077,12 +1169,13 @@ int main()
 
 	C->cd(2);
 	jet4LPtB->SetTitle("pp->4b");
-	jet4LPtB->GetXaxis()->SetTitle("p_{t,jet} [GeV/c]");
+	jet4LPtB->GetXaxis()->SetTitle("p_{T,jet} [GeV/c]");
 	jet4LPtB->Draw("hist");
 	jet3LPtB->Draw("hist same");
 	jet2LPtB->Draw("hist same");
 	jetLPtB->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c14b");
 	C->Print(out_file_,"pdf");
 	//! page15
 	//! 4 leading Jets invariant mass
@@ -1098,6 +1191,7 @@ int main()
 	jet2LM1->Draw("hist same");
 	jetLM1->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c15a");
 
 	C->cd(2);	
 	gPad->SetLogy();
@@ -1109,6 +1203,7 @@ int main()
 	jet2LM0->Draw("hist same");
 	jetLM0->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c15b");
 
 	C->cd(3);	
 	gPad->SetLogy();
@@ -1120,6 +1215,7 @@ int main()
 	jet2LM_1->Draw("hist same");
 	jetLM_1->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c15c");
 
 	C->cd(4);	
 	gPad->SetLogy();
@@ -1131,6 +1227,7 @@ int main()
 	jet2LM_2->Draw("hist same");
 	jetLM_2->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c15d");
 	C->Print(out_file_,"pdf");
 	
 	//! page16
@@ -1157,6 +1254,7 @@ int main()
 	jet2LM2->Draw("hist same");
 	jetLM2->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c16b");
 	
 	C->cd(3);
 	gPad->SetLogy();
@@ -1168,6 +1266,7 @@ int main()
 	jet2LM2_5->Draw("hist same");
 	jetLM2_5->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c16c");
 	
 	C->cd(4);
 	gPad->SetLogy();
@@ -1179,6 +1278,7 @@ int main()
 	jet2LM3->Draw("hist same");
 	jetLM3->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c16d");
 	C->Print(out_file_,"pdf");
 	
 	//! page17
@@ -1202,10 +1302,11 @@ int main()
 	jet2LMB->Draw("hist same");
 	jetLMB->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c17b");
 	C->Print(out_file_,"pdf");
 
 	//! page18
-	//! 4 leading Jets invariant mass
+	//! 4 leading bJets invariant mass
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
@@ -1218,6 +1319,7 @@ int main()
 	bjet2LM1->Draw("hist same");
 	bjetLM1->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c18a");
 
 	C->cd(2);	
 	gPad->SetLogy();
@@ -1229,6 +1331,7 @@ int main()
 	bjet2LM0->Draw("hist same");
 	bjetLM0->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c18b");
 
 	C->cd(3);	
 	gPad->SetLogy();
@@ -1240,6 +1343,7 @@ int main()
 	bjet2LM_1->Draw("hist same");
 	bjetLM_1->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c18c");
 
 	C->cd(4);	
 	gPad->SetLogy();
@@ -1251,6 +1355,7 @@ int main()
 	bjet2LM_2->Draw("hist same");
 	bjetLM_2->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c18d");
 	C->Print(out_file_,"pdf");
 	
 	//! page19
@@ -1277,6 +1382,7 @@ int main()
 	bjet2LM2->Draw("hist same");
 	bjetLM2->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c19b");
 	
 	C->cd(3);
 	gPad->SetLogy();
@@ -1288,6 +1394,7 @@ int main()
 	bjet2LM2_5->Draw("hist same");
 	bjetLM2_5->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c19c");
 	
 	C->cd(4);
 	gPad->SetLogy();
@@ -1299,6 +1406,7 @@ int main()
 	bjet2LM3->Draw("hist same");
 	bjetLM3->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c19d");
 	C->Print(out_file_,"pdf");
 	
 	//! page20
@@ -1322,6 +1430,7 @@ int main()
 	bjet2LMB->Draw("hist same");
 	bjetLMB->Draw("hist same");
 	leg2->Draw();
+	gPad->Write("c20b");
 	C->Print(out_file_,"pdf");
 
 	//! page21
@@ -1351,6 +1460,7 @@ int main()
 	bLPt_1->Draw("hist same");
 	bLPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c21a");
 	
 	C->cd(2);
 	gPad->SetLogy();
@@ -1364,6 +1474,7 @@ int main()
 	b2LPt_1->Draw("hist same");
 	b2LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c21b");
 	
 	C->cd(3);
 	gPad->SetLogy();
@@ -1378,6 +1489,7 @@ int main()
 	b3LPt_1->Draw("hist same");
 	b3LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c21c");
 	
 	C->cd(4);
 	gPad->SetLogy();
@@ -1394,6 +1506,7 @@ int main()
 	b4LPt_1->Draw("hist same");
 	b4LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c21d");
 	C->Print(out_file_,"pdf");
 
 	//! page22
@@ -1416,6 +1529,7 @@ int main()
 	bjetLPt1->Draw("hist same");
 	bjetLPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c22a");
 	
 	C->cd(2);
 	gPad->SetLogy();
@@ -1429,6 +1543,7 @@ int main()
 	bjet2LPt1->Draw("hist same");
 	bjet2LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c22b");
 	
 	C->cd(3);
 	gPad->SetLogy();
@@ -1443,6 +1558,7 @@ int main()
 	bjet3LPt1->Draw("hist same");
 	bjet3LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c22c");
 	
 	C->cd(4);
 	gPad->SetLogy();
@@ -1458,6 +1574,7 @@ int main()
 	bjet4LPt1->Draw("hist same");
 	bjet4LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c22d");
 	C->Print(out_file_,"pdf");
 	
 	//! page23
@@ -1480,6 +1597,7 @@ int main()
 	jetLPt1->Draw("hist same");
 	jetLPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c23a");
 	
 	C->cd(2);
 	gPad->SetLogy();
@@ -1493,6 +1611,8 @@ int main()
 	jet2LPt1->Draw("hist same");
 	jet2LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c23b");
+
 	
 	C->cd(3);
 	gPad->SetLogy();
@@ -1507,6 +1627,7 @@ int main()
 	jet3LPt1->Draw("hist same");
 	jet3LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c23c");
 	
 	C->cd(4);
 	gPad->SetLogy();
@@ -1522,6 +1643,7 @@ int main()
 	jet4LPt1->Draw("hist same");
 	jet4LPt0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c23d");
 	C->Print(out_file_,"pdf");
 	
 	//! page24
@@ -1544,6 +1666,7 @@ int main()
 	bCEta_1->Draw("hist same");
 	bCEta0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c24a");
 	
 	C->cd(2);
 	gPad->SetLogy();
@@ -1557,6 +1680,7 @@ int main()
 	b2CEta_1->Draw("hist same");
 	b2CEta0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c24b");
 	
 	C->cd(3);
 	gPad->SetLogy();
@@ -1570,6 +1694,7 @@ int main()
 	b3CEta_1->Draw("hist same");
 	b3CEta0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c24c");
 	
 	C->cd(4);
 	gPad->SetLogy();
@@ -1583,6 +1708,7 @@ int main()
 	b4CEta_1->Draw("hist same");
 	b4CEta0->Draw("hist same");
 	leg_higgs->Draw();
+	gPad->Write("c24d");
 	C->Print(out_file_,"pdf");
 
 	//! page25
@@ -1594,6 +1720,7 @@ int main()
 	leg3->AddEntry((TObject*)0,Form("total = %f",h_NbTags1->Integral(1,6)),"");
 	leg3->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags1->Integral(0,5) - h_NbTags1->Integral(0,4)),"");
 	leg3->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags1->Integral(0,4) - h_NbTags1->Integral(0,3)),"");
+	leg3->SetEntrySeparation(ENTRY_SEP);
 	leg3->Draw();
 	
 	C->cd(2);
@@ -1601,6 +1728,8 @@ int main()
 	leg4->AddEntry((TObject*)0,Form("total = %f",h_NbTags0->Integral(1,6)),"");
 	leg4->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags0->Integral(0,5) - h_NbTags0->Integral(0,4)),"");
 	leg4->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags0->Integral(0,4) - h_NbTags0->Integral(0,3)),"");
+	leg4->SetEntrySeparation(ENTRY_SEP);
+
 	leg4->Draw();
 	
 	C->cd(3);
@@ -1608,6 +1737,7 @@ int main()
 	leg5->AddEntry((TObject*)0,Form("total = %f",h_NbTags_1->Integral(1,6)),"");
 	leg5->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags_1->Integral(0,5) - h_NbTags_1->Integral(0,4)),"");
 	leg5->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags_1->Integral(0,4) - h_NbTags_1->Integral(0,3)),"");
+	leg5->SetEntrySeparation(ENTRY_SEP);
 	leg5->Draw();
 	
 	C->cd(4);
@@ -1615,6 +1745,7 @@ int main()
 	leg6->AddEntry((TObject*)0,Form("total = %f",h_NbTags_2->Integral(1,6)),"");
 	leg6->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags_2->Integral(0,5) - h_NbTags_2->Integral(0,4)),"");
 	leg6->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags_2->Integral(0,4) - h_NbTags_2->Integral(0,3)),"");
+	leg6->SetEntrySeparation(ENTRY_SEP);
 	leg6->Draw();
 	C->Print(out_file_,"pdf");
 
@@ -1631,6 +1762,7 @@ int main()
 	leg3->AddEntry((TObject*)0,Form("total = %f",h_NbTags2->Integral(1,6)),"");
 	leg3->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags2->Integral(0,5) - h_NbTags2->Integral(0,4)),"");
 	leg3->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags2->Integral(0,4) - h_NbTags2->Integral(0,3)),"");
+	leg3->SetEntrySeparation(ENTRY_SEP);
 	leg3->Draw();
 	
 	C->cd(2);
@@ -1638,6 +1770,7 @@ int main()
 	leg4->AddEntry((TObject*)0,Form("total = %f",h_NbTags2_5->Integral(1,6)),"");
 	leg4->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags2_5->Integral(0,5) - h_NbTags2_5->Integral(0,4)),"");
 	leg4->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags2_5->Integral(0,4) - h_NbTags2_5->Integral(0,3)),"");
+	leg4->SetEntrySeparation(ENTRY_SEP);
 	leg4->Draw();
 	
 	C->cd(3);
@@ -1645,6 +1778,7 @@ int main()
 	leg5->AddEntry((TObject*)0,Form("total = %f",h_NbTags3->Integral(1,6)),"");
 	leg5->AddEntry((TObject*)0,Form("4btags = %f",h_NbTags3->Integral(0,5) - h_NbTags3->Integral(0,4)),"");
 	leg5->AddEntry((TObject*)0,Form("3btags = %f",h_NbTags3->Integral(0,4) - h_NbTags3->Integral(0,3)),"");
+	leg5->SetEntrySeparation(ENTRY_SEP);
 	leg5->Draw();
 	
 	C->cd(4);
@@ -1652,6 +1786,7 @@ int main()
 	leg6->AddEntry((TObject*)0,Form("total = %f",h_NbTagsB->Integral(1,6)),"");
 	leg6->AddEntry((TObject*)0,Form("4btags = %f",h_NbTagsB->Integral(0,5) - h_NbTagsB->Integral(0,4)),"");
 	leg6->AddEntry((TObject*)0,Form("3btags = %f",h_NbTagsB->Integral(0,4) - h_NbTagsB->Integral(0,3)),"");
+	leg6->SetEntrySeparation(ENTRY_SEP);
 	leg6->Draw();
 	C->Print(out_file_,"pdf");
 
@@ -1734,19 +1869,24 @@ int main()
 	dM_b1b4_b2b3_B->Draw("hist");
 	C->Print(out_file_,"pdf");
 
+	//! page31
 	C->Clear();
 	C->Divide(2,2);
 	C->cd(1);
 	M_Lhiggs1->Draw("hist");
+	gPad->Write("c31a");
 	C->cd(2);
 	M_NLhiggs1->Draw("hist");
+	gPad->Write("c31b");
 	C->cd(3);
 	M_LhiggsB->Draw("hist");
+	gPad->Write("c31c");
 	C->cd(4);
 	M_NLhiggsB->Draw("hist");
+	gPad->Write("c31d");
 	C->Print(out_file_,"pdf");
 
-	//! page31
+	//! page32
 	// invariant mass of a pair of b's, pp->4b
 	C->Clear();
 	C->Divide(2,3);
@@ -1770,7 +1910,7 @@ int main()
 	Mb3b4_B->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page32
+	//! page33
 	// invariant mass of a pair of b's, ctr = 1.0
 	C->Clear();
 	C->Divide(2,3);
@@ -1794,7 +1934,7 @@ int main()
 	Mb3b4_1->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page33
+	//! page34
 	// invariant mass of a pair of b's, ctr = 0.0
 	C->Clear();
 	C->Divide(2,3);
@@ -1818,7 +1958,7 @@ int main()
 	Mb3b4_0->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page34
+	//! page35
 	// invariant mass of a pair of b's, ctr = -1.0
 	C->Clear();
 	C->Divide(2,3);
@@ -1842,7 +1982,7 @@ int main()
 	Mb3b4__1->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page35
+	//! page36
 	// invariant mass of a pair of b's, ctr = -2.0
 	C->Clear();
 	C->Divide(2,3);
@@ -1866,7 +2006,7 @@ int main()
 	Mb3b4__2->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page36
+	//! page37
 	// invariant mass of a pair of b's, ctr = 2.0
 	C->Clear();
 	C->Divide(2,3);
@@ -1890,7 +2030,7 @@ int main()
 	Mb3b4_2->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page37
+	//! page38
 	// invariant mass of a pair of b's, ctr = 2.5
 	C->Clear();
 	C->Divide(2,3);
@@ -1914,7 +2054,7 @@ int main()
 	Mb3b4_2_5->Draw("hist");
 	C->Print(out_file_,"pdf");
 
-	//! page38
+	//! page39
 	// invariant mass of a pair of b's, ctr = 3.0
 	C->Clear();
 	C->Divide(2,3);
@@ -1938,12 +2078,12 @@ int main()
 	Mb3b4_3->Draw("hist");
 //	C->Print(out_file_,"pdf");
 
-	//! page39
 
 	//! page40
 	// invariant mass of di-higgs system
 //	C->Clear();
 //	C->SetLogy();
 	C->Print(out_file_close,"pdf");
-	return 0;
+	f_out->Close();
+	return;
 }
