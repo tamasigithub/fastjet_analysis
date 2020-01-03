@@ -1,3 +1,37 @@
+void ClearLorentzVectors__2()
+{
+	//! clear the Lorentz vectors
+	higgs1__2 = TLorentzVector();
+	higgs2__2 = TLorentzVector();
+	H1H2__2 = TLorentzVector();
+
+	b1__2 = TLorentzVector();
+	b2__2 = TLorentzVector();
+	b3__2 = TLorentzVector();
+	b4__2 = TLorentzVector();
+
+	b1b2__2 = TLorentzVector();
+	b1b3__2 = TLorentzVector();
+	b1b4__2 = TLorentzVector();
+	b2b3__2 = TLorentzVector();
+	b2b4__2 = TLorentzVector();
+	b3b4__2 = TLorentzVector();
+	
+	bJ1__2 = TLorentzVector(); 
+	bJ2__2 = TLorentzVector(); 
+	bJ3__2 = TLorentzVector(); 
+	bJ4__2 = TLorentzVector(); 
+	bJ1bJ2__2 = TLorentzVector();
+	bJ1bJ3__2 = TLorentzVector();
+	bJ1bJ4__2 = TLorentzVector();
+	bJ2bJ3__2 = TLorentzVector();
+	bJ2bJ4__2 = TLorentzVector();
+	bJ3bJ4__2 = TLorentzVector();
+
+	RecH1H2__2 = TLorentzVector();
+	return;
+
+}
 void fetch_histos__2()
 {
 
@@ -97,41 +131,43 @@ void Set_higgsPtProps__2()
 	float ptmax = 500;
 	float Mmin = 200;
 	float Mmax = 800;
-	higgsPt_2 = new TH1D("higgsPt_2", "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
-
+	//! truth leading and sub leading higgs Pt
+	higgsPt_2  = new TH1D("higgsPt_2",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	higgsPt_2->SetLineColor(kGreen);
-	
 	higgsPt_2->SetLineWidth(LINE_WIDTH);
 	
-	higgsNLPt_2 = new TH1D("higgsNLPt_2", "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
-
+	higgsNLPt_2  = new TH1D("higgsNLPt_2",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	higgsNLPt_2->SetLineColor(kGreen);
-	
 	higgsNLPt_2->SetLineWidth(LINE_WIDTH);
+	//! truth leading and sub leading higgs inv mass
+	higgsL_M_2  = new TH1D("higgsL_M_2",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	higgsL_M_2->SetLineColor(kGreen);
+	higgsL_M_2->SetLineWidth(LINE_WIDTH);
 	
-	M_Lhiggs_2 = new TH1D("M_Lhiggs_2", "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
-
-	M_Lhiggs_2->SetLineColor(kGreen);
-	
-	M_Lhiggs_2->SetLineWidth(LINE_WIDTH);
-	
-	M_NLhiggs_2 = new TH1D("M_NLhiggs_2", "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
-
-	M_NLhiggs_2->SetLineColor(kGreen);
-	
-	M_NLhiggs_2->SetLineWidth(LINE_WIDTH);
-	
-	MH1H2__2 = new TH1D("MH1H2__2", "Invariant di-higgs mass;m_{truth, h1h2} [GeV];", nbins, Mmin, Mmax);
-
+	higgsNL_M_2  = new TH1D("higgsNL_M_2",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	higgsNL_M_2->SetLineColor(kGreen);
+	higgsNL_M_2->SetLineWidth(LINE_WIDTH);
+	//! truth Inv mass of the di-higgs system
+	MH1H2__2  = new TH1D("MH1H2__2",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
 	MH1H2__2->SetLineColor(kGreen);
-	
 	MH1H2__2->SetLineWidth(LINE_WIDTH);
-	
-	PtH1H2__2 = new TH1D("PtH1H2__2", "Transverse momentum of the di-higgs system;p_{T, truth, h1h2} [GeV/c];", nbins, ptmin, ptmax);
-
+	//! truth Pt of the di-higgs system
+	PtH1H2__2  = new TH1D("PtH1H2__2",  "Transverse momentum of the di-higgs system;p_{T, truth, h1,h2} [GeV/c];", nbins, ptmin, ptmax);
 	PtH1H2__2->SetLineColor(kGreen);
-	
 	PtH1H2__2->SetLineWidth(LINE_WIDTH);
+
+	
+	//! reconstructed leading and sub leading higgs pt
+	Pt_Lhiggs_2  = new TH1D("Pt_Lhiggs_2",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
+	Pt_NLhiggs_2  = new TH1D("Pt_NLhiggs_2",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
+	//! reconstructed leading and sub leading inv mass
+	M_Lhiggs_2  = new TH1D("M_Lhiggs_2",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_NLhiggs_2  = new TH1D("M_NLhiggs_2",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	
+	//! reconstructed Inv mass of the di-higgs system
+	RecMH1H2__2  = new TH1D("RecMH1H2__2",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
+	//! reconstructed Pt of the di-higgs system
+	RecPtH1H2__2  = new TH1D("RecPtH1H2__2",  "Transverse momentum of the di-higgs system;p_{T, truth, h1,h2} [GeV/c];", nbins, ptmin, ptmax);
 
 	// invariant mass of a pair of b's, ctr = -2.0
 	Mb1b2__2 = new TH1D("Mb1b2__2", "#lambda = -2.0, Truth Invariant mass of the higgs candidates; m_{higgs candidate, 12} [GeV];", nbins, ptmin, ptmax);
@@ -209,6 +245,9 @@ void Draw_InvariantMass__2()
 		higgs1__2.SetPtEtaPhiM((*v_2_higgsPt)[0], (*v_2_higgsEta)[0], (*v_2_higgsPhi)[0], (*v_2_higgsM)[0]);
 		higgs2__2.SetPtEtaPhiM((*v_2_higgsPt)[1], (*v_2_higgsEta)[1], (*v_2_higgsPhi)[1], (*v_2_higgsM)[1]);
 		H1H2__2 = higgs1__2 + higgs2__2;
+		
+		MH1H2__2->Fill(H1H2__2.M()*1e-3);
+		PtH1H2__2->Fill(H1H2__2.Pt()*1e-3);
 	}
 	//! b's
 	if(v_2_bPt->size() == 4)
@@ -224,23 +263,30 @@ void Draw_InvariantMass__2()
 		b2b3__2 = b2__2 + b3__2;
 		b2b4__2 = b2__2 + b4__2;
 		b3b4__2 = b3__2 + b4__2;
+		
+		Mb1b2__2->Fill(b1b2__2.M()*1e-3);
+		Mb1b3__2->Fill(b1b3__2.M()*1e-3);
+		Mb1b4__2->Fill(b1b4__2.M()*1e-3);
+		Mb2b3__2->Fill(b2b3__2.M()*1e-3);
+		Mb2b4__2->Fill(b2b4__2.M()*1e-3);
+		Mb3b4__2->Fill(b3b4__2.M()*1e-3);
 	}
 
 	return;
 }
-void Fill_InvariantMass__2()
-{
-	Mb1b2__2->Fill(b1b2__2.M()*1e-3);
-	Mb1b3__2->Fill(b1b3__2.M()*1e-3);
-	Mb1b4__2->Fill(b1b4__2.M()*1e-3);
-	Mb2b3__2->Fill(b2b3__2.M()*1e-3);
-	Mb2b4__2->Fill(b2b4__2.M()*1e-3);
-	Mb3b4__2->Fill(b3b4__2.M()*1e-3);
-
-	MH1H2__2->Fill(H1H2__2.M()*1e-3);
-	PtH1H2__2->Fill(H1H2__2.Pt()*1e-3);
-	return;
-}
+//void Fill_InvariantMass__2()
+//{
+//	Mb1b2__2->Fill(b1b2__2.M()*1e-3);
+//	Mb1b3__2->Fill(b1b3__2.M()*1e-3);
+//	Mb1b4__2->Fill(b1b4__2.M()*1e-3);
+//	Mb2b3__2->Fill(b2b3__2.M()*1e-3);
+//	Mb2b4__2->Fill(b2b4__2.M()*1e-3);
+//	Mb3b4__2->Fill(b3b4__2.M()*1e-3);
+//
+//	MH1H2__2->Fill(H1H2__2.M()*1e-3);
+//	PtH1H2__2->Fill(H1H2__2.Pt()*1e-3);
+//	return;
+//}
 void Fill_NLeadingJetPtM__2()
 {
 	jetLPt_2->Fill((*v_2_jetPt)[0]*1e-3);
@@ -253,39 +299,6 @@ void Fill_NLeadingJetPtM__2()
 	jet3LM_2->Fill((*v_2_jetM)[2]*1e-3);
 	jet4LM_2->Fill((*v_2_jetM)[3]*1e-3);
 
-	return;
-}
-void Draw_DiJetInvariantMass__2()
-{
-	v_2_bjetPt.clear();
-	v_2_bjetEta.clear();
-	v_2_bjetPhi.clear();
-	v_2_bjetM.clear();
-	for(int j = 0; j < v_2_tagFlavor->size(); j++)
-	{
-		if((*v_2_tagFlavor)[j] != 5) continue;
-		v_2_bjetPt.push_back((*v_2_jetPt)[j]);
-		v_2_bjetEta.push_back((*v_2_jetEta)[j]);
-		v_2_bjetPhi.push_back((*v_2_jetPhi)[j]);
-		v_2_bjetM.push_back((*v_2_jetM)[j]);
-
-	}
-	
-	//! b jet's
-	if(v_2_bjetPt.size() > 3)
-	{
-		bJ1__2.SetPtEtaPhiM(v_2_bjetPt[0], v_2_bjetEta[0], v_2_bjetPhi[0], v_2_bjetM[0]);
-		bJ2__2.SetPtEtaPhiM(v_2_bjetPt[1], v_2_bjetEta[1], v_2_bjetPhi[1], v_2_bjetM[1]);
-		bJ3__2.SetPtEtaPhiM(v_2_bjetPt[2], v_2_bjetEta[2], v_2_bjetPhi[2], v_2_bjetM[2]);
-		bJ4__2.SetPtEtaPhiM(v_2_bjetPt[3], v_2_bjetEta[3], v_2_bjetPhi[3], v_2_bjetM[3]);
-
-		bJ1bJ2__2 = bJ1__2 + bJ2__2;
-		bJ1bJ3__2 = bJ1__2 + bJ3__2;
-		bJ1bJ4__2 = bJ1__2 + bJ4__2;
-		bJ2bJ3__2 = bJ2__2 + bJ3__2;
-		bJ2bJ4__2 = bJ2__2 + bJ4__2;
-		bJ3bJ4__2 = bJ3__2 + bJ4__2;
-	}
 	return;
 }
 void Fill_bjetPtM__2(int &nhiggs)
@@ -338,14 +351,21 @@ void Fill_bjetPtM__2(int &nhiggs)
 			{
 				M_Lhiggs_2->Fill(bJ1bJ2__2.M()*1e-3);
 				M_NLhiggs_2->Fill(bJ3bJ4__2.M()*1e-3);
+				Pt_Lhiggs_2->Fill(bJ1bJ2__2.Pt()*1e-3);
+				Pt_NLhiggs_2->Fill(bJ3bJ4__2.Pt()*1e-3);
 			
 			} 
 			else
 			{
 				M_Lhiggs_2->Fill(bJ3bJ4__2.M()*1e-3);
 				M_NLhiggs_2->Fill(bJ1bJ2__2.M()*1e-3);
+				Pt_Lhiggs_2->Fill(bJ3bJ4__2.Pt()*1e-3);
+				Pt_NLhiggs_2->Fill(bJ1bJ2__2.Pt()*1e-3);
 				
 			}
+			RecH1H2__2 = bJ1bJ2__2 + bJ3bJ4__2;
+			RecMH1H2__2->Fill(RecH1H2__2.M()*1e-3);
+			RecPtH1H2__2->Fill(RecH1H2__2.Pt()*1e-3);
 		}
 	}
 	else if(higgs_candidates == 1324)
@@ -357,14 +377,21 @@ void Fill_bjetPtM__2(int &nhiggs)
 			{
 				M_Lhiggs_2->Fill(bJ1bJ3__2.M()*1e-3);
 				M_NLhiggs_2->Fill(bJ2bJ4__2.M()*1e-3);
+				Pt_Lhiggs_2->Fill(bJ1bJ3__2.Pt()*1e-3);
+				Pt_NLhiggs_2->Fill(bJ2bJ4__2.Pt()*1e-3);
 			
 			} 
 			else
 			{
 				M_Lhiggs_2->Fill(bJ2bJ4__2.M()*1e-3);
 				M_NLhiggs_2->Fill(bJ1bJ3__2.M()*1e-3);
+				Pt_Lhiggs_2->Fill(bJ2bJ4__2.Pt()*1e-3);
+				Pt_NLhiggs_2->Fill(bJ1bJ3__2.Pt()*1e-3);
 				
 			}
+			RecH1H2__2 = bJ1bJ3__2 + bJ2bJ4__2;
+			RecMH1H2__2->Fill(RecH1H2__2.M()*1e-3);
+			RecPtH1H2__2->Fill(RecH1H2__2.Pt()*1e-3);
 		}
 	
 	}
@@ -377,18 +404,60 @@ void Fill_bjetPtM__2(int &nhiggs)
 			{
 				M_Lhiggs_2->Fill(bJ1bJ4__2.M()*1e-3);
 				M_NLhiggs_2->Fill(bJ2bJ3__2.M()*1e-3);
+				Pt_Lhiggs_2->Fill(bJ1bJ4__2.Pt()*1e-3);
+				Pt_NLhiggs_2->Fill(bJ2bJ3__2.Pt()*1e-3);
 			
 			} 
 			else
 			{
 				M_Lhiggs_2->Fill(bJ2bJ3__2.M()*1e-3);
 				M_NLhiggs_2->Fill(bJ1bJ4__2.M()*1e-3);
+				Pt_Lhiggs_2->Fill(bJ2bJ3__2.Pt()*1e-3);
+				Pt_NLhiggs_2->Fill(bJ1bJ4__2.Pt()*1e-3);
 				
 			}
+			RecH1H2__2 = bJ1bJ4__2 + bJ2bJ3__2;
+			RecMH1H2__2->Fill(RecH1H2__2.M()*1e-3);
+			RecPtH1H2__2->Fill(RecH1H2__2.Pt()*1e-3);
 		}
 	
 	}
 
+	return;
+}
+void Draw_DiJetInvariantMass__2(int &nhiggs)
+{
+	v_2_bjetPt.clear();
+	v_2_bjetEta.clear();
+	v_2_bjetPhi.clear();
+	v_2_bjetM.clear();
+	for(int j = 0; j < v_2_tagFlavor->size(); j++)
+	{
+		if((*v_2_tagFlavor)[j] != 5) continue;
+		v_2_bjetPt.push_back((*v_2_jetPt)[j]);
+		v_2_bjetEta.push_back((*v_2_jetEta)[j]);
+		v_2_bjetPhi.push_back((*v_2_jetPhi)[j]);
+		v_2_bjetM.push_back((*v_2_jetM)[j]);
+
+	}
+	
+	//! b jet's
+	if(v_2_bjetPt.size() > 3)
+	{
+		bJ1__2.SetPtEtaPhiM(v_2_bjetPt[0], v_2_bjetEta[0], v_2_bjetPhi[0], v_2_bjetM[0]);
+		bJ2__2.SetPtEtaPhiM(v_2_bjetPt[1], v_2_bjetEta[1], v_2_bjetPhi[1], v_2_bjetM[1]);
+		bJ3__2.SetPtEtaPhiM(v_2_bjetPt[2], v_2_bjetEta[2], v_2_bjetPhi[2], v_2_bjetM[2]);
+		bJ4__2.SetPtEtaPhiM(v_2_bjetPt[3], v_2_bjetEta[3], v_2_bjetPhi[3], v_2_bjetM[3]);
+
+		bJ1bJ2__2 = bJ1__2 + bJ2__2;
+		bJ1bJ3__2 = bJ1__2 + bJ3__2;
+		bJ1bJ4__2 = bJ1__2 + bJ4__2;
+		bJ2bJ3__2 = bJ2__2 + bJ3__2;
+		bJ2bJ4__2 = bJ2__2 + bJ4__2;
+		bJ3bJ4__2 = bJ3__2 + bJ4__2;
+
+		Fill_bjetPtM__2(nhiggs);
+	}
 	return;
 }
 
@@ -413,6 +482,10 @@ void SetLineWidth_2()
 	higgsNLPt_2->SetLineWidth(LINE_WIDTH);
 	M_Lhiggs_2->SetLineWidth(LINE_WIDTH);
 	M_NLhiggs_2->SetLineWidth(LINE_WIDTH);
+	Pt_Lhiggs_2->SetLineWidth(LINE_WIDTH);
+	Pt_NLhiggs_2->SetLineWidth(LINE_WIDTH);
+	RecMH1H2__2->SetLineWidth(LINE_WIDTH);
+	RecPtH1H2__2->SetLineWidth(LINE_WIDTH);
 
 	// invariant mass of a pair of b's, ctr = -2.0
 	M_b1b2__2->SetLineWidth(LINE_WIDTH);
@@ -480,6 +553,10 @@ void Scale_signalHistos_2(double norm)
 	higgsNLPt_2->Scale(norm);
 	M_Lhiggs_2->Scale(norm);
 	M_NLhiggs_2->Scale(norm);
+	Pt_Lhiggs_2->Scale(norm);
+	Pt_NLhiggs_2->Scale(norm);
+	RecMH1H2__2->Scale(norm);
+	RecPtH1H2__2->Scale(norm);
 
 	// invariant mass of a pair of b's, ctr = -2.0
 	M_b1b2__2->Scale(norm);
@@ -553,6 +630,11 @@ void Set_bquark_lambdaColors__2()
 
 	M_Lhiggs_2->SetLineColor(kGreen);
 	M_NLhiggs_2->SetLineColor(kGreen);
+	Pt_Lhiggs_2->SetLineColor(kGreen);
+	Pt_NLhiggs_2->SetLineColor(kGreen);
+	RecMH1H2__2->SetLineColor(kGreen);
+	RecPtH1H2__2->SetLineColor(kGreen);
+
 	bjetLM_2->SetLineColor(kGreen);
 	bjet2LM_2->SetLineColor(kGreen);
 	bjet3LM_2->SetLineColor(kGreen);

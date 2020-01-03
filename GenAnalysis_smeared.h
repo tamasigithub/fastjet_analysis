@@ -20,6 +20,8 @@
 #include "TF1.h"
 #include "TLatex.h"
 
+double max_rangeM=0;
+double max_rangePt=0;
 
 const int min_Njets = 4;
 const double minLeadingPt = 55.0;//GeV
@@ -37,18 +39,22 @@ const double ggFhhXsec2   = 624.195;
 const double ggFhhXsec2_5 = 522.665;
 const double ggFhhXsec3   = 551.980;
 
-const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4.root";
-const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.4";
+double k_lambda[7] = {-2.0, -1.0, 0.0, 1.0, 2.0, 2.5, 3.0};
 
-const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.4.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.4.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.4.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.4.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.4.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.4.root"; 
-const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4.root"; 
+double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec2, ggFhhXsec2_5, ggFhhXsec3};
+
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.2.root";
+const char *out_path = "./analysis_plots/pdf"; 
+const char *output_file_name = "GenJet4b2_2.5_allR0.2_1";
+
+const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.2.root"; 
+const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root"; 
 
 TFile *f1  = nullptr;
 TFile *f0  = nullptr;
@@ -111,31 +117,7 @@ TLorentzVector higgs1__1, higgs2__1, H1H2__1;
 TLorentzVector higgs1__2, higgs2__2, H1H2__2;
 TLorentzVector higgs1_2, higgs2_2, H1H2_2;
 TLorentzVector higgs1_2_5, higgs2_2_5, H1H2_2_5;
-TLorentzVector higgs1_3, higgs2_3, H1H2_3;
-
-TH1D *MH1H2_1 = nullptr; 
-TH1D *MH1H2_0 = nullptr; 
-TH1D *MH1H2__1 = nullptr; 
-TH1D *MH1H2__2 = nullptr; 
-TH1D *MH1H2_2 = nullptr; 
-TH1D *MH1H2_2_5 = nullptr; 
-TH1D *MH1H2_3 = nullptr; 
-
-TH1D *RecMH1H2_1 = nullptr; 
-TH1D *RecMH1H2_0 = nullptr; 
-TH1D *RecMH1H2__1 = nullptr; 
-TH1D *RecMH1H2__2 = nullptr; 
-TH1D *RecMH1H2_2 = nullptr; 
-TH1D *RecMH1H2_2_5 = nullptr; 
-TH1D *RecMH1H2_3 = nullptr; 
-
-TH1D *PtH1H2_1 = nullptr; 
-TH1D *PtH1H2_0 = nullptr; 
-TH1D *PtH1H2__1 = nullptr; 
-TH1D *PtH1H2__2 = nullptr; 
-TH1D *PtH1H2_2 = nullptr; 
-TH1D *PtH1H2_2_5 = nullptr; 
-TH1D *PtH1H2_3 = nullptr; 
+TLorentzVector higgs1_3, higgs2_3, H1H2_3; 
 
 std::vector<double> *v1_bPt  = nullptr;
 std::vector<double> *v1_bEta = nullptr;
@@ -251,6 +233,7 @@ TH1D *Mb2b3_B = nullptr;
 TH1D *Mb2b4_B = nullptr;
 TH1D *Mb3b4_B = nullptr;
 
+//! Reconstructed objects
 TLorentzVector bJ1_1, bJ2_1, bJ3_1, bJ4_1;
 TLorentzVector bJ1bJ2_1, bJ1bJ3_1, bJ1bJ4_1, bJ2bJ3_1, bJ2bJ4_1, bJ3bJ4_1;
 TLorentzVector bJ1_0, bJ2_0, bJ3_0, bJ4_0;
@@ -265,9 +248,17 @@ TLorentzVector bJ1_2_5, bJ2_2_5, bJ3_2_5, bJ4_2_5;
 TLorentzVector bJ1bJ2_2_5, bJ1bJ3_2_5, bJ1bJ4_2_5, bJ2bJ3_2_5, bJ2bJ4_2_5, bJ3bJ4_2_5;
 TLorentzVector bJ1_3, bJ2_3, bJ3_3, bJ4_3;
 TLorentzVector bJ1bJ2_3, bJ1bJ3_3, bJ1bJ4_3, bJ2bJ3_3, bJ2bJ4_3, bJ3bJ4_3;
+TLorentzVector RecH1H2_1;
+TLorentzVector RecH1H2_0;
+TLorentzVector RecH1H2__1;
+TLorentzVector RecH1H2__2;
+TLorentzVector RecH1H2_2;
+TLorentzVector RecH1H2_2_5;
+TLorentzVector RecH1H2_3;
 
 TLorentzVector bJ1_B, bJ2_B, bJ3_B, bJ4_B;
 TLorentzVector bJ1bJ2_B, bJ1bJ3_B, bJ1bJ4_B, bJ2bJ3_B, bJ2bJ4_B, bJ3bJ4_B;
+TLorentzVector RecH1H2_B;
 
 //! Get bjetPt in locally defined std::vector
 std::vector<double> v1_bjetPt;
@@ -306,15 +297,15 @@ std::vector<double> v2_5_bjetM;
 std::vector<double> v3_bjetM;
 std::vector<double> vB_bjetM;
 //! Get invariant mass of combinations of bjets  in locally defined std::vector
-//! there are 4 bjets in an event => 6 combination of 2 bjets are possible
-std::vector<double> v1_bibjM;
-std::vector<double> v0_bibjM;
-std::vector<double> v_1_bibjM;
-std::vector<double> v_2_bibjM;
-std::vector<double> v2_bibjM;
-std::vector<double> v2_5_bibjM;
-std::vector<double> v3_bibjM;
-std::vector<double> vB_bibjM;
+////! there are 4 bjets in an event => 6 combination of 2 bjets are possible
+//std::vector<double> v1_bibjM;
+//std::vector<double> v0_bibjM;
+//std::vector<double> v_1_bibjM;
+//std::vector<double> v_2_bibjM;
+//std::vector<double> v2_bibjM;
+//std::vector<double> v2_5_bibjM;
+//std::vector<double> v3_bibjM;
+//std::vector<double> vB_bibjM;
 //! Get jetM in locally defined std::vector
 std::vector<double> *v1_jetM = nullptr;
 std::vector<double> *v0_jetM = nullptr;
@@ -406,7 +397,7 @@ TH1D *Njets2_5= nullptr;
 TH1D *Njets3  = nullptr;
 TH1D *NjetsB  = nullptr;
 //! Book histograms:
-//Higgs Pt
+// truth Higgs Pt
 TH1 *higgsPt1  = nullptr;
 TH1 *higgsPt0  = nullptr;
 TH1 *higgsPt_1 = nullptr;
@@ -414,7 +405,7 @@ TH1 *higgsPt_2 = nullptr;
 TH1 *higgsPt2  = nullptr;
 TH1 *higgsPt2_5= nullptr;
 TH1 *higgsPt3  = nullptr;
-//Higgs sub leading Pt
+//truth Higgs sub leading Pt
 TH1 *higgsNLPt1  = nullptr;
 TH1 *higgsNLPt0  = nullptr;
 TH1 *higgsNLPt_1 = nullptr;
@@ -422,7 +413,57 @@ TH1 *higgsNLPt_2 = nullptr;
 TH1 *higgsNLPt2  = nullptr;
 TH1 *higgsNLPt2_5= nullptr;
 TH1 *higgsNLPt3  = nullptr;
+// truth leading Higgs mass
+TH1 *higgsL_M1  = nullptr;
+TH1 *higgsL_M0  = nullptr;
+TH1 *higgsL_M_1 = nullptr;
+TH1 *higgsL_M_2 = nullptr;
+TH1 *higgsL_M2  = nullptr;
+TH1 *higgsL_M2_5= nullptr;
+TH1 *higgsL_M3  = nullptr;
+//truth sub leading Higgs mass
+TH1 *higgsNL_M1  = nullptr;
+TH1 *higgsNL_M0  = nullptr;
+TH1 *higgsNL_M_1 = nullptr;
+TH1 *higgsNL_M_2 = nullptr;
+TH1 *higgsNL_M2  = nullptr;
+TH1 *higgsNL_M2_5= nullptr;
+TH1 *higgsNL_M3  = nullptr;
+//truth inv mass of di-higgs system
+TH1D *MH1H2_1 = nullptr; 
+TH1D *MH1H2_0 = nullptr; 
+TH1D *MH1H2__1 = nullptr; 
+TH1D *MH1H2__2 = nullptr; 
+TH1D *MH1H2_2 = nullptr; 
+TH1D *MH1H2_2_5 = nullptr; 
+TH1D *MH1H2_3 = nullptr; 
+// truth pt of di-higgs system
+TH1D *PtH1H2_1 = nullptr; 
+TH1D *PtH1H2_0 = nullptr; 
+TH1D *PtH1H2__1 = nullptr; 
+TH1D *PtH1H2__2 = nullptr; 
+TH1D *PtH1H2_2 = nullptr; 
+TH1D *PtH1H2_2_5 = nullptr; 
+TH1D *PtH1H2_3 = nullptr;
 
+//recconstructed pt of the leading higgs
+TH1D *Pt_Lhiggs1   = nullptr;
+TH1D *Pt_Lhiggs0   = nullptr;
+TH1D *Pt_Lhiggs_1  = nullptr;
+TH1D *Pt_Lhiggs_2  = nullptr;
+TH1D *Pt_Lhiggs2   = nullptr;
+TH1D *Pt_Lhiggs2_5 = nullptr;
+TH1D *Pt_Lhiggs3   = nullptr;
+TH1D *Pt_LhiggsB   = nullptr;
+//recconstructed pt of the sub-leading higgs
+TH1D *Pt_NLhiggs1   = nullptr;
+TH1D *Pt_NLhiggs0   = nullptr;
+TH1D *Pt_NLhiggs_1  = nullptr;
+TH1D *Pt_NLhiggs_2  = nullptr;
+TH1D *Pt_NLhiggs2   = nullptr;
+TH1D *Pt_NLhiggs2_5 = nullptr;
+TH1D *Pt_NLhiggs3   = nullptr;
+TH1D *Pt_NLhiggsB   = nullptr;
 //recconstructed invariant mass of the leading higgs
 TH1D *M_Lhiggs1   = nullptr;
 TH1D *M_Lhiggs0   = nullptr;
@@ -441,6 +482,24 @@ TH1D *M_NLhiggs2   = nullptr;
 TH1D *M_NLhiggs2_5 = nullptr;
 TH1D *M_NLhiggs3   = nullptr;
 TH1D *M_NLhiggsB   = nullptr;
+//reconstructed pt of the di-higgs system
+TH1D *RecPtH1H2_1 = nullptr; 
+TH1D *RecPtH1H2_0 = nullptr; 
+TH1D *RecPtH1H2__1 = nullptr; 
+TH1D *RecPtH1H2__2 = nullptr; 
+TH1D *RecPtH1H2_2 = nullptr; 
+TH1D *RecPtH1H2_2_5 = nullptr; 
+TH1D *RecPtH1H2_3 = nullptr;
+TH1D *RecPtH1H2_B = nullptr;
+//reconstructed inv mass of the di-higgs system
+TH1D *RecMH1H2_1 = nullptr; 
+TH1D *RecMH1H2_0 = nullptr; 
+TH1D *RecMH1H2__1 = nullptr; 
+TH1D *RecMH1H2__2 = nullptr; 
+TH1D *RecMH1H2_2 = nullptr; 
+TH1D *RecMH1H2_2_5 = nullptr; 
+TH1D *RecMH1H2_3 = nullptr;
+TH1D *RecMH1H2_B = nullptr;
 
 // invariant mass of a pair of b's, ctr = 1.0
 TH1D *M_b1b2_1 = nullptr;
@@ -796,8 +855,10 @@ TH1D *b4CEta3  = nullptr;
 TH1D *b4CEtaB  = nullptr;
 
 Float_t LINE_WIDTH = 2.5;
-Float_t TITLE_SIZE = 0.045;
+Float_t TITLE_SIZE = 0.04;
+Float_t MARKER_SIZE = 1.2;
 Float_t AXISTITLE_OFFSET = 0.8;
+Float_t YAXISTITLE_OFFSET = 1.2;
 
 //********** Legend Properties ************//
 //! Draw Legends
@@ -810,7 +871,7 @@ TLegend *leg4 = nullptr;
 TLegend *leg5 = nullptr;
 TLegend *leg6 = nullptr;
 
-Float_t ENTRY_SEP = 0.1;
+Float_t ENTRY_SEP = 0.05;
 Float_t FILL_STYLE = 0;
 Float_t BORDER_SIZE = 0;
 Float_t TEXT_ALIGN = 32;
