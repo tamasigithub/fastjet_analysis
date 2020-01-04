@@ -90,3 +90,4 @@ sed -i -e 's/_6.0_allR0.4/_2.5_allR0.2/g' ./GenAnalysis_smeared.h
 #pdflatex c44d.tex
 #cd ${CURRENT_DIR}
 echo 'DONE!'
+vlc ~/Videos/damodarashtaka.mp4

@@ -77,6 +77,7 @@ for file in "$@"; do
   sed -i -e 's@\[MeV\]@\~\[MeV\]@g' $BODY_FILE
   sed -i -e 's@\[GeV\]@\~\[GeV\]@g' $BODY_FILE
   sed -i -e 's@\[TeV\]@\~\[TeV\]@g' $BODY_FILE
+  sed -i -e 's@\[fb\]@\~\[fb\]@g' $BODY_FILE
   sed -i -e 's@\[GeV\/c\]@\~\[GeV\/c\]@g' $BODY_FILE
   sed -i -e 's@meV@\\text{meV}@g' $BODY_FILE
   sed -i -e 's@MeV@\\text{MeV}@g' $BODY_FILE
