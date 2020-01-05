@@ -102,6 +102,7 @@ for file in "$@"; do
   sed -i -e 's@=  3.0@=\~\~3.0@g' $BODY_FILE
   sed -i -e 's@leading@\~\\text{leading}@g' $BODY_FILE
   sed -i -e 's@sub\-@\\text{sub}\~\-@g' $BODY_FILE
+  sed -i -e 's@wwbar@bar@g' $BODY_FILE
   # derivatives
   sed -i -e 's@d\\sigma@\\text{d}\\sigma@g' $BODY_FILE
   sed -i -e 's@dE@\\text{d}E@g' $BODY_FILE

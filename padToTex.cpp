@@ -51,7 +51,7 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, const char
 	{
 		TPad *legend = (TPad*)f->Get("c43c");
 		//legend->SetPad(0.4,0.5,0.899,0.899);//dx = 0.5, dy = 0.4
-		legend->SetPad(0.4,0.42,0.94,0.89);
+		legend->SetPad(0.4,0.37,0.94,0.85);
 		legend->SetFillStyle(0);// make the pad transparent
 		legend->DrawClone();
 	}
@@ -69,10 +69,17 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, const char
 	cms_E->SetTextSize(0.04);
         cms_E->Draw();	
 	c->Update();
+	TLegend *signal = new TLegend(0.58,0.72,0.9,0.92);
+	signal->SetFillStyle(0);
+	signal->SetBorderSize(0);
+	signal->AddEntry((TObject*)0, "HH #rightarrow b#bar{b}b#bar{b}", "");
+	signal->SetTextSize(0.04);
+        signal->Draw();	
+	c->Update();
 
 	if(which_legend == 0)
 	{
-		TLegend *ana_txt = new TLegend(0.5,0.8,0.94,0.79);
+		TLegend *ana_txt = new TLegend(0.5,0.77,0.94,0.79);
 		ana_txt->SetFillStyle(0);
 		ana_txt->SetBorderSize(0);
 		ana_txt->AddEntry((TObject*)0, "after analysis cuts", "");

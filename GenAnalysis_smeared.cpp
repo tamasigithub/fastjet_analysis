@@ -53,7 +53,7 @@ void Set_LegendProps()
 	leg_higgs->SetBorderSize(BORDER_SIZE);
 	leg_higgs->SetTextAlign(TEXT_ALIGN);
 	leg_higgs->SetTextFont(TEXT_FONT);
-	leg_higgs->SetTextSize(0.08);
+	leg_higgs->SetTextSize(0.09);
 
 	leg1->SetFillStyle(FILL_STYLE);
 	leg1->SetBorderSize(BORDER_SIZE);
@@ -637,7 +637,7 @@ void plot()
 
 	leg_higgs_1 = new TLegend(0.5, 0.2, 0.9, 0.9, "");
 	//leg_higgs = new TLegend(x1, y1, x2, y2, "");
-	leg_higgs = new TLegend(0.25, 0.55, 0.9, 0.9, "");
+	leg_higgs = new TLegend(0.25, 0.65, 0.9, 0.9, "");
 	leg1 = new TLegend(0.42, 0.5, 0.9, 0.9, "");
 	//leg1 = new TLegend(x1, y1, x2, y2, "");
 	leg2 = new TLegend(x1, y1, x2, y2, "");
@@ -1134,6 +1134,7 @@ void plot()
 	C->cd(2);
 	b4LPtB->SetTitle("pp->4b");
 	b4LPtB->GetXaxis()->SetTitle("p_{T, b} [GeV/c]");
+	b4LPtB->GetXaxis()->SetRangeUser(0,200);
 	b4LPtB->Draw("hist");
 	b3LPtB->Draw("hist same");
 	b2LPtB->Draw("hist same");
@@ -2370,6 +2371,7 @@ void plot()
 	gPad->Write("c40b");
 	// reconstructed pt of leading and sub-leading higgs
 	C->cd(3);
+	gPad->SetLogy();
 	Pt_Lhiggs_2->GetXaxis()->SetTitle("p_{T, rec, H1} [GeV/c]");
 	Pt_Lhiggs_2->Draw("hist");
 	Pt_Lhiggs1->Draw("hist same");
@@ -2380,6 +2382,7 @@ void plot()
 	Pt_Lhiggs3->Draw("hist same");
 	gPad->Write("c40c");
 	C->cd(4);
+	gPad->SetLogy();
 	Pt_NLhiggs_2->GetXaxis()->SetTitle("p_{T, rec, H2} [GeV/c]");
 	Pt_NLhiggs_2->Draw("hist");
 	Pt_NLhiggs1->Draw("hist same");
