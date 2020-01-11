@@ -214,8 +214,9 @@ void plot()
 	Draw_Number_bTags_B();
 
 	int n1 = 0, n0 = 0, n_1 = 0, n_2 = 0, n2 = 0, n2_5 = 0, n3 = 0, nB = 0;
-	int nL1 = 0, nL0 = 0, nL_1 = 0, nL_2 = 0, nL2 = 0, nL2_5 = 0, nL3 = 0, nLB = 0;
+	int nall1 = 0, nall0 = 0, nall_1 = 0, nall_2 = 0, nall2 = 0, nall2_5 = 0, nall3 = 0, nallB = 0;
 	int nNL1 = 0, nNL0 = 0, nNL_1 = 0, nNL_2 = 0, nNL2 = 0, nNL2_5 = 0, nNL3 = 0, nNLB = 0;
+	int nL1 = 0, nL0 = 0, nL_1 = 0, nL_2 = 0, nL2 = 0, nL2_5 = 0, nL3 = 0, nLB = 0;
 	int nb1 = 0, nb0 = 0, nb_1 = 0, nb_2 = 0, nb2 = 0, nb2_5 = 0, nb3 = 0, nbB = 0;
 	int nh1 = 0, nh0 = 0, nh_1 = 0, nh_2 = 0, nh2 = 0, nh2_5 = 0, nh3 = 0, nhB = 0;
 	
@@ -238,13 +239,13 @@ void plot()
 		if (v1_jetPt->size() < min_Njets) continue;
 		n1++;
 
-		//if((*v1_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v1_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v1_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v1_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL1++;
+		if((*v1_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v1_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall1++;
 		if((*v1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL1++;
+		if((*v1_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL1++;
 		Fill_NLeadingJetPtM_1();
 		if(n1_btags < 4) continue;
 		nb1++;
@@ -252,12 +253,13 @@ void plot()
 		//Fill_bjetPtM_1(nh1);
 
 	}	
-	std::cout<<"ctr = 1.0" <<std::endl;
-	std::cout<<"n1 : " << n1 <<std::endl;
-	std::cout<<"nL1 : " << nL1 <<std::endl;
-	std::cout<<"nNL1 : " << nNL1 <<std::endl;
-	std::cout<<"nb1 : " << nb1 <<std::endl;
-	std::cout<<"nh1 : " << nh1 <<std::endl;
+	std::cout<<"ctr   = 1.0" <<std::endl;
+	std::cout<<"n1    : " << n1 <<std::endl;
+	std::cout<<"nall1 : " << nall1 <<std::endl;
+	std::cout<<"nNL1  : " << nNL1 <<std::endl;
+	std::cout<<"nL1   : " << nL1 <<std::endl;
+	std::cout<<"nb1   : " << nb1 <<std::endl;
+	std::cout<<"nh1   : " << nh1 <<std::endl;
 
 	for(int i = 0; i < t0->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -269,13 +271,13 @@ void plot()
 		if (v0_jetPt->size() < min_Njets) continue;
 		n0++;
 
-		//if((*v0_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v0_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v0_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v0_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL0++;
+		if((*v0_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v0_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall0++;
 		if((*v0_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL0++;
+		if((*v0_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL0++;
 		Fill_NLeadingJetPtM_0();
 		if(n0_btags < 4) continue;
 		nb0++;
@@ -283,12 +285,13 @@ void plot()
 		//Fill_bjetPtM_0(nh0);
 
 	}
-	std::cout<<"ctr = 0.0" <<std::endl;
-	std::cout<<"n0 : " << n0 <<std::endl;
-	std::cout<<"nL0 : " << nL0 <<std::endl;
-	std::cout<<"nNL0 : " << nNL0 <<std::endl;
-	std::cout<<"nb0 : " << nb0 <<std::endl;
-	std::cout<<"nh0 : " << nh0 <<std::endl;
+	std::cout<<"ctr   = 0.0" <<std::endl;
+	std::cout<<"n0    : " << n0 <<std::endl;
+	std::cout<<"nall0 : " << nall0 <<std::endl;
+	std::cout<<"nNL0  : " << nNL0 <<std::endl;
+	std::cout<<"nL0   : " << nL0 <<std::endl;
+	std::cout<<"nb0   : " << nb0 <<std::endl;
+	std::cout<<"nh0   : " << nh0 <<std::endl;
 	
 	for(int i = 0; i < t_1->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -300,13 +303,13 @@ void plot()
 		if (v_1_jetPt->size() < min_Njets) continue;
 		n_1++;
 		
-		//if((*v_1_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v_1_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v_1_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v_1_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL_1++;
+		if((*v_1_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v_1_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall_1++;
 		if((*v_1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL_1++;
+		if((*v_1_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL_1++;
 		Fill_NLeadingJetPtM__1();
 		if(n_1_btags < 4) continue;
 		nb_1++;
@@ -314,12 +317,13 @@ void plot()
 		//Fill_bjetPtM__1(nh_1);
 
 	}
-	std::cout<<"ctr = -1.0" <<std::endl;
-	std::cout<<"n_1 : " << n_1 <<std::endl;
-	std::cout<<"nL_1 : " << nL_1 <<std::endl;
-	std::cout<<"nNL_1 : " << nNL_1 <<std::endl;
-	std::cout<<"nb_1 : " << nb_1 <<std::endl;
-	std::cout<<"nh_1 : " << nh_1 <<std::endl;
+	std::cout<<"ctr    = -1.0" <<std::endl;
+	std::cout<<"n_1    : " << n_1 <<std::endl;
+	std::cout<<"nall_1 : " << nall_1 <<std::endl;
+	std::cout<<"nNL_1  : " << nNL_1 <<std::endl;
+	std::cout<<"nL_1   : " << nL_1 <<std::endl;
+	std::cout<<"nb_1   : " << nb_1 <<std::endl;
+	std::cout<<"nh_1   : " << nh_1 <<std::endl;
 	
 	for(int i = 0; i < t_2->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -331,13 +335,13 @@ void plot()
 		if (v_2_jetPt->size() < min_Njets) continue;
 		n_2++;
 		
-		//if((*v_2_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v_2_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v_2_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v_2_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL_2++;
+		if((*v_2_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v_2_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall_2++;
 		if((*v_2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL_2++;
+		if((*v_2_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL_2++;
 		Fill_NLeadingJetPtM__2();
 		if(n_2_btags < 4) continue;
 		nb_2++;
@@ -345,12 +349,13 @@ void plot()
 		//Fill_bjetPtM__2(nh_2);
 
 	}
-	std::cout<<"ctr = -2.0" <<std::endl;
-	std::cout<<"n_2 : " << n_2 <<std::endl;
-	std::cout<<"nL_2 : " << nL_2 <<std::endl;
-	std::cout<<"nNL_2 : " << nNL_2 <<std::endl;
-	std::cout<<"nb_2 : " << nb_2 <<std::endl;
-	std::cout<<"nh_2 : " << nh_2 <<std::endl;
+	std::cout<<"ctr    = -2.0" <<std::endl;
+	std::cout<<"n_2    : " << n_2 <<std::endl;
+	std::cout<<"nall_2 : " << nall_2 <<std::endl;
+	std::cout<<"nNL_2  : " << nNL_2 <<std::endl;
+	std::cout<<"nL_2   : " << nL_2 <<std::endl;
+	std::cout<<"nb_2   : " << nb_2 <<std::endl;
+	std::cout<<"nh_2   : " << nh_2 <<std::endl;
 	
 	for(int i = 0; i < t2->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -361,13 +366,13 @@ void plot()
 		//Fill_InvariantMass_2();
 		if (v2_jetPt->size() < min_Njets) continue;
 		n2++;
-		//if((*v2_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v2_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v2_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v2_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL2++;
+		if((*v2_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v2_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall2++;
 		if((*v2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL2++;
+		if((*v2_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL2++;
 		Fill_NLeadingJetPtM_2();
 		if(n2_btags < 4) continue;
 		nb2++;
@@ -375,12 +380,13 @@ void plot()
 		//Fill_bjetPtM_2(nh2);
 
 	}
-	std::cout<<"ctr = 2.0" <<std::endl;
-	std::cout<<"n2 : " << n2 <<std::endl;
-	std::cout<<"nL2 : " << nL2 <<std::endl;
-	std::cout<<"nNL2 : " << nNL2 <<std::endl;
-	std::cout<<"nb2 : " << nb2 <<std::endl;
-	std::cout<<"nh2 : " << nh2 <<std::endl;
+	std::cout<<"ctr   = 2.0" <<std::endl;
+	std::cout<<"n2    : " << n2 <<std::endl;
+	std::cout<<"nall2 : " << nall2 <<std::endl;
+	std::cout<<"nNL2  : " << nNL2 <<std::endl;
+	std::cout<<"nL2   : " << nL2 <<std::endl;
+	std::cout<<"nb2   : " << nb2 <<std::endl;
+	std::cout<<"nh2   : " << nh2 <<std::endl;
 	
 	for(int i = 0; i < t2_5->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -392,13 +398,13 @@ void plot()
 		if (v2_5_jetPt->size() < min_Njets) continue;
 		n2_5++;
 		
-		//if((*v2_5_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v2_5_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v2_5_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v2_5_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL2_5++;
+		if((*v2_5_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v2_5_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall2_5++;
 		if((*v2_5_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL2_5++;
+		if((*v2_5_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL2_5++;
 		Fill_NLeadingJetPtM_2_5();
 		if(n2_5_btags < 4) continue;
 		nb2_5++;
@@ -406,12 +412,13 @@ void plot()
 		//Fill_bjetPtM_2_5(nh2_5);
 
 	}
-	std::cout<<"ctr = 2.5" <<std::endl;
-	std::cout<<"n2_5 : " << n2_5 <<std::endl;
-	std::cout<<"nL2_5 : " << nL2_5 <<std::endl;
-	std::cout<<"nNL2_5 : " << nNL2_5 <<std::endl;
-	std::cout<<"nb2_5 : " << nb2_5 <<std::endl;
-	std::cout<<"nh2_5 : " << nh2_5 <<std::endl;
+	std::cout<<"ctr     = 2.5" <<std::endl;
+	std::cout<<"n2_5    : " << n2_5 <<std::endl;
+	std::cout<<"nall2_5 : " << nall2_5 <<std::endl;
+	std::cout<<"nNL2_5  : " << nNL2_5 <<std::endl;
+	std::cout<<"nL2_5   : " << nL2_5 <<std::endl;
+	std::cout<<"nb2_5   : " << nb2_5 <<std::endl;
+	std::cout<<"nh2_5   : " << nh2_5 <<std::endl;
 	
 	for(int i = 0; i < t3->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -423,13 +430,13 @@ void plot()
 		if (v3_jetPt->size() < min_Njets) continue;
 		n3++;
 		
-		//if((*v3_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*v3_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*v3_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*v3_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nL3++;
+		if((*v3_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*v3_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nall3++;
 		if((*v3_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL3++;
+		if((*v3_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nL3++;
 		Fill_NLeadingJetPtM_3();
 		if(n3_btags < 4) continue;
 		nb3++;
@@ -437,12 +444,13 @@ void plot()
 		//Fill_bjetPtM_3(nh3);
 
 	}
-	std::cout<<"ctr = 3.0" <<std::endl;
-	std::cout<<"n3 : " << n3 <<std::endl;
-	std::cout<<"nL3 : " << nL3 <<std::endl;
-	std::cout<<"nNL3 : " << nNL3 <<std::endl;
-	std::cout<<"nb3 : " << nb3 <<std::endl;
-	std::cout<<"nh3 : " << nh3 <<std::endl;
+	std::cout<<"ctr   = 3.0" <<std::endl;
+	std::cout<<"n3    : " << n3 <<std::endl;
+	std::cout<<"nall3 : " << nall3 <<std::endl;
+	std::cout<<"nNL3  : " << nNL3 <<std::endl;
+	std::cout<<"nL3   : " << nL3 <<std::endl;
+	std::cout<<"nb3   : " << nb3 <<std::endl;
+	std::cout<<"nh3   : " << nh3 <<std::endl;
 	
 	for(int i = 0; i < tB->GetEntries(); i++)
 	//for(int i = 0; i < 50; i++)
@@ -454,13 +462,13 @@ void plot()
 		if (vB_jetPt->size() < min_Njets) continue;
 		nB++;
 		
-		//if((*vB_jetPt)[0]*1e-3 < minSubLeadingPt) continue;
-		//if((*vB_jetPt)[2]*1e-3 < minSubLeadingPt) continue;
-		//if((*vB_jetPt)[3]*1e-3 < minSubLeadingPt) continue;
-		if((*vB_jetPt)[0]*1e-3 < minLeadingPt) continue;
-		nLB++;
+		if((*vB_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
+		if((*vB_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		nallB++;
 		if((*vB_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNLB++;
+		if((*vB_jetPt)[0]*1e-3 < minLeadingPt) continue;
+		nLB++;
 		Fill_NLeadingJetPtM_B();
 		if(nB_btags < 4) continue;
 		nbB++;
@@ -469,11 +477,12 @@ void plot()
 
 	}
 	std::cout<<"pp->4b" <<std::endl;
-	std::cout<<"nB : " << nB <<std::endl;
-	std::cout<<"nLB : " << nLB <<std::endl;
-	std::cout<<"nNLB : " << nNLB <<std::endl;
-	std::cout<<"nbB : " << nbB <<std::endl;
-	std::cout<<"nhB : " << nhB <<std::endl;
+	std::cout<<"nB    : " << nB <<std::endl;
+	std::cout<<"nallB : " << nallB <<std::endl;
+	std::cout<<"nNLB  : " << nNLB <<std::endl;
+	std::cout<<"nLB   : " << nLB <<std::endl;
+	std::cout<<"nbB   : " << nbB <<std::endl;
+	std::cout<<"nhB   : " << nhB <<std::endl;
 
 	Scale_bckgndHistos(norm_bckgnd);	
 	Scale_signalHistos1(norm_signal1);
@@ -541,7 +550,6 @@ void plot()
 	g1->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g1->GetYaxis()->CenterTitle();
 	g1->GetXaxis()->CenterTitle();
-	g1->GetYaxis()->SetRangeUser(0, 200);
 	g1->SetMarkerStyle(kFullCircle);//kFullCircle);
 	//g1->SetMarkerColor(kBlack);
 	g1->SetLineColor(kBlack);
@@ -549,6 +557,9 @@ void plot()
 	g1->SetMarkerSize(MARKER_SIZE);
 	g1->SetTitle("hh #rightarrow 4b sensitivty Vs k_{#lambda}");
 	g1->Draw("ACPe1");
+	max_rangeM = g1->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g1->GetHistogram()->GetMinimum()*0.4;
+	g1->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);
 	//g1->Draw("APe1");
 	
 	TGraphErrors *g2 = new TGraphErrors(7,k_lambda,SoverB,0,0);
@@ -559,7 +570,6 @@ void plot()
 	g2->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g2->GetYaxis()->CenterTitle();
 	g2->GetXaxis()->CenterTitle();
-	g2->GetYaxis()->SetRangeUser(1e-4, 9e-3);
 	g2->SetMarkerStyle(kFullCircle);//kFullCircle);
 	//g2->SetMarkerColor(kBlack);
 	g2->SetLineColor(kBlack);
@@ -568,6 +578,10 @@ void plot()
 	//g2->SetFillStyle(0);
 	g2->SetTitle("hh #rightarrow 4b signal over background Vs k_{#lambda}");
 	g2->Draw("ACPe1");
+	max_rangeM = g2->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g2->GetHistogram()->GetMinimum()*0.4;
+	g2->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);
+	//g2->GetYaxis()->SetRangeUser(1e-4, 9e-3);
 	//g2->Draw("APe1");
 	
 	TGraphErrors *g3_ = new TGraphErrors(7,k_lambda,Xsec_basic,0,0);
@@ -578,7 +592,6 @@ void plot()
 	g3_->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g3_->GetYaxis()->CenterTitle();
 	g3_->GetXaxis()->CenterTitle();
-	g3_->GetYaxis()->SetRangeUser(100, 7e3);
 	g3_->SetMarkerStyle(kFullCircle);//kFullCircle);
 	g3_->SetMarkerColor(kRed);
 	g3_->SetLineColor(kRed);
@@ -587,6 +600,10 @@ void plot()
 	//g3_->SetFillStyle(0);
 	g3_->SetTitle("hh #rightarrow 4b cross-section Vs k_{#lambda} after basic cuts");
 	g3_->Draw("ACPe1");
+	max_rangeM = g3_->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g3_->GetHistogram()->GetMinimum()*0.4;
+	g3_->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);
+	//g3_->GetYaxis()->SetRangeUser(100, 7e3);
 	
 	TGraphErrors *g3 = new TGraphErrors(7,k_lambda,Xsec,0,0);
 	g3->GetXaxis()->SetTitle("k_{#lambda}");
@@ -596,7 +613,6 @@ void plot()
 	g3->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g3->GetYaxis()->CenterTitle();
 	g3->GetXaxis()->CenterTitle();
-	g3->GetYaxis()->SetRangeUser(0, 8e2);
 	g3->SetMarkerStyle(kFullCircle);//kFullCircle);
 	g3->SetMarkerColor(kGreen);
 	g3->SetLineColor(kGreen);
@@ -605,6 +621,10 @@ void plot()
 	//g3->SetFillStyle(0);
 	g3->SetTitle("hh #rightarrow 4b cross-section Vs k_{#lambda} after analysis cuts");
 	g3->Draw("ACPe1");
+	max_rangeM  = g3->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g3->GetHistogram()->GetMinimum()*0.4;
+	g3->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);
+	//g3->GetYaxis()->SetRangeUser(0, 8e2);
 	
 	TGraphErrors *g4 = new TGraphErrors(7,k_lambda,Xsec_OG,0,0);
 	g4->GetXaxis()->SetTitle("k_{#lambda}");
@@ -614,7 +634,6 @@ void plot()
 	g4->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g4->GetYaxis()->CenterTitle();
 	g4->GetXaxis()->CenterTitle();
-	g4->GetYaxis()->SetRangeUser(500, 7500);
 	g4->SetMarkerStyle(kFullCircle);//kFullCircle);
 	//g4->SetMarkerColor(kBlack);
 	g4->SetLineColor(kBlack);
@@ -623,6 +642,10 @@ void plot()
 	//g4->SetFillStyle(0);
 	g4->SetTitle("hh #rightarrow 4b cross-section Vs k_{#lambda}");
 	g4->Draw("ACPe1");
+	max_rangeM  = g4->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g4->GetHistogram()->GetMinimum()*0.4;
+	g4->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);
+	//g4->GetYaxis()->SetRangeUser(500, 7500);
 	//////////////////////////////////////////////////
 	//////////////// writing to pdf //////////////////
 	//////////////////////////////////////////////////
@@ -707,29 +730,28 @@ void plot()
 	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (n3*norm_signal3)/std::sqrt(nB*norm_bckgnd)));
 
 	Ylat -= step;
-	lat.DrawLatex(X1lat, Ylat, "p_{T, all 4} #geq 40 GeV/c");
-	//lat.DrawLatex(X1lat, Ylat, "p_{T, L} #geq 55 GeV/c");
-	lat.DrawLatex(X2lat, Ylat, Form("%d", nLB));
-	lat.DrawLatex(X3lat, Ylat, Form("%d", nL1));
-	lat.DrawLatex(X4lat, Ylat, Form("%d", nL0));
-	lat.DrawLatex(X5lat, Ylat, Form("%d", nL_1));
-	lat.DrawLatex(X6lat, Ylat, Form("%d", nL_2));
-	lat.DrawLatex(X7lat, Ylat, Form("%d", nL2));
-	lat.DrawLatex(X8lat, Ylat, Form("%d", nL2_5));
-	lat.DrawLatex(X9lat, Ylat, Form("%d", nL3));
+	lat.DrawLatex(X1lat, Ylat, Form("p_{T, all} #geq %.1f GeV/c", defualt_Pt_cut));
+	lat.DrawLatex(X2lat, Ylat, Form("%d", nallB));
+	lat.DrawLatex(X3lat, Ylat, Form("%d", nall1));
+	lat.DrawLatex(X4lat, Ylat, Form("%d", nall0));
+	lat.DrawLatex(X5lat, Ylat, Form("%d", nall_1));
+	lat.DrawLatex(X6lat, Ylat, Form("%d", nall_2));
+	lat.DrawLatex(X7lat, Ylat, Form("%d", nall2));
+	lat.DrawLatex(X8lat, Ylat, Form("%d", nall2_5));
+	lat.DrawLatex(X9lat, Ylat, Form("%d", nall3));
 	Ylat -= step;
 	lat.DrawLatex(X1lat, Ylat, "S/#sqrt{B}");
 	lat.DrawLatex(X2lat, Ylat, "--");
-	lat.DrawLatex(X3lat, Ylat, Form("%.3f", (nL1*norm_signal1)/std::sqrt(nLB*norm_bckgnd)));
-	lat.DrawLatex(X4lat, Ylat, Form("%.3f", (nL0*norm_signal0)/std::sqrt(nLB*norm_bckgnd)));
-	lat.DrawLatex(X5lat, Ylat, Form("%.3f", (nL_1*norm_signal_1)/std::sqrt(nLB*norm_bckgnd)));
-	lat.DrawLatex(X6lat, Ylat, Form("%.3f", (nL_2*norm_signal_2)/std::sqrt(nLB*norm_bckgnd)));
-	lat.DrawLatex(X7lat, Ylat, Form("%.3f", (nL2*norm_signal2)/std::sqrt(nLB*norm_bckgnd)));
-	lat.DrawLatex(X8lat, Ylat, Form("%.3f", (nL2_5*norm_signal2_5)/std::sqrt(nLB*norm_bckgnd)));
-	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (nL3*norm_signal3)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X3lat, Ylat, Form("%.3f", (nall1*norm_signal1)/std::sqrt(nallB*norm_bckgnd)));
+	lat.DrawLatex(X4lat, Ylat, Form("%.3f", (nall0*norm_signal0)/std::sqrt(nallB*norm_bckgnd)));
+	lat.DrawLatex(X5lat, Ylat, Form("%.3f", (nall_1*norm_signal_1)/std::sqrt(nallB*norm_bckgnd)));
+	lat.DrawLatex(X6lat, Ylat, Form("%.3f", (nall_2*norm_signal_2)/std::sqrt(nallB*norm_bckgnd)));
+	lat.DrawLatex(X7lat, Ylat, Form("%.3f", (nall2*norm_signal2)/std::sqrt(nallB*norm_bckgnd)));
+	lat.DrawLatex(X8lat, Ylat, Form("%.3f", (nall2_5*norm_signal2_5)/std::sqrt(nallB*norm_bckgnd)));
+	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (nall3*norm_signal3)/std::sqrt(nallB*norm_bckgnd)));
 
 	Ylat -= step;
-	lat.DrawLatex(X1lat, Ylat, "p_{T, NL} #geq 40 GeV/c");
+	lat.DrawLatex(X1lat, Ylat, Form("p_{T, NL} #geq %.1f GeV/c", minSubLeadingPt));
 	lat.DrawLatex(X2lat, Ylat, Form("%d", nNLB));
 	lat.DrawLatex(X3lat, Ylat, Form("%d", nNL1));
 	lat.DrawLatex(X4lat, Ylat, Form("%d", nNL0));
@@ -748,6 +770,29 @@ void plot()
 	lat.DrawLatex(X7lat, Ylat, Form("%.3f", (nNL2*norm_signal2)/std::sqrt(nNLB*norm_bckgnd)));
 	lat.DrawLatex(X8lat, Ylat, Form("%.3f", (nNL2_5*norm_signal2_5)/std::sqrt(nNLB*norm_bckgnd)));
 	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (nNL3*norm_signal3)/std::sqrt(nNLB*norm_bckgnd)));
+
+	Ylat -= step;
+	//lat.DrawLatex(X1lat, Ylat, "p_{T, all 4} #geq 40 GeV/c");
+	//lat.DrawLatex(X1lat, Ylat, "p_{T, L} #geq 55 GeV/c");
+	lat.DrawLatex(X1lat, Ylat, Form("p_{T, L} #geq %.1f GeV/c", minLeadingPt));
+	lat.DrawLatex(X2lat, Ylat, Form("%d", nLB));
+	lat.DrawLatex(X3lat, Ylat, Form("%d", nL1));
+	lat.DrawLatex(X4lat, Ylat, Form("%d", nL0));
+	lat.DrawLatex(X5lat, Ylat, Form("%d", nL_1));
+	lat.DrawLatex(X6lat, Ylat, Form("%d", nL_2));
+	lat.DrawLatex(X7lat, Ylat, Form("%d", nL2));
+	lat.DrawLatex(X8lat, Ylat, Form("%d", nL2_5));
+	lat.DrawLatex(X9lat, Ylat, Form("%d", nL3));
+	Ylat -= step;
+	lat.DrawLatex(X1lat, Ylat, "S/#sqrt{B}");
+	lat.DrawLatex(X2lat, Ylat, "--");
+	lat.DrawLatex(X3lat, Ylat, Form("%.3f", (nL1*norm_signal1)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X4lat, Ylat, Form("%.3f", (nL0*norm_signal0)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X5lat, Ylat, Form("%.3f", (nL_1*norm_signal_1)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X6lat, Ylat, Form("%.3f", (nL_2*norm_signal_2)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X7lat, Ylat, Form("%.3f", (nL2*norm_signal2)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X8lat, Ylat, Form("%.3f", (nL2_5*norm_signal2_5)/std::sqrt(nLB*norm_bckgnd)));
+	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (nL3*norm_signal3)/std::sqrt(nLB*norm_bckgnd)));
 
 	Ylat -= step;
 	lat.DrawLatex(X1lat, Ylat, "N_{btags} #geq 4");
@@ -2559,8 +2604,11 @@ void plot()
 	C->cd(3);	
 	g3->Draw("ACPe");
 	gPad->Write("c44c");
-	C->cd(4);	
-	g4->GetYaxis()->SetRangeUser(25, 9500);
+	C->cd(4);
+	max_rangeM = g4->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g3->GetHistogram()->GetMinimum()*0.4;
+	g4->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);	
+	//g4->GetYaxis()->SetRangeUser(25, 9500);
 	g4->Draw("ACPe");
 	g3_->Draw("CPe");
 	g3->Draw("CPe");

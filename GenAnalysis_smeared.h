@@ -24,37 +24,58 @@ double max_rangeM=0;
 double max_rangePt=0;
 
 const int min_Njets = 4;
-const double minLeadingPt = 55.0;//GeV
+const double defualt_Pt_cut  = 25.0;//GeV 
 const double minSubLeadingPt = 40.0;//GeV
-const double HiggsMass = 125.0;//GeV
-const double MassWidth = 80.0;//GeV
-
-const double IntLumi      = 1e4;//fb-1 -> 10 ab-1
-const double pp4bXsec     = 23.283e6;//fb, NLO Xsection
+const double minLeadingPt    = 55.0;//GeV
+const double HiggsMass       = 125.0;//GeV
+const double MassWidth       = 80.0;//GeV
+//! 100TeV
+const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
+const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3 
 const double ggFhhXsec1   = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
-const double ggFhhXsec0   = 2340.91;
-const double ggFhhXsec_1  = 3986.84;
-const double ggFhhXsec_2  = 6157.58;
-const double ggFhhXsec2   = 624.195;
-const double ggFhhXsec2_5 = 522.665;
-const double ggFhhXsec3   = 551.980;
+const double ggFhhXsec0   = 2346.13;
+const double ggFhhXsec_1  = 3995.26;
+const double ggFhhXsec_2  = 6172.40;
+const double ggFhhXsec2   = 625.59;
+const double ggFhhXsec2_5 = 523.907;
+const double ggFhhXsec3   = 553.485;
+////! 14TeV
+//const double IntLumi      = 3e3;//fb-1 -> 0.3 ab-1
+//const double pp4bXsec     = 15.696e5;//fb, NLO Xsection// k-factor 1.6?// LO 9.81e5
+//const double ggFhhXsec1   = 36.69;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+//const double ggFhhXsec0   = 75.867;
+//const double ggFhhXsec_1  = 135.046;
+//const double ggFhhXsec_2  = 214.181;
+//const double ggFhhXsec2   = 17.4765;
+//const double ggFhhXsec2_5 = 15.3792;
+//const double ggFhhXsec3   = 18.2744;
 
 double k_lambda[7] = {-2.0, -1.0, 0.0, 1.0, 2.0, 2.5, 3.0};
 
 double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec2, ggFhhXsec2_5, ggFhhXsec3};
 
-const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.2.root";
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_4R0.4_0.8.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.2_1";
+const char *output_file_name = "GenJet4b2_2.5_4R0.4_0.8";
 
-const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.2.root"; 
-const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.2.root"; 
-const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.2.root"; 
+const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr1.0_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr0.0_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file_1 = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file_2 = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file2  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.0_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file2_5= "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.5_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file3  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr3.0_q300MeV_2.5_4R0.4.root"; 
+const char *inp_fileB  = "./fastjet_output/80percentBtag/Genjet2_pp4b_q300MeV_2.5_4R0.4.root"; 
+
+////!14TeV
+//const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr1.0_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr0.0_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_file_1 = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr-1.0_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_file_2 = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr-2.0_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_file2  = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr2.0_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_file2_5= "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr2.5_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_file3  = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr3.0_q300MeV_2.5_allR0.4.root"; 
+//const char *inp_fileB  = "./fastjet_output/80percentBtag/Genjet2_pp4b14TeV_q300MeV_2.5_allR0.4.root"; 
 
 TFile *f1  = nullptr;
 TFile *f0  = nullptr;
