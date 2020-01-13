@@ -158,6 +158,15 @@ void plot()
 	Set_jetPtProps_2_5();
 	Set_jetPtProps_3();
 	Set_jetPtProps_B();
+
+	Set_FinalJetPtProps_1();	
+	Set_FinalJetPtProps_0();	
+	Set_FinalJetPtProps__1();	
+	Set_FinalJetPtProps__2();	
+	Set_FinalJetPtProps_2();	
+	Set_FinalJetPtProps_2_5();	
+	Set_FinalJetPtProps_3();	
+	Set_FinalJetPtProps_B();	
 	
 	Draw_higgsPt_1();
 	Draw_higgsPt_0();
@@ -239,8 +248,8 @@ void plot()
 		if (v1_jetPt->size() < min_Njets) continue;
 		n1++;
 
-		if((*v1_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v1_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v1_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall1++;
 		if((*v1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL1++;
@@ -271,8 +280,8 @@ void plot()
 		if (v0_jetPt->size() < min_Njets) continue;
 		n0++;
 
-		if((*v0_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v0_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v0_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall0++;
 		if((*v0_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL0++;
@@ -303,8 +312,8 @@ void plot()
 		if (v_1_jetPt->size() < min_Njets) continue;
 		n_1++;
 		
-		if((*v_1_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v_1_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v_1_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall_1++;
 		if((*v_1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL_1++;
@@ -335,8 +344,8 @@ void plot()
 		if (v_2_jetPt->size() < min_Njets) continue;
 		n_2++;
 		
-		if((*v_2_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v_2_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v_2_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall_2++;
 		if((*v_2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL_2++;
@@ -366,8 +375,8 @@ void plot()
 		//Fill_InvariantMass_2();
 		if (v2_jetPt->size() < min_Njets) continue;
 		n2++;
-		if((*v2_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v2_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v2_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall2++;
 		if((*v2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL2++;
@@ -398,8 +407,8 @@ void plot()
 		if (v2_5_jetPt->size() < min_Njets) continue;
 		n2_5++;
 		
-		if((*v2_5_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v2_5_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v2_5_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall2_5++;
 		if((*v2_5_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL2_5++;
@@ -430,8 +439,8 @@ void plot()
 		if (v3_jetPt->size() < min_Njets) continue;
 		n3++;
 		
-		if((*v3_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*v3_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v3_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall3++;
 		if((*v3_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNL3++;
@@ -462,8 +471,8 @@ void plot()
 		if (vB_jetPt->size() < min_Njets) continue;
 		nB++;
 		
-		if((*vB_jetPt)[2]*1e-3 < defualt_Pt_cut) continue;
 		if((*vB_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*vB_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nallB++;
 		if((*vB_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
 		nNLB++;
@@ -730,7 +739,7 @@ void plot()
 	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (n3*norm_signal3)/std::sqrt(nB*norm_bckgnd)));
 
 	Ylat -= step;
-	lat.DrawLatex(X1lat, Ylat, Form("p_{T, all} #geq %.1f GeV/c", defualt_Pt_cut));
+	lat.DrawLatex(X1lat, Ylat, Form("p_{T, NNL} #geq %.1f GeV/c", third_Pt_cut));
 	lat.DrawLatex(X2lat, Ylat, Form("%d", nallB));
 	lat.DrawLatex(X3lat, Ylat, Form("%d", nall1));
 	lat.DrawLatex(X4lat, Ylat, Form("%d", nall0));
@@ -2124,14 +2133,36 @@ void plot()
 	//relative difference of the jet pairs
 	//only 3 combination of jet pairs possible
 	C->Clear();
-	C->Divide(1,3);
+	C->Divide(3,3);
+	//gStyle->SetPalette(kColorPrintableOnGrey);
+	//gStyle->SetPalette(kTemperatureMap);
+	gStyle->SetPalette(kCMYK);
+	b1b2_b3b4_1->SetMaximum(1100.);
+	b1b3_b2b4_1->SetMaximum(1100.);
+	b1b4_b2b3_1->SetMaximum(1100.);
+	C->cd(2);
+	b1b2_b3b4_1->Draw("colz");
+	C->cd(5);
+	b1b3_b2b4_1->Draw("colz");
+	C->cd(8);
+	b1b4_b2b3_1->Draw("colz");
+
+	b1b2_b3b4_B->SetMaximum(45.);
+	b1b3_b2b4_B->SetMaximum(45.);
+	b1b4_b2b3_B->SetMaximum(45.);
+	C->cd(3);
+	b1b2_b3b4_B->Draw("colz");
+	C->cd(6);
+	b1b3_b2b4_B->Draw("colz");
+	C->cd(9);
+	b1b4_b2b3_B->Draw("colz");
 	C->cd(1);
 	gPad->SetLogy();
 	dM_b1b2_b3b4_1->Draw("hist");
-	C->cd(2);
+	C->cd(4);
 	gPad->SetLogy();
 	dM_b1b3_b2b4_1->Draw("hist");
-	C->cd(3);
+	C->cd(7);
 	gPad->SetLogy();
 	dM_b1b4_b2b3_1->Draw("hist");
 	C->Print(out_file_,"pdf");
@@ -2618,6 +2649,65 @@ void plot()
 //	C->Clear();
 //	C->SetLogy();
 	C->Print(out_file_close,"pdf");
+
+	//! Four jet pt after all selection, SM
+	Ana_bjetLPt1->Write();
+	Ana_bjet2LPt1->Write();
+	Ana_bjet3LPt1->Write();
+	Ana_bjet4LPt1->Write();
+	//! Four jet pt after all selection, 0
+	Ana_bjetLPt0->Write();
+	Ana_bjet2LPt0->Write();
+	Ana_bjet3LPt0->Write();
+	Ana_bjet4LPt0->Write();
+	//! Four jet pt after all selection, _1
+	Ana_bjetLPt_1->Write();
+	Ana_bjet2LPt_1->Write();
+	Ana_bjet3LPt_1->Write();
+	Ana_bjet4LPt_1->Write();
+	//! Four jet pt after all selection, _2
+	Ana_bjetLPt_2->Write();
+	Ana_bjet2LPt_2->Write();
+	Ana_bjet3LPt_2->Write();
+	Ana_bjet4LPt_2->Write();
+	//! Four jet pt after all selection, 2
+	Ana_bjetLPt2->Write();
+	Ana_bjet2LPt2->Write();
+	Ana_bjet3LPt2->Write();
+	Ana_bjet4LPt2->Write();
+	//! Four jet pt after all selection, 2_5
+	Ana_bjetLPt2_5->Write();
+	Ana_bjet2LPt2_5->Write();
+	Ana_bjet3LPt2_5->Write();
+	Ana_bjet4LPt2_5->Write();
+	//! Four jet pt after all selection, 3
+	Ana_bjetLPt3->Write();
+	Ana_bjet2LPt3->Write();
+	Ana_bjet3LPt3->Write();
+	Ana_bjet4LPt3->Write();
+	//! Four jet pt after all selection, pp->4b
+	Ana_bjetLPtB->Write();
+	Ana_bjet2LPtB->Write();
+	Ana_bjet3LPtB->Write();
+	Ana_bjet4LPtB->Write();
+	//reconstructed pt of the di-higgs system
+	RecPtH1H2_1->Write(); 
+	RecPtH1H2_0->Write(); 
+	RecPtH1H2__1->Write(); 
+	RecPtH1H2__2->Write(); 
+	RecPtH1H2_2->Write(); 
+	RecPtH1H2_2_5->Write(); 
+	RecPtH1H2_3->Write();
+	RecPtH1H2_B->Write();
+	//reconstructed inv mass of the di-higgs system
+	RecMH1H2_1->Write(); 
+	RecMH1H2_0->Write(); 
+	RecMH1H2__1->Write(); 
+	RecMH1H2__2->Write(); 
+	RecMH1H2_2->Write(); 
+	RecMH1H2_2_5->Write(); 
+	RecMH1H2_3->Write();
+	RecMH1H2_B->Write();
 	f_out->Close();
 	return;
 }

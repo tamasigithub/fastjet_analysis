@@ -178,6 +178,21 @@ void Set_higgsPtProps__1()
 	Mb3b4__1 = new TH1D("Mb3b4__1", "#lambda = -1.0, Truth Invariant mass of the higgs candidates; m_{higgs candidate, 34} [GeV];", nbins, ptmin, ptmax);
 	return;
 }
+void Set_FinalJetPtProps__1()
+{
+	int nbins = 15; 
+	Int_t nbinsMinus = nbins - 1; 
+	Float_t pt_bins[15] = {20., 30., 40., 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 500.};
+	//b-jet leading Pt
+	Ana_bjetLPt_1  = new TH1D("Ana_bjetLPt_1", "Jet p_{T} after analysis cuts; p_{T, leading b-jet} [GeV/c];", nbinsMinus, pt_bins);
+	//b-jet 2nd leading Pt
+	Ana_bjet2LPt_1  = new TH1D("Ana_bjet2LPt_1", "Jet p_{T} after analysis cuts; p_{T, sub leading b-jet} [GeV/c];", nbinsMinus, pt_bins);
+	//b-jet 3rd leading Pt
+	Ana_bjet3LPt_1  = new TH1D("Ana_bjet3LPt_1", "Jet p_{T} after analysis cuts; p_{T, 3rd leading b-jet} [GeV/c];", nbinsMinus, pt_bins);
+	//b-jet 4th leading Pt
+	Ana_bjet4LPt_1  = new TH1D("Ana_bjet4LPt_1", "Jet p_{T} after analysis cuts; p_{T, 4th leading b-jet} [GeV/c];", nbinsMinus, pt_bins);
+	return;
+}
 void Set_jetPtProps__1()
 {
 	int nbins = 50;
@@ -346,6 +361,11 @@ void Fill_bjetPtM__1(int &nhiggs)
 		if((std::fabs(bJ1bJ2__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ3bJ4__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		{
 			nhiggs++;
+			//! Fill four jet pt after all selection
+			Ana_bjetLPt_1->Fill( bJ1__1.Pt()*1e-3);
+			Ana_bjet2LPt_1->Fill(bJ2__1.Pt()*1e-3);
+			Ana_bjet3LPt_1->Fill(bJ3__1.Pt()*1e-3);
+			Ana_bjet4LPt_1->Fill(bJ4__1.Pt()*1e-3);
 			if(bJ1bJ2__1.M() > bJ3bJ4__1.M())
 			{
 				M_Lhiggs_1->Fill(bJ1bJ2__1.M()*1e-3);
@@ -372,6 +392,11 @@ void Fill_bjetPtM__1(int &nhiggs)
 		if((std::fabs(bJ1bJ3__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ4__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		{
 			nhiggs++;
+			//! Fill four jet pt after all selection
+			Ana_bjetLPt_1->Fill( bJ1__1.Pt()*1e-3);
+			Ana_bjet2LPt_1->Fill(bJ2__1.Pt()*1e-3);
+			Ana_bjet3LPt_1->Fill(bJ3__1.Pt()*1e-3);
+			Ana_bjet4LPt_1->Fill(bJ4__1.Pt()*1e-3);
 			if(bJ1bJ3__1.M() > bJ2bJ4__1.M())
 			{
 				M_Lhiggs_1->Fill(bJ1bJ3__1.M()*1e-3);
@@ -399,6 +424,11 @@ void Fill_bjetPtM__1(int &nhiggs)
 		if((std::fabs(bJ1bJ4__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ3__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		{
 			nhiggs++;
+			//! Fill four jet pt after all selection
+			Ana_bjetLPt_1->Fill( bJ1__1.Pt()*1e-3);
+			Ana_bjet2LPt_1->Fill(bJ2__1.Pt()*1e-3);
+			Ana_bjet3LPt_1->Fill(bJ3__1.Pt()*1e-3);
+			Ana_bjet4LPt_1->Fill(bJ4__1.Pt()*1e-3);
 			if(bJ1bJ4__1.M() > bJ2bJ3__1.M())
 			{
 				M_Lhiggs_1->Fill(bJ1bJ4__1.M()*1e-3);

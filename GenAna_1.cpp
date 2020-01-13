@@ -182,7 +182,21 @@ void Set_higgsPtProps_1()
 	return;
 }
 
-
+void Set_FinalJetPtProps_1()
+{
+	int nbins = 15; 
+	Int_t nbinsMinus1 = nbins - 1; 
+	Float_t pt_bins[15] = {20., 30., 40., 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 500.};
+	//b-jet leading Pt
+	Ana_bjetLPt1  = new TH1D("Ana_bjetLPt1", "Jet p_{T} after analysis cuts; p_{T, leading b-jet} [GeV/c];", nbinsMinus1, pt_bins);
+	//b-jet 2nd leading Pt
+	Ana_bjet2LPt1  = new TH1D("Ana_bjet2LPt1", "Jet p_{T} after analysis cuts; p_{T, sub leading b-jet} [GeV/c];", nbinsMinus1, pt_bins);
+	//b-jet 3rd leading Pt
+	Ana_bjet3LPt1  = new TH1D("Ana_bjet3LPt1", "Jet p_{T} after analysis cuts; p_{T, 3rd leading b-jet} [GeV/c];", nbinsMinus1, pt_bins);
+	//b-jet 4th leading Pt
+	Ana_bjet4LPt1  = new TH1D("Ana_bjet4LPt1", "Jet p_{T} after analysis cuts; p_{T, 4th leading b-jet} [GeV/c];", nbinsMinus1, pt_bins);
+	return;
+}
 void Set_jetPtProps_1()
 {
 	int nbins = 50;
@@ -233,6 +247,11 @@ void Set_jetPtProps_1()
 	M_b2b3_1 = new TH1D("M_b2b3_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 23} [GeV];", nbins, ptmin, ptmax);
 	M_b2b4_1 = new TH1D("M_b2b4_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 24} [GeV];", nbins, ptmin, ptmax);
 	M_b3b4_1 = new TH1D("M_b3b4_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 34} [GeV];", nbins, ptmin, ptmax);
+	//scatter plot of the jet pairs
+	//only 3 combination of jet pairs possible
+	b1b2_b3b4_1 = new TH2D("b1b2_b3b4_1", "m_{H cand., 34} Vs m_{H cand., 12}; m_{H cand., 12} [GeV];m_{H cand., 34} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	b1b3_b2b4_1 = new TH2D("b1b3_b2b4_1", "m_{H cand., 24} Vs m_{H cand., 13}; m_{H cand., 13} [GeV];m_{H cand., 24} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	b1b4_b2b3_1 = new TH2D("b1b4_b2b3_1", "m_{H cand., 23} Vs m_{H cand., 14}; m_{H cand., 14} [GeV];m_{H cand., 23} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
 	//relative difference of the jet pairs
 	//only 3 combination of jet pairs possible
 	dM_b1b2_b3b4_1 = new TH1D("dM_b1b2_b3b4_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1234} [GeV];", nbins, dptmin, dptmax);
@@ -326,6 +345,10 @@ void Fill_bjetPtM_1(int &nhiggs)
 	M_b2b4_1->Fill(bJ2bJ4_1.M()*1e-3);
 	M_b3b4_1->Fill(bJ3bJ4_1.M()*1e-3);
 
+	b1b2_b3b4_1->Fill(bJ1bJ2_1.M()*1e-3,bJ3bJ4_1.M()*1e-3);	
+	b1b3_b2b4_1->Fill(bJ1bJ3_1.M()*1e-3,bJ2bJ4_1.M()*1e-3);	
+	b1b4_b2b3_1->Fill(bJ1bJ4_1.M()*1e-3,bJ2bJ3_1.M()*1e-3);	
+
 	double dm_12_34 = 0, dm_13_24 = 0, dm_14_23 = 0;
 	dm_12_34 = std::fabs(bJ1bJ2_1.M() - bJ3bJ4_1.M());
 	dm_13_24 = std::fabs(bJ1bJ3_1.M() - bJ2bJ4_1.M());
@@ -353,6 +376,11 @@ void Fill_bjetPtM_1(int &nhiggs)
 		if((std::fabs(bJ1bJ2_1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ3bJ4_1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		{
 			nhiggs++;
+			//! Fill four jet pt after all selection
+			Ana_bjetLPt1->Fill( bJ1_1.Pt()*1e-3);
+			Ana_bjet2LPt1->Fill(bJ2_1.Pt()*1e-3);
+			Ana_bjet3LPt1->Fill(bJ3_1.Pt()*1e-3);
+			Ana_bjet4LPt1->Fill(bJ4_1.Pt()*1e-3);
 			if(bJ1bJ2_1.M() > bJ3bJ4_1.M())
 			{
 				M_Lhiggs1->Fill(bJ1bJ2_1.M()*1e-3);
@@ -379,6 +407,11 @@ void Fill_bjetPtM_1(int &nhiggs)
 		if((std::fabs(bJ1bJ3_1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ4_1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		{
 			nhiggs++;
+			//! Fill four jet pt after all selection
+			Ana_bjetLPt1->Fill( bJ1_1.Pt()*1e-3);
+			Ana_bjet2LPt1->Fill(bJ2_1.Pt()*1e-3);
+			Ana_bjet3LPt1->Fill(bJ3_1.Pt()*1e-3);
+			Ana_bjet4LPt1->Fill(bJ4_1.Pt()*1e-3);
 			if(bJ1bJ3_1.M() > bJ2bJ4_1.M())
 			{
 				M_Lhiggs1->Fill(bJ1bJ3_1.M()*1e-3);
@@ -406,6 +439,11 @@ void Fill_bjetPtM_1(int &nhiggs)
 		if((std::fabs(bJ1bJ4_1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ3_1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		{
 			nhiggs++;
+			//! Fill four jet pt after all selection
+			Ana_bjetLPt1->Fill( bJ1_1.Pt()*1e-3);
+			Ana_bjet2LPt1->Fill(bJ2_1.Pt()*1e-3);
+			Ana_bjet3LPt1->Fill(bJ3_1.Pt()*1e-3);
+			Ana_bjet4LPt1->Fill(bJ4_1.Pt()*1e-3);
 			if(bJ1bJ4_1.M() > bJ2bJ3_1.M())
 			{
 				M_Lhiggs1->Fill(bJ1bJ4_1.M()*1e-3);

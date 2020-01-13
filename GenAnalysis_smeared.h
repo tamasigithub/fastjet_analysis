@@ -24,7 +24,8 @@ double max_rangeM=0;
 double max_rangePt=0;
 
 const int min_Njets = 4;
-const double defualt_Pt_cut  = 25.0;//GeV 
+const double defualt_Pt_cut  = 20.0;//GeV 
+const double third_Pt_cut    = 35.0;//GeV 
 const double minSubLeadingPt = 40.0;//GeV
 const double minLeadingPt    = 55.0;//GeV
 const double HiggsMass       = 125.0;//GeV
@@ -54,18 +55,18 @@ double k_lambda[7] = {-2.0, -1.0, 0.0, 1.0, 2.0, 2.5, 3.0};
 
 double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec2, ggFhhXsec2_5, ggFhhXsec3};
 
-const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_4R0.4_0.8.root";
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_4R0.4_0.8";
+const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_1";
 
-const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr1.0_q300MeV_2.5_4R0.4.root"; 
-const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr0.0_q300MeV_2.5_4R0.4.root"; 
-const char *inp_file_1 = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_4R0.4.root"; 
-const char *inp_file_2 = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_4R0.4.root"; 
-const char *inp_file2  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.0_q300MeV_2.5_4R0.4.root"; 
-const char *inp_file2_5= "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.5_q300MeV_2.5_4R0.4.root"; 
-const char *inp_file3  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr3.0_q300MeV_2.5_4R0.4.root"; 
-const char *inp_fileB  = "./fastjet_output/80percentBtag/Genjet2_pp4b_q300MeV_2.5_4R0.4.root"; 
+const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_file_1 = "./fastjet_output/Genjet2_ggF_Ctr-1.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_file_2 = "./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4_0.8btag.root"; 
 
 ////!14TeV
 //const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr1.0_q300MeV_2.5_allR0.4.root"; 
@@ -801,6 +802,47 @@ TH1D *bjet4LPt2_5= nullptr;
 TH1D *bjet4LPt3  = nullptr;
 TH1D *bjet4LPtB  = nullptr;
 
+//! Four jet pt after all selection, SM
+TH1D *Ana_bjetLPt1  = nullptr;
+TH1D *Ana_bjet2LPt1 = nullptr;
+TH1D *Ana_bjet3LPt1 = nullptr;
+TH1D *Ana_bjet4LPt1 = nullptr;
+//! Four jet pt after all selection, 0 
+TH1D *Ana_bjetLPt0  = nullptr;
+TH1D *Ana_bjet2LPt0 = nullptr;
+TH1D *Ana_bjet3LPt0 = nullptr;
+TH1D *Ana_bjet4LPt0 = nullptr;
+//! Four jet pt after all selection, _1 
+TH1D *Ana_bjetLPt_1  = nullptr;
+TH1D *Ana_bjet2LPt_1 = nullptr;
+TH1D *Ana_bjet3LPt_1 = nullptr;
+TH1D *Ana_bjet4LPt_1 = nullptr;
+//! Four jet pt after all selection, _2 
+TH1D *Ana_bjetLPt_2  = nullptr;
+TH1D *Ana_bjet2LPt_2 = nullptr;
+TH1D *Ana_bjet3LPt_2 = nullptr;
+TH1D *Ana_bjet4LPt_2 = nullptr;
+//! Four jet pt after all selection, 2 
+TH1D *Ana_bjetLPt2  = nullptr;
+TH1D *Ana_bjet2LPt2 = nullptr;
+TH1D *Ana_bjet3LPt2 = nullptr;
+TH1D *Ana_bjet4LPt2 = nullptr;
+//! Four jet pt after all selection, 2_5 
+TH1D *Ana_bjetLPt2_5  = nullptr;
+TH1D *Ana_bjet2LPt2_5 = nullptr;
+TH1D *Ana_bjet3LPt2_5 = nullptr;
+TH1D *Ana_bjet4LPt2_5 = nullptr;
+//! Four jet pt after all selection, 3 
+TH1D *Ana_bjetLPt3  = nullptr;
+TH1D *Ana_bjet2LPt3 = nullptr;
+TH1D *Ana_bjet3LPt3 = nullptr;
+TH1D *Ana_bjet4LPt3 = nullptr;
+//! Four jet pt after all selection, pp->4b
+TH1D *Ana_bjetLPtB  = nullptr;
+TH1D *Ana_bjet2LPtB = nullptr;
+TH1D *Ana_bjet3LPtB = nullptr;
+TH1D *Ana_bjet4LPtB = nullptr;
+
 //b leading Pt
 TH1D *bLPt1  = nullptr;
 TH1D *bLPt0  = nullptr;
@@ -874,6 +916,15 @@ TH1D *b4CEta2  = nullptr;
 TH1D *b4CEta2_5= nullptr;
 TH1D *b4CEta3  = nullptr;
 TH1D *b4CEtaB  = nullptr;
+
+//! scatter plot b/w rec mass of possible higgs candidates
+TH2D *b1b2_b3b4_1 = nullptr;
+TH2D *b1b3_b2b4_1 = nullptr;
+TH2D *b1b4_b2b3_1 = nullptr;
+//! scatter plot b/w rec mass of possible higgs candidates
+TH2D *b1b2_b3b4_B = nullptr;
+TH2D *b1b3_b2b4_B = nullptr;
+TH2D *b1b4_b2b3_B = nullptr;
 
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
