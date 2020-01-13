@@ -283,31 +283,46 @@ void Fill_bjetPtM_B(int &nhiggs)
 	b1b4_b2b3_B->Fill(bJ1bJ4_B.M()*1e-3,bJ2bJ3_B.M()*1e-3);	
 
 	double dm_12_34 = 0, dm_13_24 = 0, dm_14_23 = 0;
-	dm_12_34 = std::fabs(bJ1bJ2_B.M() - bJ3bJ4_B.M());
-	dm_13_24 = std::fabs(bJ1bJ3_B.M() - bJ2bJ4_B.M());
-	dm_14_23 = std::fabs(bJ1bJ4_B.M() - bJ2bJ3_B.M());
-	dM_b1b2_b3b4_B->Fill(dm_12_34*1e-3);	
-	dM_b1b3_b2b4_B->Fill(dm_13_24*1e-3);	
-	dM_b1b4_b2b3_B->Fill(dm_14_23*1e-3);
+	dm_12_34 = std::fabs(bJ1bJ2_B.M() - bJ3bJ4_B.M())*1e-3;
+	dm_13_24 = std::fabs(bJ1bJ3_B.M() - bJ2bJ4_B.M())*1e-3;
+	dm_14_23 = std::fabs(bJ1bJ4_B.M() - bJ2bJ3_B.M())*1e-3;
+	//dM_b1b2_b3b4_B->Fill(dm_12_34*1e-3);	
+	//dM_b1b3_b2b4_B->Fill(dm_13_24*1e-3);	
+	//dM_b1b4_b2b3_B->Fill(dm_14_23*1e-3);
 
 	//! Higgs Candidate
-	int higgs_candidates = 1234;
-	int min_diffCombi = dm_12_34;
-	if(dm_13_24 < min_diffCombi) 
+	int higgs_candidates = -1;
+	int min_diffCombi = 999;
+	if((std::fabs(bJ1bJ2_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ3bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 	{
-		min_diffCombi = dm_13_24;
-		higgs_candidates = 1324;
-	}
-	if(dm_14_23 < min_diffCombi)
-	{
-		min_diffCombi = dm_14_23;
-		higgs_candidates = 1423;
+		if(dm_12_34 < min_diffCombi) 
+		{
+			min_diffCombi = dm_12_34;
+			higgs_candidates = 1234;
+		}
 	}
 
+	if((std::fabs(bJ1bJ3_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
+	{
+		if(dm_13_24 < min_diffCombi) 
+		{
+			min_diffCombi = dm_13_24;
+			higgs_candidates = 1324;
+		}
+	}
+
+	if((std::fabs(bJ1bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ3_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
+	{
+		if(dm_14_23 < min_diffCombi)
+		{
+			min_diffCombi = dm_14_23;
+			higgs_candidates = 1423;
+		}
+	}
 	if(higgs_candidates == 1234)
 	{
-		if((std::fabs(bJ1bJ2_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ3bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
-		{
+		//if((std::fabs(bJ1bJ2_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ3bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
+		//{
 			nhiggs++;
 			//! Fill four jet pt after all selection
 			Ana_bjetLPtB->Fill( bJ1_B.Pt()*1e-3);
@@ -333,12 +348,14 @@ void Fill_bjetPtM_B(int &nhiggs)
 			RecH1H2_B = bJ1bJ2_B + bJ3bJ4_B;
 			RecMH1H2_B->Fill(RecH1H2_B.M()*1e-3);
 			RecPtH1H2_B->Fill(RecH1H2_B.Pt()*1e-3);
-		}
+			
+			dM_b1b2_b3b4_B->Fill(dm_12_34);	
+		//}
 	}
 	else if(higgs_candidates == 1324)
 	{
-		if((std::fabs(bJ1bJ3_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
-		{
+		//if((std::fabs(bJ1bJ3_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
+		//{
 			nhiggs++;
 			//! Fill four jet pt after all selection
 			Ana_bjetLPtB->Fill( bJ1_B.Pt()*1e-3);
@@ -364,13 +381,15 @@ void Fill_bjetPtM_B(int &nhiggs)
 			RecH1H2_B = bJ1bJ3_B + bJ2bJ4_B;
 			RecMH1H2_B->Fill(RecH1H2_B.M()*1e-3);
 			RecPtH1H2_B->Fill(RecH1H2_B.Pt()*1e-3);
-		}
+			
+			dM_b1b3_b2b4_B->Fill(dm_13_24);	
+		//}
 	
 	}
 	else if(higgs_candidates == 1423)
 	{
-		if((std::fabs(bJ1bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ3_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
-		{
+		//if((std::fabs(bJ1bJ4_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ3_B.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
+		//{
 			nhiggs++;
 			//! Fill four jet pt after all selection
 			Ana_bjetLPtB->Fill( bJ1_B.Pt()*1e-3);
@@ -396,7 +415,9 @@ void Fill_bjetPtM_B(int &nhiggs)
 			RecH1H2_B = bJ1bJ4_B + bJ2bJ3_B;
 			RecMH1H2_B->Fill(RecH1H2_B.M()*1e-3);
 			RecPtH1H2_B->Fill(RecH1H2_B.Pt()*1e-3);
-		}
+			
+			dM_b1b4_b2b3_B->Fill(dm_14_23);
+		//}
 	
 	}
 
