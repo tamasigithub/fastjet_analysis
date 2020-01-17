@@ -23,7 +23,7 @@
 
 const int n = 10;
 const int nGraphPts = 9;
-const float ctr = 1.0;
+const float ctr = 2.0;
 const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.root";
 const char *txt_path = "./analysis_plots/txt_files";
 const char *out_path = "./analysis_plots/pdf"; 
@@ -40,7 +40,7 @@ Float_t min_range;
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3
-const double ggFhhXsec1   = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+const double ggFhhXsec2   = 625.59;
 int tot_MCevents = 5e5;
 
 double norm_signal, norm_bckgnd;
@@ -76,18 +76,18 @@ TGraphErrors *g3 = nullptr;
 TGraphErrors *G2 = nullptr;
 TGraphErrors *G2_ = nullptr;
 TGraphErrors *G3 = nullptr;
-void plot_VsPt1()
+void plot_VsPt2()
 {
 
 	TFile *f = new TFile(root_file_name, "READ");
-	Ana_bjet4LPt = (TH1D*)f->Get("Ana_bjet4LPt1");
+	Ana_bjet4LPt = (TH1D*)f->Get("Ana_bjet4LPt2");
 	Ana_bjet4LPtB = (TH1D*)f->Get("Ana_bjet4LPtB");
 	h4_sig = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig", pt_bins);
 	h4_bg   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg", pt_bins);
-	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt1");
+	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt2");
 	//h4_bg   = (TH1D*)f->Get("Ana_bjet4LPtB");
 
-	norm_signal   = (IntLumi * ggFhhXsec1)/tot_MCevents;
+	norm_signal   = (IntLumi * ggFhhXsec2)/tot_MCevents;
 	norm_bckgnd    = (IntLumi * pp4bXsec)/tot_MCevents;
 	
 	int nbins = h4_sig->GetNbinsX();
@@ -136,7 +136,7 @@ void plot_graph()
 {
 
 	TCanvas *c = new TCanvas("c","c",800,800);
-	plot_VsPt1();
+	plot_VsPt2();
 	c->SetLeftMargin(0.13);
 	TGaxis::SetMaxDigits(3);
 	h4_sig->Draw("hist");	
@@ -306,7 +306,6 @@ void plot_graph()
         sprintf(root_file_name,"%s/../root/%s_%.1f.root",out_path,output_file_name,ctr);
 
 	TFile *f_out = new TFile(root_file_name,"RECREATE");
-	//TFile *f_out = new TFile("./analysis_plots/root/SignificanceVs4thPt_1.root","RECREATE");
 	h4_sig->Write();
 	h4_bg->Write();
 	h4_Significance1->Write();	
