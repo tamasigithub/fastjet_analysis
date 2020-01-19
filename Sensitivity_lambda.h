@@ -26,7 +26,13 @@ const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.
 
 const char *txt_path = "./analysis_plots/txt_files";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "Sensitivity_studyVsk_lambda";
+const char *output_file_name = "Sensitivity_studyVsk_lambda_corrected";
+char out_root_file_name[1023];
+
+TCanvas *c1 = nullptr;
+char out_file_open[1023];
+char out_file_[1023];
+char out_file_close[1023];
 
 const int nlambda = 6;
 Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
@@ -69,13 +75,24 @@ Double_t SoverB_1[n] = {0};
 Double_t SoverB_2[n] = {0};
 Double_t SoverB2[n]  = {0};
 Double_t SoverB3[n]  = {0};
+
 //! Significance in the ith bin for different lambda values.
-Double_t Significance1[n]  = {0};
-Double_t Significance0[n]  = {0};
-Double_t Significance_1[n] = {0};
-Double_t Significance_2[n] = {0};
-Double_t Significance2[n]  = {0};
-Double_t Significance3[n]  = {0};
+double Significance1[n]  = {0};
+double Significance0[n]  = {0};
+double Significance_1[n] = {0};
+double Significance_2[n] = {0};
+double Significance2[n]  = {0};
+double Significance3[n]  = {0};
+
+//double vSignificance[nlambda][n] = {
+//	Significance1,
+//	Significance0,
+//	Significance_1,
+//	Significance_2,
+//	Significance2,
+//	Significance3
+//
+//};
 //! Significance square in the ith bin for different lambda values.
 Double_t Significance2_1[n]  = {0};
 Double_t Significance2_0[n]  = {0};
@@ -123,16 +140,8 @@ TH1D *h4_Significance2_2   = nullptr;
 TH1D *h4_Significance2_3   = nullptr;
 
 //! Significance of the ith bin(pT threshold) Vs k_lambda
-Double_t sigI_lambdaI_20[nlambda]  = {0};
-Double_t sigI_lambdaI_30[nlambda]  = {0};
-Double_t sigI_lambdaI_40[nlambda]  = {0};
-Double_t sigI_lambdaI_50[nlambda]  = {0};
-Double_t sigI_lambdaI_60[nlambda]  = {0};
-Double_t sigI_lambdaI_70[nlambda]  = {0};
-Double_t sigI_lambdaI_80[nlambda]  = {0};
-Double_t sigI_lambdaI_90[nlambda]  = {0};
-Double_t sigI_lambdaI_100[nlambda] = {0};
-
+//TObjArray graphList(0);
+//TString graph_name;
 TGraph *g20  = nullptr;
 TGraph *g30  = nullptr;
 TGraph *g40  = nullptr;

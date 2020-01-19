@@ -1,5 +1,5 @@
-#include "Sensitivity_lambda.h"
-
+//#include "Sensitivity_lambda.h"
+#include "Sensitivity_fit.cpp"
 void calculate_normalization()
 {
 	norm_signal1   = (IntLumi * ggFhhXsec1)/tot_MCevents;
@@ -162,16 +162,10 @@ void Fill_Arrays_histos()
 void Set_graphProps()
 {
 
-	char out_file_open[1023];
-        sprintf(out_file_open,"%s/%s.pdf(",out_path,output_file_name);
-        char out_file_[1023];
-        sprintf(out_file_,"%s/%s.pdf",out_path,output_file_name);
-        char out_file_close[1023];
-        sprintf(out_file_close,"%s/%s.pdf)",out_path,output_file_name);
-	TCanvas *c1 = new TCanvas();
 	g20->GetXaxis()->SetTitle("k_{#lambda}");
 	g20->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g20->GetYaxis()->SetTitle("significance (p_{T} #in {20,30})");
+	//g20->GetYaxis()->SetTitle("significance (p_{T} #in {20,30})");
+	g20->GetYaxis()->SetTitle("S_{i} (p_{T} #in {20,30})");
 	g20->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g20->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g20->GetYaxis()->CenterTitle();
@@ -180,7 +174,8 @@ void Set_graphProps()
 	g20->SetLineColor(kRed);
 	g20->SetLineWidth(LINE_WIDTH);
 	g20->SetMarkerSize(MARKER_SIZE);
-	g20->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g20->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g20->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g20->Draw("ACPe1");
 	max_range = g20->GetHistogram()->GetMaximum()*1.1;
 	min_range = g20->GetHistogram()->GetMinimum()*0.4;
@@ -191,7 +186,8 @@ void Set_graphProps()
 	//TCanvas *c2 = new TCanvas();
 	g30->GetXaxis()->SetTitle("k_{#lambda}");
 	g30->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g30->GetYaxis()->SetTitle("significance (p_{T} #in {30,40})");
+	//g30->GetYaxis()->SetTitle("significance (p_{T} #in {30,40})");
+	g30->GetYaxis()->SetTitle("S_{i} (p_{T} #in {30,40})");
 	g30->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g30->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g30->GetYaxis()->CenterTitle();
@@ -200,7 +196,8 @@ void Set_graphProps()
 	g30->SetLineColor(kRed);
 	g30->SetLineWidth(LINE_WIDTH);
 	g30->SetMarkerSize(MARKER_SIZE);
-	g30->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g30->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g30->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g30->Draw("ACPe1");
 	max_range = g30->GetHistogram()->GetMaximum()*1.1;
 	min_range = g30->GetHistogram()->GetMinimum()*0.4;
@@ -211,7 +208,8 @@ void Set_graphProps()
 	//TCanvas *c3 = new TCanvas();
 	g40->GetXaxis()->SetTitle("k_{#lambda}");
 	g40->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g40->GetYaxis()->SetTitle("significance (p_{T} #in {40,50})");
+	//g40->GetYaxis()->SetTitle("significance (p_{T} #in {40,50})");
+	g40->GetYaxis()->SetTitle("S_{i} (p_{T} #in {40,50})");
 	g40->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g40->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g40->GetYaxis()->CenterTitle();
@@ -220,7 +218,8 @@ void Set_graphProps()
 	g40->SetLineColor(kRed);
 	g40->SetLineWidth(LINE_WIDTH);
 	g40->SetMarkerSize(MARKER_SIZE);
-	g40->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g40->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g40->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g40->Draw("ACPe1");
 	max_range = g40->GetHistogram()->GetMaximum()*1.1;
 	min_range = g40->GetHistogram()->GetMinimum()*0.4;
@@ -231,7 +230,8 @@ void Set_graphProps()
 	//TCanvas *c4 = new TCanvas();
 	g50->GetXaxis()->SetTitle("k_{#lambda}");
 	g50->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g50->GetYaxis()->SetTitle("significance (p_{T} #in {50,60})");
+	//g50->GetYaxis()->SetTitle("significance (p_{T} #in {50,60})");
+	g50->GetYaxis()->SetTitle("S_{i} (p_{T} #in {50,60})");
 	g50->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g50->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g50->GetYaxis()->CenterTitle();
@@ -240,7 +240,8 @@ void Set_graphProps()
 	g50->SetLineColor(kRed);
 	g50->SetLineWidth(LINE_WIDTH);
 	g50->SetMarkerSize(MARKER_SIZE);
-	g50->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g50->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g50->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g50->Draw("ACPe1");
 	max_range = g50->GetHistogram()->GetMaximum()*1.1;
 	min_range = g50->GetHistogram()->GetMinimum()*0.4;
@@ -251,7 +252,8 @@ void Set_graphProps()
 	//TCanvas *c5 = new TCanvas();
 	g60->GetXaxis()->SetTitle("k_{#lambda}");
 	g60->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g60->GetYaxis()->SetTitle("significance (p_{T} #in {60,70})");
+	//g60->GetYaxis()->SetTitle("significance (p_{T} #in {60,70})");
+	g60->GetYaxis()->SetTitle("S_{i} (p_{T} #in {60,70})");
 	g60->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g60->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g60->GetYaxis()->CenterTitle();
@@ -260,7 +262,8 @@ void Set_graphProps()
 	g60->SetLineColor(kRed);
 	g60->SetLineWidth(LINE_WIDTH);
 	g60->SetMarkerSize(MARKER_SIZE);
-	g60->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g60->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g60->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g60->Draw("ACPe1");
 	max_range = g60->GetHistogram()->GetMaximum()*1.1;
 	min_range = g60->GetHistogram()->GetMinimum()*0.4;
@@ -271,7 +274,8 @@ void Set_graphProps()
 	//TCanvas *c6 = new TCanvas();
 	g70->GetXaxis()->SetTitle("k_{#lambda}");
 	g70->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g70->GetYaxis()->SetTitle("significance (p_{T} #in {70,80})");
+	//g70->GetYaxis()->SetTitle("significance (p_{T} #in {70,80})");
+	g70->GetYaxis()->SetTitle("S_{i} (p_{T} #in {70,80})");
 	g70->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g70->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g70->GetYaxis()->CenterTitle();
@@ -280,7 +284,8 @@ void Set_graphProps()
 	g70->SetLineColor(kRed);
 	g70->SetLineWidth(LINE_WIDTH);
 	g70->SetMarkerSize(MARKER_SIZE);
-	g70->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g70->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g70->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g70->Draw("ACPe1");
 	max_range = g70->GetHistogram()->GetMaximum()*1.1;
 	min_range = g70->GetHistogram()->GetMinimum()*0.4;
@@ -291,7 +296,8 @@ void Set_graphProps()
 	//TCanvas *c7 = new TCanvas();
 	g80->GetXaxis()->SetTitle("k_{#lambda}");
 	g80->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g80->GetYaxis()->SetTitle("significance (p_{T} #in {80,90})");
+	//g80->GetYaxis()->SetTitle("significance (p_{T} #in {80,90})");
+	g80->GetYaxis()->SetTitle("S_{i} (p_{T} #in {80,90})");
 	g80->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g80->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g80->GetYaxis()->CenterTitle();
@@ -300,7 +306,8 @@ void Set_graphProps()
 	g80->SetLineColor(kRed);
 	g80->SetLineWidth(LINE_WIDTH);
 	g80->SetMarkerSize(MARKER_SIZE);
-	g80->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g80->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g80->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g80->Draw("ACPe1");
 	max_range = g80->GetHistogram()->GetMaximum()*1.1;
 	min_range = g80->GetHistogram()->GetMinimum()*0.4;
@@ -311,7 +318,8 @@ void Set_graphProps()
 	//TCanvas *c8 = new TCanvas();
 	g90->GetXaxis()->SetTitle("k_{#lambda}");
 	g90->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g90->GetYaxis()->SetTitle("significance (p_{T} #in {90,100})");
+	//g90->GetYaxis()->SetTitle("significance (p_{T} #in {90,100})");
+	g90->GetYaxis()->SetTitle("S_{i} (p_{T} #in {90,100})");
 	g90->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g90->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g90->GetYaxis()->CenterTitle();
@@ -320,7 +328,8 @@ void Set_graphProps()
 	g90->SetLineColor(kRed);
 	g90->SetLineWidth(LINE_WIDTH);
 	g90->SetMarkerSize(MARKER_SIZE);
-	g90->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g90->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g90->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g90->Draw("ACPe1");
 	max_range = g90->GetHistogram()->GetMaximum()*1.1;
 	min_range = g90->GetHistogram()->GetMinimum()*0.4;
@@ -331,7 +340,8 @@ void Set_graphProps()
 	//TCanvas *c9 = new TCanvas();
 	g100->GetXaxis()->SetTitle("k_{#lambda}");
 	g100->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g100->GetYaxis()->SetTitle("significance (p_{T} #in {100,500})");
+	//g100->GetYaxis()->SetTitle("significance (p_{T} #in {100,500})");
+	g100->GetYaxis()->SetTitle("S_{i} (p_{T} #in {100,500})");
 	g100->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g100->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g100->GetYaxis()->CenterTitle();
@@ -340,84 +350,174 @@ void Set_graphProps()
 	g100->SetLineColor(kRed);
 	g100->SetLineWidth(LINE_WIDTH);
 	g100->SetMarkerSize(MARKER_SIZE);
-	g100->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	//g100->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
+	g100->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
 	g100->Draw("ACPe1");
 	max_range = g100->GetHistogram()->GetMaximum()*1.1;
 	min_range = g100->GetHistogram()->GetMinimum()*0.4;
 	g100->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Write("c100");
-	c1->Print(out_file_close,"pdf");
+	c1->Print(out_file_,"pdf");
 	return;
 }
 
 void Fill_sigI_lambdaI_graphs()
 {
+	//for(int i = 0; i < nGraphPts; i++)
+	//{
+	//
+	//	for(int k = 0; k < nlambda; k++)
+	//	{
+	//	
+	//		(graphList*)[i]->SetPoint(k, lambda[k], vSignificance[k][i])
+	//	}
 
-	g20->SetPoint(0, lambda[0], Significance_2[0]);
-	g20->SetPoint(1, lambda[1], Significance_1[0]);
-	g20->SetPoint(2, lambda[2], Significance0[0]);
-	g20->SetPoint(3, lambda[3], Significance1[0]);
-	g20->SetPoint(4, lambda[4], Significance2[0]);
-	g20->SetPoint(5, lambda[5], Significance3[0]);
-	
-	g30->SetPoint(0, lambda[0], Significance_2[1]);
-	g30->SetPoint(1, lambda[1], Significance_1[1]);
-	g30->SetPoint(2, lambda[2], Significance0[1]);
-	g30->SetPoint(3, lambda[3], Significance1[1]);
-	g30->SetPoint(4, lambda[4], Significance2[1]);
-	g30->SetPoint(5, lambda[5], Significance3[1]);
+	//}
 
-	g40->SetPoint(0, lambda[0], Significance_2[2]);
-	g40->SetPoint(1, lambda[1], Significance_1[2]);
-	g40->SetPoint(2, lambda[2], Significance0[2]);
-	g40->SetPoint(3, lambda[3], Significance1[2]);
-	g40->SetPoint(4, lambda[4], Significance2[2]);
-	g40->SetPoint(5, lambda[5], Significance3[2]);
+	//g20->SetPoint(0, lambda[0], Significance_2[0]);
+	//g20->SetPoint(1, lambda[1], Significance_1[0]);
+	//g20->SetPoint(2, lambda[2], Significance0[0]);
+	//g20->SetPoint(3, lambda[3], Significance1[0]);
+	//g20->SetPoint(4, lambda[4], Significance2[0]);
+	//g20->SetPoint(5, lambda[5], Significance3[0]);
+	//
+	//g30->SetPoint(0, lambda[0], Significance_2[1]);
+	//g30->SetPoint(1, lambda[1], Significance_1[1]);
+	//g30->SetPoint(2, lambda[2], Significance0[1]);
+	//g30->SetPoint(3, lambda[3], Significance1[1]);
+	//g30->SetPoint(4, lambda[4], Significance2[1]);
+	//g30->SetPoint(5, lambda[5], Significance3[1]);
+
+	//g40->SetPoint(0, lambda[0], Significance_2[2]);
+	//g40->SetPoint(1, lambda[1], Significance_1[2]);
+	//g40->SetPoint(2, lambda[2], Significance0[2]);
+	//g40->SetPoint(3, lambda[3], Significance1[2]);
+	//g40->SetPoint(4, lambda[4], Significance2[2]);
+	//g40->SetPoint(5, lambda[5], Significance3[2]);
+	//
+	//std::cout<<"Significance_2[3] = " <<Significance_2[3] <<std::endl;
+	//g50->SetPoint(0, lambda[0], Significance_2[3]);
+	//g50->SetPoint(1, lambda[1], Significance_1[3]);
+	//g50->SetPoint(2, lambda[2], Significance0[3]);
+	//g50->SetPoint(3, lambda[3], Significance1[3]);
+	//g50->SetPoint(4, lambda[4], Significance2[3]);
+	//g50->SetPoint(5, lambda[5], Significance3[3]);
+	//
+	//g60->SetPoint(0, lambda[0], Significance_2[4]);
+	//g60->SetPoint(1, lambda[1], Significance_1[4]);
+	//g60->SetPoint(2, lambda[2], Significance0[4]);
+	//g60->SetPoint(3, lambda[3], Significance1[4]);
+	//g60->SetPoint(4, lambda[4], Significance2[4]);
+	//g60->SetPoint(5, lambda[5], Significance3[4]);
+	//
+	//g70->SetPoint(0, lambda[0], Significance_2[5]);
+	//g70->SetPoint(1, lambda[1], Significance_1[5]);
+	//g70->SetPoint(2, lambda[2], Significance0[5]);
+	//g70->SetPoint(3, lambda[3], Significance1[5]);
+	//g70->SetPoint(4, lambda[4], Significance2[5]);
+	//g70->SetPoint(5, lambda[5], Significance3[5]);
+	//
+	//g80->SetPoint(0, lambda[0], Significance_2[6]);
+	//g80->SetPoint(1, lambda[1], Significance_1[6]);
+	//g80->SetPoint(2, lambda[2], Significance0[6]);
+	//g80->SetPoint(3, lambda[3], Significance1[6]);
+	//g80->SetPoint(4, lambda[4], Significance2[6]);
+	//g80->SetPoint(5, lambda[5], Significance3[6]);
+	//
+	//g90->SetPoint(0, lambda[0], Significance_2[7]);
+	//g90->SetPoint(1, lambda[1], Significance_1[7]);
+	//g90->SetPoint(2, lambda[2], Significance0[7]);
+	//g90->SetPoint(3, lambda[3], Significance1[7]);
+	//g90->SetPoint(4, lambda[4], Significance2[7]);
+	//g90->SetPoint(5, lambda[5], Significance3[7]);
+	//
+	//g100->SetPoint(0, lambda[0], Significance_2[8]);
+	//g100->SetPoint(1, lambda[1], Significance_1[8]);
+	//g100->SetPoint(2, lambda[2], Significance0[8]);
+	//g100->SetPoint(3, lambda[3], Significance1[8]);
+	//g100->SetPoint(4, lambda[4], Significance2[8]);
+	//g100->SetPoint(5, lambda[5], Significance3[8]);
 	
-	std::cout<<"Significance_2[3] = " <<Significance_2[3]<<std::endl;
-	g50->SetPoint(0, lambda[0], Significance_2[3]);
-	g50->SetPoint(1, lambda[1], Significance_1[3]);
-	g50->SetPoint(2, lambda[2], Significance0[3]);
-	g50->SetPoint(3, lambda[3], Significance1[3]);
-	g50->SetPoint(4, lambda[4], Significance2[3]);
-	g50->SetPoint(5, lambda[5], Significance3[3]);
+	g20->SetPoint(0, lambda[0], nAna_2[0] * norm_signal_2);
+	g20->SetPoint(1, lambda[1], nAna_1[0] * norm_signal_1);
+	g20->SetPoint(2, lambda[2], nAna0[0] * norm_signal0);
+	g20->SetPoint(3, lambda[3], nAna1[0] * norm_signal1);
+	g20->SetPoint(4, lambda[4], nAna2[0] * norm_signal2);
+	g20->SetPoint(5, lambda[5], nAna3[0] * norm_signal3);
 	
-	g60->SetPoint(0, lambda[0], Significance_2[4]);
-	g60->SetPoint(1, lambda[1], Significance_1[4]);
-	g60->SetPoint(2, lambda[2], Significance0[4]);
-	g60->SetPoint(3, lambda[3], Significance1[4]);
-	g60->SetPoint(4, lambda[4], Significance2[4]);
-	g60->SetPoint(5, lambda[5], Significance3[4]);
+	g30->SetPoint(0, lambda[0], nAna_2[1] * norm_signal_2);
+	g30->SetPoint(1, lambda[1], nAna_1[1] * norm_signal_1);
+	g30->SetPoint(2, lambda[2], nAna0[1] * norm_signal0);
+	g30->SetPoint(3, lambda[3], nAna1[1] * norm_signal1);
+	g30->SetPoint(4, lambda[4], nAna2[1] * norm_signal2);
+	g30->SetPoint(5, lambda[5], nAna3[1] * norm_signal3);
+
+	g40->SetPoint(0, lambda[0], nAna_2[2] * norm_signal_2);
+	g40->SetPoint(1, lambda[1], nAna_1[2] * norm_signal_1);
+	g40->SetPoint(2, lambda[2], nAna0[2] * norm_signal0);
+	g40->SetPoint(3, lambda[3], nAna1[2] * norm_signal1);
+	g40->SetPoint(4, lambda[4], nAna2[2] * norm_signal2);
+	g40->SetPoint(5, lambda[5], nAna3[2] * norm_signal3);
 	
-	g70->SetPoint(0, lambda[0], Significance_2[5]);
-	g70->SetPoint(1, lambda[1], Significance_1[5]);
-	g70->SetPoint(2, lambda[2], Significance0[5]);
-	g70->SetPoint(3, lambda[3], Significance1[5]);
-	g70->SetPoint(4, lambda[4], Significance2[5]);
-	g70->SetPoint(5, lambda[5], Significance3[5]);
+	std::cout<<"nAna_2[3] = " <<nAna_2[3] * norm_signal_2<<std::endl;
+	g50->SetPoint(0, lambda[0], nAna_2[3] * norm_signal_2);
+	g50->SetPoint(1, lambda[1], nAna_1[3] * norm_signal_1);
+	g50->SetPoint(2, lambda[2], nAna0[3] * norm_signal0);
+	g50->SetPoint(3, lambda[3], nAna1[3] * norm_signal1);
+	g50->SetPoint(4, lambda[4], nAna2[3] * norm_signal2);
+	g50->SetPoint(5, lambda[5], nAna3[3] * norm_signal3);
 	
-	g80->SetPoint(0, lambda[0], Significance_2[6]);
-	g80->SetPoint(1, lambda[1], Significance_1[6]);
-	g80->SetPoint(2, lambda[2], Significance0[6]);
-	g80->SetPoint(3, lambda[3], Significance1[6]);
-	g80->SetPoint(4, lambda[4], Significance2[6]);
-	g80->SetPoint(5, lambda[5], Significance3[6]);
+	g60->SetPoint(0, lambda[0], nAna_2[4] * norm_signal_2);
+	g60->SetPoint(1, lambda[1], nAna_1[4] * norm_signal_1);
+	g60->SetPoint(2, lambda[2], nAna0[4] * norm_signal0);
+	g60->SetPoint(3, lambda[3], nAna1[4] * norm_signal1);
+	g60->SetPoint(4, lambda[4], nAna2[4] * norm_signal2);
+	g60->SetPoint(5, lambda[5], nAna3[4] * norm_signal3);
 	
-	g90->SetPoint(0, lambda[0], Significance_2[7]);
-	g90->SetPoint(1, lambda[1], Significance_1[7]);
-	g90->SetPoint(2, lambda[2], Significance0[7]);
-	g90->SetPoint(3, lambda[3], Significance1[7]);
-	g90->SetPoint(4, lambda[4], Significance2[7]);
-	g90->SetPoint(5, lambda[5], Significance3[7]);
+	g70->SetPoint(0, lambda[0], nAna_2[5] * norm_signal_2);
+	g70->SetPoint(1, lambda[1], nAna_1[5] * norm_signal_1);
+	g70->SetPoint(2, lambda[2], nAna0[5] * norm_signal0);
+	g70->SetPoint(3, lambda[3], nAna1[5] * norm_signal1);
+	g70->SetPoint(4, lambda[4], nAna2[5] * norm_signal2);
+	g70->SetPoint(5, lambda[5], nAna3[5] * norm_signal3);
 	
-	g100->SetPoint(0, lambda[0], Significance_2[8]);
-	g100->SetPoint(1, lambda[1], Significance_1[8]);
-	g100->SetPoint(2, lambda[2], Significance0[8]);
-	g100->SetPoint(3, lambda[3], Significance1[8]);
-	g100->SetPoint(4, lambda[4], Significance2[8]);
-	g100->SetPoint(5, lambda[5], Significance3[8]);
+	g80->SetPoint(0, lambda[0], nAna_2[6] * norm_signal_2);
+	g80->SetPoint(1, lambda[1], nAna_1[6] * norm_signal_1);
+	g80->SetPoint(2, lambda[2], nAna0[6] * norm_signal0);
+	g80->SetPoint(3, lambda[3], nAna1[6] * norm_signal1);
+	g80->SetPoint(4, lambda[4], nAna2[6] * norm_signal2);
+	g80->SetPoint(5, lambda[5], nAna3[6] * norm_signal3);
+	
+	g90->SetPoint(0, lambda[0], nAna_2[7] * norm_signal_2);
+	g90->SetPoint(1, lambda[1], nAna_1[7] * norm_signal_1);
+	g90->SetPoint(2, lambda[2], nAna0[7] * norm_signal0);
+	g90->SetPoint(3, lambda[3], nAna1[7] * norm_signal1);
+	g90->SetPoint(4, lambda[4], nAna2[7] * norm_signal2);
+	g90->SetPoint(5, lambda[5], nAna3[7] * norm_signal3);
+	
+	g100->SetPoint(0, lambda[0], nAna_2[8] * norm_signal_2);
+	g100->SetPoint(1, lambda[1], nAna_1[8] * norm_signal_1);
+	g100->SetPoint(2, lambda[2], nAna0[8] * norm_signal0);
+	g100->SetPoint(3, lambda[3], nAna1[8] * norm_signal1);
+	g100->SetPoint(4, lambda[4], nAna2[8] * norm_signal2);
+	g100->SetPoint(5, lambda[5], nAna3[8] * norm_signal3);
 	return;
 }
+void Delete_graphs()
+{
+
+	if(g20) delete g20;
+	if(g30) delete g30;
+	if(g40) delete g40;
+	if(g50) delete g50;
+	if(g60) delete g60;
+	if(g70) delete g70;
+	if(g80) delete g80;
+	if(g90) delete g90;
+	if(g100) delete g100;
+	return;
+}
+
 void final_plot()
 {
 
@@ -450,7 +550,14 @@ void final_plot()
 
 	Init_FinalHistos();
 	Fill_Arrays_histos();	
-
+	
+	//for(int i = 0; i < nGraphPts; i++)
+	//{
+	//	graph_name.Form("g%d", (i+2)*10);
+	//	TGraph *mygraph = new TGraph();
+	//	mygraph->SetName(graph_name);
+	//	graphList.Add(mygraph);	
+	//}
 	g20  = new TGraph();
 	g30  = new TGraph();
 	g40  = new TGraph();
@@ -461,14 +568,26 @@ void final_plot()
 	g90  = new TGraph();
 	g100 = new TGraph();
 
+	//vSignificance[]
+
+	//vSignificance[0] = {Significance_2};	
+	//vSignificance[1] = {Significance_1};	
+	//vSignificance[2] = {Significance0};	
+	//vSignificance[3] = {Significance1};	
+	//vSignificance[4] = {Significance2};	
+	//vSignificance[5] = {Significance3};	
 	Fill_sigI_lambdaI_graphs();
 	
-	char out_root_file_name[1023];
         sprintf(out_root_file_name,"%s/../root/%s.root",out_path,output_file_name);
 	TFile *fout = new TFile(out_root_file_name,"RECREATE");
 	
-	Set_graphProps();
+        sprintf(out_file_open,"%s/%s.pdf(",out_path,output_file_name);
+        sprintf(out_file_,"%s/%s.pdf",out_path,output_file_name);
+        sprintf(out_file_close,"%s/%s.pdf)",out_path,output_file_name);
+	c1 = new TCanvas();
 
+	Set_graphProps();
+	//graphList.Write();
 	g20->Write("g20");
 	g30->Write("g30");
 	g40->Write("g40");
@@ -479,5 +598,24 @@ void final_plot()
 	g90->Write("g90");
 	g100->Write("g100");
 	fout->Close();
+
+	Delete_graphs();
+	
+	Fit_graphs();
+        sprintf(out_root_file_name,"%s/../root/%s_final.root",out_path,output_file_name);
+        TFile *finalout = new TFile(out_root_file_name,"RECREATE");
+	Init_ci();
+	Init_sigma_square();
+
+
+
+	plot_ithBinSensitivity2_Vs_klambda();
+
+	plot_total_sensitivity_Vs_klambda();
+	
+	finalout->Close();
+	c1->Print(out_file_close,"pdf");
+
+
 	return;
 }
