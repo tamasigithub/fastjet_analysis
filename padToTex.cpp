@@ -6,9 +6,10 @@
 #include "TLatex.h"
 const char *out_path = "./analysis_plots/tex";
 const char *in_path = "./analysis_plots/root";
-const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4.root";
+//const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+//const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4.root";
 //void padToTex(const char *pad_name)
-void pad(const char *pad_name, int which_legend = 0, bool up = false, const char *input_file = "GenJet4b2_2.5_allR0.4.root")
+void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left = false, const char *input_file = "GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root")
 {
 
 	char input_root_file[1023];
@@ -32,8 +33,14 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, const char
 	{
 		TPad *legend = (TPad*)f->Get("c2_d");
 		//legend->SetPad(0.4,0.5,0.899,0.899);//dx = 0.5, dy = 0.4
-		if(up) legend->SetPad(0.35,0.4,0.9,0.85);
-		else legend->SetPad(0.3,0.02,0.85,0.47);
+		//! default - down right
+		legend->SetPad(0.3,0.02,0.85,0.47);
+		//! down left
+		if(!up && left)legend->SetPad(-0.15,0.02,0.40,0.47);
+		//! up left
+		if(up && left)legend->SetPad(-0.15,0.4,0.40,0.85);
+		//! up right
+		if(up && !left) legend->SetPad(0.35,0.4,0.9,0.85);
 		legend->SetFillStyle(0);// make the pad transparent
 		legend->DrawClone();
 	}

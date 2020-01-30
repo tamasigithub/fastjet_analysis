@@ -21,9 +21,9 @@ root -l padToTex.cpp -e 'pad("c8_a", 2);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c8_b", 2);'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c8_c", 2, false, "GenJet4b2_6.0_allR0.4_0.8.root");'<<EOF
+root -l padToTex.cpp -e 'pad("c8_c", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProb.root");'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c8_d", 2, false, "GenJet4b2_6.0_allR0.4_0.8.root");'<<EOF
+root -l padToTex.cpp -e 'pad("c8_d", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProb.root");'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c11a", 2);'<<EOF
 EOF
@@ -51,7 +51,7 @@ root -l padToTex.cpp -e 'pad("c40d", 1, true);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c41b", 1);'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c41d", 1);'<<EOF
+root -l padToTex.cpp -e 'pad("c41d", 1, false, true);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c43a", 0);'<<EOF
 EOF
