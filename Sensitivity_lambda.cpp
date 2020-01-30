@@ -2,13 +2,13 @@
 #include "Sensitivity_fit.cpp"
 void calculate_normalization()
 {
-	norm_signal1   = (IntLumi * ggFhhXsec1)/tot_MCevents;
-	norm_signal0   = (IntLumi * ggFhhXsec0)/tot_MCevents;
-	norm_signal_1  = (IntLumi * ggFhhXsec_1)/tot_MCevents;
-	norm_signal_2  = (IntLumi * ggFhhXsec_2)/tot_MCevents;
-	norm_signal2   = (IntLumi * ggFhhXsec2)/tot_MCevents;
-	norm_signal2_5 = (IntLumi * ggFhhXsec2_5)/tot_MCevents;
-	norm_signal3   = (IntLumi * ggFhhXsec3)/tot_MCevents;
+	norm_signal1   = (IntLumi * four_b_Prob * ggFhhXsec1)/tot_MCevents;
+	norm_signal0   = (IntLumi * four_b_Prob * ggFhhXsec0)/tot_MCevents;
+	norm_signal_1  = (IntLumi * four_b_Prob * ggFhhXsec_1)/tot_MCevents;
+	norm_signal_2  = (IntLumi * four_b_Prob * ggFhhXsec_2)/tot_MCevents;
+	norm_signal2   = (IntLumi * four_b_Prob * ggFhhXsec2)/tot_MCevents;
+	norm_signal2_5 = (IntLumi * four_b_Prob * ggFhhXsec2_5)/tot_MCevents;
+	norm_signal3   = (IntLumi * four_b_Prob * ggFhhXsec3)/tot_MCevents;
 	norm_bckgnd    = (IntLumi * pp4bXsec)/tot_MCevents;
 	return;
 }
@@ -176,10 +176,12 @@ void Set_graphProps()
 	g20->SetMarkerSize(MARKER_SIZE);
 	//g20->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g20->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g20->Draw("ACPe1");
+	g20->Draw("APe1");
+	g20->Fit("pol2");
 	max_range = g20->GetHistogram()->GetMaximum()*1.1;
 	min_range = g20->GetHistogram()->GetMinimum()*0.4;
 	g20->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c20");
 	c1->Print(out_file_open,"pdf");
 
@@ -198,10 +200,12 @@ void Set_graphProps()
 	g30->SetMarkerSize(MARKER_SIZE);
 	//g30->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g30->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g30->Draw("ACPe1");
+	g30->Draw("APe1");
+	g30->Fit("pol2");
 	max_range = g30->GetHistogram()->GetMaximum()*1.1;
 	min_range = g30->GetHistogram()->GetMinimum()*0.4;
 	g30->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c30");
 	c1->Print(out_file_,"pdf");
 
@@ -220,10 +224,12 @@ void Set_graphProps()
 	g40->SetMarkerSize(MARKER_SIZE);
 	//g40->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g40->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g40->Draw("ACPe1");
+	g40->Draw("APe1");
+	g40->Fit("pol2");
 	max_range = g40->GetHistogram()->GetMaximum()*1.1;
 	min_range = g40->GetHistogram()->GetMinimum()*0.4;
 	g40->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c40");
 	c1->Print(out_file_,"pdf");
 
@@ -242,10 +248,12 @@ void Set_graphProps()
 	g50->SetMarkerSize(MARKER_SIZE);
 	//g50->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g50->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g50->Draw("ACPe1");
+	g50->Draw("APe1");
+	g50->Fit("pol2");
 	max_range = g50->GetHistogram()->GetMaximum()*1.1;
 	min_range = g50->GetHistogram()->GetMinimum()*0.4;
 	g50->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c50");
 	c1->Print(out_file_,"pdf");
 
@@ -264,10 +272,12 @@ void Set_graphProps()
 	g60->SetMarkerSize(MARKER_SIZE);
 	//g60->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g60->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g60->Draw("ACPe1");
+	g60->Draw("APe1");
+	g60->Fit("pol2");
 	max_range = g60->GetHistogram()->GetMaximum()*1.1;
 	min_range = g60->GetHistogram()->GetMinimum()*0.4;
 	g60->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c60");
 	c1->Print(out_file_,"pdf");
 
@@ -286,10 +296,12 @@ void Set_graphProps()
 	g70->SetMarkerSize(MARKER_SIZE);
 	//g70->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g70->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g70->Draw("ACPe1");
+	g70->Draw("APe1");
+	g70->Fit("pol2");
 	max_range = g70->GetHistogram()->GetMaximum()*1.1;
 	min_range = g70->GetHistogram()->GetMinimum()*0.4;
 	g70->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c70");
 	c1->Print(out_file_,"pdf");
 
@@ -308,10 +320,12 @@ void Set_graphProps()
 	g80->SetMarkerSize(MARKER_SIZE);
 	//g80->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g80->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g80->Draw("ACPe1");
+	g80->Draw("APe1");
+	g80->Fit("pol2");
 	max_range = g80->GetHistogram()->GetMaximum()*1.1;
 	min_range = g80->GetHistogram()->GetMinimum()*0.4;
 	g80->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c80");
 	c1->Print(out_file_,"pdf");
 	
@@ -330,10 +344,12 @@ void Set_graphProps()
 	g90->SetMarkerSize(MARKER_SIZE);
 	//g90->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g90->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g90->Draw("ACPe1");
+	g90->Draw("APe1");
+	g90->Fit("pol2");
 	max_range = g90->GetHistogram()->GetMaximum()*1.1;
 	min_range = g90->GetHistogram()->GetMinimum()*0.4;
 	g90->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c90");
 	c1->Print(out_file_,"pdf");
 
@@ -352,10 +368,12 @@ void Set_graphProps()
 	g100->SetMarkerSize(MARKER_SIZE);
 	//g100->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
 	g100->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g100->Draw("ACPe1");
+	g100->Draw("APe1");
+	g100->Fit("pol2");
 	max_range = g100->GetHistogram()->GetMaximum()*1.1;
 	min_range = g100->GetHistogram()->GetMinimum()*0.4;
 	g100->GetYaxis()->SetRangeUser(min_range, max_range);
+	c1->Update();
 	c1->Write("c100");
 	c1->Print(out_file_,"pdf");
 	return;
@@ -584,7 +602,11 @@ void final_plot()
         sprintf(out_file_open,"%s/%s.pdf(",out_path,output_file_name);
         sprintf(out_file_,"%s/%s.pdf",out_path,output_file_name);
         sprintf(out_file_close,"%s/%s.pdf)",out_path,output_file_name);
-	c1 = new TCanvas();
+	c1 = new TCanvas("c1","c1",800,800);
+        c1->SetLeftMargin(0.13);
+
+
+	gStyle->SetOptStat(0);
 
 	Set_graphProps();
 	//graphList.Write();

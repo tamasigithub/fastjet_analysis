@@ -1,11 +1,12 @@
 #include "Sensitivity_lambda.h"
 #include <vector>
+
 //! initialise a 2D array containing the derivative of the 
 // fit function for the ith bin evaluated at a given k_lambda
 double c[nGraphPts][nlambda]   = {0};
 //! sigma_square[i] = number of background events[i] + Significance_SM[i] 
 double sigma_square[nGraphPts] = {0};
-
+double Sensitivity_withPt[nGraphPts] = {0};
 TObjArray funList(0);
 TString fname;
 TString gname;
@@ -33,8 +34,12 @@ void Fit_graphs(const char *filename = out_root_file_name)
 		TF1 *myFunc = new TF1(fname, "pol2");
 		//TGraph *mygraph = (TGraph*)graphList[i];
 		TGraph *mygraph = (TGraph*)file2->Get(gname);
+		mygraph->Draw("AP");
 		mygraph->Fit(fname, "S");
-		funList.Add(myFunc);	
+		funList.Add(myFunc);
+		myFunc->Draw("same");
+			
+		//c1->Print(out_file_,"pdf");
 		delete mygraph;
 	}
 	return;	
@@ -50,7 +55,7 @@ void Init_ci()
 		{
 		
 			TF1 *myfun = (TF1*)funList[i];
-			c[i][k] = myfun->Derivative(k);
+			c[i][k] = myfun->Derivative(lambda[k]);
 			//c[i][k] = (funList*)[i]->Derivative(k);
 			std::cout<<"c[" <<i <<"]["<<k <<"] = " <<c[i][k] <<std::endl;	
 			myCi->SetPoint(k, lambda[k], c[i][k]);
@@ -123,19 +128,119 @@ void plot_ithBinSensitivity2_Vs_klambda()
 
 void plot_total_sensitivity_Vs_klambda()
 {
+	TLegend *leg = new TLegend(0.5, 0.2, 0.9, 0.9);
+	leg->SetFillStyle(FILL_STYLE);
+	leg->SetBorderSize(BORDER_SIZE);
+	leg->SetTextAlign(TEXT_ALIGN);
+	leg->SetTextFont(TEXT_FONT);
+	leg->SetTextSize(TEXT_SIZE);
 
+	TMultiGraph *mg1 = new TMultiGraph();
+	TMultiGraph *mg2 = new TMultiGraph();
+	//! Total sensitivity graph Vs k_lambda
 	TGraph *myGraph = new TGraph();
 	for(int k = 0; k < nlambda; k++)
 	{
+		//! Total sensitivity Vs Pt threshold
+		TString gname1;
+		if(lambda[k] < 0){gname1.Form("Sens2_ithPt_klambda__%d",(int)std::abs(lambda[k]));}
+		else {gname1.Form("Sens2_ithPt_klambda_%d", (int)std::abs(lambda[k]));}
+		TH1D *Sens2_i = new TH1D(gname1,"sensitivity in the i^{th} p_{T} bin", nbinsMinus, pT_threshold);
 	
-		double sum_sens2_i = 0;
-		for(int i = 0; i < nGraphPts; i ++)
+		double tot_sens2_i = 0;
+		for(int i = 0; i < nGraphPts; i++)
 		{
-		
-			sum_sens2_i += (c[i][k] * c[i][k])/sigma_square[i];
+			double sens2_i = (c[i][k] * c[i][k])/sigma_square[i];
+			Sens2_i->SetBinContent(i+1, sens2_i);
+			tot_sens2_i += (c[i][k] * c[i][k])/sigma_square[i];
 		}
 
-		myGraph->SetPoint(k, lambda[k], std::sqrt(sum_sens2_i));
+		myGraph->SetPoint(k, lambda[k], std::sqrt(tot_sens2_i));
+
+		if(lambda[k] < 0){gname.Form("Sens_contri_klambda__%d",(int)std::abs(lambda[k]));}
+		else {gname.Form("Sens_contri_klambda_%d", (int)std::abs(lambda[k]));}
+		//TGraph *ithBin_contri = new TGraph();
+		TH1D *ithBin_contri = new TH1D(gname,"i^{th} bin contribution", nbinsMinus, pT_threshold);
+		for(int i = 0; i < nGraphPts; i++)
+		{
+		
+			double sens2_i = (c[i][k] * c[i][k])/sigma_square[i];
+			//ithBin_contri->SetPoint(i, pT_threshold[i], sens2_i/tot_sens2_i);
+			ithBin_contri->SetBinContent(i+1, sens2_i/tot_sens2_i);
+			
+
+			//! 1st integral is bin 1(contents in 20-30 GeV) to 9(contents in 100 - 500 GeV)
+			//! last integral is bin 9(contents in 100-500 GeV) to 9(contents in 100 - 500 GeV)
+			Sensitivity_withPt[i] = std::sqrt(Sens2_i->Integral(i+1, nGraphPts));
+
+		}
+		
+		TString gname2;	
+		if(lambda[k] < 0){gname2.Form("Sens_withPt_klambda__%d",(int)std::abs(lambda[k]));}
+		else {gname2.Form("Sens_withPt_klambda_%d", (int)std::abs(lambda[k]));}	
+		TGraph *sens_withPt = new TGraph(nGraphPts,pT_threshold, Sensitivity_withPt);
+		sens_withPt->SetName(gname2);
+		sens_withPt->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		sens_withPt->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		sens_withPt->GetYaxis()->SetTitle("#sqrt{ #sum_{i}^{500} sensitivity_{i}^{2}}");
+		sens_withPt->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		sens_withPt->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		sens_withPt->GetYaxis()->CenterTitle();
+		sens_withPt->GetXaxis()->CenterTitle();
+		sens_withPt->SetMarkerStyle(kFullCircle);//kFullCircle);
+		sens_withPt->SetLineColor(lambda_colors[k]);
+		sens_withPt->SetTitle(Form("sensitivity Vs p_{T} threshold for k_{#lambda} = %.1f", lambda[k]));
+		sens_withPt->SetLineWidth(LINE_WIDTH);
+		sens_withPt->SetMarkerSize(MARKER_SIZE);
+		sens_withPt->Draw("ACPe1");
+		max_range = sens_withPt->GetHistogram()->GetMaximum()*1.1;
+		min_range = sens_withPt->GetHistogram()->GetMinimum()*0.4;
+		sens_withPt->GetYaxis()->SetRangeUser(min_range, max_range);	
+		c1->Print(out_file_,"pdf");
+		sens_withPt->Write();
+		c1->Write(gname2);
+		mg1->Add(sens_withPt);
+
+			
+		//ithBin_contri->SetName(gname);
+		ithBin_contri->GetXaxis()->SetRangeUser(20.0, 100.0);
+		ithBin_contri->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		ithBin_contri->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		ithBin_contri->GetYaxis()->SetTitle("Sens_{i}^{2}/ Sens_{tot}^{2}");
+		ithBin_contri->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		ithBin_contri->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		ithBin_contri->GetYaxis()->CenterTitle();
+		ithBin_contri->GetXaxis()->CenterTitle();
+		ithBin_contri->SetMarkerStyle(kFullCircle);//kFullCircle);
+		ithBin_contri->SetLineColor(lambda_colors[k]);
+		ithBin_contri->SetLineWidth(LINE_WIDTH);
+		ithBin_contri->SetMarkerSize(MARKER_SIZE);
+		ithBin_contri->SetTitle(Form("Sensitivity contributions from p_{T} bins for k_{#lambda} = %.1f",lambda[k]));
+		//ithBin_contri->Draw("ACPe1");
+		//ithBin_contri->Sumw2();
+		max_range = ithBin_contri->GetMaximum()*1.1;
+		min_range = ithBin_contri->GetMinimum()*0.4;
+		ithBin_contri->GetYaxis()->SetRangeUser(min_range, max_range);
+		ithBin_contri->Draw("PC");
+			
+		c1->Print(out_file_,"pdf");
+		c1->Write(gname);
+		ithBin_contri->Write("HPL");
+		
+		TGraph *mg_i = new TGraph(ithBin_contri);
+		//std::cout<<"number of points before removal: " <<mg_i->GetN() <<std::endl;
+		mg_i->RemovePoint(nGraphPts-1);
+		//std::cout<<"number of points After removal: " <<mg_i->GetN() <<std::endl;
+		mg_i->Draw("ACP");
+		mg2->Add(mg_i,"ACP");
+		//mg2->Add((TGraph*)ithBin_contri);
+		
+		//delete ithBin_contri;
+		delete Sens2_i;
+		//delete sens_withPt;
+		
+		leg->AddEntry(sens_withPt,Form("k_{#lambda} = %.1f", lambda[k]),"l");
+
 
 	}
 	myGraph->SetName("Sum_sens_i");
@@ -156,6 +261,34 @@ void plot_total_sensitivity_Vs_klambda()
 	min_range = myGraph->GetHistogram()->GetMinimum()*0.4;
 	myGraph->GetYaxis()->SetRangeUser(min_range, max_range);
 	myGraph->Write();
+	c1->Print(out_file_,"pdf");
+	delete myGraph;
+
+	
+
+	mg1->Draw("ACP");
+	mg1->GetYaxis()->SetTitle("#sqrt{ #sum_{i}^{500} sensitivity_{i}^{2}}");
+	mg1->GetXaxis()->SetTitle("p_{T} threshold [GeV/c]");
+	mg1->GetXaxis()->CenterTitle();
+	mg1->GetYaxis()->CenterTitle();
+	gPad->Modified();
+	mg1->Write("Sens_pTthre");
+	c1->Write("Sens_pTthre");
+	c1->Print(out_file_,"pdf");
+	//gPad->Modified();
+	//mg2->GetXaxis()->SetLimits(20,100);
+	mg2->Draw("ACP");
+	mg2->GetYaxis()->SetTitle("Sens_{i}^{2}/ Sens_{tot}^{2}");
+	mg2->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	mg2->GetXaxis()->CenterTitle();
+	mg2->GetYaxis()->CenterTitle();
+	gPad->Modified();
+
+	mg2->Write("sens_ithBincontri");
+	c1->Write("sens_ithBincontri");
+	c1->Print(out_file_,"pdf");
+	c1->Clear();
+	leg->Draw();
 
 	return;
 }

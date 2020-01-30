@@ -27,7 +27,7 @@ const float ctr = 1.0;
 const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.root";
 const char *txt_path = "./analysis_plots/txt_files";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "SignificanceVs4thPt";
+const char *output_file_name = "SignificanceVs4thPt_incl4bProb";
 
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
@@ -41,6 +41,7 @@ Float_t min_range;
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3
 const double ggFhhXsec1   = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+const double four_b_Prob  = std::pow(0.58,4);
 int tot_MCevents = 5e5;
 
 double norm_signal, norm_bckgnd;
@@ -87,8 +88,8 @@ void plot_VsPt1()
 	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt1");
 	//h4_bg   = (TH1D*)f->Get("Ana_bjet4LPtB");
 
-	norm_signal   = (IntLumi * ggFhhXsec1)/tot_MCevents;
-	norm_bckgnd    = (IntLumi * pp4bXsec)/tot_MCevents;
+	norm_signal   = (IntLumi * four_b_Prob * ggFhhXsec1)/tot_MCevents;
+	norm_bckgnd   = (IntLumi * pp4bXsec)/tot_MCevents;
 	
 	int nbins = h4_sig->GetNbinsX();
 	int nbinsB = h4_bg->GetNbinsX();
@@ -177,8 +178,9 @@ void plot_graph()
 		//! 1st integral is bin 1(contents in 20-30 GeV) to 9(contents in 100 - 500 GeV)
 		//! last integral is bin 9(contents in 100-500 GeV) to 9(contents in 100 - 500 GeV)
 		SoverB[i] = h4_SoverB->Integral(i+1, nGraphPts);
-		Significance1[i] = h4_Significance1->Integral(i+1, nGraphPts);
 		Significance2[i] = h4_Significance2->Integral(i+1, nGraphPts);
+		Significance1[i] = std::sqrt(Significance2[i]);
+		//Significance1[i] = h4_Significance1->Integral(i+1, nGraphPts);
 		Significance2_[i] = h4_Significance2->Integral(1, i+1);
 	}
 	Significance1[nGraphPts] = Significance1[nGraphPts-1];// this will make the gain for the last pt = 1
@@ -211,7 +213,8 @@ void plot_graph()
 	g2 = new TGraphErrors(nGraphPts, pT_threshold, Significance1,0,0);
 	g2->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	g2->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g2->GetYaxis()->SetTitle("#sum_{i}^{500}S_{i}/#sqrt{B}_{i}");
+	//g2->GetYaxis()->SetTitle("#sum_{i}^{500}S_{i}/#sqrt{B}_{i}");
+	g2->GetYaxis()->SetTitle("#sqrt{#sum_{i}^{500}S_{i}^{2}/B_{i}}");
 	g2->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g2->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g2->GetYaxis()->CenterTitle();
@@ -220,7 +223,7 @@ void plot_graph()
 	g2->SetLineColor(kRed);
 	g2->SetLineWidth(LINE_WIDTH);
 	g2->SetMarkerSize(MARKER_SIZE);
-	g2->SetTitle("hh #rightarrow 4b Significance Vs 4^{th} leading jet p_{T}");
+	g2->SetTitle("hh #rightarrow 4b Total Significance Vs 4^{th} leading jet p_{T}");
 	g2->Draw("ACPe1");
 	max_range = g2->GetHistogram()->GetMaximum()*1.3;
 	min_range = g2->GetHistogram()->GetMinimum()*0.4;

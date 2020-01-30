@@ -32,32 +32,42 @@ const double HiggsMass       = 125.0;//GeV
 const double MassWidth       = 80.0;//GeV
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
+const double four_b_Prob  = std::pow(0.58,4);
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3 
-const double ggFhhXsec1   = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
-const double ggFhhXsec0   = 2346.13;
-const double ggFhhXsec_1  = 3995.26;
-const double ggFhhXsec_2  = 6172.40;
-const double ggFhhXsec2   = 625.59;
-const double ggFhhXsec2_5 = 523.907;
-const double ggFhhXsec3   = 553.485;
+const double ggFhhXsec1   = 12.24e2 * four_b_Prob;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+const double ggFhhXsec0   = 2346.13 * four_b_Prob;
+const double ggFhhXsec_1  = 3995.26 * four_b_Prob;
+const double ggFhhXsec_2  = 6172.40 * four_b_Prob;
+const double ggFhhXsec2   = 625.59 * four_b_Prob;
+const double ggFhhXsec2_5 = 523.907 * four_b_Prob;
+const double ggFhhXsec3   = 553.485 * four_b_Prob;
 ////! 14TeV
 //const double IntLumi      = 3e3;//fb-1 -> 0.3 ab-1
 //const double pp4bXsec     = 15.696e5;//fb, NLO Xsection// k-factor 1.6?// LO 9.81e5
-//const double ggFhhXsec1   = 36.69;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
-//const double ggFhhXsec0   = 75.867;
-//const double ggFhhXsec_1  = 135.046;
-//const double ggFhhXsec_2  = 214.181;
-//const double ggFhhXsec2   = 17.4765;
-//const double ggFhhXsec2_5 = 15.3792;
-//const double ggFhhXsec3   = 18.2744;
+//const double ggFhhXsec1   = 36.69 * four_b_Prob;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+//const double ggFhhXsec0   = 75.867 * four_b_Prob;
+//const double ggFhhXsec_1  = 135.046 * four_b_Prob;
+//const double ggFhhXsec_2  = 214.181 * four_b_Prob;
+//const double ggFhhXsec2   = 17.4765 * four_b_Prob;
+//const double ggFhhXsec2_5 = 15.3792 * four_b_Prob;
+//const double ggFhhXsec3   = 18.2744 * four_b_Prob;
 
 double k_lambda[7] = {-2.0, -1.0, 0.0, 1.0, 2.0, 2.5, 3.0};
 
 double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec2, ggFhhXsec2_5, ggFhhXsec3};
 
-const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.root";
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_1";
+const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProb";
+
+//const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr1.0_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr0.0_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_file_1 = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr-1.0_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_file_2 = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr-2.0_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_file2  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.0_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_file2_5= "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.5_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_file3  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr3.0_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_fileB  = "./fastjet_output/80percentBtag/Genjet2_pp4b_q300MeV_6.0_allR0.4.root"; 
 
 const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
 const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
@@ -626,6 +636,16 @@ TH1D *M_b3b4_B = nullptr;
 TH1D *dM_b1b2_b3b4_B = nullptr;
 TH1D *dM_b1b3_b2b4_B = nullptr;
 TH1D *dM_b1b4_b2b3_B = nullptr;
+
+//! frequency of the combination selected from amongst the 3 possible combinations
+TH1D *combi_selected_1   = nullptr;
+TH1D *combi_selected_0   = nullptr;
+TH1D *combi_selected__1  = nullptr;
+TH1D *combi_selected__2  = nullptr;
+TH1D *combi_selected_2   = nullptr;
+TH1D *combi_selected_2_5 = nullptr;
+TH1D *combi_selected_3   = nullptr;
+TH1D *combi_selected_B   = nullptr;
 
 //jet leading M
 TH1D *jetLM1  = nullptr;

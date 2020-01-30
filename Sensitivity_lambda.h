@@ -26,7 +26,7 @@ const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.
 
 const char *txt_path = "./analysis_plots/txt_files";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "Sensitivity_studyVsk_lambda_corrected";
+const char *output_file_name = "Sensitivity_studyVsk_lambda_corrected_incl4bProb";
 char out_root_file_name[1023];
 
 TCanvas *c1 = nullptr;
@@ -36,6 +36,7 @@ char out_file_close[1023];
 
 const int nlambda = 6;
 Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
+Float_t lambda_colors[nlambda] = {kGreen, kYellow-9, kBlack, kRed, kBlue, kViolet};
 const int n = 10;
 const int nGraphPts = 9;
 Int_t nbinsMinus = n - 1; 
@@ -50,6 +51,7 @@ const double ggFhhXsec_2  = 6172.40;
 const double ggFhhXsec2   = 625.59;
 const double ggFhhXsec2_5 = 523.907;
 const double ggFhhXsec3   = 553.485;
+const double four_b_Prob  = std::pow(0.58,4);
 int tot_MCevents = 5e5;
 
 double norm_signal1, norm_signal0, norm_signal_1, norm_signal_2, norm_signal2, norm_signal2_5, norm_signal3;
@@ -139,6 +141,8 @@ TH1D *h4_Significance2__2  = nullptr;
 TH1D *h4_Significance2_2   = nullptr;
 TH1D *h4_Significance2_3   = nullptr;
 
+//TMultiGraph *mg1 = nullptr;
+//TMultiGraph *mg2 = nullptr;
 //! Significance of the ith bin(pT threshold) Vs k_lambda
 //TObjArray graphList(0);
 //TString graph_name;
@@ -152,10 +156,17 @@ TGraph *g80  = nullptr;
 TGraph *g90  = nullptr;
 TGraph *g100 = nullptr;
 ////////////////////////////////////
-Float_t LINE_WIDTH = 2.5;
+Float_t LINE_WIDTH = 3;
 Float_t TITLE_SIZE = 0.04;
 Float_t MARKER_SIZE = 1.2;
 Float_t AXISTITLE_OFFSET = 0.8;
 Float_t YAXISTITLE_OFFSET = 1.2;
 Float_t max_range;
 Float_t min_range;
+Float_t ENTRY_SEP = 0.05;
+Float_t FILL_STYLE = 0;
+Float_t BORDER_SIZE = 0;
+Float_t TEXT_ALIGN = 32;
+Float_t TEXT_ALIGN_1 = 12;
+Float_t TEXT_FONT = 62;
+Float_t TEXT_SIZE = 0.09;
