@@ -249,6 +249,7 @@ void Set_jetPtProps__1()
 	dM_b1b3_b2b4__1 = new TH1D("dM_b1b3_b2b4__1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1324} [GeV];", nbins, dptmin, dptmax);
 	dM_b1b4_b2b3__1 = new TH1D("dM_b1b4_b2b3__1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1423} [GeV];", nbins, dptmin, dptmax);
 
+	combi_selected__1 = new TH1D("combi_selected__1", "Selected combination", 3, 1, 4);
 	return;
 }
 void Draw_InvariantMass__1()
@@ -377,6 +378,7 @@ void Fill_bjetPtM__1(int &nhiggs)
 	{
 		//if((std::fabs(bJ1bJ2__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ3bJ4__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		//{
+			combi_selected__1->Fill(1);
 			nhiggs++;
 			//! Fill four jet pt after all selection
 			Ana_bjetLPt_1->Fill( bJ1__1.Pt()*1e-3);
@@ -410,6 +412,7 @@ void Fill_bjetPtM__1(int &nhiggs)
 	{
 		//if((std::fabs(bJ1bJ3__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ4__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		//{
+			combi_selected__1->Fill(2);
 			nhiggs++;
 			//! Fill four jet pt after all selection
 			Ana_bjetLPt_1->Fill( bJ1__1.Pt()*1e-3);
@@ -444,6 +447,7 @@ void Fill_bjetPtM__1(int &nhiggs)
 	{
 		//if((std::fabs(bJ1bJ4__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth && std::fabs(bJ2bJ3__1.M()*1e-3 - HiggsMass) < 0.5 * MassWidth))
 		//{
+			combi_selected__1->Fill(3);
 			nhiggs++;
 			//! Fill four jet pt after all selection
 			Ana_bjetLPt_1->Fill( bJ1__1.Pt()*1e-3);

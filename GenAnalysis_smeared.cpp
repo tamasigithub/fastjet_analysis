@@ -2645,6 +2645,35 @@ void plot()
 	g3->Draw("CPe");
 	gPad->SetLogy();
 	gPad->Write("c44d");
+	C->Print(out_file_,"pdf");
+
+	//! page45
+	C->Clear();
+	C->Divide(4,2);
+	C->cd(1);
+	combi_selected__2->SetTitle("Selected Comnination, k_{#lambda} = -2");
+	combi_selected__2->Draw();
+	C->cd(2);
+	combi_selected__1->SetTitle("Selected Comnination, k_{#lambda} = -1");
+	combi_selected__1->Draw();
+	C->cd(3);
+	combi_selected_0->SetTitle("Selected Comnination, k_{#lambda} = 0");
+	combi_selected_0->Draw();
+	C->cd(4);
+	combi_selected_1->SetTitle("Selected Comnination, k_{#lambda} = 1");
+	combi_selected_1->Draw();
+	C->cd(5);
+	combi_selected_2->SetTitle("Selected Comnination, k_{#lambda} = 2");
+	combi_selected_2->Draw();
+	C->cd(6);
+	combi_selected_2_5->SetTitle("Selected Comnination, k_{#lambda} = 2.5");
+	combi_selected_2_5->Draw();
+	C->cd(7);
+	combi_selected_3->SetTitle("Selected Comnination, k_{#lambda} = 3");
+	combi_selected_3->Draw();
+	C->cd(8);
+	combi_selected_B->SetTitle("Selected Comnination, k_{#lambda} = B");
+	combi_selected_B->Draw();
 
 //	C->Clear();
 //	C->SetLogy();
