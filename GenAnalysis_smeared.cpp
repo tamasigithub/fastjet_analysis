@@ -248,7 +248,7 @@ void plot()
 		if (v1_jetPt->size() < min_Njets) continue;
 		n1++;
 
-		if((*v1_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v1_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v1_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall1++;
 		if((*v1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -257,8 +257,8 @@ void plot()
 		nL1++;
 		Fill_NLeadingJetPtM_1();
 		if(n1_btags < 4) continue;
-		nb1++;
-		Draw_DiJetInvariantMass_1(nh1);
+		//nb1++;
+		Draw_DiJetInvariantMass_1(nb1,nh1);
 		//Fill_bjetPtM_1(nh1);
 
 	}	
@@ -280,7 +280,7 @@ void plot()
 		if (v0_jetPt->size() < min_Njets) continue;
 		n0++;
 
-		if((*v0_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v0_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v0_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall0++;
 		if((*v0_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -289,8 +289,8 @@ void plot()
 		nL0++;
 		Fill_NLeadingJetPtM_0();
 		if(n0_btags < 4) continue;
-		nb0++;
-		Draw_DiJetInvariantMass_0(nh0);
+		//nb0++;
+		Draw_DiJetInvariantMass_0(nb0,nh0);
 		//Fill_bjetPtM_0(nh0);
 
 	}
@@ -312,7 +312,7 @@ void plot()
 		if (v_1_jetPt->size() < min_Njets) continue;
 		n_1++;
 		
-		if((*v_1_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v_1_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v_1_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall_1++;
 		if((*v_1_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -321,8 +321,8 @@ void plot()
 		nL_1++;
 		Fill_NLeadingJetPtM__1();
 		if(n_1_btags < 4) continue;
-		nb_1++;
-		Draw_DiJetInvariantMass__1(nh_1);
+		//nb_1++;
+		Draw_DiJetInvariantMass__1(nb_1,nh_1);
 		//Fill_bjetPtM__1(nh_1);
 
 	}
@@ -344,7 +344,7 @@ void plot()
 		if (v_2_jetPt->size() < min_Njets) continue;
 		n_2++;
 		
-		if((*v_2_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v_2_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v_2_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall_2++;
 		if((*v_2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -353,8 +353,8 @@ void plot()
 		nL_2++;
 		Fill_NLeadingJetPtM__2();
 		if(n_2_btags < 4) continue;
-		nb_2++;
-		Draw_DiJetInvariantMass__2(nh_2);
+		//nb_2++;
+		Draw_DiJetInvariantMass__2(nb_2,nh_2);
 		//Fill_bjetPtM__2(nh_2);
 
 	}
@@ -375,7 +375,7 @@ void plot()
 		//Fill_InvariantMass_2();
 		if (v2_jetPt->size() < min_Njets) continue;
 		n2++;
-		if((*v2_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v2_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v2_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall2++;
 		if((*v2_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -384,8 +384,8 @@ void plot()
 		nL2++;
 		Fill_NLeadingJetPtM_2();
 		if(n2_btags < 4) continue;
-		nb2++;
-		Draw_DiJetInvariantMass_2(nh2);
+		//nb2++;
+		Draw_DiJetInvariantMass_2(nb2,nh2);
 		//Fill_bjetPtM_2(nh2);
 
 	}
@@ -407,7 +407,7 @@ void plot()
 		if (v2_5_jetPt->size() < min_Njets) continue;
 		n2_5++;
 		
-		if((*v2_5_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v2_5_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v2_5_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall2_5++;
 		if((*v2_5_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -416,8 +416,8 @@ void plot()
 		nL2_5++;
 		Fill_NLeadingJetPtM_2_5();
 		if(n2_5_btags < 4) continue;
-		nb2_5++;
-		Draw_DiJetInvariantMass_2_5(nh2_5);
+		//nb2_5++;
+		Draw_DiJetInvariantMass_2_5(nb2_5,nh2_5);
 		//Fill_bjetPtM_2_5(nh2_5);
 
 	}
@@ -439,7 +439,7 @@ void plot()
 		if (v3_jetPt->size() < min_Njets) continue;
 		n3++;
 		
-		if((*v3_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*v3_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*v3_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nall3++;
 		if((*v3_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -448,8 +448,8 @@ void plot()
 		nL3++;
 		Fill_NLeadingJetPtM_3();
 		if(n3_btags < 4) continue;
-		nb3++;
-		Draw_DiJetInvariantMass_3(nh3);
+		//nb3++;
+		Draw_DiJetInvariantMass_3(nb3,nh3);
 		//Fill_bjetPtM_3(nh3);
 
 	}
@@ -471,7 +471,7 @@ void plot()
 		if (vB_jetPt->size() < min_Njets) continue;
 		nB++;
 		
-		if((*vB_jetPt)[3]*1e-3 < defualt_Pt_cut) continue;
+		if((*vB_jetPt)[3]*1e-3 < default_Pt_cut) continue;
 		if((*vB_jetPt)[2]*1e-3 < third_Pt_cut) continue;
 		nallB++;
 		if((*vB_jetPt)[1]*1e-3 < minSubLeadingPt) continue;
@@ -480,8 +480,8 @@ void plot()
 		nLB++;
 		Fill_NLeadingJetPtM_B();
 		if(nB_btags < 4) continue;
-		nbB++;
-		Draw_DiJetInvariantMass_B(nhB);
+		//nbB++;
+		Draw_DiJetInvariantMass_B(nbB,nhB);
 		//Fill_bjetPtM_B(nhB);
 
 	}
@@ -655,6 +655,7 @@ void plot()
 	max_rangePt = g4->GetHistogram()->GetMinimum()*0.4;
 	g4->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);
 	//g4->GetYaxis()->SetRangeUser(500, 7500);
+	
 	//////////////////////////////////////////////////
 	//////////////// writing to pdf //////////////////
 	//////////////////////////////////////////////////
@@ -682,6 +683,11 @@ void plot()
 
 	TFile *f_out = new TFile(root_out_name,"RECREATE");
 	gROOT->ForceStyle(0);
+	g1->Write("g1");
+	g2->Write("g2");
+	g3->Write("g3");
+	g3_->Write("g3_");
+	g4->Write("g4");
 	//TCanvas * CW = new TCanvas("CW","CW",800,800);
 	TCanvas * C = new TCanvas();
 	gStyle->SetOptStat(0);
@@ -825,7 +831,7 @@ void plot()
 	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (nb3*norm_signal3)/std::sqrt(nbB*norm_bckgnd)));
 
 	Ylat -= step;
-	lat.DrawLatex(X1lat, Ylat, "|M_{h1,h2} - 125|  #leq 40");
+	lat.DrawLatex(X1lat, Ylat, Form("|M_{h1,h2} - 125|  #leq %.1f",MassWidth/2));
 	lat.DrawLatex(X2lat, Ylat, Form("%d", nhB));
 	lat.DrawLatex(X3lat, Ylat, Form("%d", nh1));
 	lat.DrawLatex(X4lat, Ylat, Form("%d", nh0));
@@ -838,13 +844,13 @@ void plot()
 	Ylat -= step;
 	lat.DrawLatex(X1lat, Ylat, "S/#sqrt{B}");
 	lat.DrawLatex(X2lat, Ylat, "--");
-	lat.DrawLatex(X3lat, Ylat, Form("%.3f", (nh1*norm_signal1)/std::sqrt(nhB*norm_bckgnd)));
-	lat.DrawLatex(X4lat, Ylat, Form("%.3f", (nh0*norm_signal0)/std::sqrt(nhB*norm_bckgnd)));
-	lat.DrawLatex(X5lat, Ylat, Form("%.3f", (nh_1*norm_signal_1)/std::sqrt(nhB*norm_bckgnd)));
-	lat.DrawLatex(X6lat, Ylat, Form("%.3f", (nh_2*norm_signal_2)/std::sqrt(nhB*norm_bckgnd)));
-	lat.DrawLatex(X7lat, Ylat, Form("%.3f", (nh2*norm_signal2)/std::sqrt(nhB*norm_bckgnd)));
-	lat.DrawLatex(X8lat, Ylat, Form("%.3f", (nh2_5*norm_signal2_5)/std::sqrt(nhB*norm_bckgnd)));
-	lat.DrawLatex(X9lat, Ylat, Form("%.3f", (nh3*norm_signal3)/std::sqrt(nhB*norm_bckgnd)));
+	lat.DrawLatex(X3lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh1*norm_signal1,2)/(nhB*norm_bckgnd))));
+	lat.DrawLatex(X4lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh0*norm_signal0,2)/(nhB*norm_bckgnd))));
+	lat.DrawLatex(X5lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh_1*norm_signal_1,2)/(nhB*norm_bckgnd))));
+	lat.DrawLatex(X6lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh_2*norm_signal_2,2)/(nhB*norm_bckgnd))));
+	lat.DrawLatex(X7lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh2*norm_signal2,2)/(nhB*norm_bckgnd))));
+	lat.DrawLatex(X8lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh2_5*norm_signal2_5,2)/(nhB*norm_bckgnd))));
+	lat.DrawLatex(X9lat, Ylat, Form("%.3f", std::sqrt(std::pow(nh3*norm_signal3,2)/(nhB*norm_bckgnd))));
 	
 	Ylat -= step;
 	lat.DrawLatex(X1lat, Ylat, "S/B");
@@ -857,7 +863,7 @@ void plot()
 	lat.DrawLatex(X8lat, Ylat, Form("%.3e", (nh2_5*norm_signal2_5)/(nhB*norm_bckgnd)));
 	lat.DrawLatex(X9lat, Ylat, Form("%.3e", (nh3*norm_signal3)/(nhB*norm_bckgnd)));
 	C->Print(out_file_open,"pdf");
-	//C->Print("./analysis_plots/tex/1.tex");
+	C->Print("./analysis_plots/tex/1.tex");
 	C->Write("c1");
 
 	//! page2
@@ -2137,25 +2143,39 @@ void plot()
 	//gStyle->SetPalette(kColorPrintableOnGrey);
 	//gStyle->SetPalette(kTemperatureMap);
 	gStyle->SetPalette(kCMYK);
-	b1b2_b3b4_1->SetMaximum(1100.);
-	b1b3_b2b4_1->SetMaximum(1100.);
-	b1b4_b2b3_1->SetMaximum(1100.);
+	gPad->Modified();
+	gPad->Update();
+	b1b2_b3b4_1->SetMaximum(850.);
+	b1b3_b2b4_1->SetMaximum(850.);
+	b1b4_b2b3_1->SetMaximum(850.);
 	C->cd(2);
 	b1b2_b3b4_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c28a");
 	C->cd(5);
 	b1b3_b2b4_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c28b");
 	C->cd(8);
 	b1b4_b2b3_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c28c");
 
-	b1b2_b3b4_B->SetMaximum(45.);
-	b1b3_b2b4_B->SetMaximum(45.);
-	b1b4_b2b3_B->SetMaximum(45.);
+	b1b2_b3b4_B->SetMaximum(35.);
+	b1b3_b2b4_B->SetMaximum(35.);
+	b1b4_b2b3_B->SetMaximum(35.);
 	C->cd(3);
 	b1b2_b3b4_B->Draw("colz");
+	gPad->Update();
+	gPad->Write("c28d");
 	C->cd(6);
 	b1b3_b2b4_B->Draw("colz");
+	gPad->Update();
+	gPad->Write("c28e");
 	C->cd(9);
 	b1b4_b2b3_B->Draw("colz");
+	gPad->Update();
+	gPad->Write("c28f");
 	C->cd(1);
 	gPad->SetLogy();
 	dM_b1b2_b3b4_1->Draw("hist");
@@ -2636,18 +2656,232 @@ void plot()
 	g3->Draw("ACPe");
 	gPad->Write("c44c");
 	C->cd(4);
-	max_rangeM = g4->GetHistogram()->GetMaximum()*1.3;
-	max_rangePt = g3->GetHistogram()->GetMinimum()*0.4;
-	g4->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);	
 	//g4->GetYaxis()->SetRangeUser(25, 9500);
 	g4->Draw("ACPe");
 	g3_->Draw("CPe");
 	g3->Draw("CPe");
 	gPad->SetLogy();
+	max_rangeM = g4->GetHistogram()->GetMaximum()*1.3;
+	max_rangePt = g4->GetHistogram()->GetMinimum()*0.1;
+	g4->GetYaxis()->SetRangeUser(max_rangePt, max_rangeM);	
 	gPad->Write("c44d");
 	C->Print(out_file_,"pdf");
 
 	//! page45
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	bLPt_2->GetXaxis()->SetTitle("p_{T, b1} [GeV/c]");
+	max_rangePt = bLPt_2->GetMaximum() * 1.3;
+	bLPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	bLPt_2->Draw("hist");
+	bLPt3->Draw("hist same");
+	bLPt1->Draw("hist same");
+	bLPt2->Draw("hist same");
+	bLPt2_5->Draw("hist same");
+	bLPt_1->Draw("hist same");
+	bLPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c45a");
+	
+	C->cd(2);
+	gPad->SetLogy();
+	b2LPt_2->GetXaxis()->SetTitle("p_{T, b2} [GeV/c]");
+	max_rangePt = b2LPt_2->GetMaximum() * 1.3;
+	b2LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	b2LPt_2->Draw("hist");
+	b2LPt3->Draw("hist same");
+	b2LPt1->Draw("hist same");
+	b2LPt2->Draw("hist same");
+	b2LPt2_5->Draw("hist same");
+	b2LPt_1->Draw("hist same");
+	b2LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c45b");
+	
+	C->cd(3);
+	gPad->SetLogy();
+	b3LPt_2->GetXaxis()->SetTitle("p_{T, b3} [GeV/c]");
+	b3LPt_2->GetXaxis()->SetRangeUser(0,250);
+	max_rangePt = b3LPt_2->GetMaximum() * 1.3;
+	b3LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	b3LPt_2->Draw("hist");
+	b3LPt3->Draw("hist same");
+	b3LPt1->Draw("hist same");
+	b3LPt2->Draw("hist same");
+	b3LPt2_5->Draw("hist same");
+	b3LPt_1->Draw("hist same");
+	b3LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c45c");
+	
+	C->cd(4);
+	gPad->SetLogy();
+	b4LPt_2->GetXaxis()->SetTitle("p_{T, b4} [GeV/c]");
+	b4LPt_2->SetTitle("P_{t} of 4th leading b quark");
+	b4LPt_2->GetXaxis()->SetRangeUser(0,150);
+	max_rangePt = b4LPt_2->GetMaximum() * 1.3;
+	b4LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	
+	b4LPt_2->Draw("hist");
+	b4LPt1->Draw("hist same");
+	b4LPt2->Draw("hist same");
+	b4LPt2_5->Draw("hist same");
+	b4LPt3->Draw("hist same");
+	b4LPt_1->Draw("hist same");
+	b4LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c45d");
+	C->Print(out_file_,"pdf");
+
+	//! page46
+	//! b-jet leading for various lambda, 
+	//! b-jet sub leading for various lambda, 
+	//! b-jet 3rd leading for various lambda, 
+	//! b-jet 4th leading for various lambda,
+	//Set_bquark_lambdaColors(); 
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	bjetLPt_2->GetXaxis()->SetTitle("p_{T, bJ1} [GeV/c]");
+	max_rangePt = bjetLPt_2->GetMaximum() * 1.3;
+	bjetLPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	bjetLPt_2->Draw("hist");
+	bjetLPt2->Draw("hist same");
+	bjetLPt2_5->Draw("hist same");
+	bjetLPt3->Draw("hist same");
+	bjetLPt_1->Draw("hist same");
+	bjetLPt1->Draw("hist same");
+	bjetLPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c46a");
+	
+	C->cd(2);
+	gPad->SetLogy();
+	bjet2LPt_2->GetXaxis()->SetTitle("p_{T, bJ2} [GeV/c]");
+	max_rangePt = bjet2LPt_2->GetMaximum() * 1.3;
+	bjet2LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	bjet2LPt_2->Draw("hist");
+	bjet2LPt2->Draw("hist same");
+	bjet2LPt2_5->Draw("hist same");
+	bjet2LPt3->Draw("hist same");
+	bjet2LPt_1->Draw("hist same");
+	bjet2LPt1->Draw("hist same");
+	bjet2LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c46b");
+	
+	C->cd(3);
+	gPad->SetLogy();
+	bjet3LPt_2->GetXaxis()->SetTitle("p_{T, bJ3} [GeV/c]");
+	bjet3LPt_2->GetXaxis()->SetRangeUser(0,250);
+	max_rangePt = bjet3LPt_2->GetMaximum() * 1.3;
+	bjet3LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	bjet3LPt_2->Draw("hist");
+	bjet3LPt3->Draw("hist same");
+	bjet3LPt2->Draw("hist same");
+	bjet3LPt2_5->Draw("hist same");
+	bjet3LPt_1->Draw("hist same");
+	bjet3LPt1->Draw("hist same");
+	bjet3LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c46c");
+	
+	C->cd(4);
+	gPad->SetLogy();
+	bjet4LPt_2->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
+	bjet4LPt_2->GetXaxis()->SetRangeUser(0,150);
+	max_rangePt = bjet4LPt_2->GetMaximum() * 1.3;
+	bjet4LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	
+	bjet4LPt_2->Draw("hist");
+	bjet4LPt2->Draw("hist same");
+	bjet4LPt2_5->Draw("hist same");
+	bjet4LPt3->Draw("hist same");
+	bjet4LPt_1->Draw("hist same");
+	bjet4LPt1->Draw("hist same");
+	bjet4LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c46d");
+	C->Print(out_file_,"pdf");
+	
+	//! page47
+	//! jet leading for various lambda, 
+	//! jet sub leading for various lambda, 
+	//! jet 3rd leading for various lambda, 
+	//! jet 4th leading for various lambda,
+	//Set_bquark_lambdaColors(); 
+	C->Clear();
+	C->Divide(2,2);
+	C->cd(1);
+	gPad->SetLogy();
+	max_rangePt = jetLPt_2->GetMaximum() * 1.3;
+	jetLPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	jetLPt_2->GetXaxis()->SetTitle("p_{T, J1} [GeV/c]");
+	jetLPt_2->Draw("hist ");
+	jetLPt2->Draw("hist same");
+	jetLPt2_5->Draw("hist same");
+	jetLPt3->Draw("hist same");
+	jetLPt_1->Draw("hist same");
+	jetLPt1->Draw("hist same");
+	jetLPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c47a");
+	
+	C->cd(2);
+	gPad->SetLogy();
+	jet2LPt_2->GetXaxis()->SetTitle("p_{T, J2} [GeV/c]");
+	max_rangePt = jet2LPt_2->GetMaximum() * 1.3;
+	jet2LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	jet2LPt_2->Draw("hist");
+	jet2LPt2->Draw("hist same");
+	jet2LPt2_5->Draw("hist same");
+	jet2LPt3->Draw("hist same");
+	jet2LPt_1->Draw("hist same");
+	jet2LPt1->Draw("hist same");
+	jet2LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c47b");
+
+	
+	C->cd(3);
+	gPad->SetLogy();
+	jet3LPt_2->GetXaxis()->SetTitle("p_{T, J3} [GeV/c]");
+	jet3LPt_2->GetXaxis()->SetRangeUser(0,250);
+	max_rangePt = jet3LPt_2->GetMaximum() * 1.3;
+	jet3LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+
+	jet3LPt_2->Draw("hist");
+	jet3LPt3->Draw("hist same");
+	jet3LPt2->Draw("hist same");
+	jet3LPt2_5->Draw("hist same");
+	jet3LPt_1->Draw("hist same");
+	jet3LPt1->Draw("hist same");
+	jet3LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c47c");
+	
+	C->cd(4);
+	gPad->SetLogy();
+	jet4LPt_2->GetXaxis()->SetTitle("p_{T, J4} [GeV/c]");
+	jet4LPt_2->GetXaxis()->SetRangeUser(0,150);
+	max_rangePt = jet4LPt_2->GetMaximum() * 1.3;
+	jet4LPt_2->GetYaxis()->SetRangeUser(1e2,max_rangePt);
+	
+	jet4LPt_2->Draw("hist");
+	jet4LPt2->Draw("hist same");
+	jet4LPt2_5->Draw("hist same");
+	jet4LPt3->Draw("hist same");
+	jet4LPt_1->Draw("hist same");
+	jet4LPt1->Draw("hist same");
+	jet4LPt0->Draw("hist same");
+	//leg_higgs->Draw();
+	gPad->Write("c47d");
+	C->Print(out_file_,"pdf");
+	
+	//! page48
 	C->Clear();
 	C->Divide(4,2);
 	C->cd(1);

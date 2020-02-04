@@ -193,6 +193,10 @@ void SetXaxisTITLE_SIZE()
 	dM_b1b2_b3b4_1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b3_b2b4_1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b4_b2b3_1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
+	
+	b1b2_b3b4_1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b3_b2b4_1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b4_b2b3_1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 
 	// invariant mass of a pair of b's, ctr = 0.0
 	M_b1b2_0->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
@@ -284,6 +288,10 @@ void SetXaxisTITLE_SIZE()
 	dM_b1b2_b3b4_B->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b3_b2b4_B->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b4_b2b3_B->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
+	
+	b1b2_b3b4_B->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b3_b2b4_B->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b4_b2b3_B->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 
 	//jet leading M
 	jetLM1->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
@@ -732,6 +740,10 @@ void SetYaxisTITLE_SIZE()
 	dM_b1b2_b3b4_1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b3_b2b4_1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b4_b2b3_1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
+	
+	b1b2_b3b4_1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b3_b2b4_1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b4_b2b3_1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 
 	// invariant mass of a pair of b's, ctr = 0.0
 	M_b1b2_0->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
@@ -823,6 +835,10 @@ void SetYaxisTITLE_SIZE()
 	dM_b1b2_b3b4_B->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b3_b2b4_B->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 	dM_b1b4_b2b3_B->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
+	
+	b1b2_b3b4_B->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b3_b2b4_B->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
+	b1b4_b2b3_B->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 
 	//jet leading M
 	jetLM1->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
@@ -1271,6 +1287,10 @@ void CenterXaxisTITLE()
 	dM_b1b3_b2b4_1->GetXaxis()->CenterTitle();
 	dM_b1b4_b2b3_1->GetXaxis()->CenterTitle();
 
+	b1b2_b3b4_1->GetXaxis()->CenterTitle();
+	b1b3_b2b4_1->GetXaxis()->CenterTitle();
+	b1b4_b2b3_1->GetXaxis()->CenterTitle();
+
 	// invariant mass of a pair of b's, ctr = 0.0
 	M_b1b2_0->GetXaxis()->CenterTitle();
 	M_b1b3_0->GetXaxis()->CenterTitle();
@@ -1361,6 +1381,10 @@ void CenterXaxisTITLE()
 	dM_b1b2_b3b4_B->GetXaxis()->CenterTitle();
 	dM_b1b3_b2b4_B->GetXaxis()->CenterTitle();
 	dM_b1b4_b2b3_B->GetXaxis()->CenterTitle();
+
+	b1b2_b3b4_B->GetXaxis()->CenterTitle();
+	b1b3_b2b4_B->GetXaxis()->CenterTitle();
+	b1b4_b2b3_B->GetXaxis()->CenterTitle();
 
 	//jet leading M
 	jetLM1->GetXaxis()->CenterTitle();
@@ -1809,6 +1833,10 @@ void CenterYaxisTITLE()
 	dM_b1b3_b2b4_1->GetYaxis()->CenterTitle();
 	dM_b1b4_b2b3_1->GetYaxis()->CenterTitle();
 
+	b1b2_b3b4_1->GetYaxis()->CenterTitle();
+	b1b3_b2b4_1->GetYaxis()->CenterTitle();
+	b1b4_b2b3_1->GetYaxis()->CenterTitle();
+
 	// invariant mass of a pair of b's, ctr = 0.0
 	M_b1b2_0->GetYaxis()->CenterTitle();
 	M_b1b3_0->GetYaxis()->CenterTitle();
@@ -1899,6 +1927,10 @@ void CenterYaxisTITLE()
 	dM_b1b2_b3b4_B->GetYaxis()->CenterTitle();
 	dM_b1b3_b2b4_B->GetYaxis()->CenterTitle();
 	dM_b1b4_b2b3_B->GetYaxis()->CenterTitle();
+
+	b1b2_b3b4_B->GetYaxis()->CenterTitle();
+	b1b3_b2b4_B->GetYaxis()->CenterTitle();
+	b1b4_b2b3_B->GetYaxis()->CenterTitle();
 
 	//jet leading M
 	jetLM1->GetYaxis()->CenterTitle();

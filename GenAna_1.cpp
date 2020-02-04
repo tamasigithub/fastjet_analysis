@@ -129,11 +129,11 @@ void fetch_TTrees_1()
 }
 void Set_higgsPtProps_1()
 {
-	int nbins = 50;
+	int nbins = 60;
 	float ptmin = 0;
-	float ptmax = 500;
+	float ptmax = 600;
 	float Mmin = 200;
-	float Mmax = 800;
+	float Mmax = 1400;
 	//! truth leading and sub leading higgs Pt
 	higgsPt1  = new TH1D("higgsPt1",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	higgsPt1->SetLineColor(kRed);
@@ -199,7 +199,7 @@ void Set_FinalJetPtProps_1()
 }
 void Set_jetPtProps_1()
 {
-	int nbins = 50;
+	int nbins = 60;
 	float ptmin = 0;
 	float ptmax = 300;
 	float dptmin = 0;
@@ -249,9 +249,9 @@ void Set_jetPtProps_1()
 	M_b3b4_1 = new TH1D("M_b3b4_1", "Invariant mass of the higgs candidates; m_{higgs candidate, 34} [GeV];", nbins, ptmin, ptmax);
 	//scatter plot of the jet pairs
 	//only 3 combination of jet pairs possible
-	b1b2_b3b4_1 = new TH2D("b1b2_b3b4_1", "m_{H cand., 34} Vs m_{H cand., 12}; m_{H cand., 12} [GeV];m_{H cand., 34} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
-	b1b3_b2b4_1 = new TH2D("b1b3_b2b4_1", "m_{H cand., 24} Vs m_{H cand., 13}; m_{H cand., 13} [GeV];m_{H cand., 24} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
-	b1b4_b2b3_1 = new TH2D("b1b4_b2b3_1", "m_{H cand., 23} Vs m_{H cand., 14}; m_{H cand., 14} [GeV];m_{H cand., 23} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	b1b2_b3b4_1 = new TH2D("b1b2_b3b4_1", "M_{H cand., 34} Vs m_{H cand., 12}; M_{H cand., 12} [GeV];M_{H cand., 34} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	b1b3_b2b4_1 = new TH2D("b1b3_b2b4_1", "M_{H cand., 24} Vs m_{H cand., 13}; M_{H cand., 13} [GeV];M_{H cand., 24} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	b1b4_b2b3_1 = new TH2D("b1b4_b2b3_1", "M_{H cand., 23} Vs m_{H cand., 14}; M_{H cand., 14} [GeV];M_{H cand., 23} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
 	//relative difference of the jet pairs
 	//only 3 combination of jet pairs possible
 	dM_b1b2_b3b4_1 = new TH1D("dM_b1b2_b3b4_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1234} [GeV];", nbins, dptmin, dptmax);
@@ -497,7 +497,7 @@ void Fill_bjetPtM_1(int &nhiggs)
 
 	return;
 }
-void Draw_DiJetInvariantMass_1(int &nhiggs)
+void Draw_DiJetInvariantMass_1(int &nb1, int &nhiggs)
 {
 	v1_bjetPt.clear();
 	v1_bjetEta.clear();
@@ -516,19 +516,23 @@ void Draw_DiJetInvariantMass_1(int &nhiggs)
 	//! b jet's
 	if(v1_bjetPt.size() > 3)
 	{
-		bJ1_1.SetPtEtaPhiM(v1_bjetPt[0], v1_bjetEta[0], v1_bjetPhi[0], v1_bjetM[0]);
-		bJ2_1.SetPtEtaPhiM(v1_bjetPt[1], v1_bjetEta[1], v1_bjetPhi[1], v1_bjetM[1]);
-		bJ3_1.SetPtEtaPhiM(v1_bjetPt[2], v1_bjetEta[2], v1_bjetPhi[2], v1_bjetM[2]);
-		bJ4_1.SetPtEtaPhiM(v1_bjetPt[3], v1_bjetEta[3], v1_bjetPhi[3], v1_bjetM[3]);
+		if(v1_bjetPt[0]*1e-3 >= minLeadingPt  && v1_bjetPt[1]*1e-3 >= minSubLeadingPt  && v1_bjetPt[2]*1e-3 >= third_Pt_cut && v1_bjetPt[3]*1e-3 >= default_Pt_cut )
+		{
+			nb1++;
+			bJ1_1.SetPtEtaPhiM(v1_bjetPt[0], v1_bjetEta[0], v1_bjetPhi[0], v1_bjetM[0]);
+			bJ2_1.SetPtEtaPhiM(v1_bjetPt[1], v1_bjetEta[1], v1_bjetPhi[1], v1_bjetM[1]);
+			bJ3_1.SetPtEtaPhiM(v1_bjetPt[2], v1_bjetEta[2], v1_bjetPhi[2], v1_bjetM[2]);
+			bJ4_1.SetPtEtaPhiM(v1_bjetPt[3], v1_bjetEta[3], v1_bjetPhi[3], v1_bjetM[3]);
 
-		bJ1bJ2_1 = bJ1_1 + bJ2_1;
-		bJ1bJ3_1 = bJ1_1 + bJ3_1;
-		bJ1bJ4_1 = bJ1_1 + bJ4_1;
-		bJ2bJ3_1 = bJ2_1 + bJ3_1;
-		bJ2bJ4_1 = bJ2_1 + bJ4_1;
-		bJ3bJ4_1 = bJ3_1 + bJ4_1;
+			bJ1bJ2_1 = bJ1_1 + bJ2_1;
+			bJ1bJ3_1 = bJ1_1 + bJ3_1;
+			bJ1bJ4_1 = bJ1_1 + bJ4_1;
+			bJ2bJ3_1 = bJ2_1 + bJ3_1;
+			bJ2bJ4_1 = bJ2_1 + bJ4_1;
+			bJ3bJ4_1 = bJ3_1 + bJ4_1;
 
-		Fill_bjetPtM_1(nhiggs);
+			Fill_bjetPtM_1(nhiggs);
+		}
 	}
 	return;
 }

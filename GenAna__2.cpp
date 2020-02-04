@@ -126,11 +126,11 @@ void fetch_TTrees__2()
 }
 void Set_higgsPtProps__2()
 {
-	int nbins = 50;
+	int nbins = 60;
 	float ptmin = 0;
-	float ptmax = 500;
+	float ptmax = 600;
 	float Mmin = 200;
-	float Mmax = 800;
+	float Mmax = 1400;
 	//! truth leading and sub leading higgs Pt
 	higgsPt_2  = new TH1D("higgsPt_2",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	higgsPt_2->SetLineColor(kGreen);
@@ -196,7 +196,7 @@ void Set_FinalJetPtProps__2()
 }
 void Set_jetPtProps__2()
 {
-	int nbins = 50;
+	int nbins = 60;
 	float ptmin = 0;
 	float ptmax = 300;
 	float dptmin = 0;
@@ -480,7 +480,7 @@ void Fill_bjetPtM__2(int &nhiggs)
 
 	return;
 }
-void Draw_DiJetInvariantMass__2(int &nhiggs)
+void Draw_DiJetInvariantMass__2(int &nb_2, int &nhiggs)
 {
 	v_2_bjetPt.clear();
 	v_2_bjetEta.clear();
@@ -499,19 +499,23 @@ void Draw_DiJetInvariantMass__2(int &nhiggs)
 	//! b jet's
 	if(v_2_bjetPt.size() > 3)
 	{
-		bJ1__2.SetPtEtaPhiM(v_2_bjetPt[0], v_2_bjetEta[0], v_2_bjetPhi[0], v_2_bjetM[0]);
-		bJ2__2.SetPtEtaPhiM(v_2_bjetPt[1], v_2_bjetEta[1], v_2_bjetPhi[1], v_2_bjetM[1]);
-		bJ3__2.SetPtEtaPhiM(v_2_bjetPt[2], v_2_bjetEta[2], v_2_bjetPhi[2], v_2_bjetM[2]);
-		bJ4__2.SetPtEtaPhiM(v_2_bjetPt[3], v_2_bjetEta[3], v_2_bjetPhi[3], v_2_bjetM[3]);
+		if(v_2_bjetPt[0]*1e-3 >= minLeadingPt  && v_2_bjetPt[1]*1e-3 >= minSubLeadingPt  && v_2_bjetPt[2]*1e-3 >= third_Pt_cut && v_2_bjetPt[3]*1e-3 >= default_Pt_cut )
+		{
+			nb_2++;
+			bJ1__2.SetPtEtaPhiM(v_2_bjetPt[0], v_2_bjetEta[0], v_2_bjetPhi[0], v_2_bjetM[0]);
+			bJ2__2.SetPtEtaPhiM(v_2_bjetPt[1], v_2_bjetEta[1], v_2_bjetPhi[1], v_2_bjetM[1]);
+			bJ3__2.SetPtEtaPhiM(v_2_bjetPt[2], v_2_bjetEta[2], v_2_bjetPhi[2], v_2_bjetM[2]);
+			bJ4__2.SetPtEtaPhiM(v_2_bjetPt[3], v_2_bjetEta[3], v_2_bjetPhi[3], v_2_bjetM[3]);
 
-		bJ1bJ2__2 = bJ1__2 + bJ2__2;
-		bJ1bJ3__2 = bJ1__2 + bJ3__2;
-		bJ1bJ4__2 = bJ1__2 + bJ4__2;
-		bJ2bJ3__2 = bJ2__2 + bJ3__2;
-		bJ2bJ4__2 = bJ2__2 + bJ4__2;
-		bJ3bJ4__2 = bJ3__2 + bJ4__2;
+			bJ1bJ2__2 = bJ1__2 + bJ2__2;
+			bJ1bJ3__2 = bJ1__2 + bJ3__2;
+			bJ1bJ4__2 = bJ1__2 + bJ4__2;
+			bJ2bJ3__2 = bJ2__2 + bJ3__2;
+			bJ2bJ4__2 = bJ2__2 + bJ4__2;
+			bJ3bJ4__2 = bJ3__2 + bJ4__2;
 
-		Fill_bjetPtM__2(nhiggs);
+			Fill_bjetPtM__2(nhiggs);
+		}
 	}
 	return;
 }

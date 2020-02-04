@@ -9,7 +9,7 @@ const char *in_path = "./analysis_plots/root";
 //const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
 //const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4.root";
 //void padToTex(const char *pad_name)
-void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left = false, const char *input_file = "GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root")
+void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left = false, const char *input_file = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root")
 {
 
 	char input_root_file[1023];
@@ -36,7 +36,8 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left 
 		//! default - down right
 		legend->SetPad(0.3,0.02,0.85,0.47);
 		//! down left
-		if(!up && left)legend->SetPad(-0.15,0.02,0.40,0.47);
+		//if(!up && left)legend->SetPad(-0.15,0.02,0.40,0.47);
+		if(!up && left)legend->SetPad(0.0,0.02,0.55,0.47);
 		//! up left
 		if(up && left)legend->SetPad(-0.15,0.4,0.40,0.85);
 		//! up right
@@ -69,14 +70,14 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left 
 	newpad->cd();
 
 	//TLegend *cms_E = new TLegend(0.35,0.91,0.65,0.96);
-	TLegend *cms_E = new TLegend(0.55,0.79,0.9,0.92);
+	TLegend *cms_E = new TLegend(0.4,0.79,0.9,0.92);
 	cms_E->SetFillStyle(0);
 	cms_E->SetBorderSize(0);
-	cms_E->AddEntry((TObject*)0, "#sqrt{s} = 100 TeV", "");
+	cms_E->AddEntry((TObject*)0, "#sqrt{s} = 100 TeV, #mathcal{L} = 30 ab^{-1}", "");
 	cms_E->SetTextSize(0.04);
         cms_E->Draw();	
 	c->Update();
-	TLegend *signal = new TLegend(0.58,0.72,0.9,0.92);
+	TLegend *signal = new TLegend(0.55,0.72,0.87,0.92);
 	signal->SetFillStyle(0);
 	signal->SetBorderSize(0);
 	signal->AddEntry((TObject*)0, "HH #rightarrow b#bar{b}b#bar{b}", "");
@@ -86,6 +87,7 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left 
 
 	if(which_legend == 0)
 	{
+		gStyle->SetPalette(kCMYK);
 		TLegend *ana_txt = new TLegend(0.5,0.77,0.94,0.79);
 		ana_txt->SetFillStyle(0);
 		ana_txt->SetBorderSize(0);

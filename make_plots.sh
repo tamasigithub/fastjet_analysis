@@ -59,6 +59,26 @@ root -l padToTex.cpp -e 'pad("c43b", 0);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c44d", 3);'<<EOF
 EOF
+root -l padToTex.cpp -e 'pad("c46a", 1, false, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c46b", 1, false, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c46c", 1, false, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c46d", 1, false, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c28a", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c28b", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c28c", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c28d", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c28e", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c28f", 0);'<<EOF
+EOF
 ./rootTex2pdf ./analysis_plots/tex/*.tex
 echo "TEX files modified DONE!"
 
@@ -68,15 +88,40 @@ sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c8_d.tex
 sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c11b.tex
 sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c14b.tex
 sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c17b.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c3_a.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c3_b.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c4_a.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c4_b.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_a.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_b.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_c.tex
-sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_d.tex
-
+sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c28d.tex
+sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c28e.tex
+sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c28f.tex
+### to comment out a line with a pattern
+sed -i -e '/after analysis cuts/s/^/%/g' ./c28a.tex
+sed -i -e '/after analysis cuts/s/^/%/g' ./c28b.tex
+sed -i -e '/after analysis cuts/s/^/%/g' ./c28c.tex
+sed -i -e '/after analysis cuts/s/^/%/g' ./c28d.tex
+sed -i -e '/after analysis cuts/s/^/%/g' ./c28e.tex
+sed -i -e '/after analysis cuts/s/^/%/g' ./c28f.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c3_a.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c3_b.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c4_a.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c4_b.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_a.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_b.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_c.tex
+#sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c5_d.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c3_a.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c3_b.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c4_a.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c4_b.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c5_a.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c5_b.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c5_c.tex
+sed -i -e 's/ \\rightarrow b\\bar{b}b\\bar{b}/,\~ggF/g' ./c5_d.tex
+#
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c8_a.tex
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c8_c.tex
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c11a.tex
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c14a.tex
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c17a.tex
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c31a.tex
+sed -i -e 's/b\\bar{b}b\\bar{b}/b\\bar{b}b\\bar{b},\\text{SM}/g' ./c31b.tex
 pdflatex c3_a.tex
 pdflatex c3_b.tex
 pdflatex c4_a.tex
@@ -106,5 +151,17 @@ pdflatex c41d.tex
 pdflatex c43a.tex
 pdflatex c43b.tex
 pdflatex c44d.tex
+pdflatex c46a.tex
+pdflatex c46b.tex
+pdflatex c46c.tex
+pdflatex c46d.tex
+pdflatex c28a.tex
+pdflatex c28b.tex
+pdflatex c28c.tex
+pdflatex c28d.tex
+pdflatex c28e.tex
+pdflatex c28f.tex
+rm ./*.log
+rm ./*.aux
 cd ${CURRENT_DIR}
 echo 'DONE!'
