@@ -22,11 +22,12 @@
 
 //! input root file
 TFile *f = nullptr;
-const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.root";
+//const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
 
 const char *txt_path = "./analysis_plots/txt_files";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "Sensitivity_studyVsk_lambda_corrected_incl4bProb";
+const char *output_file_name = "Sensitivity_studyVsk_lambda_corrected_incl4bProbMH30";
 char out_root_file_name[1023];
 
 TCanvas *c1 = nullptr;
@@ -51,7 +52,7 @@ const double ggFhhXsec_2  = 6172.40;
 const double ggFhhXsec2   = 625.59;
 const double ggFhhXsec2_5 = 523.907;
 const double ggFhhXsec3   = 553.485;
-const double four_b_Prob  = std::pow(0.58,4);
+const double four_b_Prob  = std::pow(0.58,2);
 int tot_MCevents = 5e5;
 
 double norm_signal1, norm_signal0, norm_signal_1, norm_signal_2, norm_signal2, norm_signal2_5, norm_signal3;
@@ -156,7 +157,7 @@ TGraph *g80  = nullptr;
 TGraph *g90  = nullptr;
 TGraph *g100 = nullptr;
 ////////////////////////////////////
-Float_t LINE_WIDTH = 3;
+Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
 Float_t MARKER_SIZE = 1.2;
 Float_t AXISTITLE_OFFSET = 0.8;
@@ -169,4 +170,6 @@ Float_t BORDER_SIZE = 0;
 Float_t TEXT_ALIGN = 32;
 Float_t TEXT_ALIGN_1 = 12;
 Float_t TEXT_FONT = 62;
-Float_t TEXT_SIZE = 0.09;
+Float_t TEXT_SIZE = 0.04;
+Float_t Xl1 = 0.16, Yu1 = 0.6, Xl2 = 0.36, Yu2 = 0.89;
+Float_t Xr1 = 0.65, Ym1 = 0.5, Xr2 = 0.85, Ym2 = 0.76;

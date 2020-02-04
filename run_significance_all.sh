@@ -29,62 +29,30 @@ root -b -l Significance_Pt_3.cpp -e 'pdf();'<<EOF
 EOF
 echo 'Done Significance for ctr = 3.0'
 #
-##
-#root -l padToTex.cpp -e 'pad("c3_a", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c3_b", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c4_a", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c4_b", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c5_a", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c5_b", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c5_c", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c5_d", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c8_a", 1);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c8_b", 1);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c31a", 1);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c31b", 1);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c41b", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c41d", 0);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c43a", 1);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c43b", 1);'<<EOF
-#EOF
-#root -l padToTex.cpp -e 'pad("c44d", 1);'<<EOF
-#EOF
-#./rootTex2pdf ./analysis_plots/tex/*.tex
-#echo "TEX files modified DONE!"
+root -b -l Significance_summary.cpp -e 'plot();'<<EOF
+EOF
+echo 'Done Significance Summary'
+echo 'NOW RUNNING SENSITIVITY MACRO'
 #
-#cd ${CURRENT_DIR}/analysis_plots/tex/
-#pdflatex c3_a.tex
-#pdflatex c3_b.tex
-#pdflatex c4_a.tex
-#pdflatex c4_b.tex
-#pdflatex c5_a.tex
-#pdflatex c5_b.tex
-#pdflatex c5_c.tex
-#pdflatex c5_d.tex
-#pdflatex c8_a.tex
-#pdflatex c8_b.tex
-#pdflatex c31a.tex
-#pdflatex c31b.tex
-#pdflatex c41b.tex
-#pdflatex c41d.tex
-#pdflatex c43a.tex
-#pdflatex c43b.tex
-#pdflatex c44d.tex
-#cd ${CURRENT_DIR}
+root -b -l Sensitivity_lambda.cpp -e 'final_plot();'<<EOF
+EOF
+echo 'Done Sensitivity'
+#
+##
+./rootTex2pdf ./analysis_plots/tex/*.tex
+echo "TEX files modified DONE!"
+#
+cd ${CURRENT_DIR}/analysis_plots/tex/
+pdflatex mgSB.tex
+pdflatex mgZsum.tex
+pdflatex mgZiZtot.tex
+pdflatex gZatpT.tex
+pdflatex gSBatpT.tex
+pdflatex Sens_pTthre.tex
+pdflatex sens_ithBincontri.tex
+mv ./*.pdf ./pdf/Sensitivity_Summary/
+rm ./*.log
+rm ./*.aux
+cd ${CURRENT_DIR}
 echo 'DONE!'
 #vlc ~/Videos/damodarashtaka.mp4

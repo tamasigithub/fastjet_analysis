@@ -24,15 +24,15 @@ double max_rangeM=0;
 double max_rangePt=0;
 
 const int min_Njets = 4;
-const double defualt_Pt_cut  = 20.0;//GeV 
+const double default_Pt_cut  = 20.0;//GeV 
 const double third_Pt_cut    = 35.0;//GeV 
 const double minSubLeadingPt = 40.0;//GeV
 const double minLeadingPt    = 55.0;//GeV
 const double HiggsMass       = 125.0;//GeV
-const double MassWidth       = 80.0;//GeV
+const double MassWidth       = 60.0;//GeV
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
-const double four_b_Prob  = std::pow(0.58,4);
+const double four_b_Prob  = std::pow(0.58,2);
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3 
 const double ggFhhXsec1   = 12.24e2 * four_b_Prob;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
 const double ggFhhXsec0   = 2346.13 * four_b_Prob;
@@ -56,9 +56,9 @@ double k_lambda[7] = {-2.0, -1.0, 0.0, 1.0, 2.0, 2.5, 3.0};
 
 double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec2, ggFhhXsec2_5, ggFhhXsec3};
 
-const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProb";
+const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30";
 
 //const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr1.0_q300MeV_6.0_allR0.4.root"; 
 //const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr0.0_q300MeV_6.0_allR0.4.root"; 

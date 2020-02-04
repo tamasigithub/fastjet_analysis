@@ -1,4 +1,4 @@
-//#include "Sensitivity_lambda.h"
+#include "Legends.cpp"
 #include "Sensitivity_fit.cpp"
 void calculate_normalization()
 {
@@ -182,7 +182,7 @@ void Set_graphProps()
 	min_range = g20->GetHistogram()->GetMinimum()*0.4;
 	g20->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c20");
+	gPad->Write("c20");
 	c1->Print(out_file_open,"pdf");
 
 	//TCanvas *c2 = new TCanvas();
@@ -206,7 +206,7 @@ void Set_graphProps()
 	min_range = g30->GetHistogram()->GetMinimum()*0.4;
 	g30->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c30");
+	gPad->Write("c30");
 	c1->Print(out_file_,"pdf");
 
 	//TCanvas *c3 = new TCanvas();
@@ -230,7 +230,7 @@ void Set_graphProps()
 	min_range = g40->GetHistogram()->GetMinimum()*0.4;
 	g40->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c40");
+	gPad->Write("c40");
 	c1->Print(out_file_,"pdf");
 
 	//TCanvas *c4 = new TCanvas();
@@ -254,7 +254,7 @@ void Set_graphProps()
 	min_range = g50->GetHistogram()->GetMinimum()*0.4;
 	g50->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c50");
+	gPad->Write("c50");
 	c1->Print(out_file_,"pdf");
 
 	//TCanvas *c5 = new TCanvas();
@@ -278,7 +278,7 @@ void Set_graphProps()
 	min_range = g60->GetHistogram()->GetMinimum()*0.4;
 	g60->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c60");
+	gPad->Write("c60");
 	c1->Print(out_file_,"pdf");
 
 	//TCanvas *c6 = new TCanvas();
@@ -302,7 +302,7 @@ void Set_graphProps()
 	min_range = g70->GetHistogram()->GetMinimum()*0.4;
 	g70->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c70");
+	gPad->Write("c70");
 	c1->Print(out_file_,"pdf");
 
 	//TCanvas *c7 = new TCanvas();
@@ -326,7 +326,7 @@ void Set_graphProps()
 	min_range = g80->GetHistogram()->GetMinimum()*0.4;
 	g80->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c80");
+	gPad->Write("c80");
 	c1->Print(out_file_,"pdf");
 	
 	//TCanvas *c8 = new TCanvas();
@@ -350,7 +350,7 @@ void Set_graphProps()
 	min_range = g90->GetHistogram()->GetMinimum()*0.4;
 	g90->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c90");
+	gPad->Write("c90");
 	c1->Print(out_file_,"pdf");
 
 	//TCanvas *c9 = new TCanvas();
@@ -374,7 +374,7 @@ void Set_graphProps()
 	min_range = g100->GetHistogram()->GetMinimum()*0.4;
 	g100->GetYaxis()->SetRangeUser(min_range, max_range);
 	c1->Update();
-	c1->Write("c100");
+	gPad->Write("c100");
 	c1->Print(out_file_,"pdf");
 	return;
 }
@@ -539,6 +539,7 @@ void Delete_graphs()
 void final_plot()
 {
 
+	Legends();
 	calculate_normalization();
 
 	//! open the input root file

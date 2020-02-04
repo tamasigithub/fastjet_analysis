@@ -103,8 +103,8 @@ void plot_ithBinSensitivity2_Vs_klambda()
 
 		mygraph->GetXaxis()->SetTitle("k_{#lambda}");
 		mygraph->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-		if(i == nGraphPts -1) mygraph->GetYaxis()->SetTitle(Form("sensitivity (p_{T} #in {%d,%d})", (i+2)*10, (i+2)*50));
-		else mygraph->GetYaxis()->SetTitle(Form("sensitivity (p_{T} #in {%d,%d})", (i+2)*10, (i+3)*10));
+		if(i == nGraphPts -1) mygraph->GetYaxis()->SetTitle(Form("sens. (p_{T} #in {%d,%d})", (i+2)*10, (i+2)*50));
+		else mygraph->GetYaxis()->SetTitle(Form("sens. (p_{T} #in {%d,%d})", (i+2)*10, (i+3)*10));
 		mygraph->GetYaxis()->SetTitleSize(TITLE_SIZE);
 		mygraph->GetXaxis()->SetTitleSize(TITLE_SIZE);
 		mygraph->GetYaxis()->CenterTitle();
@@ -128,12 +128,19 @@ void plot_ithBinSensitivity2_Vs_klambda()
 
 void plot_total_sensitivity_Vs_klambda()
 {
-	TLegend *leg = new TLegend(0.5, 0.2, 0.9, 0.9);
+	TLegend *leg = new TLegend(Xl1, Yu1, Xl2, Yu2);
 	leg->SetFillStyle(FILL_STYLE);
 	leg->SetBorderSize(BORDER_SIZE);
 	leg->SetTextAlign(TEXT_ALIGN);
 	leg->SetTextFont(TEXT_FONT);
 	leg->SetTextSize(TEXT_SIZE);
+	
+	TLegend *legR = new TLegend(Xr1, Ym1, Xr2, Ym2);
+	legR->SetFillStyle(FILL_STYLE);
+	legR->SetBorderSize(BORDER_SIZE);
+	legR->SetTextAlign(TEXT_ALIGN);
+	legR->SetTextFont(TEXT_FONT);
+	legR->SetTextSize(TEXT_SIZE);
 
 	TMultiGraph *mg1 = new TMultiGraph();
 	TMultiGraph *mg2 = new TMultiGraph();
@@ -180,16 +187,16 @@ void plot_total_sensitivity_Vs_klambda()
 		else {gname2.Form("Sens_withPt_klambda_%d", (int)std::abs(lambda[k]));}	
 		TGraph *sens_withPt = new TGraph(nGraphPts,pT_threshold, Sensitivity_withPt);
 		sens_withPt->SetName(gname2);
-		sens_withPt->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		sens_withPt->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 		sens_withPt->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-		sens_withPt->GetYaxis()->SetTitle("#sqrt{ #sum_{i}^{500} sensitivity_{i}^{2}}");
+		sens_withPt->GetYaxis()->SetTitle("#sqrt{ #sum_{i}^{500} sens._{i}^{2}}");
 		sens_withPt->GetYaxis()->SetTitleSize(TITLE_SIZE);
 		sens_withPt->GetXaxis()->SetTitleSize(TITLE_SIZE);
 		sens_withPt->GetYaxis()->CenterTitle();
 		sens_withPt->GetXaxis()->CenterTitle();
 		sens_withPt->SetMarkerStyle(kFullCircle);//kFullCircle);
 		sens_withPt->SetLineColor(lambda_colors[k]);
-		sens_withPt->SetTitle(Form("sensitivity Vs p_{T} threshold for k_{#lambda} = %.1f", lambda[k]));
+		sens_withPt->SetTitle(Form("sensitivity Vs p_{T, bJ4} threshold for k_{#lambda} = %.1f", lambda[k]));
 		sens_withPt->SetLineWidth(LINE_WIDTH);
 		sens_withPt->SetMarkerSize(MARKER_SIZE);
 		sens_withPt->Draw("ACPe1");
@@ -198,15 +205,15 @@ void plot_total_sensitivity_Vs_klambda()
 		sens_withPt->GetYaxis()->SetRangeUser(min_range, max_range);	
 		c1->Print(out_file_,"pdf");
 		sens_withPt->Write();
-		c1->Write(gname2);
+		gPad->Write(gname2);
 		mg1->Add(sens_withPt);
 
 			
 		//ithBin_contri->SetName(gname);
 		ithBin_contri->GetXaxis()->SetRangeUser(20.0, 100.0);
-		ithBin_contri->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		ithBin_contri->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 		ithBin_contri->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-		ithBin_contri->GetYaxis()->SetTitle("Sens_{i}^{2}/ Sens_{tot}^{2}");
+		ithBin_contri->GetYaxis()->SetTitle("sens._{i}^{2}/ sens._{tot}^{2}");
 		ithBin_contri->GetYaxis()->SetTitleSize(TITLE_SIZE);
 		ithBin_contri->GetXaxis()->SetTitleSize(TITLE_SIZE);
 		ithBin_contri->GetYaxis()->CenterTitle();
@@ -215,7 +222,7 @@ void plot_total_sensitivity_Vs_klambda()
 		ithBin_contri->SetLineColor(lambda_colors[k]);
 		ithBin_contri->SetLineWidth(LINE_WIDTH);
 		ithBin_contri->SetMarkerSize(MARKER_SIZE);
-		ithBin_contri->SetTitle(Form("Sensitivity contributions from p_{T} bins for k_{#lambda} = %.1f",lambda[k]));
+		ithBin_contri->SetTitle(Form("Sensitivity contributions from p_{T, bJ4} bins for k_{#lambda} = %.1f",lambda[k]));
 		//ithBin_contri->Draw("ACPe1");
 		//ithBin_contri->Sumw2();
 		max_range = ithBin_contri->GetMaximum()*1.1;
@@ -224,7 +231,7 @@ void plot_total_sensitivity_Vs_klambda()
 		ithBin_contri->Draw("PC");
 			
 		c1->Print(out_file_,"pdf");
-		c1->Write(gname);
+		gPad->Write(gname);
 		ithBin_contri->Write("HPL");
 		
 		TGraph *mg_i = new TGraph(ithBin_contri);
@@ -239,14 +246,24 @@ void plot_total_sensitivity_Vs_klambda()
 		delete Sens2_i;
 		//delete sens_withPt;
 		
-		leg->AddEntry(sens_withPt,Form("k_{#lambda} = %.1f", lambda[k]),"l");
+		//! draw a k_lambda legend.
+		if(lambda[k] < 0)
+		{
+			leg->AddEntry(sens_withPt,Form("k_{#lambda} = %.1f", lambda[k]),"l");
+			legR->AddEntry(sens_withPt,Form("k_{#lambda} = %.1f", lambda[k]),"l");
+		}
+		else
+		{
+			leg->AddEntry(sens_withPt,Form("k_{#lambda} =  %.1f", lambda[k]),"l");
+			legR->AddEntry(sens_withPt,Form("k_{#lambda} =  %.1f", lambda[k]),"l");
+		}
 
 
 	}
 	myGraph->SetName("Sum_sens_i");
 	myGraph->GetXaxis()->SetTitle("k_{#lambda}");
 	myGraph->GetYaxis()->SetTitleOffset(0.9);
-	myGraph->GetYaxis()->SetTitle("Sensitivity #sqrt{ #sum_{i=20}^{500} c_{i}^{2}/#sigma_{i}^{2} }");
+	myGraph->GetYaxis()->SetTitle("sens. #sqrt{ #sum_{i=20}^{500} c_{i}^{2}/#sigma_{i}^{2} }");
 	myGraph->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	myGraph->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	myGraph->GetYaxis()->CenterTitle();
@@ -265,30 +282,49 @@ void plot_total_sensitivity_Vs_klambda()
 	delete myGraph;
 
 	
-
+	c1->cd();
 	mg1->Draw("ACP");
-	mg1->GetYaxis()->SetTitle("#sqrt{ #sum_{i}^{500} sensitivity_{i}^{2}}");
-	mg1->GetXaxis()->SetTitle("p_{T} threshold [GeV/c]");
+	mg1->GetYaxis()->SetTitle("#sqrt{ #sum_{i}^{500} sens._{i}^{2}}");
+	mg1->GetXaxis()->SetTitle("p_{T, bJ4} threshold [GeV/c]");
 	mg1->GetXaxis()->CenterTitle();
 	mg1->GetYaxis()->CenterTitle();
+cms_E->Draw();	
+signal_->Draw();	
+ana_txt->Draw();	
+legR->Draw();
 	gPad->Modified();
+	gPad->Update();
 	mg1->Write("Sens_pTthre");
-	c1->Write("Sens_pTthre");
+	gPad->Write("Sens_pTthre");
 	c1->Print(out_file_,"pdf");
+	c1->SaveAs("./analysis_plots/tex/Sens_pTthre.tex");
+	
+
 	//gPad->Modified();
 	//mg2->GetXaxis()->SetLimits(20,100);
+	c1->cd();
 	mg2->Draw("ACP");
-	mg2->GetYaxis()->SetTitle("Sens_{i}^{2}/ Sens_{tot}^{2}");
-	mg2->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	mg2->GetYaxis()->SetTitle("sens._{i}^{2}/ sens._{tot}^{2}");
+	mg2->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	mg2->GetXaxis()->CenterTitle();
 	mg2->GetYaxis()->CenterTitle();
+	max_range = mg2->GetHistogram()->GetMaximum()*1.3;
+	min_range = mg2->GetHistogram()->GetMinimum()*0.4;
+	mg2->GetYaxis()->SetRangeUser(min_range, max_range);
+cms_E->Draw();	
+signal_->Draw();	
+ana_txt->Draw();	
+leg->Draw();
 	gPad->Modified();
+	gPad->Update();
 
 	mg2->Write("sens_ithBincontri");
-	c1->Write("sens_ithBincontri");
+	gPad->Write("sens_ithBincontri");
 	c1->Print(out_file_,"pdf");
+	c1->SaveAs("./analysis_plots/tex/sens_ithBincontri.tex");
 	c1->Clear();
 	leg->Draw();
+	gPad->Write("k_lambdaLeg");
 
 	return;
 }

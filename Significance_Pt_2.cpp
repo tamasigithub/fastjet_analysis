@@ -24,10 +24,11 @@
 const int n = 10;
 const int nGraphPts = 9;
 const float ctr = 2.0;
-const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_1.root";
+//const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
 const char *txt_path = "./analysis_plots/txt_files";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "SignificanceVs4thPt_incl4bProb";
+const char *output_file_name = "SignificanceVs4thPt_incl4bProbMH30";
 
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
@@ -41,7 +42,7 @@ Float_t min_range;
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3
 const double ggFhhXsec2   = 625.59;
-const double four_b_Prob  = std::pow(0.58,4);
+const double four_b_Prob  = std::pow(0.58,2);
 int tot_MCevents = 5e5;
 
 double norm_signal, norm_bckgnd;
@@ -173,6 +174,13 @@ void plot_graph()
 	h4_SoverB->SetLineWidth(LINE_WIDTH);
 	h4_SoverB->Draw("hist");
 	
+	//Significance1[nGraphPts] = Significance1[nGraphPts-1];// this will make the gain for the last pt = 1
+	//Significance2[nGraphPts] = Significance2[nGraphPts-1];// this will make the gain for the last pt = 1
+	for(int i = 0; i < nGraphPts; i++)
+	{
+		SignificanceGain1[i] = Significance1[i]/h4_Significance1->Integral(1,nGraphPts); 
+		SignificanceGain2[i] = Significance2[i]/h4_Significance2->Integral(1, nGraphPts); 
+	}
 	for(int i = 0; i < nGraphPts; i++)
 	{
 		//! 1st integral is bin 1(contents in 20-30 GeV) to 9(contents in 100 - 500 GeV)
@@ -182,13 +190,6 @@ void plot_graph()
 		Significance1[i] = std::sqrt(Significance2[i]);
 		//Significance1[i] = h4_Significance1->Integral(i+1, nGraphPts);
 		Significance2_[i] = h4_Significance2->Integral(1, i+1);
-	}
-	Significance1[nGraphPts] = Significance1[nGraphPts-1];// this will make the gain for the last pt = 1
-	Significance2[nGraphPts] = Significance2[nGraphPts-1];// this will make the gain for the last pt = 1
-	for(int i = 0; i < nGraphPts; i++)
-	{
-		SignificanceGain1[i] = Significance1[i]/Significance1[i+1]; 
-		SignificanceGain2[i] = Significance2[i]/Significance2[i+1]; 
 	}
 	//! SoverB Vs Pt threshold 
 	g1 = new TGraphErrors(nGraphPts, pT_threshold, SoverB,0,0);
@@ -287,7 +288,8 @@ void plot_graph()
 	g3->GetYaxis()->SetRangeUser(min_range, max_range);
 	
 	//! Gain in (Significance)^2 Vs Pt threshold 
-	G3 = new TGraphErrors(nGraphPts, pT_threshold, SignificanceGain2,0,0);
+	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0, 95.0, 120.0};
+	G3 = new TGraphErrors(nGraphPts, pT_new, SignificanceGain2,0,0);
 	G3->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	G3->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
 	G3->GetYaxis()->SetTitle("Gain in S^{2}/B");
