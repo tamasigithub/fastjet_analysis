@@ -37,7 +37,7 @@ char out_file_close[1023];
 
 const int nlambda = 6;
 Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
-Float_t lambda_colors[nlambda] = {kGreen, kYellow-9, kBlack, kRed, kBlue, kViolet};
+Float_t lambda_colors[nlambda] = {kGreen, kGray +1, kBlack, kRed, kBlue, kViolet};
 const int n = 10;
 const int nGraphPts = 9;
 Int_t nbinsMinus = n - 1; 
@@ -54,6 +54,7 @@ const double ggFhhXsec2_5 = 523.907;
 const double ggFhhXsec3   = 553.485;
 const double four_b_Prob  = std::pow(0.58,2);
 int tot_MCevents = 5e5;
+int tot_MCevents_B = 1e6;
 
 double norm_signal1, norm_signal0, norm_signal_1, norm_signal_2, norm_signal2, norm_signal2_5, norm_signal3;
 double norm_bckgnd;

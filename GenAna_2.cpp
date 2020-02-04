@@ -590,6 +590,10 @@ void SetLineWidth2()
 	b3CEta2->SetLineWidth(LINE_WIDTH);
 	b4CEta2->SetLineWidth(LINE_WIDTH);
 
+	Ana_bjetLPt2->SetLineWidth(LINE_WIDTH);
+	Ana_bjet2LPt2->SetLineWidth(LINE_WIDTH);
+	Ana_bjet3LPt2->SetLineWidth(LINE_WIDTH);
+	Ana_bjet4LPt2->SetLineWidth(LINE_WIDTH);
 	return;
 }
 void Scale_signalHistos2(double norm)
@@ -717,6 +721,10 @@ void Set_bquark_lambdaColors_2()
 	b2CEta2->SetLineColor(kBlue);
 	b3CEta2->SetLineColor(kBlue);
 	b4CEta2->SetLineColor(kBlue);
+	Ana_bjetLPt2->SetLineColor(kBlue);
+	Ana_bjet2LPt2->SetLineColor(kBlue);
+	Ana_bjet3LPt2->SetLineColor(kBlue);
+	Ana_bjet4LPt2->SetLineColor(kBlue);
 	return;
 }
 void Draw_Number_bTags_2()

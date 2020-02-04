@@ -44,6 +44,7 @@ const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.5
 const double ggFhhXsec0   = 2346.13;
 const double four_b_Prob  = std::pow(0.58,2);
 int tot_MCevents = 5e5;
+int tot_MCevents_B = 1e6;
 
 double norm_signal, norm_bckgnd;
 
@@ -90,7 +91,7 @@ void plot_VsPt0()
 	//h4_bg   = (TH1D*)f->Get("Ana_bjet4LPtB");
 
 	norm_signal   = (IntLumi * four_b_Prob * ggFhhXsec0)/tot_MCevents;
-	norm_bckgnd   = (IntLumi * pp4bXsec)/tot_MCevents;
+	norm_bckgnd   = (IntLumi * pp4bXsec)/tot_MCevents_B;
 	
 	int nbins = h4_sig->GetNbinsX();
 	int nbinsB = h4_bg->GetNbinsX();

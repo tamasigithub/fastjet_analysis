@@ -15,7 +15,7 @@ void Set_higgsPtProps()
 
 	higgsPt1->SetLineColor(kRed);
 	higgsPt0->SetLineColor(kBlack);
-	higgsPt_1->SetLineColor(kYellow -9);
+	higgsPt_1->SetLineColor(kGray +1);
 	higgsPt_2->SetLineColor(kGreen);
 	higgsPt2->SetLineColor(kBlue);
 	higgsPt2_5->SetLineColor(kOrange-9);
@@ -39,7 +39,7 @@ void Set_higgsPtProps()
 
 	higgsNLPt1->SetLineColor(kRed);
 	higgsNLPt0->SetLineColor(kBlack);
-	higgsNLPt_1->SetLineColor(kYellow -9);
+	higgsNLPt_1->SetLineColor(kGray +1);
 	higgsNLPt_2->SetLineColor(kGreen);
 	higgsNLPt2->SetLineColor(kBlue);
 	higgsNLPt2_5->SetLineColor(kOrange-9);
@@ -241,7 +241,7 @@ void Set_bquark_lambdaColors()
 {
 	bjetLPt1->SetLineColor(kRed);
 	bjetLPt0->SetLineColor(kBlack);
-	bjetLPt_1->SetLineColor(kYellow -9);
+	bjetLPt_1->SetLineColor(kGray +1);
 	bjetLPt_2->SetLineColor(kGreen);
 	bjetLPt2->SetLineColor(kBlue);
 	bjetLPt2_5->SetLineColor(kOrange-9);
@@ -249,7 +249,7 @@ void Set_bquark_lambdaColors()
 	
 	bjet2LPt1->SetLineColor(kRed);
 	bjet2LPt0->SetLineColor(kBlack);
-	bjet2LPt_1->SetLineColor(kYellow -9);
+	bjet2LPt_1->SetLineColor(kGray +1);
 	bjet2LPt_2->SetLineColor(kGreen);
 	bjet2LPt2->SetLineColor(kBlue);
 	bjet2LPt2_5->SetLineColor(kOrange-9);
@@ -257,7 +257,7 @@ void Set_bquark_lambdaColors()
 	
 	bjet3LPt1->SetLineColor(kRed);
 	bjet3LPt0->SetLineColor(kBlack);
-	bjet3LPt_1->SetLineColor(kYellow -9);
+	bjet3LPt_1->SetLineColor(kGray +1);
 	bjet3LPt_2->SetLineColor(kGreen);
 	bjet3LPt2->SetLineColor(kBlue);
 	bjet3LPt2_5->SetLineColor(kOrange-9);
@@ -265,7 +265,7 @@ void Set_bquark_lambdaColors()
 	
 	bjet4LPt1->SetLineColor(kRed);
 	bjet4LPt0->SetLineColor(kBlack);
-	bjet4LPt_1->SetLineColor(kYellow -9);
+	bjet4LPt_1->SetLineColor(kGray +1);
 	bjet4LPt_2->SetLineColor(kGreen);
 	bjet4LPt2->SetLineColor(kBlue);
 	bjet4LPt2_5->SetLineColor(kOrange-9);
@@ -273,7 +273,7 @@ void Set_bquark_lambdaColors()
 
 	bLPt1->SetLineColor(kRed);
 	bLPt0->SetLineColor(kBlack);
-	bLPt_1->SetLineColor(kYellow -9);
+	bLPt_1->SetLineColor(kGray +1);
 	bLPt_2->SetLineColor(kGreen);
 	bLPt2->SetLineColor(kBlue);
 	bLPt2_5->SetLineColor(kOrange-9);
@@ -281,7 +281,7 @@ void Set_bquark_lambdaColors()
 	
 	b2LPt1->SetLineColor(kRed);
 	b2LPt0->SetLineColor(kBlack);
-	b2LPt_1->SetLineColor(kYellow -9);
+	b2LPt_1->SetLineColor(kGray +1);
 	b2LPt_2->SetLineColor(kGreen);
 	b2LPt2->SetLineColor(kBlue);
 	b2LPt2_5->SetLineColor(kOrange-9);
@@ -289,7 +289,7 @@ void Set_bquark_lambdaColors()
 	
 	b3LPt1->SetLineColor(kRed);
 	b3LPt0->SetLineColor(kBlack);
-	b3LPt_1->SetLineColor(kYellow -9);
+	b3LPt_1->SetLineColor(kGray +1);
 	b3LPt_2->SetLineColor(kGreen);
 	b3LPt2->SetLineColor(kBlue);
 	b3LPt2_5->SetLineColor(kOrange-9);
@@ -297,7 +297,7 @@ void Set_bquark_lambdaColors()
 	
 	b4LPt1->SetLineColor(kRed);
 	b4LPt0->SetLineColor(kBlack);
-	b4LPt_1->SetLineColor(kYellow -9);
+	b4LPt_1->SetLineColor(kGray +1);
 	b4LPt_2->SetLineColor(kGreen);
 	b4LPt2->SetLineColor(kBlue);
 	b4LPt2_5->SetLineColor(kOrange-9);
@@ -305,7 +305,7 @@ void Set_bquark_lambdaColors()
 	
 	bCEta1->SetLineColor(kRed);
 	bCEta0->SetLineColor(kBlack);
-	bCEta_1->SetLineColor(kYellow -9);
+	bCEta_1->SetLineColor(kGray +1);
 	bCEta_2->SetLineColor(kGreen);
 	bCEta2->SetLineColor(kBlue);
 	bCEta2_5->SetLineColor(kOrange-9);
@@ -313,7 +313,7 @@ void Set_bquark_lambdaColors()
 	
 	b2CEta1->SetLineColor(kRed);
 	b2CEta0->SetLineColor(kBlack);
-	b2CEta_1->SetLineColor(kYellow -9);
+	b2CEta_1->SetLineColor(kGray +1);
 	b2CEta_2->SetLineColor(kGreen);
 	b2CEta2->SetLineColor(kBlue);
 	b2CEta2_5->SetLineColor(kOrange-9);
@@ -321,7 +321,7 @@ void Set_bquark_lambdaColors()
 	
 	b3CEta1->SetLineColor(kRed);
 	b3CEta0->SetLineColor(kBlack);
-	b3CEta_1->SetLineColor(kYellow -9);
+	b3CEta_1->SetLineColor(kGray +1);
 	b3CEta_2->SetLineColor(kGreen);
 	b3CEta2->SetLineColor(kBlue);
 	b3CEta2_5->SetLineColor(kOrange-9);
@@ -329,7 +329,7 @@ void Set_bquark_lambdaColors()
 	
 	b4CEta1->SetLineColor(kRed);
 	b4CEta0->SetLineColor(kBlack);
-	b4CEta_1->SetLineColor(kYellow -9);
+	b4CEta_1->SetLineColor(kGray +1);
 	b4CEta_2->SetLineColor(kGreen);
 	b4CEta2->SetLineColor(kBlue);
 	b4CEta2_5->SetLineColor(kOrange-9);

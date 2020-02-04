@@ -542,6 +542,38 @@ void SetXaxisTITLE_SIZE()
 	b4CEta3->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 	b4CEtaB->GetXaxis()->SetTitleSize(TITLE_SIZE) ;
 
+	Ana_bjetLPtB->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt_2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt_1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt0->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt2_5->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt3->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPtB->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt_2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt_1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt0->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt2_5->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt3->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPtB->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt_2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt_1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt0->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt2_5->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt3->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPtB->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt_2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt_1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt0->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt1->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt2->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt2_5->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt3->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	return;
 }
 void SetYaxisTITLE_SIZE()
@@ -1089,6 +1121,38 @@ void SetYaxisTITLE_SIZE()
 	b4CEta3->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 	b4CEtaB->GetYaxis()->SetTitleSize(TITLE_SIZE) ;
 
+	Ana_bjetLPtB->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt_2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt_1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt0->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt2_5->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjetLPt3->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPtB->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt_2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt_1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt0->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt2_5->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet2LPt3->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPtB->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt_2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt_1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt0->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt2_5->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet3LPt3->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPtB->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt_2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt_1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt0->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt1->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt2->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt2_5->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	Ana_bjet4LPt3->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	return;
 }
 void CenterXaxisTITLE()
@@ -2181,5 +2245,37 @@ void CenterYaxisTITLE()
 	b4CEta3->GetYaxis()->CenterTitle();
 	b4CEtaB->GetYaxis()->CenterTitle();
 
+	Ana_bjetLPtB->GetXaxis()->CenterTitle();
+	Ana_bjetLPt_2->GetXaxis()->CenterTitle();
+	Ana_bjetLPt_1->GetXaxis()->CenterTitle();
+	Ana_bjetLPt0->GetXaxis()->CenterTitle();
+	Ana_bjetLPt1->GetXaxis()->CenterTitle();
+	Ana_bjetLPt2->GetXaxis()->CenterTitle();
+	Ana_bjetLPt2_5->GetXaxis()->CenterTitle();
+	Ana_bjetLPt3->GetXaxis()->CenterTitle();
+	Ana_bjet2LPtB->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt_2->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt_1->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt0->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt1->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt2->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt2_5->GetXaxis()->CenterTitle();
+	Ana_bjet2LPt3->GetXaxis()->CenterTitle();
+	Ana_bjet3LPtB->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt_2->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt_1->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt0->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt1->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt2->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt2_5->GetXaxis()->CenterTitle();
+	Ana_bjet3LPt3->GetXaxis()->CenterTitle();
+	Ana_bjet4LPtB->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt_2->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt_1->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt0->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt1->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt2->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt2_5->GetXaxis()->CenterTitle();
+	Ana_bjet4LPt3->GetXaxis()->CenterTitle();
 	return;
 }

@@ -617,6 +617,10 @@ void SetLineWidth3()
 	b3CEta3->SetLineWidth(LINE_WIDTH);
 	//b 4th central Pt
 	b4CEta3->SetLineWidth(LINE_WIDTH);
+	Ana_bjetLPt3->SetLineWidth(LINE_WIDTH);
+	Ana_bjet2LPt3->SetLineWidth(LINE_WIDTH);
+	Ana_bjet3LPt3->SetLineWidth(LINE_WIDTH);
+	Ana_bjet4LPt3->SetLineWidth(LINE_WIDTH);
 	return;
 
 }
@@ -771,6 +775,10 @@ void Set_bquark_lambdaColors_3()
 	b2CEta3->SetLineColor(kViolet);
 	b3CEta3->SetLineColor(kViolet);
 	b4CEta3->SetLineColor(kViolet);
+	Ana_bjetLPt3->SetLineColor(kViolet);
+	Ana_bjet2LPt3->SetLineColor(kViolet);
+	Ana_bjet3LPt3->SetLineColor(kViolet);
+	Ana_bjet4LPt3->SetLineColor(kViolet);
 	return;
 }
 void Draw_Number_bTags_3()

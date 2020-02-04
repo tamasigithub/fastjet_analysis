@@ -77,6 +77,7 @@ const char *inp_file2  = "./fastjet_output/Genjet2_ggF_Ctr2.0_q300MeV_2.5_allR0.
 const char *inp_file2_5= "./fastjet_output/Genjet2_ggF_Ctr2.5_q300MeV_2.5_allR0.4_0.8btag.root"; 
 const char *inp_file3  = "./fastjet_output/Genjet2_ggF_Ctr3.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
 const char *inp_fileB  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4_0.8btag.root"; 
+const char *inp_fileB_1  = "./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4_0.8btag_1.root"; 
 
 ////!14TeV
 //const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF14TeV_Ctr1.0_q300MeV_2.5_allR0.4.root"; 
@@ -96,6 +97,7 @@ TFile *f2  = nullptr;
 TFile *f2_5= nullptr;
 TFile *f3  = nullptr;
 TFile *fB  = nullptr;
+TFile *fB_1  = nullptr;
 
 //TTree
 TTree *t1  = nullptr;
@@ -105,7 +107,8 @@ TTree *t_2 = nullptr;
 TTree *t2  = nullptr;
 TTree *t2_5= nullptr;
 TTree *t3  = nullptr;
-TTree *tB  = nullptr;
+//TTree *tB  = nullptr;
+TChain tB("glob_jet");
 
 
 std::vector<double> *v1_higgsPt  = nullptr;

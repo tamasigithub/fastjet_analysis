@@ -31,23 +31,43 @@ void ClearLorentzVectors_B()
 void fetch_histos_B()
 {
 
-	bLPtB  = (TH1D*)fB->Get("hbPt_Lpt");
-	b2LPtB = (TH1D*)fB->Get("hbPt_NLpt");
-	b3LPtB = (TH1D*)fB->Get("hbPt_NNLpt");
-	b4LPtB = (TH1D*)fB->Get("hbPt_NNNLpt");
-
+	bLPtB->Fill((*vB_bPt)[0]*1e-3);
+	b2LPtB->Fill((*vB_bPt)[1]*1e-3);
+	b3LPtB->Fill((*vB_bPt)[2]*1e-3);
+	b4LPtB->Fill((*vB_bPt)[3]*1e-3);
+	
 	bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
 	b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
 	b3CEtaB = (TH1D*)fB->Get("hbEta_NNCeta");
 	b4CEtaB = (TH1D*)fB->Get("hbEta_NNNCeta");
+
+	bCEtaB ->Add( (TH1D*)fB_1->Get("hbEta_Ceta") );
+	b2CEtaB->Add( (TH1D*)fB_1->Get("hbEta_NCeta") );
+	b3CEtaB->Add( (TH1D*)fB_1->Get("hbEta_NNCeta") );
+	b4CEtaB->Add( (TH1D*)fB_1->Get("hbEta_NNNCeta") );
+	//bCEtaB->Fill((*vB_bEta)[0]);
+	//b2CEtaB->Fill((*vB_bEta)[1]);
+	//b3CEtaB->Fill((*vB_bEta)[2]);
+	//b4CEtaB->Fill((*vB_bEta)[3]);
+
+	
+	//bLPtB  = (TH1D*)fB->Get("hbPt_Lpt");
+	//b2LPtB = (TH1D*)fB->Get("hbPt_NLpt");
+	//b3LPtB = (TH1D*)fB->Get("hbPt_NNLpt");
+	//b4LPtB = (TH1D*)fB->Get("hbPt_NNNLpt");
+
+	//bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
+	//b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
+	//b3CEtaB = (TH1D*)fB->Get("hbEta_NNCeta");
+	//b4CEtaB = (TH1D*)fB->Get("hbEta_NNNCeta");
 	return;
 }
 void Draw_b_jetPt_B()
 {
-	tB->Draw("bJetLPt>>bjetLPtB");
-	tB->Draw("bJetNLPt>>bjet2LPtB");
-	tB->Draw("bJetNNLPt>>bjet3LPtB");
-	tB->Draw("bJetNNNLPt>>bjet4LPtB");
+	tB.Draw("bJetLPt>>bjetLPtB");
+	tB.Draw("bJetNLPt>>bjet2LPtB");
+	tB.Draw("bJetNNLPt>>bjet3LPtB");
+	tB.Draw("bJetNNNLPt>>bjet4LPtB");
 
 	return;
 }
@@ -57,45 +77,45 @@ void Draw_Nparticles_B()
 	double nmin = 0, nmax = 6, nmax_1 = 20;
 	NbquarksB  = new TH1D("NbquarksB", "number of b quarks", nbins, nmin, nmax);
 	NjetsB  = new TH1D("NjetsB", "number of jets", nbins_1, nmin, nmax_1);
-	tB->Draw("Nbquarks>>NbquarksB");
-	tB->Draw("Njets>>NjetsB");
+	tB.Draw("Nbquarks>>NbquarksB");
+	tB.Draw("Njets>>NjetsB");
 	NbquarksB->SetLineColor(kCyan);
 	NjetsB->SetLineColor(kCyan);
 	return;
 }
 void fetch_TTrees_B()
 {
-	tB   = (TTree*)fB->Get("glob_jet");
+	//tB   = (TTree*)fB->Get("glob_jet");
 
-	tB->SetBranchStatus("*",0);
+	tB.SetBranchStatus("*",0);
 	
-	tB->SetBranchStatus("Nbquarks",1);
-	tB->SetBranchStatus("Njets",1);
-	tB->SetBranchStatus("jetPt",1);
-	tB->SetBranchStatus("jetEta",1);
-	tB->SetBranchStatus("jetPhi",1);
-	tB->SetBranchStatus("jetM",1);
-	tB->SetBranchStatus("btaggedFlavor",1);
-	tB->SetBranchStatus("bJetLPt",1);
-	tB->SetBranchStatus("bJetNLPt",1);
-	tB->SetBranchStatus("bJetNNLPt",1);
-	tB->SetBranchStatus("bJetNNNLPt",1);
-	tB->SetBranchStatus("Nbtags",1);
-	tB->SetBranchStatus("v_bPt", 1);
-	tB->SetBranchStatus("v_bEta",1);
-	tB->SetBranchStatus("v_bPhi",1);
-	tB->SetBranchStatus("v_bM",  1);
+	tB.SetBranchStatus("Nbquarks",1);
+	tB.SetBranchStatus("Njets",1);
+	tB.SetBranchStatus("jetPt",1);
+	tB.SetBranchStatus("jetEta",1);
+	tB.SetBranchStatus("jetPhi",1);
+	tB.SetBranchStatus("jetM",1);
+	tB.SetBranchStatus("btaggedFlavor",1);
+	tB.SetBranchStatus("bJetLPt",1);
+	tB.SetBranchStatus("bJetNLPt",1);
+	tB.SetBranchStatus("bJetNNLPt",1);
+	tB.SetBranchStatus("bJetNNNLPt",1);
+	tB.SetBranchStatus("Nbtags",1);
+	tB.SetBranchStatus("v_bPt", 1);
+	tB.SetBranchStatus("v_bEta",1);
+	tB.SetBranchStatus("v_bPhi",1);
+	tB.SetBranchStatus("v_bM",  1);
 
-	tB->SetBranchAddress("jetPt",  &vB_jetPt);;
-	tB->SetBranchAddress("jetEta",  &vB_jetEta);
-	tB->SetBranchAddress("jetPhi",  &vB_jetPhi);
-	tB->SetBranchAddress("jetM",  &vB_jetM);
-	tB->SetBranchAddress("btaggedFlavor",  &vB_tagFlavor);
-	tB->SetBranchAddress("Nbtags",&nB_btags);
-	tB->SetBranchAddress("v_bPt", &vB_bPt);
-	tB->SetBranchAddress("v_bEta",&vB_bEta);
-	tB->SetBranchAddress("v_bPhi",&vB_bPhi);
-	tB->SetBranchAddress("v_bM",  &vB_bM);
+	tB.SetBranchAddress("jetPt",  &vB_jetPt);;
+	tB.SetBranchAddress("jetEta",  &vB_jetEta);
+	tB.SetBranchAddress("jetPhi",  &vB_jetPhi);
+	tB.SetBranchAddress("jetM",  &vB_jetM);
+	tB.SetBranchAddress("btaggedFlavor",  &vB_tagFlavor);
+	tB.SetBranchAddress("Nbtags",&nB_btags);
+	tB.SetBranchAddress("v_bPt", &vB_bPt);
+	tB.SetBranchAddress("v_bEta",&vB_bEta);
+	tB.SetBranchAddress("v_bPhi",&vB_bPhi);
+	tB.SetBranchAddress("v_bM",  &vB_bM);
 	return;
 }
 void Set_higgsPtProps_B()
@@ -145,27 +165,48 @@ void Set_FinalJetPtProps_B()
 void Set_jetPtProps_B()
 {
 	int nbins = 60;
+	//int netabins = 100;
+	//float etamin = 0;
+	//float etamax = 6.0;
 	float ptmin = 0;
 	float ptmax = 300;
 	float dptmin = 0;
 	float dptmax = 300;
+	////b central Pt
+	//bCEtaB  = new TH1D("bCEtaB", "b quark #eta_{b}; #eta_{b, central b quark} ;", netabins, etamin, etamax);
+	////b 2nd central Pt
+	//b2CEtaB  = new TH1D("b2CEtaB", "b quark #eta_{b}; #eta_{b, sub central b quark} ;", netabins, etamin, etamax);
+	////b 3rd central Pt
+	//b3CEtaB  = new TH1D("b3CEtaB", "b quark #eta_{b}; #eta_{b, 3rd central b quark} ;", netabins, etamin, etamax);
+	////b 4th central Pt
+	//b4CEtaB  = new TH1D("b4CEtaB", "b quark #eta_{b}; #eta_{b, 4th central b quark} ;", netabins, etamin, etamax);
+	
+	//b leading Pt
+	bLPtB  = new TH1D("bLPtB", "b quark p_{T}; p_{T, leading b quark} [GeV/c];", nbins, ptmin, ptmax);
+	//b 2nd leading Pt
+	b2LPtB  = new TH1D("b2LPtB", "b quark p_{T}; p_{T, sub leading b quark} [GeV/c];", nbins, ptmin, ptmax);
+	//b 3rd leading Pt
+	b3LPtB  = new TH1D("b3LPtB", "b quark p_{T}; p_{T, 3rd leading b quark} [GeV/c];", nbins, ptmin, ptmax);
+	//b 4th leading Pt
+	b4LPtB  = new TH1D("b4LPtB", "b quark p_{T}; p_{T, 4th leading b quark} [GeV/c];", nbins, ptmin, ptmax);
+
 	//b-jet leading Pt
-	bjetLPtB  = new TH1D("bjetLPtB", "b-tagged Jet p_{t}; p_{t, leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
+	bjetLPtB  = new TH1D("bjetLPtB", "b-tagged Jet p_{T}; p_{T, leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	//b-jet 2nd leading Pt
-	bjet2LPtB  = new TH1D("bjet2LPtB", "b-tagged Jet p_{t}; p_{t, sub leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
+	bjet2LPtB  = new TH1D("bjet2LPtB", "b-tagged Jet p_{T}; p_{T, sub leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	//b-jet 3rd leading Pt
-	bjet3LPtB  = new TH1D("bjet3LPtB", "b-tagged Jet p_{t}; p_{t, 3rd leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
+	bjet3LPtB  = new TH1D("bjet3LPtB", "b-tagged Jet p_{T}; p_{T, 3rd leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	//b-jet 4th leading Pt
-	bjet4LPtB  = new TH1D("bjet4LPtB", "b-tagged Jet p_{t}; p_{t, 4th leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
+	bjet4LPtB  = new TH1D("bjet4LPtB", "b-tagged Jet p_{T}; p_{T, 4th leading b-jet} [GeV/c];", nbins, ptmin, ptmax);
 	
 	//jet leading Pt
-	jetLPtB  = new TH1D("jetLPtB", "Jet p_{t}; p_{t, leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jetLPtB  = new TH1D("jetLPtB", "Jet p_{T}; p_{T, leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	//jet 2nd leading Pt
-	jet2LPtB  = new TH1D("jet2LPtB", "Jet p_{t}; p_{t, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet2LPtB  = new TH1D("jet2LPtB", "Jet p_{T}; p_{T, sub leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	//jet 3rd leading Pt
-	jet3LPtB  = new TH1D("jet3LPtB", "Jet p_{t}; p_{t, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet3LPtB  = new TH1D("jet3LPtB", "Jet p_{T}; p_{T, 3rd leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	//jet 4th leading Pt
-	jet4LPtB  = new TH1D("jet4LPtB", "Jet p_{t}; p_{t, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
+	jet4LPtB  = new TH1D("jet4LPtB", "Jet p_{T}; p_{T, 4th leading jet} [GeV/c];", nbins, ptmin, ptmax);
 	
 	//jet leading M
 	jetLMB  = new TH1D("jetLMB", "Jet invariant mass; m_{ leading jet} [GeV];", nbins, ptmin, ptmax);
@@ -564,6 +605,10 @@ void SetLineWidthB()
 	b3CEtaB->SetLineWidth(LINE_WIDTH);
 	//b 4th central Pt
 	b4CEtaB->SetLineWidth(LINE_WIDTH);
+	Ana_bjetLPtB->SetLineWidth(LINE_WIDTH);
+	Ana_bjet2LPtB->SetLineWidth(LINE_WIDTH);
+	Ana_bjet3LPtB->SetLineWidth(LINE_WIDTH);
+	Ana_bjet4LPtB->SetLineWidth(LINE_WIDTH);
 	return;
 }
 void Scale_bckgndHistos(double norm)
@@ -683,6 +728,14 @@ void Set_NleadingJetColors_B()
 	jet2LPtB->SetLineColor(kBlack);
 	jet3LPtB->SetLineColor(kRed);
 	jet4LPtB->SetLineColor(kGreen);
+	bLPtB->SetLineColor(kOrange);
+	b2LPtB->SetLineColor(kBlack);
+	b3LPtB->SetLineColor(kRed);
+	b4LPtB->SetLineColor(kGreen);
+	//bCEtaB->SetLineColor(kOrange);
+	//b2CEtaB->SetLineColor(kBlack);
+	//b3CEtaB->SetLineColor(kRed);
+	//b4CEtaB->SetLineColor(kGreen);
 	return;
 	
 }
@@ -721,6 +774,10 @@ void Set_bquark_lambdaColors_B()
 	b2CEtaB->SetLineColor(kCyan);
 	b3CEtaB->SetLineColor(kCyan);
 	b4CEtaB->SetLineColor(kCyan);
+	Ana_bjetLPtB->SetLineColor(kCyan);
+	Ana_bjet2LPtB->SetLineColor(kCyan);
+	Ana_bjet3LPtB->SetLineColor(kCyan);
+	Ana_bjet4LPtB->SetLineColor(kCyan);
 	return;
 }
 
@@ -728,6 +785,6 @@ void Draw_Number_bTags_B()
 {
 
 	h_NbTagsB = new TH1D("h_NbTagsB", "number of b tagged jets, pp->4b", 6, 0, 6);
-	tB->Draw("Nbtags>>h_NbTagsB");
+	tB.Draw("Nbtags>>h_NbTagsB");
 	return;
 }

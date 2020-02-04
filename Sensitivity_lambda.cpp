@@ -9,7 +9,7 @@ void calculate_normalization()
 	norm_signal2   = (IntLumi * four_b_Prob * ggFhhXsec2)/tot_MCevents;
 	norm_signal2_5 = (IntLumi * four_b_Prob * ggFhhXsec2_5)/tot_MCevents;
 	norm_signal3   = (IntLumi * four_b_Prob * ggFhhXsec3)/tot_MCevents;
-	norm_bckgnd    = (IntLumi * pp4bXsec)/tot_MCevents;
+	norm_bckgnd    = (IntLumi * pp4bXsec)/tot_MCevents_B;
 	return;
 }
 void fetch_bckgnd()

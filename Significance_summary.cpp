@@ -28,7 +28,7 @@ const double EvalPT = 35.0;
 const int nGraphPts = 9;
 const int nlambda = 6;
 Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
-Float_t lambda_colors[nlambda] = {kGreen, kYellow-9, kBlack, kRed, kBlue, kViolet};
+Float_t lambda_colors[nlambda] = {kGreen, kGray +1, kBlack, kRed, kBlue, kViolet};
 
 const char *root_file_name   = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30";
 //const char *root_file_name_2 = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-2.0.root";

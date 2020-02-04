@@ -75,9 +75,9 @@ void Draw_Nparticles_2_5()
 	t2_5->Draw("NSMhiggs>>NSMhiggs2_5");
 	t2_5->Draw("Nbquarks>>Nbquarks2_5");
 	t2_5->Draw("Njets>>Njets2_5");
-	NSMhiggs2_5->SetLineColor(kOrange-9);
-	Nbquarks2_5->SetLineColor(kOrange-9);
-	Njets2_5->SetLineColor(kOrange-9);
+	NSMhiggs2_5->SetLineColor(kOrange);
+	Nbquarks2_5->SetLineColor(kOrange);
+	Njets2_5->SetLineColor(kOrange);
 	return;
 }
 void fetch_TTrees_2_5()
@@ -133,27 +133,27 @@ void Set_higgsPtProps_2_5()
 	float Mmax = 1400;
 	//! truth leading and sub leading higgs Pt
 	higgsPt2_5  = new TH1D("higgsPt2_5",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
-	higgsPt2_5->SetLineColor(kOrange-9);
+	higgsPt2_5->SetLineColor(kOrange);
 	higgsPt2_5->SetLineWidth(LINE_WIDTH);
 	
 	higgsNLPt2_5  = new TH1D("higgsNLPt2_5",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
-	higgsNLPt2_5->SetLineColor(kOrange-9);
+	higgsNLPt2_5->SetLineColor(kOrange);
 	higgsNLPt2_5->SetLineWidth(LINE_WIDTH);
 	//! truth leading and sub leading higgs inv mass
 	higgsL_M2_5  = new TH1D("higgsL_M2_5",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
-	higgsL_M2_5->SetLineColor(kOrange-9);
+	higgsL_M2_5->SetLineColor(kOrange);
 	higgsL_M2_5->SetLineWidth(LINE_WIDTH);
 	
 	higgsNL_M2_5  = new TH1D("higgsNL_M2_5",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
-	higgsNL_M2_5->SetLineColor(kOrange-9);
+	higgsNL_M2_5->SetLineColor(kOrange);
 	higgsNL_M2_5->SetLineWidth(LINE_WIDTH);
 	//! truth Inv mass of the di-higgs system
 	MH1H2_2_5  = new TH1D("MH1H2_2_5",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
-	MH1H2_2_5->SetLineColor(kOrange-9);
+	MH1H2_2_5->SetLineColor(kOrange);
 	MH1H2_2_5->SetLineWidth(LINE_WIDTH);
 	//! truth Pt of the di-higgs system
 	PtH1H2_2_5  = new TH1D("PtH1H2_2_5",  "Transverse momentum of the di-higgs system;p_{T, truth, h1,h2} [GeV/c];", nbins, ptmin, ptmax);
-	PtH1H2_2_5->SetLineColor(kOrange-9);
+	PtH1H2_2_5->SetLineColor(kOrange);
 	PtH1H2_2_5->SetLineWidth(LINE_WIDTH);
 
 	
@@ -590,6 +590,10 @@ void SetLineWidth2_5()
 	b3CEta2_5->SetLineWidth(LINE_WIDTH);
 	b4CEta2_5->SetLineWidth(LINE_WIDTH);
 
+	Ana_bjetLPt2_5->SetLineWidth(LINE_WIDTH);
+	Ana_bjet2LPt2_5->SetLineWidth(LINE_WIDTH);
+	Ana_bjet3LPt2_5->SetLineWidth(LINE_WIDTH);
+	Ana_bjet4LPt2_5->SetLineWidth(LINE_WIDTH);
 	return;
 }
 void Scale_signalHistos2_5(double norm)
@@ -687,37 +691,41 @@ void Set_NleadingJetColors_2_5()
 void Set_bquark_lambdaColors_2_5()
 {
 
-	M_Lhiggs2_5->SetLineColor(kOrange-9);
-	M_NLhiggs2_5->SetLineColor(kOrange-9);
-	Pt_Lhiggs2_5->SetLineColor(kOrange-9);
-	Pt_NLhiggs2_5->SetLineColor(kOrange-9);
-	RecMH1H2_2_5->SetLineColor(kOrange-9);
-	RecPtH1H2_2_5->SetLineColor(kOrange-9);
+	M_Lhiggs2_5->SetLineColor(kOrange);
+	M_NLhiggs2_5->SetLineColor(kOrange);
+	Pt_Lhiggs2_5->SetLineColor(kOrange);
+	Pt_NLhiggs2_5->SetLineColor(kOrange);
+	RecMH1H2_2_5->SetLineColor(kOrange);
+	RecPtH1H2_2_5->SetLineColor(kOrange);
 	
-	bjetLM2_5->SetLineColor(kOrange-9);
-	bjet2LM2_5->SetLineColor(kOrange-9);
-	bjet3LM2_5->SetLineColor(kOrange-9);
-	bjet4LM2_5->SetLineColor(kOrange-9);
-	jetLM2_5->SetLineColor(kOrange-9);
-	jet2LM2_5->SetLineColor(kOrange-9);
-	jet3LM2_5->SetLineColor(kOrange-9);
-	jet4LM2_5->SetLineColor(kOrange-9);
-	jetLPt2_5->SetLineColor(kOrange-9);
-	jet2LPt2_5->SetLineColor(kOrange-9);
-	jet3LPt2_5->SetLineColor(kOrange-9);
-	jet4LPt2_5->SetLineColor(kOrange-9);
-	bjetLPt2_5->SetLineColor(kOrange-9);
-	bjet2LPt2_5->SetLineColor(kOrange-9);
-	bjet3LPt2_5->SetLineColor(kOrange-9);
-	bjet4LPt2_5->SetLineColor(kOrange-9);
-	bLPt2_5->SetLineColor(kOrange-9);
-	b2LPt2_5->SetLineColor(kOrange-9);
-	b3LPt2_5->SetLineColor(kOrange-9);
-	b4LPt2_5->SetLineColor(kOrange-9);
-	bCEta2_5->SetLineColor(kOrange-9);
-	b2CEta2_5->SetLineColor(kOrange-9);
-	b3CEta2_5->SetLineColor(kOrange-9);
-	b4CEta2_5->SetLineColor(kOrange-9);
+	bjetLM2_5->SetLineColor(kOrange);
+	bjet2LM2_5->SetLineColor(kOrange);
+	bjet3LM2_5->SetLineColor(kOrange);
+	bjet4LM2_5->SetLineColor(kOrange);
+	jetLM2_5->SetLineColor(kOrange);
+	jet2LM2_5->SetLineColor(kOrange);
+	jet3LM2_5->SetLineColor(kOrange);
+	jet4LM2_5->SetLineColor(kOrange);
+	jetLPt2_5->SetLineColor(kOrange);
+	jet2LPt2_5->SetLineColor(kOrange);
+	jet3LPt2_5->SetLineColor(kOrange);
+	jet4LPt2_5->SetLineColor(kOrange);
+	bjetLPt2_5->SetLineColor(kOrange);
+	bjet2LPt2_5->SetLineColor(kOrange);
+	bjet3LPt2_5->SetLineColor(kOrange);
+	bjet4LPt2_5->SetLineColor(kOrange);
+	bLPt2_5->SetLineColor(kOrange);
+	b2LPt2_5->SetLineColor(kOrange);
+	b3LPt2_5->SetLineColor(kOrange);
+	b4LPt2_5->SetLineColor(kOrange);
+	bCEta2_5->SetLineColor(kOrange);
+	b2CEta2_5->SetLineColor(kOrange);
+	b3CEta2_5->SetLineColor(kOrange);
+	b4CEta2_5->SetLineColor(kOrange);
+	Ana_bjetLPt2_5->SetLineColor(kOrange);
+	Ana_bjet2LPt2_5->SetLineColor(kOrange);
+	Ana_bjet3LPt2_5->SetLineColor(kOrange);
+	Ana_bjet4LPt2_5->SetLineColor(kOrange);
 	return;
 }
 void Draw_Number_bTags_2_5()
