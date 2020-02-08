@@ -21,8 +21,8 @@
 #include "TF1.h"
 #include "TLatex.h"
 
-const int n = 10;
-const int nGraphPts = 9;
+const int n = 8;
+const int nGraphPts = 7;
 const float ctr = 0.0;
 //const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
 const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
@@ -49,7 +49,7 @@ int tot_MCevents_B = 1e6;
 double norm_signal, norm_bckgnd;
 
 Int_t nbinsMinus = n - 1; 
-Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 90., 100., 500.};
+Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 500.};
 Int_t   nAna[n]        = {0};
 Int_t   nAnaB[n]        = {0};
 
@@ -289,7 +289,7 @@ void plot_graph()
 	g3->GetYaxis()->SetRangeUser(min_range, max_range);
 	
 	//! Gain in (Significance)^2 Vs Pt threshold 
-	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0, 95.0, 120.0};
+	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 120.0};
 	G3 = new TGraphErrors(nGraphPts, pT_new, SignificanceGain2,0,0);
 	G3->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	G3->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);

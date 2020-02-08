@@ -4,8 +4,9 @@
 //! initialise a 2D array containing the derivative of the 
 // fit function for the ith bin evaluated at a given k_lambda
 double c[nGraphPts][nlambda]   = {0};
-//! sigma_square[i] = number of background events[i] + Significance_SM[i] 
+//! sigma_square[i] = number of background events[i] + number of signal events _SM[i] 
 double sigma_square[nGraphPts] = {0};
+TH1 *hsigma_square = nullptr;
 double Sensitivity_withPt[nGraphPts] = {0};
 TObjArray funList(0);
 TString fname;
@@ -14,11 +15,14 @@ TFile *file2 = nullptr;
 void Init_sigma_square()
 {
 
+	//! do hist add to calculate errors correctly
+	hsigma_square = dynamic_cast<TH1*>(h4_sig1->Clone("hsigma_square"));
+	hsigma_square->Add(h4_bg);	
 	for(int i = 0; i < nGraphPts; i++)
 	{
 	
-		//sigma_square[i] = (nAnaB[i]*norm_bckgnd) + Significance1[i];
-		sigma_square[i] = (nAnaB[i]*norm_bckgnd) + (nAna1[i]*norm_signal1);
+		//sigma_square[i] = (nAnaB[i]*norm_bckgnd) + (nAna1[i]*norm_signal1);
+		sigma_square[i] = (nAnaB[i]) + (nAna1[i]);
 	}
 	return;
 }
@@ -30,11 +34,11 @@ void Fit_graphs(const char *filename = out_root_file_name)
 	{
 	
 		fname.Form("fun%d", i);
-		gname.Form("g%d", (i+2)*10);
+		gname.Form("g%.0f", pt_bins[i]);
 		TF1 *myFunc = new TF1(fname, "pol2");
 		//TGraph *mygraph = (TGraph*)graphList[i];
-		TGraph *mygraph = (TGraph*)file2->Get(gname);
-		mygraph->Draw("AP");
+		TGraphErrors *mygraph = (TGraphErrors*)file2->Get(gname);
+		mygraph->Draw("APe1");
 		mygraph->Fit(fname, "S");
 		funList.Add(myFunc);
 		myFunc->Draw("same");
@@ -49,7 +53,7 @@ void Init_ci()
 
 	for(int i = 0; i < nGraphPts; i++)
 	{
-		gname.Form("Ci_%d", (i+2)*10);
+		gname.Form("Ci_%.0f", pt_bins[i]);
 		TGraph *myCi = new TGraph();
 		for(int k = 0; k < nlambda; k++)
 		{
@@ -65,8 +69,7 @@ void Init_ci()
 
 		myCi->GetXaxis()->SetTitle("k_{#lambda}");
 		myCi->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-		if(i == nGraphPts -1) myCi->GetYaxis()->SetTitle(Form("c_{i} (p_{T} #in {%d,%d})", (i+2)*10, (i+2)*50));
-		else myCi->GetYaxis()->SetTitle(Form("c_{i} (p_{T} #in {%d,%d})", (i+2)*10, (i+3)*10));
+		myCi->GetYaxis()->SetTitle(Form("c_{i} (p_{T} #in {%.0f,%.0f})", pt_bins[i], pt_bins[i+1]));
 		myCi->GetYaxis()->SetTitleSize(TITLE_SIZE);
 		myCi->GetXaxis()->SetTitleSize(TITLE_SIZE);
 		myCi->GetYaxis()->CenterTitle();
@@ -92,7 +95,7 @@ void plot_ithBinSensitivity2_Vs_klambda()
 
 	for(int i = 0; i < nGraphPts; i++)
 	{
-		gname.Form("Sens_%d", (i+2)*10);
+		gname.Form("Sens_%.0f", pt_bins[i]);
 		TGraph *mygraph = new TGraph();
 		for(int k = 0; k < nlambda; k++)
 		{
@@ -103,8 +106,7 @@ void plot_ithBinSensitivity2_Vs_klambda()
 
 		mygraph->GetXaxis()->SetTitle("k_{#lambda}");
 		mygraph->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-		if(i == nGraphPts -1) mygraph->GetYaxis()->SetTitle(Form("sens. (p_{T} #in {%d,%d})", (i+2)*10, (i+2)*50));
-		else mygraph->GetYaxis()->SetTitle(Form("sens. (p_{T} #in {%d,%d})", (i+2)*10, (i+3)*10));
+		mygraph->GetYaxis()->SetTitle(Form("sens. (p_{T} #in {%.0f,%.0f})", pt_bins[i], pt_bins[i+1]));
 		mygraph->GetYaxis()->SetTitleSize(TITLE_SIZE);
 		mygraph->GetXaxis()->SetTitleSize(TITLE_SIZE);
 		mygraph->GetYaxis()->CenterTitle();
@@ -159,6 +161,7 @@ void plot_total_sensitivity_Vs_klambda()
 		{
 			double sens2_i = (c[i][k] * c[i][k])/sigma_square[i];
 			Sens2_i->SetBinContent(i+1, sens2_i);
+			Sens2_i->SetBinError(i+1, sens2_i * hsigma_square->GetBinError(i+1)/hsigma_square->GetBinContent(i+1));
 			tot_sens2_i += (c[i][k] * c[i][k])/sigma_square[i];
 		}
 
@@ -167,13 +170,15 @@ void plot_total_sensitivity_Vs_klambda()
 		if(lambda[k] < 0){gname.Form("Sens_contri_klambda__%d",(int)std::abs(lambda[k]));}
 		else {gname.Form("Sens_contri_klambda_%d", (int)std::abs(lambda[k]));}
 		//TGraph *ithBin_contri = new TGraph();
-		TH1D *ithBin_contri = new TH1D(gname,"i^{th} bin contribution", nbinsMinus, pT_threshold);
+		//TH1D *ithBin_contri = new TH1D(gname,"i^{th} bin contribution", nbinsMinus, pT_threshold);
+		TH1 *ithBin_contri = dynamic_cast<TH1*>(Sens2_i->Clone(gname));
+		ithBin_contri->Scale(1/tot_sens2_i);
 		for(int i = 0; i < nGraphPts; i++)
 		{
 		
 			double sens2_i = (c[i][k] * c[i][k])/sigma_square[i];
 			//ithBin_contri->SetPoint(i, pT_threshold[i], sens2_i/tot_sens2_i);
-			ithBin_contri->SetBinContent(i+1, sens2_i/tot_sens2_i);
+			//ithBin_contri->SetBinContent(i+1, sens2_i/tot_sens2_i);
 			
 
 			//! 1st integral is bin 1(contents in 20-30 GeV) to 9(contents in 100 - 500 GeV)
@@ -205,12 +210,12 @@ void plot_total_sensitivity_Vs_klambda()
 		sens_withPt->GetYaxis()->SetRangeUser(min_range, max_range);	
 		c1->Print(out_file_,"pdf");
 		sens_withPt->Write();
-		gPad->Write(gname2);
+		//gPad->Write(gname2);
 		mg1->Add(sens_withPt);
 
 			
 		//ithBin_contri->SetName(gname);
-		ithBin_contri->GetXaxis()->SetRangeUser(20.0, 100.0);
+		//ithBin_contri->GetXaxis()->SetRangeUser(20.0, 100.0);
 		ithBin_contri->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 		ithBin_contri->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
 		ithBin_contri->GetYaxis()->SetTitle("sens._{i}^{2}/ sens._{tot}^{2}");
@@ -228,18 +233,22 @@ void plot_total_sensitivity_Vs_klambda()
 		max_range = ithBin_contri->GetMaximum()*1.1;
 		min_range = ithBin_contri->GetMinimum()*0.4;
 		ithBin_contri->GetYaxis()->SetRangeUser(min_range, max_range);
-		ithBin_contri->Draw("PC");
+		//ithBin_contri->Draw("PC");
+		ithBin_contri->Draw("PLe1");
+		c1->SetLogx();
 			
 		c1->Print(out_file_,"pdf");
-		gPad->Write(gname);
-		ithBin_contri->Write("HPL");
+		//gPad->Write(gname);
+		ithBin_contri->Write();
+		c1->SetLogx(0);
+
 		
-		TGraph *mg_i = new TGraph(ithBin_contri);
+		TGraphErrors *mg_i = new TGraphErrors(ithBin_contri);
 		//std::cout<<"number of points before removal: " <<mg_i->GetN() <<std::endl;
 		mg_i->RemovePoint(nGraphPts-1);
 		//std::cout<<"number of points After removal: " <<mg_i->GetN() <<std::endl;
-		mg_i->Draw("ACP");
-		mg2->Add(mg_i,"ACP");
+		mg_i->Draw("APe1");
+		mg2->Add(mg_i,"APe1");
 		//mg2->Add((TGraph*)ithBin_contri);
 		
 		//delete ithBin_contri;
@@ -303,7 +312,9 @@ legR->Draw();
 	//gPad->Modified();
 	//mg2->GetXaxis()->SetLimits(20,100);
 	c1->cd();
-	mg2->Draw("ACP");
+	//c1->SetLogx();
+	//c1->SetLogy();
+	mg2->Draw("APe1");
 	mg2->GetYaxis()->SetTitle("sens._{i}^{2}/ sens._{tot}^{2}");
 	mg2->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	mg2->GetXaxis()->CenterTitle();

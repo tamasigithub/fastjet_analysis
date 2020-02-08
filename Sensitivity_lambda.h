@@ -36,12 +36,13 @@ char out_file_[1023];
 char out_file_close[1023];
 
 const int nlambda = 6;
-Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
+Float_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
+Double_t Norms_Signal[nlambda] = {0};
 Float_t lambda_colors[nlambda] = {kGreen, kGray +1, kBlack, kRed, kBlue, kViolet};
-const int n = 10;
-const int nGraphPts = 9;
+const int n = 8;
+const int nGraphPts = 7;
 Int_t nbinsMinus = n - 1; 
-Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 90., 100., 500.};
+Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 500.};
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 
 const double pp4bXsec     = 23.283e6;//fb 
@@ -71,6 +72,17 @@ Int_t   nAna_2[n]       = {0};
 Int_t   nAna2[n]        = {0};
 Int_t   nAna3[n]        = {0};
 
+Float_t   nAnaErrB[n]        = {0};
+
+Float_t   nAnaErr1[n]        = {0};
+Float_t   nAnaErr0[n]        = {0};
+Float_t   nAnaErr_1[n]       = {0};
+Float_t   nAnaErr_2[n]       = {0};
+Float_t   nAnaErr2[n]        = {0};
+Float_t   nAnaErr3[n]        = {0};
+
+Float_t nAna[n][nlambda] = {0};
+Float_t nAnaErr[n][nlambda] = {0};
 
 //! SoverB in the ith bin for different lambda values.
 Double_t SoverB1[n]  = {0};
@@ -147,16 +159,15 @@ TH1D *h4_Significance2_3   = nullptr;
 //TMultiGraph *mg2 = nullptr;
 //! Significance of the ith bin(pT threshold) Vs k_lambda
 //TObjArray graphList(0);
-//TString graph_name;
-TGraph *g20  = nullptr;
-TGraph *g30  = nullptr;
-TGraph *g40  = nullptr;
-TGraph *g50  = nullptr;
-TGraph *g60  = nullptr;
-TGraph *g70  = nullptr;
-TGraph *g80  = nullptr;
-TGraph *g90  = nullptr;
-TGraph *g100 = nullptr;
+TGraphErrors *g20  = nullptr;
+TGraphErrors *g30  = nullptr;
+TGraphErrors *g40  = nullptr;
+TGraphErrors *g50  = nullptr;
+TGraphErrors *g60  = nullptr;
+TGraphErrors *g70  = nullptr;
+TGraphErrors *g80  = nullptr;
+TGraphErrors *g90  = nullptr;
+TGraphErrors *g100 = nullptr;
 ////////////////////////////////////
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;

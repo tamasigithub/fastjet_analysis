@@ -22,7 +22,7 @@
 #include "TLatex.h"
 
 const int n = 14;
-const int nGraphPts = 9;
+const int nGraphPts = 7;
 const float ctr = 1.0;
 const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8.root";
 const char *txt_path = "./analysis_plots/txt_files";

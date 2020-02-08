@@ -29,14 +29,14 @@ root -b -l Significance_Pt_3.cpp -e 'pdf();'<<EOF
 EOF
 echo 'Done Significance for ctr = 3.0'
 #
+root -b -l Sensitivity_lambda.cpp -e 'final_plot();'<<EOF
+EOF
+echo 'Done Sensitivity'
+#
 root -b -l Significance_summary.cpp -e 'plot();'<<EOF
 EOF
 echo 'Done Significance Summary'
 echo 'NOW RUNNING SENSITIVITY MACRO'
-#
-root -b -l Sensitivity_lambda.cpp -e 'final_plot();'<<EOF
-EOF
-echo 'Done Sensitivity'
 #
 ##
 ./rootTex2pdf ./analysis_plots/tex/*.tex
@@ -48,8 +48,11 @@ pdflatex mgZsum.tex
 pdflatex mgZiZtot.tex
 pdflatex gZatpT.tex
 pdflatex gSBatpT.tex
+pdflatex gSensatpT.tex
 pdflatex Sens_pTthre.tex
 pdflatex sens_ithBincontri.tex
+pdflatex hist_Zi2Z2tot.tex
+pdflatex hist_sensi2sens2tot.tex
 mv ./*.pdf ./pdf/Sensitivity_Summary/
 rm ./*.log
 rm ./*.aux

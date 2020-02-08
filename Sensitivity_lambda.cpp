@@ -10,6 +10,13 @@ void calculate_normalization()
 	norm_signal2_5 = (IntLumi * four_b_Prob * ggFhhXsec2_5)/tot_MCevents;
 	norm_signal3   = (IntLumi * four_b_Prob * ggFhhXsec3)/tot_MCevents;
 	norm_bckgnd    = (IntLumi * pp4bXsec)/tot_MCevents_B;
+	Norms_Signal[0] = norm_signal_2;
+	Norms_Signal[1] = norm_signal_1;
+	Norms_Signal[2] = norm_signal0;
+	Norms_Signal[3] = norm_signal1;
+	Norms_Signal[4] = norm_signal2;
+	Norms_Signal[5] = norm_signal3;
+
 	return;
 }
 void fetch_bckgnd()
@@ -62,42 +69,22 @@ void fetch_Ctr3()
 	nbins3 = h4_sig3->GetNbinsX();
 	return;
 }
-void Init_FinalHistos()
-{
 
-	h4_SoverB1  = new TH1D("h4_SoverB1", "SoverB Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance1  = new TH1D("h4_Significance1", "Significance Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2_1  = new TH1D("h4_Significance2_1", "Significance square Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	
-	h4_SoverB0  = new TH1D("h4_SoverB0", "SoverB Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance0  = new TH1D("h4_Significance0", "Significance Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2_0  = new TH1D("h4_Significance2_0", "Significance square Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	
-	h4_SoverB_1  = new TH1D("h4_SoverB_1", "SoverB Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance_1  = new TH1D("h4_Significance_1", "Significance Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2__1  = new TH1D("h4_Significance2__1", "Significance square Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	
-	h4_SoverB_2  = new TH1D("h4_SoverB_2", "SoverB Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance_2  = new TH1D("h4_Significance_2", "Significance Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2__2  = new TH1D("h4_Significance2__2", "Significance square Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	
-	h4_SoverB2  = new TH1D("h4_SoverB2", "SoverB Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2  = new TH1D("h4_Significance2", "Significance Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2_2  = new TH1D("h4_Significance2_2", "Significance square Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	
-	h4_SoverB3  = new TH1D("h4_SoverB3", "SoverB Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance3  = new TH1D("h4_Significance3", "Significance Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	h4_Significance2_3  = new TH1D("h4_Significance2_3", "Significance square Vs 4^{th} jet p_{T} after analysis cuts; p_{T, bJ4} [GeV/c];", nbinsMinus, pt_bins);
-	return;
-}
 void Fill_Arrays_histos()
 {
 
+	h4_bg->Scale(norm_bckgnd);
+	h4_sig1->Scale(norm_signal1);
+	h4_sig0->Scale(norm_signal0);
+	h4_sig_1->Scale(norm_signal_1);
+	h4_sig_2->Scale(norm_signal_2);
+	h4_sig2->Scale(norm_signal2);
+	h4_sig3->Scale(norm_signal3);	
 	for(int i = 1; i < n + 1; i++)
 	{
 		pT_threshold[i-1] = h4_bg->GetBinLowEdge(i);
 		nAnaB[i-1]        = h4_bg->GetBinContent(i);
-		
+
 		nAna1[i-1]        = h4_sig1->GetBinContent(i);
 		nAna0[i-1]        = h4_sig0->GetBinContent(i);
 		nAna_1[i-1]       = h4_sig_1->GetBinContent(i);
@@ -105,440 +92,218 @@ void Fill_Arrays_histos()
 		nAna2[i-1]        = h4_sig2->GetBinContent(i);
 		nAna3[i-1]        = h4_sig3->GetBinContent(i);
 
-		if(nAnaB[i-1] != 0)
-		{
-			SoverB1[i-1]      = (nAna1[i-1] * norm_signal1)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2_1[i-1] = std::pow(nAna1[i-1] * norm_signal1, 2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance1[i-1] = std::sqrt(Significance2_1[i-1]);
-			
-			SoverB0[i-1]      = (nAna0[i-1] * norm_signal0)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2_0[i-1] = std::pow(nAna0[i-1] * norm_signal0, 2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance0[i-1] = std::sqrt(Significance2_0[i-1]);
-			
-			SoverB_1[i-1]      = (nAna_1[i-1] * norm_signal_1)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2__1[i-1] = std::pow(nAna_1[i-1] * norm_signal_1, 2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance_1[i-1] = std::sqrt(Significance2__1[i-1]);
-			
-			SoverB_2[i-1]      = (nAna_2[i-1] * norm_signal_2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2__2[i-1] = std::pow(nAna_2[i-1] * norm_signal_2, 2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance_2[i-1] = std::sqrt(Significance2__2[i-1]);
-			
-			SoverB2[i-1]      = (nAna2[i-1] * norm_signal2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2_2[i-1] = std::pow(nAna2[i-1] * norm_signal2, 2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2[i-1] = std::sqrt(Significance2_2[i-1]);
-			
-			SoverB3[i-1]      = (nAna3[i-1] * norm_signal3)/(nAnaB[i-1] * norm_bckgnd);
-			Significance2_3[i-1] = std::pow(nAna3[i-1] * norm_signal3, 2)/(nAnaB[i-1] * norm_bckgnd);
-			Significance3[i-1] = std::sqrt(Significance2_3[i-1]);
+		nAnaErrB[i-1]        = h4_bg->GetBinError(i);
+
+		nAnaErr1[i-1]        = h4_sig1->GetBinError(i);
+		nAnaErr0[i-1]        = h4_sig0->GetBinError(i);
+		nAnaErr_1[i-1]       = h4_sig_1->GetBinError(i);
+		nAnaErr_2[i-1]       = h4_sig_2->GetBinError(i);
+		nAnaErr2[i-1]        = h4_sig2->GetBinError(i);
+		nAnaErr3[i-1]        = h4_sig3->GetBinError(i);
 		
-		}
-		h4_SoverB1->SetBinContent(i, SoverB1[i-1]);
-		h4_Significance1->SetBinContent(i, Significance1[i-1]);
-		h4_Significance2_1->SetBinContent(i, Significance2_1[i-1]);
-		
-		h4_SoverB0->SetBinContent(i, SoverB0[i-1]);
-		h4_Significance0->SetBinContent(i, Significance0[i-1]);
-		h4_Significance2_0->SetBinContent(i, Significance2_0[i-1]);
-		
-		h4_SoverB_1->SetBinContent(i, SoverB_1[i-1]);
-		h4_Significance_1->SetBinContent(i, Significance_1[i-1]);
-		h4_Significance2__1->SetBinContent(i, Significance2__1[i-1]);
-		
-		h4_SoverB_2->SetBinContent(i, SoverB_2[i-1]);
-		h4_Significance_2->SetBinContent(i, Significance_2[i-1]);
-		h4_Significance2__2->SetBinContent(i, Significance2__2[i-1]);
-		
-		h4_SoverB2->SetBinContent(i, SoverB2[i-1]);
-		h4_Significance2->SetBinContent(i, Significance2[i-1]);
-		h4_Significance2_2->SetBinContent(i, Significance2_2[i-1]);
-		
-		h4_SoverB3->SetBinContent(i, SoverB3[i-1]);
-		h4_Significance3->SetBinContent(i, Significance3[i-1]);
-		h4_Significance2_3->SetBinContent(i, Significance2_3[i-1]);
+		nAna[i-1][0]       = h4_sig_2->GetBinContent(i);
+		nAna[i-1][1]       = h4_sig_1->GetBinContent(i);
+		nAna[i-1][2]       = h4_sig0->GetBinContent(i);
+		nAna[i-1][3]       = h4_sig1->GetBinContent(i);
+		nAna[i-1][4]       = h4_sig2->GetBinContent(i);
+		nAna[i-1][5]       = h4_sig3->GetBinContent(i);
+
+		nAnaErr[i-1][0]    = h4_sig_2->GetBinError(i);
+		nAnaErr[i-1][1]    = h4_sig_1->GetBinError(i);
+		nAnaErr[i-1][2]    = h4_sig0->GetBinError(i);
+		nAnaErr[i-1][3]    = h4_sig1->GetBinError(i);
+		nAnaErr[i-1][4]    = h4_sig2->GetBinError(i);
+		nAnaErr[i-1][5]    = h4_sig3->GetBinError(i);
 	
-	}
-	return;
-}
-void Set_graphProps()
-{
-
-	g20->GetXaxis()->SetTitle("k_{#lambda}");
-	g20->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g20->GetYaxis()->SetTitle("significance (p_{T} #in {20,30})");
-	g20->GetYaxis()->SetTitle("S_{i} (p_{T} #in {20,30})");
-	g20->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g20->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g20->GetYaxis()->CenterTitle();
-	g20->GetXaxis()->CenterTitle();
-	g20->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g20->SetLineColor(kRed);
-	g20->SetLineWidth(LINE_WIDTH);
-	g20->SetMarkerSize(MARKER_SIZE);
-	//g20->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g20->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g20->Draw("APe1");
-	g20->Fit("pol2");
-	max_range = g20->GetHistogram()->GetMaximum()*1.1;
-	min_range = g20->GetHistogram()->GetMinimum()*0.4;
-	g20->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c20");
-	c1->Print(out_file_open,"pdf");
-
-	//TCanvas *c2 = new TCanvas();
-	g30->GetXaxis()->SetTitle("k_{#lambda}");
-	g30->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g30->GetYaxis()->SetTitle("significance (p_{T} #in {30,40})");
-	g30->GetYaxis()->SetTitle("S_{i} (p_{T} #in {30,40})");
-	g30->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g30->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g30->GetYaxis()->CenterTitle();
-	g30->GetXaxis()->CenterTitle();
-	g30->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g30->SetLineColor(kRed);
-	g30->SetLineWidth(LINE_WIDTH);
-	g30->SetMarkerSize(MARKER_SIZE);
-	//g30->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g30->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g30->Draw("APe1");
-	g30->Fit("pol2");
-	max_range = g30->GetHistogram()->GetMaximum()*1.1;
-	min_range = g30->GetHistogram()->GetMinimum()*0.4;
-	g30->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c30");
-	c1->Print(out_file_,"pdf");
-
-	//TCanvas *c3 = new TCanvas();
-	g40->GetXaxis()->SetTitle("k_{#lambda}");
-	g40->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g40->GetYaxis()->SetTitle("significance (p_{T} #in {40,50})");
-	g40->GetYaxis()->SetTitle("S_{i} (p_{T} #in {40,50})");
-	g40->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g40->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g40->GetYaxis()->CenterTitle();
-	g40->GetXaxis()->CenterTitle();
-	g40->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g40->SetLineColor(kRed);
-	g40->SetLineWidth(LINE_WIDTH);
-	g40->SetMarkerSize(MARKER_SIZE);
-	//g40->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g40->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g40->Draw("APe1");
-	g40->Fit("pol2");
-	max_range = g40->GetHistogram()->GetMaximum()*1.1;
-	min_range = g40->GetHistogram()->GetMinimum()*0.4;
-	g40->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c40");
-	c1->Print(out_file_,"pdf");
-
-	//TCanvas *c4 = new TCanvas();
-	g50->GetXaxis()->SetTitle("k_{#lambda}");
-	g50->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g50->GetYaxis()->SetTitle("significance (p_{T} #in {50,60})");
-	g50->GetYaxis()->SetTitle("S_{i} (p_{T} #in {50,60})");
-	g50->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g50->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g50->GetYaxis()->CenterTitle();
-	g50->GetXaxis()->CenterTitle();
-	g50->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g50->SetLineColor(kRed);
-	g50->SetLineWidth(LINE_WIDTH);
-	g50->SetMarkerSize(MARKER_SIZE);
-	//g50->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g50->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g50->Draw("APe1");
-	g50->Fit("pol2");
-	max_range = g50->GetHistogram()->GetMaximum()*1.1;
-	min_range = g50->GetHistogram()->GetMinimum()*0.4;
-	g50->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c50");
-	c1->Print(out_file_,"pdf");
-
-	//TCanvas *c5 = new TCanvas();
-	g60->GetXaxis()->SetTitle("k_{#lambda}");
-	g60->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g60->GetYaxis()->SetTitle("significance (p_{T} #in {60,70})");
-	g60->GetYaxis()->SetTitle("S_{i} (p_{T} #in {60,70})");
-	g60->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g60->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g60->GetYaxis()->CenterTitle();
-	g60->GetXaxis()->CenterTitle();
-	g60->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g60->SetLineColor(kRed);
-	g60->SetLineWidth(LINE_WIDTH);
-	g60->SetMarkerSize(MARKER_SIZE);
-	//g60->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g60->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g60->Draw("APe1");
-	g60->Fit("pol2");
-	max_range = g60->GetHistogram()->GetMaximum()*1.1;
-	min_range = g60->GetHistogram()->GetMinimum()*0.4;
-	g60->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c60");
-	c1->Print(out_file_,"pdf");
-
-	//TCanvas *c6 = new TCanvas();
-	g70->GetXaxis()->SetTitle("k_{#lambda}");
-	g70->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g70->GetYaxis()->SetTitle("significance (p_{T} #in {70,80})");
-	g70->GetYaxis()->SetTitle("S_{i} (p_{T} #in {70,80})");
-	g70->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g70->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g70->GetYaxis()->CenterTitle();
-	g70->GetXaxis()->CenterTitle();
-	g70->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g70->SetLineColor(kRed);
-	g70->SetLineWidth(LINE_WIDTH);
-	g70->SetMarkerSize(MARKER_SIZE);
-	//g70->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g70->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g70->Draw("APe1");
-	g70->Fit("pol2");
-	max_range = g70->GetHistogram()->GetMaximum()*1.1;
-	min_range = g70->GetHistogram()->GetMinimum()*0.4;
-	g70->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c70");
-	c1->Print(out_file_,"pdf");
-
-	//TCanvas *c7 = new TCanvas();
-	g80->GetXaxis()->SetTitle("k_{#lambda}");
-	g80->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g80->GetYaxis()->SetTitle("significance (p_{T} #in {80,90})");
-	g80->GetYaxis()->SetTitle("S_{i} (p_{T} #in {80,90})");
-	g80->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g80->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g80->GetYaxis()->CenterTitle();
-	g80->GetXaxis()->CenterTitle();
-	g80->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g80->SetLineColor(kRed);
-	g80->SetLineWidth(LINE_WIDTH);
-	g80->SetMarkerSize(MARKER_SIZE);
-	//g80->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g80->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g80->Draw("APe1");
-	g80->Fit("pol2");
-	max_range = g80->GetHistogram()->GetMaximum()*1.1;
-	min_range = g80->GetHistogram()->GetMinimum()*0.4;
-	g80->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c80");
-	c1->Print(out_file_,"pdf");
-	
-	//TCanvas *c8 = new TCanvas();
-	g90->GetXaxis()->SetTitle("k_{#lambda}");
-	g90->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g90->GetYaxis()->SetTitle("significance (p_{T} #in {90,100})");
-	g90->GetYaxis()->SetTitle("S_{i} (p_{T} #in {90,100})");
-	g90->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g90->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g90->GetYaxis()->CenterTitle();
-	g90->GetXaxis()->CenterTitle();
-	g90->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g90->SetLineColor(kRed);
-	g90->SetLineWidth(LINE_WIDTH);
-	g90->SetMarkerSize(MARKER_SIZE);
-	//g90->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g90->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g90->Draw("APe1");
-	g90->Fit("pol2");
-	max_range = g90->GetHistogram()->GetMaximum()*1.1;
-	min_range = g90->GetHistogram()->GetMinimum()*0.4;
-	g90->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c90");
-	c1->Print(out_file_,"pdf");
-
-	//TCanvas *c9 = new TCanvas();
-	g100->GetXaxis()->SetTitle("k_{#lambda}");
-	g100->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	//g100->GetYaxis()->SetTitle("significance (p_{T} #in {100,500})");
-	g100->GetYaxis()->SetTitle("S_{i} (p_{T} #in {100,500})");
-	g100->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	g100->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	g100->GetYaxis()->CenterTitle();
-	g100->GetXaxis()->CenterTitle();
-	g100->SetMarkerStyle(kFullCircle);//kFullCircle);
-	g100->SetLineColor(kRed);
-	g100->SetLineWidth(LINE_WIDTH);
-	g100->SetMarkerSize(MARKER_SIZE);
-	//g100->SetTitle("hh #rightarrow 4b #sqrt{S_{i}^{2}/B_{i}} Vs k_{#lambda}");
-	g100->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
-	g100->Draw("APe1");
-	g100->Fit("pol2");
-	max_range = g100->GetHistogram()->GetMaximum()*1.1;
-	min_range = g100->GetHistogram()->GetMinimum()*0.4;
-	g100->GetYaxis()->SetRangeUser(min_range, max_range);
-	c1->Update();
-	gPad->Write("c100");
-	c1->Print(out_file_,"pdf");
+	}	
 	return;
 }
 
 void Fill_sigI_lambdaI_graphs()
 {
-	//for(int i = 0; i < nGraphPts; i++)
-	//{
-	//
-	//	for(int k = 0; k < nlambda; k++)
-	//	{
-	//	
-	//		(graphList*)[i]->SetPoint(k, lambda[k], vSignificance[k][i])
-	//	}
-
-	//}
-
-	//g20->SetPoint(0, lambda[0], Significance_2[0]);
-	//g20->SetPoint(1, lambda[1], Significance_1[0]);
-	//g20->SetPoint(2, lambda[2], Significance0[0]);
-	//g20->SetPoint(3, lambda[3], Significance1[0]);
-	//g20->SetPoint(4, lambda[4], Significance2[0]);
-	//g20->SetPoint(5, lambda[5], Significance3[0]);
-	//
-	//g30->SetPoint(0, lambda[0], Significance_2[1]);
-	//g30->SetPoint(1, lambda[1], Significance_1[1]);
-	//g30->SetPoint(2, lambda[2], Significance0[1]);
-	//g30->SetPoint(3, lambda[3], Significance1[1]);
-	//g30->SetPoint(4, lambda[4], Significance2[1]);
-	//g30->SetPoint(5, lambda[5], Significance3[1]);
-
-	//g40->SetPoint(0, lambda[0], Significance_2[2]);
-	//g40->SetPoint(1, lambda[1], Significance_1[2]);
-	//g40->SetPoint(2, lambda[2], Significance0[2]);
-	//g40->SetPoint(3, lambda[3], Significance1[2]);
-	//g40->SetPoint(4, lambda[4], Significance2[2]);
-	//g40->SetPoint(5, lambda[5], Significance3[2]);
-	//
-	//std::cout<<"Significance_2[3] = " <<Significance_2[3] <<std::endl;
-	//g50->SetPoint(0, lambda[0], Significance_2[3]);
-	//g50->SetPoint(1, lambda[1], Significance_1[3]);
-	//g50->SetPoint(2, lambda[2], Significance0[3]);
-	//g50->SetPoint(3, lambda[3], Significance1[3]);
-	//g50->SetPoint(4, lambda[4], Significance2[3]);
-	//g50->SetPoint(5, lambda[5], Significance3[3]);
-	//
-	//g60->SetPoint(0, lambda[0], Significance_2[4]);
-	//g60->SetPoint(1, lambda[1], Significance_1[4]);
-	//g60->SetPoint(2, lambda[2], Significance0[4]);
-	//g60->SetPoint(3, lambda[3], Significance1[4]);
-	//g60->SetPoint(4, lambda[4], Significance2[4]);
-	//g60->SetPoint(5, lambda[5], Significance3[4]);
-	//
-	//g70->SetPoint(0, lambda[0], Significance_2[5]);
-	//g70->SetPoint(1, lambda[1], Significance_1[5]);
-	//g70->SetPoint(2, lambda[2], Significance0[5]);
-	//g70->SetPoint(3, lambda[3], Significance1[5]);
-	//g70->SetPoint(4, lambda[4], Significance2[5]);
-	//g70->SetPoint(5, lambda[5], Significance3[5]);
-	//
-	//g80->SetPoint(0, lambda[0], Significance_2[6]);
-	//g80->SetPoint(1, lambda[1], Significance_1[6]);
-	//g80->SetPoint(2, lambda[2], Significance0[6]);
-	//g80->SetPoint(3, lambda[3], Significance1[6]);
-	//g80->SetPoint(4, lambda[4], Significance2[6]);
-	//g80->SetPoint(5, lambda[5], Significance3[6]);
-	//
-	//g90->SetPoint(0, lambda[0], Significance_2[7]);
-	//g90->SetPoint(1, lambda[1], Significance_1[7]);
-	//g90->SetPoint(2, lambda[2], Significance0[7]);
-	//g90->SetPoint(3, lambda[3], Significance1[7]);
-	//g90->SetPoint(4, lambda[4], Significance2[7]);
-	//g90->SetPoint(5, lambda[5], Significance3[7]);
-	//
-	//g100->SetPoint(0, lambda[0], Significance_2[8]);
-	//g100->SetPoint(1, lambda[1], Significance_1[8]);
-	//g100->SetPoint(2, lambda[2], Significance0[8]);
-	//g100->SetPoint(3, lambda[3], Significance1[8]);
-	//g100->SetPoint(4, lambda[4], Significance2[8]);
-	//g100->SetPoint(5, lambda[5], Significance3[8]);
+	c1->Clear();
+	for(int i = 0; i < nGraphPts; i++)
+	{
+		TString graph_name;
+		graph_name.Form("g%.0f", pt_bins[i]);
+		TGraphErrors *mygraph = new TGraphErrors(nlambda, lambda, nAna[i], 0, nAnaErr[i]);
+		mygraph->SetName(graph_name);
+		//graphList.Add(mygraph);	
+		//for(int k = 0; k < nlambda; ++k)
+		//{
+		//	mygraph->SetPoint(k, lambda[k], nAna[i][k], 0, nAnaErr[i][k]);
+		//}
+		mygraph->GetXaxis()->SetTitle("k_{#lambda}");
+		mygraph->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		TString yaxis_name;
+		yaxis_name.Form("S_{i} (p_{T} #in {%.0f,%.0f})",pt_bins[i], pt_bins[i+1]);
+		mygraph->GetYaxis()->SetTitle(yaxis_name);
+		mygraph->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		mygraph->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		mygraph->GetYaxis()->CenterTitle();
+		mygraph->GetXaxis()->CenterTitle();
+		mygraph->SetMarkerStyle(kFullCircle);//kFullCircle);
+		mygraph->SetLineColor(kRed);
+		mygraph->SetLineWidth(LINE_WIDTH);
+		mygraph->SetMarkerSize(MARKER_SIZE);
+		mygraph->SetTitle("hh #rightarrow 4b S_{i} Vs k_{#lambda}");
+		mygraph->Draw("APe1");
+		mygraph->Fit("pol2");
+		max_range = mygraph->GetHistogram()->GetMaximum()*1.1;
+		min_range = mygraph->GetHistogram()->GetMinimum()*0.4;
+		mygraph->GetYaxis()->SetRangeUser(min_range, max_range);
+		c1->Update();
+		mygraph->Write();
+		//gPad->Write("c80");
+		c1->Print(out_file_,"pdf");
+	}
 	
-	g20->SetPoint(0, lambda[0], nAna_2[0] * norm_signal_2);
-	g20->SetPoint(1, lambda[1], nAna_1[0] * norm_signal_1);
-	g20->SetPoint(2, lambda[2], nAna0[0] * norm_signal0);
-	g20->SetPoint(3, lambda[3], nAna1[0] * norm_signal1);
-	g20->SetPoint(4, lambda[4], nAna2[0] * norm_signal2);
-	g20->SetPoint(5, lambda[5], nAna3[0] * norm_signal3);
-	
-	g30->SetPoint(0, lambda[0], nAna_2[1] * norm_signal_2);
-	g30->SetPoint(1, lambda[1], nAna_1[1] * norm_signal_1);
-	g30->SetPoint(2, lambda[2], nAna0[1] * norm_signal0);
-	g30->SetPoint(3, lambda[3], nAna1[1] * norm_signal1);
-	g30->SetPoint(4, lambda[4], nAna2[1] * norm_signal2);
-	g30->SetPoint(5, lambda[5], nAna3[1] * norm_signal3);
-
-	g40->SetPoint(0, lambda[0], nAna_2[2] * norm_signal_2);
-	g40->SetPoint(1, lambda[1], nAna_1[2] * norm_signal_1);
-	g40->SetPoint(2, lambda[2], nAna0[2] * norm_signal0);
-	g40->SetPoint(3, lambda[3], nAna1[2] * norm_signal1);
-	g40->SetPoint(4, lambda[4], nAna2[2] * norm_signal2);
-	g40->SetPoint(5, lambda[5], nAna3[2] * norm_signal3);
-	
-	std::cout<<"nAna_2[3] = " <<nAna_2[3] * norm_signal_2<<std::endl;
-	g50->SetPoint(0, lambda[0], nAna_2[3] * norm_signal_2);
-	g50->SetPoint(1, lambda[1], nAna_1[3] * norm_signal_1);
-	g50->SetPoint(2, lambda[2], nAna0[3] * norm_signal0);
-	g50->SetPoint(3, lambda[3], nAna1[3] * norm_signal1);
-	g50->SetPoint(4, lambda[4], nAna2[3] * norm_signal2);
-	g50->SetPoint(5, lambda[5], nAna3[3] * norm_signal3);
-	
-	g60->SetPoint(0, lambda[0], nAna_2[4] * norm_signal_2);
-	g60->SetPoint(1, lambda[1], nAna_1[4] * norm_signal_1);
-	g60->SetPoint(2, lambda[2], nAna0[4] * norm_signal0);
-	g60->SetPoint(3, lambda[3], nAna1[4] * norm_signal1);
-	g60->SetPoint(4, lambda[4], nAna2[4] * norm_signal2);
-	g60->SetPoint(5, lambda[5], nAna3[4] * norm_signal3);
-	
-	g70->SetPoint(0, lambda[0], nAna_2[5] * norm_signal_2);
-	g70->SetPoint(1, lambda[1], nAna_1[5] * norm_signal_1);
-	g70->SetPoint(2, lambda[2], nAna0[5] * norm_signal0);
-	g70->SetPoint(3, lambda[3], nAna1[5] * norm_signal1);
-	g70->SetPoint(4, lambda[4], nAna2[5] * norm_signal2);
-	g70->SetPoint(5, lambda[5], nAna3[5] * norm_signal3);
-	
-	g80->SetPoint(0, lambda[0], nAna_2[6] * norm_signal_2);
-	g80->SetPoint(1, lambda[1], nAna_1[6] * norm_signal_1);
-	g80->SetPoint(2, lambda[2], nAna0[6] * norm_signal0);
-	g80->SetPoint(3, lambda[3], nAna1[6] * norm_signal1);
-	g80->SetPoint(4, lambda[4], nAna2[6] * norm_signal2);
-	g80->SetPoint(5, lambda[5], nAna3[6] * norm_signal3);
-	
-	g90->SetPoint(0, lambda[0], nAna_2[7] * norm_signal_2);
-	g90->SetPoint(1, lambda[1], nAna_1[7] * norm_signal_1);
-	g90->SetPoint(2, lambda[2], nAna0[7] * norm_signal0);
-	g90->SetPoint(3, lambda[3], nAna1[7] * norm_signal1);
-	g90->SetPoint(4, lambda[4], nAna2[7] * norm_signal2);
-	g90->SetPoint(5, lambda[5], nAna3[7] * norm_signal3);
-	
-	g100->SetPoint(0, lambda[0], nAna_2[8] * norm_signal_2);
-	g100->SetPoint(1, lambda[1], nAna_1[8] * norm_signal_1);
-	g100->SetPoint(2, lambda[2], nAna0[8] * norm_signal0);
-	g100->SetPoint(3, lambda[3], nAna1[8] * norm_signal1);
-	g100->SetPoint(4, lambda[4], nAna2[8] * norm_signal2);
-	g100->SetPoint(5, lambda[5], nAna3[8] * norm_signal3);
 	return;
 }
-void Delete_graphs()
+void histVsPT()
 {
 
-	if(g20) delete g20;
-	if(g30) delete g30;
-	if(g40) delete g40;
-	if(g50) delete g50;
-	if(g60) delete g60;
-	if(g70) delete g70;
-	if(g80) delete g80;
-	if(g90) delete g90;
-	if(g100) delete g100;
+	h4_bg->Scale(norm_bckgnd);
+	h4_bg->Write("h4_bg");
+	c1->Clear();
+	c1->Divide(1,3);
+	for(int k = 0; k < nlambda; ++k)
+	{	
+		TString gnamehist;
+		if(lambda[k] < 0){gnamehist.Form("Ana_bjet4LPt_%d",(int)std::abs(lambda[k]));}
+		else {gnamehist.Form("Ana_bjet4LPt%d", (int)std::abs(lambda[k]));}
+		TH1D *hSOG = (TH1D*)f->Get(gnamehist);
+
+		if(lambda[k] < 0){gnamehist.Form("h4_sig_%d",(int)std::abs(lambda[k]));}
+		else {gnamehist.Form("h4_sig%d", (int)std::abs(lambda[k]));}
+        	TH1 *h4_sigk = hSOG->Rebin(nbinsMinus, gnamehist, pt_bins);
+		h4_sigk->Scale(Norms_Signal[k]);
+		h4_sigk->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
+		h4_sigk->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		h4_sigk->GetYaxis()->SetTitle("S");
+		h4_sigk->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		h4_sigk->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		h4_sigk->GetYaxis()->CenterTitle();
+		h4_sigk->GetXaxis()->CenterTitle();
+		h4_sigk->SetMarkerStyle(kFullCircle);//kFullCircle);
+		h4_sigk->SetLineColor(lambda_colors[k]);
+		h4_sigk->SetLineWidth(LINE_WIDTH);
+		h4_sigk->SetMarkerSize(MARKER_SIZE);
+		h4_sigk->SetTitle(Form("S Vs p_{T, bJ4} bins for k_{#lambda} = %.1f",lambda[k]));
+		max_range = h4_sigk->GetMaximum()*1.1;
+		min_range = h4_sigk->GetMinimum()*0.4;
+		h4_sigk->GetYaxis()->SetRangeUser(min_range, max_range);
+		//h4_sigk->Draw("PC");
+		c1->cd(1);
+		h4_sigk->Draw("PLe1");
+		gPad->SetLogx();
+		h4_sigk->Write(gnamehist);
+	
+		if(lambda[k] < 0){gnamehist.Form("h4_SoverB_%d",(int)std::abs(lambda[k]));}
+		else {gnamehist.Form("h4_SoverB%d", (int)std::abs(lambda[k]));}	
+		TH1 *h4_SoverB = dynamic_cast<TH1*>(h4_sigk->Clone(gnamehist));
+		h4_SoverB->Divide(h4_sigk, h4_bg, 1.0, 1.0);
+		h4_SoverB->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
+		h4_SoverB->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		h4_SoverB->GetYaxis()->SetTitle("S/B");
+		h4_SoverB->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		h4_SoverB->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		h4_SoverB->GetYaxis()->CenterTitle();
+		h4_SoverB->GetXaxis()->CenterTitle();
+		h4_SoverB->SetMarkerStyle(kFullCircle);//kFullCircle);
+		h4_SoverB->SetLineColor(lambda_colors[k]);
+		h4_SoverB->SetLineWidth(LINE_WIDTH);
+		h4_SoverB->SetMarkerSize(MARKER_SIZE);
+		h4_SoverB->SetTitle(Form("S/B Vs p_{T, bJ4} bins for k_{#lambda} = %.1f",lambda[k]));
+		max_range = h4_SoverB->GetMaximum()*1.1;
+		min_range = h4_SoverB->GetMinimum()*0.4;
+		h4_SoverB->GetYaxis()->SetRangeUser(min_range, max_range);
+		//h4_SoverB->Draw("PC");
+		c1->cd(2);
+		h4_SoverB->Draw("PLe1");
+		gPad->SetLogx();
+		h4_SoverB->Write(gnamehist);
+	
+		if(lambda[k] < 0){gnamehist.Form("h4_S2overB_%d",(int)std::abs(lambda[k]));}
+		else {gnamehist.Form("h4_S2overB%d", (int)std::abs(lambda[k]));}		
+
+		TH1 *h4_S2 = dynamic_cast<TH1*>(h4_sigk->Clone("h4_S2"));
+		h4_S2->Multiply(h4_sigk);
+		
+		TH1 *h4_S2overB = dynamic_cast<TH1*>(h4_S2->Clone(gnamehist));
+		h4_S2overB->Divide(h4_S2, h4_bg, 1.0, 1.0);
+		h4_S2overB->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
+		h4_S2overB->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		h4_S2overB->GetYaxis()->SetTitle("S^{2}/B");
+		h4_S2overB->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		h4_S2overB->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		h4_S2overB->GetYaxis()->CenterTitle();
+		h4_S2overB->GetXaxis()->CenterTitle();
+		h4_S2overB->SetMarkerStyle(kFullCircle);//kFullCircle);
+		h4_S2overB->SetLineColor(lambda_colors[k]);
+		h4_S2overB->SetLineWidth(LINE_WIDTH);
+		h4_S2overB->SetMarkerSize(MARKER_SIZE);
+		h4_S2overB->SetTitle(Form("S^{2}/B Vs p_{T, bJ4} bins for k_{#lambda} = %.1f",lambda[k]));
+		max_range = h4_S2overB->GetMaximum()*1.1;
+		min_range = h4_S2overB->GetMinimum()*0.4;
+		h4_S2overB->GetYaxis()->SetRangeUser(min_range, max_range);
+		//h4_S2overB->Draw("PC");
+		c1->cd(3);
+		h4_S2overB->Draw("PLe1");
+		gPad->SetLogx();
+		c1->Print(out_file_open,"pdf");
+		h4_S2overB->Write(gnamehist);
+		c1->SetLogx(0);
+		
+	}
+	return;
+}
+
+void hist_Sig_ithBinContri()
+{
+	TString hi_name;
+	c1->Clear();
+	for(int k = nlambda-1; k >-1; --k)
+	{
+		if(lambda[k] < 0){hi_name.Form("h4_S2overB_%d",(int)std::abs(lambda[k]));}
+		else {hi_name.Form("h4_S2overB%d", (int)std::abs(lambda[k]));}
+		
+		TH1D *hi = (TH1D*)file2->Get(hi_name);
+		double integralK = hi->Integral();
+		
+		hi->Scale(1/integralK);
+		hi->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
+		hi->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+		hi->GetYaxis()->SetTitle("Z_{i}^{2}/Z_{tot}^{2}");
+		hi->GetYaxis()->SetTitleSize(TITLE_SIZE);
+		hi->GetXaxis()->SetTitleSize(TITLE_SIZE);
+		hi->GetYaxis()->CenterTitle();
+		hi->GetXaxis()->CenterTitle();
+		hi->SetMarkerStyle(kFullCircle);//kFullCircle);
+		hi->SetLineColor(lambda_colors[k]);
+		hi->SetLineWidth(LINE_WIDTH);
+		hi->SetMarkerSize(MARKER_SIZE);
+		hi->SetTitle(Form("i^{th} p_{T, bJ4} bin contribution to Significance for k_{#lambda} = %.1f",lambda[k]));
+		max_range = hi->GetMaximum()*1.1;
+		min_range = hi->GetMinimum()*0.4;
+		hi->GetYaxis()->SetRangeUser(min_range, max_range);
+		//hi->Draw("PC");
+		if(lambda[k]==3.0)hi->Draw("PLe1");
+		else hi->Draw("PLe1 same");
+		c1->SetLogx();
+		if(lambda[k] < 0){hi_name.Form("h4_S2overBi_%d",(int)std::abs(lambda[k]));}
+		else {hi_name.Form("h4_S2overBi%d", (int)std::abs(lambda[k]));}
+		hi->Write(hi_name);
+	}
+	c1->Print(out_file_,"pdf");
+	c1->SetLogx(0);
 	return;
 }
 
 void final_plot()
 {
 
+	TH1::SetDefaultSumw2(true);
 	Legends();
 	calculate_normalization();
 
@@ -566,37 +331,9 @@ void final_plot()
 	std::cout<<"number of bins: " <<nbins2 <<std::endl;
 	std::cout<<"number of bins: " <<nbins3 <<std::endl;
 	std::cout<<"number of bins: " <<nbinsB <<std::endl;
-
-	Init_FinalHistos();
+	//! scale all the histos with the correct normalization
 	Fill_Arrays_histos();	
-	
-	//for(int i = 0; i < nGraphPts; i++)
-	//{
-	//	graph_name.Form("g%d", (i+2)*10);
-	//	TGraph *mygraph = new TGraph();
-	//	mygraph->SetName(graph_name);
-	//	graphList.Add(mygraph);	
-	//}
-	g20  = new TGraph();
-	g30  = new TGraph();
-	g40  = new TGraph();
-	g50  = new TGraph();
-	g60  = new TGraph();
-	g70  = new TGraph();
-	g80  = new TGraph();
-	g90  = new TGraph();
-	g100 = new TGraph();
 
-	//vSignificance[]
-
-	//vSignificance[0] = {Significance_2};	
-	//vSignificance[1] = {Significance_1};	
-	//vSignificance[2] = {Significance0};	
-	//vSignificance[3] = {Significance1};	
-	//vSignificance[4] = {Significance2};	
-	//vSignificance[5] = {Significance3};	
-	Fill_sigI_lambdaI_graphs();
-	
         sprintf(out_root_file_name,"%s/../root/%s.root",out_path,output_file_name);
 	TFile *fout = new TFile(out_root_file_name,"RECREATE");
 	
@@ -608,29 +345,25 @@ void final_plot()
 
 
 	gStyle->SetOptStat(0);
-
-	Set_graphProps();
-	//graphList.Write();
-	g20->Write("g20");
-	g30->Write("g30");
-	g40->Write("g40");
-	g50->Write("g50");
-	g60->Write("g60");
-	g70->Write("g70");
-	g80->Write("g80");
-	g90->Write("g90");
-	g100->Write("g100");
-	fout->Close();
-
-	Delete_graphs();
+	//! for Significance
+	histVsPT();
+	//! for Sensitivity
+	Fill_sigI_lambdaI_graphs();
 	
+	fout->Close();
+	
+	//! open the first o/p root file as file2
 	Fit_graphs();
+
         sprintf(out_root_file_name,"%s/../root/%s_final.root",out_path,output_file_name);
         TFile *finalout = new TFile(out_root_file_name,"RECREATE");
+
+	//! for Significance
+	hist_Sig_ithBinContri();
+
+	//! for Sensitivity
 	Init_ci();
 	Init_sigma_square();
-
-
 
 	plot_ithBinSensitivity2_Vs_klambda();
 

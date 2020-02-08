@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -23,14 +22,17 @@
 
 #include "Legends.cpp"
 
-const double EvalPT = 35.0;
+const int nGraphPts = 7;
+Double_t EvalPT[nGraphPts] = {20., 30., 40., 50., 60., 70., 80.};
+Float_t EvalPTColors[nGraphPts] = {kViolet, kOrange, kBlue, kGreen, kGray+1, kRed, kBlack};
 
-const int nGraphPts = 9;
+//double EvalPT = 35.0;
 const int nlambda = 6;
 Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
 Float_t lambda_colors[nlambda] = {kGreen, kGray +1, kBlack, kRed, kBlue, kViolet};
 
 const char *root_file_name   = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30";
+const char *root_file_name1   = "./analysis_plots/root/Sensitivity_studyVsk_lambda_corrected_incl4bProbMH30_final.root";
 //const char *root_file_name_2 = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-2.0.root";
 //const char *root_file_name_1 = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-1.0.root";
 //const char *root_file_name0  = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_0.0.root";
@@ -66,8 +68,11 @@ void plot()
 	TMultiGraph *mg2 = new TMultiGraph();
 	TGraphErrors *Zi_cont = nullptr;
 	
-	TGraph *SBat30 = new TGraph(nlambda);
-	TGraph *Zat30 = new TGraph(nlambda);
+	//TGraph *mgSBfor_k = new TGraph(nlambda);
+	//TGraph *mgZfor_k = new TGraph(nlambda);
+	TMultiGraph *mgSBfor_k = new TMultiGraph();
+	TMultiGraph *mgZfor_k  = new TMultiGraph();
+	TMultiGraph *mgSensfor_k  = new TMultiGraph();
 
 	TLegend *leg = new TLegend(Xl1, Yu1, Xl2, Yu2);
 	leg->SetFillStyle(FILL_STYLE);
@@ -82,7 +87,19 @@ void plot()
 	legR->SetTextAlign(TEXT_ALIGN);
 	legR->SetTextFont(TEXT_FONT);
 	legR->SetTextSize(TEXT_SIZE);
-	
+
+	TLegend *pTbJ4 = new TLegend(Xr1,Ym1,Xr2,Ym2);
+	pTbJ4->SetHeader("p_{T, bJ4} thr. [GeV/c]","C");
+	pTbJ4->AddEntry((TObject*)0, " ", "");
+	TLegendEntry *header = (TLegendEntry*)pTbJ4->GetListOfPrimitives()->First();
+   	header->SetTextAlign(kHAlignCenter+kVAlignTop);
+	pTbJ4->SetFillStyle(FILL_STYLE);
+	pTbJ4->SetBorderSize(BORDER_SIZE);
+	pTbJ4->SetTextAlign(21);
+	//pTbJ4->SetTextAlign(TEXT_ALIGN);
+	pTbJ4->SetTextSize(TEXT_SIZE);
+
+
 	char fname[1024];
 	TFile *f = nullptr;
 	for(int k = 0; k < nlambda; k++)
@@ -121,9 +138,6 @@ void plot()
 		Zi_cont->SetLineColor(lambda_colors[k]);
 		mg2->Add(Zi_cont);
 
-		//! plot Significance and S/B with 4th bjet pt threshold =30GeV/c Vs k_lambda
-		Zat30->SetPoint(k, lambda[k], ZatPt->Eval(EvalPT));
-		SBat30->SetPoint(k, lambda[k], SBatPt->Eval(EvalPT));
 
 		//! draw a k_lambda legend.
 		if(lambda[k] < 0)
@@ -136,9 +150,79 @@ void plot()
 			leg->AddEntry(ZatPt,Form("k_{#lambda} =  %.1f", lambda[k]),"l");
 			legR->AddEntry(ZatPt,Form("k_{#lambda} =  %.1f", lambda[k]),"l");
 		}
-
+		f->Close();
+		
 	}
-	
+	//delete SBatPt;
+	//delete ZatPt;
+	//delete Zi_cont;
+	//delete f;
+		
+	TFile *f1 = new TFile(root_file_name1, "READ");
+	for(int i = 0; i < nGraphPts; ++i)
+	{
+		
+		TString gname1;	
+		//! plot total S/b vs pT of 4th b-jet	
+		gname1.Form("GrSB__%d",(int)std::abs(EvalPT[i]));
+		TGraph *SBat_Thi = new TGraph(nlambda);
+		SBat_Thi->SetName(gname1);
+		SBat_Thi->SetLineColor(EvalPTColors[i]);
+
+		gname1.Form("GrZ__%d",(int)std::abs(EvalPT[i]));
+		TGraph *Zat_Thi = new TGraph(nlambda);
+		Zat_Thi->SetName(gname1);
+		Zat_Thi->SetLineColor(EvalPTColors[i]);
+		
+		gname1.Form("GrSens__%d",(int)std::abs(EvalPT[i]));
+		TGraph *Sensat_Thi = new TGraph(nlambda);
+		Sensat_Thi->SetName(gname1);
+		Sensat_Thi->SetLineColor(EvalPTColors[i]);
+		
+
+		SBat_Thi->SetMarkerStyle(kFullCircle);
+		SBat_Thi->SetLineWidth(LINE_WIDTH);
+		SBat_Thi->SetMarkerSize(MARKER_SIZE);
+		
+		Zat_Thi->SetMarkerStyle(kFullCircle);
+		Zat_Thi->SetLineWidth(LINE_WIDTH);
+		Zat_Thi->SetMarkerSize(MARKER_SIZE);
+		
+		Sensat_Thi->SetMarkerStyle(kFullCircle);
+		Sensat_Thi->SetLineWidth(LINE_WIDTH);
+		Sensat_Thi->SetMarkerSize(MARKER_SIZE);
+
+		for(int k = 0; k < nlambda; ++k)
+		{
+			//! open root file
+			sprintf(fname, "%s_%.1f.root", root_file_name, lambda[k]);
+			f = new TFile(fname, "READ");
+			
+			SBatPt = (TGraphErrors*)f->Get("g1");
+
+			ZatPt = (TGraphErrors*)f->Get("g2");
+			
+			TString gname2;	
+			//! plot total S/b vs pT of 4th b-jet	
+			if(lambda[k] < 0){gname2.Form("Sens_withPt_klambda__%d",(int)std::abs(lambda[k]));}
+			else {gname2.Form("Sens_withPt_klambda_%d", (int)std::abs(lambda[k]));}	
+			TGraph *sens = (TGraph*)f1->Get(gname2);	
+			//! plot Significance and S/B with 4th bjet pt threshold =30GeV/c Vs k_lambda
+			SBat_Thi->SetPoint(k, lambda[k], SBatPt->Eval(EvalPT[i]));
+			Zat_Thi->SetPoint(k, lambda[k], ZatPt->Eval(EvalPT[i]));
+			Sensat_Thi->SetPoint(k, lambda[k], sens->Eval(EvalPT[i]));
+			
+			f->Close();
+
+		}
+		mgSBfor_k->Add(SBat_Thi);
+		mgZfor_k->Add(Zat_Thi);
+		mgSensfor_k->Add(Sensat_Thi);
+		
+		//pTbJ4->AddEntry((TObject*)0, Form(" %.1f",EvalPT[i]), "");
+		pTbJ4->AddEntry(Zat_Thi, Form("%.1f",EvalPT[i]), "l");
+	}
+
 	char out_root_file_name[1024];
         sprintf(out_root_file_name,"%s/../root/%s.root",out_path,output_file_name);
 	TFile *fout = new TFile(out_root_file_name,"RECREATE");
@@ -179,7 +263,7 @@ legR->Draw();
 	mg1->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	mg1->GetYaxis()->CenterTitle();
 	mg1->GetXaxis()->CenterTitle();
-	max_range = mg1->GetHistogram()->GetMaximum()*1.3;
+	max_range = mg1->GetHistogram()->GetMaximum()*1.5;
 	min_range = mg1->GetHistogram()->GetMinimum()*0.4;
 	mg1->GetYaxis()->SetRangeUser(min_range, max_range);
 cms_E->Draw();	
@@ -198,7 +282,7 @@ legR->Draw();
 	mg2->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	mg2->GetYaxis()->CenterTitle();
 	mg2->GetXaxis()->CenterTitle();
-	max_range = mg2->GetHistogram()->GetMaximum()*1.3;
+	max_range = mg2->GetHistogram()->GetMaximum()*1.5;
 	min_range = mg2->GetHistogram()->GetMinimum()*0.4;
 	mg2->GetYaxis()->SetRangeUser(min_range, max_range);
 cms_E->Draw();	
@@ -209,23 +293,21 @@ leg->Draw();
 	c1->Write("mgZiZtot");
 	c1->SaveAs("./analysis_plots/tex/mgZiZtot.tex");
 
-	TLegend *pTbJ4 = new TLegend(0.12,0.14,0.3,0.23);
-	pTbJ4->SetFillStyle(0);
-	pTbJ4->SetBorderSize(0);
-	pTbJ4->AddEntry((TObject*)0, Form("p_{T, bJ4} thr. = %.1f GeV/c",EvalPT), "");
-	pTbJ4->SetTextSize(0.04);
 	
-	Zat30->Draw("ACP");
-	Zat30->GetXaxis()->SetTitle("k_{#lambda}");
-	Zat30->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	Zat30->GetYaxis()->SetTitle("Significance Z");
-	Zat30->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	Zat30->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	Zat30->GetYaxis()->CenterTitle();
-	Zat30->GetXaxis()->CenterTitle();
-	Zat30->SetMarkerStyle(kFullCircle);
-	Zat30->SetLineWidth(LINE_WIDTH);
-	Zat30->SetMarkerSize(MARKER_SIZE);
+	mgZfor_k->Draw("ACP");
+	mgZfor_k->GetXaxis()->SetTitle("k_{#lambda}");
+	mgZfor_k->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+	mgZfor_k->GetYaxis()->SetTitle("Significance Z");
+	mgZfor_k->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	mgZfor_k->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	mgZfor_k->GetYaxis()->CenterTitle();
+	mgZfor_k->GetXaxis()->CenterTitle();
+	//mgZfor_k->SetMarkerStyle(kFullCircle);
+	//mgZfor_k->SetLineWidth(LINE_WIDTH);
+	//mgZfor_k->SetMarkerSize(MARKER_SIZE);
+	max_range = mgZfor_k->GetHistogram()->GetMaximum()*1.5;
+	min_range = mgZfor_k->GetHistogram()->GetMinimum()*0.4;
+	mgZfor_k->GetYaxis()->SetRangeUser(min_range, max_range);
 	pTbJ4->Draw();
 cms_E->Draw();	
 signal_->Draw();	
@@ -234,17 +316,20 @@ ana_txt->Draw();
 	c1->Write("gZatpT");
 	c1->SaveAs("./analysis_plots/tex/gZatpT.tex");
 
-	SBat30->Draw("ACP");
-	SBat30->GetXaxis()->SetTitle("k_{#lambda}");
-	SBat30->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	SBat30->GetYaxis()->SetTitle("S/B");
-	SBat30->GetYaxis()->SetTitleSize(TITLE_SIZE);
-	SBat30->GetXaxis()->SetTitleSize(TITLE_SIZE);
-	SBat30->GetYaxis()->CenterTitle();
-	SBat30->GetXaxis()->CenterTitle();
-	SBat30->SetMarkerStyle(kFullCircle);
-	SBat30->SetLineWidth(LINE_WIDTH);
-	SBat30->SetMarkerSize(MARKER_SIZE);
+	mgSBfor_k->Draw("ACP");
+	mgSBfor_k->GetXaxis()->SetTitle("k_{#lambda}");
+	mgSBfor_k->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+	mgSBfor_k->GetYaxis()->SetTitle("S/B");
+	mgSBfor_k->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	mgSBfor_k->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	mgSBfor_k->GetYaxis()->CenterTitle();
+	mgSBfor_k->GetXaxis()->CenterTitle();
+	//mgSBfor_k->SetMarkerStyle(kFullCircle);
+	//mgSBfor_k->SetLineWidth(LINE_WIDTH);
+	//mgSBfor_k->SetMarkerSize(MARKER_SIZE);
+	max_range = mgSBfor_k->GetHistogram()->GetMaximum()*1.5;
+	min_range = mgSBfor_k->GetHistogram()->GetMinimum()*0.4;
+	mgSBfor_k->GetYaxis()->SetRangeUser(min_range, max_range);
 	pTbJ4->Draw();
 cms_E->Draw();	
 signal_->Draw();	
@@ -252,7 +337,81 @@ ana_txt->Draw();
 	c1->Print(out_file_,"pdf");
 	c1->Write("gSBatpT");
 	c1->SaveAs("./analysis_plots/tex/gSBatpT.tex");
+	
+	mgSensfor_k->Draw("ACP");
+	mgSensfor_k->GetXaxis()->SetTitle("k_{#lambda}");
+	mgSensfor_k->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
+	mgSensfor_k->GetYaxis()->SetTitle("Sensitivity");
+	mgSensfor_k->GetYaxis()->SetTitleSize(TITLE_SIZE);
+	mgSensfor_k->GetXaxis()->SetTitleSize(TITLE_SIZE);
+	mgSensfor_k->GetYaxis()->CenterTitle();
+	mgSensfor_k->GetXaxis()->CenterTitle();
+	//mgSensfor_k->SetMarkerStyle(kFullCircle);
+	//mgSensfor_k->SetLineWidth(LINE_WIDTH);
+	//mgSensfor_k->SetMarkerSize(MARKER_SIZE);
+	max_range = mgSensfor_k->GetHistogram()->GetMaximum()*1.5;
+	min_range = mgSensfor_k->GetHistogram()->GetMinimum()*0.4;
+	mgSensfor_k->GetYaxis()->SetRangeUser(min_range, max_range);
+	pTbJ4->Draw();
+cms_E->Draw();	
+signal_->Draw();	
+ana_txt->Draw();	
+	c1->Print(out_file_,"pdf");
+	c1->Write("gSensatpT");
+	c1->SaveAs("./analysis_plots/tex/gSensatpT.tex");
 
+	gStyle->SetOptStat(0);	
+	TString hi_name;
+	for(int k = nlambda-1; k > -1; --k)
+	{
+		if(lambda[k] < 0){hi_name.Form("h4_S2overBi_%d",(int)std::abs(lambda[k]));}
+		else {hi_name.Form("h4_S2overBi%d", (int)std::abs(lambda[k]));}
+		TH1D *h4s2b = (TH1D*)f1->Get(hi_name);
+		
+		if(lambda[k] == 3.0) 
+		{
+			max_range = h4s2b->GetMaximum() * 1.5;
+			min_range = h4s2b->GetMinimum() * 0.4;
+			h4s2b->GetYaxis()->SetRangeUser(min_range, max_range);
+			c1->SetLogx();
+			h4s2b->Draw("pe1");
+
+		}
+		else h4s2b->Draw("pe1 same");
+	}
+	leg->Draw();
+cms_E->Draw();	
+signal_->Draw();	
+ana_txt->Draw();	
+	c1->Print(out_file_,"pdf");
+	c1->Write("hist_Zi2Z2tot");
+	c1->SaveAs("./analysis_plots/tex/hist_Zi2Z2tot.tex");
+
+	for(int k = nlambda-1; k > -1; --k)
+	{
+		if(lambda[k] < 0){hi_name.Form("Sens_contri_klambda__%d",(int)std::abs(lambda[k]));}
+                else {hi_name.Form("Sens_contri_klambda_%d", (int)std::abs(lambda[k]));}
+		TH1D *h4sens2_cont = (TH1D*)f1->Get(hi_name);
+		if(lambda[k] == 3.0) 
+		{
+			max_range = h4sens2_cont->GetMaximum() * 1.5;
+			min_range = h4sens2_cont->GetMinimum() * -1.0;
+			h4sens2_cont->GetYaxis()->SetRangeUser(min_range, max_range);
+			c1->SetLogx();
+			h4sens2_cont->Draw("pe1");
+
+		}
+		else h4sens2_cont->Draw("pe1 same");
+	}
+	leg->Draw();
+cms_E->Draw();	
+signal_->Draw();	
+ana_txt->Draw();	
+	c1->Print(out_file_,"pdf");
+	c1->Write("hist_sensi2sens2tot");
+	c1->SaveAs("./analysis_plots/tex/hist_sensi2sens2tot.tex");
+	f1->Close();
+	
 	c1->Clear();
 	leg->Draw();
 	c1->Print(out_file_close,"pdf");
