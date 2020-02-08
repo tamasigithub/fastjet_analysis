@@ -21,9 +21,9 @@ root -l padToTex.cpp -e 'pad("c8_a", 2);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c8_b", 2);'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c8_c", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProb.root");'<<EOF
+root -l padToTex.cpp -e 'pad("c8_c", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProbMH30.root");'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c8_d", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProb.root");'<<EOF
+root -l padToTex.cpp -e 'pad("c8_d", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProbMH30.root");'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c11a", 2);'<<EOF
 EOF
@@ -49,7 +49,7 @@ root -l padToTex.cpp -e 'pad("c40c", 1, true);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c40d", 1, true);'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c41b", 1);'<<EOF
+root -l padToTex.cpp -e 'pad("c41b", 1, false, true);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c41d", 1, false, true);'<<EOF
 EOF
@@ -79,6 +79,14 @@ root -l padToTex.cpp -e 'pad("c28e", 0);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c28f", 0);'<<EOF
 EOF
+root -l padToTex.cpp -e 'pad("c54a", -1, true, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c54b", -1, true, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c54c", -1, true, true);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c54d", -1, true, true);'<<EOF
+EOF
 ./rootTex2pdf ./analysis_plots/tex/*.tex
 echo "TEX files modified DONE!"
 
@@ -98,6 +106,10 @@ sed -i -e '/after analysis cuts/s/^/%/g' ./c28c.tex
 sed -i -e '/after analysis cuts/s/^/%/g' ./c28d.tex
 sed -i -e '/after analysis cuts/s/^/%/g' ./c28e.tex
 sed -i -e '/after analysis cuts/s/^/%/g' ./c28f.tex
+sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c54a.tex
+sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c54b.tex
+sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c54c.tex
+sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c54d.tex
 #sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c3_a.tex
 #sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c3_b.tex
 #sed -i -e '/HH\ \\rightarrow/s/^/%/g' ./c4_a.tex
@@ -161,6 +173,10 @@ pdflatex c28c.tex
 pdflatex c28d.tex
 pdflatex c28e.tex
 pdflatex c28f.tex
+pdflatex c54a.tex
+pdflatex c54b.tex
+pdflatex c54c.tex
+pdflatex c54d.tex
 rm ./*.log
 rm ./*.aux
 cd ${CURRENT_DIR}

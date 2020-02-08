@@ -29,6 +29,22 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left 
 	mypad->DrawClone();
 	
 	//!k_lambda legend
+	if(which_legend == -1)
+	{
+		TPad *legend = (TPad*)f->Get("c3_d");
+		//legend->SetPad(0.4,0.5,0.899,0.899);//dx = 0.5, dy = 0.4
+		//! default - down right
+		legend->SetPad(0.3,0.02,0.85,0.47);
+		//! down left
+		//if(!up && left)legend->SetPad(-0.15,0.02,0.40,0.47);
+		if(!up && left)legend->SetPad(0.0,0.02,0.55,0.47);
+		//! up left
+		if(up && left)legend->SetPad(-0.15,0.4,0.40,0.85);
+		//! up right
+		if(up && !left) legend->SetPad(0.35,0.4,0.9,0.85);
+		legend->SetFillStyle(0);// make the pad transparent
+		legend->DrawClone();
+	}
 	if(which_legend == 1)
 	{
 		TPad *legend = (TPad*)f->Get("c2_d");

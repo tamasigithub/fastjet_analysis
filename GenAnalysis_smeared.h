@@ -68,6 +68,7 @@ const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30";
 //const char *inp_file2_5= "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr2.5_q300MeV_6.0_allR0.4.root"; 
 //const char *inp_file3  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr3.0_q300MeV_6.0_allR0.4.root"; 
 //const char *inp_fileB  = "./fastjet_output/80percentBtag/Genjet2_pp4b_q300MeV_6.0_allR0.4.root"; 
+//const char *inp_fileB_1  = "./fastjet_output/80percentBtag/Genjet2_pp4b_q300MeV_6.0_allR0.4_0.8btag_1.root"; 
 
 const char *inp_file1  = "./fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_allR0.4_0.8btag.root"; 
 const char *inp_file0  = "./fastjet_output/Genjet2_ggF_Ctr0.0_q300MeV_2.5_allR0.4_0.8btag.root"; 

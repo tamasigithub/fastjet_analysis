@@ -27,7 +27,7 @@ int main()
 //**************** Constants *********************//
   const double ChargedPcle_PtThreshold 	= 300;//MeV
   const double SCALEfac_Ereso 		= 0.5; //50%
-  const double TrackerAcceptance 	= 2.5;
+  const double TrackerAcceptance 	= 6.0;
 
   const double R 			= 0.4;
   const double PTMINJET 		= 20.0e3;//MeV
@@ -53,7 +53,7 @@ int main()
 
   //! store results in an output root file 
   //TFile *f_out = new TFile("./fastjet_output/test_all_b.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_2.5_allR0.4_0.8btag_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_6.0_allR0.4_0.8btag_1.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4_0.8btag.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
