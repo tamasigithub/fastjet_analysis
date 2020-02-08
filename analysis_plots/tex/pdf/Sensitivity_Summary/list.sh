@@ -1,0 +1,11 @@
+#cp 1.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp gSBatpT.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp gZatpT.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp gSensatpT.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp mgSB.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp mgZiZtot.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp mgZsum.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp sens_ithBincontri.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp Sens_pTthre.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp hist_sensi2sens2tot.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
+cp hist_Zi2Z2tot.pdf /home/tamasi/cernbox/phd_thesis/Chapter2/Chapter2Figs/PDF/.
