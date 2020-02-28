@@ -34,9 +34,9 @@ class TrigEff
 {
 public:
 	const int Njet_max = 5;
-	const float eta_cut = 1.6; 
-	static const int nbins_plus1 = 101;
-	static const  int nbins = 100;// = (pt_max - pt_min)/ptcut_width;
+	const float eta_cut = 2.5; 
+	static const int nbins_plus1 = 401;//101;
+	static const  int nbins = 400;//100;// = (pt_max - pt_min)/ptcut_width;
 	//static const int nbins_plus1 = 116;
 	//static const  int nbins = 115;// = (pt_max - pt_min)/ptcut_width;
 	//const int Nlowpt_bins = 80;
@@ -50,7 +50,7 @@ public:
 		for(int i = 0; i <= nbins; i++)
 		{
 			if(i==0) xbins[i] = pt_min;
-			xbins[i] = i*ptcut_width;
+			xbins[i] = xbins[0] + i*ptcut_width;
 			////
 			//////std::cout<< "xbin[ " << i << "] : " <<xbins[i] <<std::endl;
 			////if(i==0) xbins[i] = pt_min;

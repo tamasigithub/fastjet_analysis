@@ -34,24 +34,30 @@ int main ()
   int MIN_Constituents, NJETS, NZVTXBIN;
   float ZRANGE, ZBIN_width;
   int izbin;
-  MIN_Constituents = 1;
-  NJETS = 10;
-  NZVTXBIN = 200;
+  MIN_Constituents = 3;
+  NJETS = 20;
+  NZVTXBIN = 40;
   ZRANGE = 200; // in mm
   ZBIN_width = ZRANGE/NZVTXBIN;
   double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
+  double KAPPA_CUT   = 3.0;
+  double ETA_CUT     = 2.5;
+  double MIN_TRACKPT = 5e3;
+  //! Jet definition
+  double R = 0.4;
+  double PTMINJET = 5e3;// in MeV 
 /////////////////////////////////////////////////////  
   //! variables used to make purity plots
 /////////////////////////////////////////////////////
   int etabin = 30;
-  double etamin =-1.7, etamax = 1.7;
-  //double etamin =-1.5, etamax = 1.5;
+  //double etamin =-1.7, etamax = 1.7;
+  double etamin =-2.5, etamax = 2.5;
   // log bins //! for TTTjet puruty histos
   const int ptbins = 40;//no. of bins
   int length = ptbins + 1;
   Double_t xbins[length];//elements of this array are
   double dx, l10;
-  dx = 3./ptbins;// 7 -> 10TeV //5 -> implies max until 10^5
+  dx = 3./ptbins;// 7 -> 10TeV //5 -> implies max until 10^5// xbins now in GeV
   l10 = TMath::Log(10);
   for (int i = 0; i<=ptbins; i++)
   {
@@ -63,7 +69,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -122,15 +128,16 @@ int main ()
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
   //TFile *f_out = new TFile("NewjetoutPU0hh4b_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
-  TFile *f_out = new TFile("NewjetoutPU0MB_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kMB7.5mm_30mm_3trk2.5_5GeV.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kggFhh4b1.5mm_30mm_1trk2.5_5GeV.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
   TH1* h_den_vs_etaPU = new TH1F("h_den_vs_etaPU", "Denominator Count vs #eta;#eta;Denominator Count", etabin, etamin, etamax);
-  TH1* h_num_vs_ptPU = new TH1F("h_num_vs_ptPU", "Numerator Count vs P_{t};P_{t} [MeV/c];Numerator Count", ptbins, xbins);
-  TH1* h_den_vs_ptPU = new TH1F("h_den_vs_ptPU", "Denominator Count vs P_{t};P_{t} [MeV/c];Denominator Count", ptbins, xbins);
+  TH1* h_num_vs_ptPU = new TH1F("h_num_vs_ptPU", "Numerator Count vs P_{t};P_{t} [GeV/c];Numerator Count", ptbins, xbins);
+  TH1* h_den_vs_ptPU = new TH1F("h_den_vs_ptPU", "Denominator Count vs P_{t};P_{t} [GeV/c];Denominator Count", ptbins, xbins);
 
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
@@ -178,7 +185,9 @@ int main ()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5_fulleta/*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5_fulleta/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5_fulleta/*.root");
+  rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/MB/*.root");
+  //rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -186,6 +195,7 @@ int main ()
   std::vector<double> *theta_rec = 0;
   std::vector<double> *eta_rec = 0;
   std::vector<double> *phi_rec = 0;
+  std::vector<double> *kap_pull = 0;
   std::vector<int> *tid_rec = 0;
   std::vector<int> *m_pdg = 0;
   std::vector<double> *m_pt = 0;
@@ -208,6 +218,7 @@ int main ()
   rec.SetBranchAddress("Eta13", &eta_rec);
   rec.SetBranchAddress("Phi013", &phi_rec);
   rec.SetBranchAddress("Tid", &tid_rec);
+  rec.SetBranchAddress("kappa_pull", &kap_pull);
   rec.SetBranchAddress("M_pdg", &m_pdg);
   rec.SetBranchAddress("M_pt", &m_pt);
   rec.SetBranchAddress("M_Vz", &m_Vz);
@@ -220,6 +231,7 @@ int main ()
   std::vector<double> theta_recPU;
   std::vector<double> eta_recPU;
   std::vector<double> phi_recPU;
+  std::vector<double> kap_pullPU;
   std::vector<int> tid_recPU;
   std::vector<int> m_pdgPU;
   std::vector<double> m_ptPU;
@@ -243,7 +255,7 @@ int main ()
   std::vector<TrackJetObj> tjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
   //! for every event do the following
   //
-  double pt,z0,theta,eta,phi,tid,mpt,mVz,mtheta,mphi;
+  double pt,z0,theta,eta,phi,tid,mpt,mVz,mtheta,mphi,kap_cut;
   int pid;
   for(Long64_t i_event = 0; i_event < nevents; ++i_event)
   {
@@ -313,6 +325,7 @@ int main ()
 			theta_recPU.push_back((*theta_rec)[ik]);
 			eta_recPU.push_back((*eta_rec)[ik]);
 			phi_recPU.push_back((*phi_rec)[ik]);
+			kap_pullPU.push_back((*kap_pull)[ik]);
 			tid_recPU.push_back((*tid_rec)[ik]);
 			m_pdgPU.push_back((*m_pdg)[ik]);
 			m_ptPU.push_back((*m_pt)[ik]);
@@ -345,9 +358,11 @@ int main ()
 		mVz	= m_VzPU[j];
 		mtheta	= m_thetaPU[j];
 		mphi	= m_phiPU[j];
+		kap_cut	= kap_pullPU[j];
 	
-		if(std::fabs(pt) < 2e3) continue; 	
-		if(std::fabs(eta) > 1.7) continue; 	
+		if(std::fabs(kap_cut) > KAPPA_CUT ) continue; 	
+		if(std::fabs(pt) < MIN_TRACKPT) continue; 	
+		if(std::fabs(eta) > ETA_CUT) continue; 	
 
 		if(debug){std::cout<<"mpt, mVz, mtheta, mphi, tid: " << mpt << " , " << mVz << " , " << mtheta << " , " << mphi << " , " << tid << std::endl; }
 		if(tid==-1)tjObj.flag = 0;//fakes
@@ -367,16 +382,20 @@ int main ()
 		tjObj.phi = phi;
 		//! matched truth info has been set to zero for fake tracks and this causes a crash while doing jet clustering
 		//! for truth jet clustering we anyway do not need these zeroes
-		if(tid==-1){
+		if(tid==-1)
+		{
 		tjObj.px_m = 1.0;
 		tjObj.py_m = 1.0;
 		tjObj.pz_m = 1.0;
-		tjObj.E_m  = 1.0;}
-		else{
+		tjObj.E_m  = 1.0;
+		}
+		else
+		{
 		tjObj.px_m = mpt*cos(mphi);
 		tjObj.py_m = mpt*sin(mphi);
 		tjObj.pz_m = mpt/tan(mtheta);
-		tjObj.E_m  = std::sqrt(std::pow(mpt/sin(mtheta),2) + std::pow(mass_piPM,2));}
+		tjObj.E_m  = std::sqrt(std::pow(mpt/sin(mtheta),2) + std::pow(mass_piPM,2));
+		}
 		tjObj.zv = z0;
 		tjObj.pdg = pid;
 		tjObj.Vz0 = mVz;
@@ -390,8 +409,6 @@ int main ()
 //////////////////////////////////////////////////////////////////////////////////
 
 	//! choose a jet definition
-	double R = 0.4;
-	double PTMINJET = 5e3;// in MeV 
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_tracks;
 	std::vector<PseudoJet> input_particles;
@@ -981,9 +998,9 @@ trigger.WriteAll();
 //! create purity histograms as a function of jet pt and jet eta
 //std::cout<<"xbin entries :  " << r_sumpt.xbins[1] << ", " << r_sumpt.xbins[40]<<std::endl;
 TH1* h_pur_vs_ptPU = dynamic_cast<TH1*>(h_num_vs_ptPU->Clone("h_pur_vs_ptPU"));
-h_pur_vs_ptPU->SetTitle("Track Jet Purity vs P_{t};P_{t} [MeV/c];Purity");
+h_pur_vs_ptPU->SetTitle("Track Jet Purity vs P_{t};P_{t} [GeV/c];Purity");
 h_pur_vs_ptPU->Divide(h_num_vs_ptPU, h_den_vs_ptPU, 1.0, 1.0, "B");
-h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.85, 1.04);
+h_pur_vs_ptPU->GetYaxis()->SetRangeUser(0.75, 1.04);
 h_pur_vs_ptPU->GetXaxis()->SetRangeUser(2000.0,1000000.0);
 h_pur_vs_ptPU->SetMarkerSize(0.95);
 h_pur_vs_ptPU->SetMarkerStyle(kOpenTriangleDown);
@@ -992,7 +1009,7 @@ h_pur_vs_ptPU->SetMarkerColor(kBlack);
 TH1* h_pur_vs_etaPU = dynamic_cast<TH1*>(h_num_vs_etaPU->Clone("h_pur_vs_etaPU"));
 h_pur_vs_etaPU->SetTitle("Track Jet Purity vs #eta;#eta;Purity");
 h_pur_vs_etaPU->Divide(h_num_vs_etaPU, h_den_vs_etaPU, 1.0, 1.0, "B");
-h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.93, 1.04);
+h_pur_vs_etaPU->GetYaxis()->SetRangeUser(0.75, 1.04);
 h_pur_vs_etaPU->SetMarkerSize(0.95);
 h_pur_vs_etaPU->SetMarkerStyle(kOpenTriangleDown);
 h_pur_vs_etaPU->SetMarkerColor(kBlack);

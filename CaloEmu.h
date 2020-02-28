@@ -46,6 +46,7 @@ class CaloEmu
 		  //static constexpr double CONSTANT = 0.299760192;
 	          const double B_field = 4.0; //Magnetic Field strength
 		  const double CONSTANT = 0.299760192;
+	      //TH2F *m_detector = nullptr; // detector (modeled by a 2dim histogram)
 
 
 	public:

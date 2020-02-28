@@ -10,6 +10,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1.h>
+#include <TH3.h>
 #include <TChain.h>
 #include <TMath.h>
 #include <TRandom.h>
@@ -23,7 +24,8 @@ int main ()
   
   //! variables used to make efficiency plots
   int etabin = 30;
-  double etamin =-1.7, etamax = 1.7;
+  //double etamin =-1.7, etamax = 1.7;
+  double etamin =-2.5, etamax = 2.5;
   // log bins
   const int ptbins = 40;//no. of bins
   int length = ptbins + 1;
@@ -37,16 +39,23 @@ int main ()
 	xbins[i] = TMath::Exp(l10*i*dx);
 	//std::cout<<"xbin[i] : " <<xbins[i] <<std::endl;
   }
-
+//////////////////////////////////////////////////////////
   int MIN_Constituents = 2;
   float SCALEfac_Ereso = 0.5;//50% 
+
+  double ETA_CUT     = 2.5;
+  //! Jet definition
+  double R = 0.4;
+  double PTMINJET = 5e3;// in MeV 
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
+  //const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
+  //r_sumpt.init_EtaHist();
 
   //! create an object to plot trigger efficiency as a function of pt
   TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH);
@@ -82,7 +91,10 @@ int main ()
 
   //! output root file
   //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000MB_q1.2GeV_30mm.root","RECREATE");
-  TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
+  //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrigSEMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mm_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV2trk_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_1.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV_PU1kMB_q1.2GeVeta2.5_30mmR0.4_1.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -90,8 +102,8 @@ int main ()
   //! track jet efficiency
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
   TH1* h_den_vs_etaPU = new TH1F("h_den_vs_etaPU", "Denominator Count vs #eta;#eta;Denominator Count", etabin, etamin, etamax);
-  TH1* h_num_vs_ptPU = new TH1F("h_num_vs_ptPU", "Numerator Count vs P_{t};P_{t} [MeV/c];Numerator Count", ptbins, xbins);
-  TH1* h_den_vs_ptPU = new TH1F("h_den_vs_ptPU", "Denominator Count vs P_{t};P_{t} [MeV/c];Denominator Count", ptbins, xbins);
+  TH1* h_num_vs_ptPU = new TH1F("h_num_vs_ptPU", "Numerator Count vs P_{t};P_{t} [GeV/c];Numerator Count", ptbins, xbins);
+  TH1* h_den_vs_ptPU = new TH1F("h_den_vs_ptPU", "Denominator Count vs P_{t};P_{t} [GeV/c];Denominator Count", ptbins, xbins);
 
   TTree *glob_jet = new TTree("glob_jet","glob_jet");
   glob_jet->Branch("event",&eventNo);
@@ -122,8 +134,10 @@ int main ()
   TChain rec("tracks");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
-  rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
+  //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5/*.root");
+  //rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/MB/*.root");
+  rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
@@ -162,8 +176,8 @@ int main ()
   ////Long64_t nentries = 1000;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  Long64_t nevents = 1e3;
-  //Long64_t nevents = rec.GetEntries();
+  //Long64_t nevents = 225;
+  Long64_t nevents = rec.GetEntries();
   r_sumpt.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
@@ -173,6 +187,9 @@ int main ()
   double pt,z0,theta,eta,phi;
   int pid,q;
 
+
+  TH2D *h2d = new TH2D("h2d","h2d", 500, -2.5, 2.5, 698, 0, 6.282);
+  //,100,0,50);
 
   //! for every event do the following
   for(Long64_t i = 0; i < nevents; ++i)
@@ -251,7 +268,7 @@ int main ()
 		q	= chargePU[j];
 
 		//////// ACCEPTANCE CUTS //////////	
-		if(std::fabs(eta) > 6.0) continue; 
+		if(std::fabs(eta) > ETA_CUT) continue; 
 		if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
 		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
 		phi_Rcalo = phi;
@@ -296,8 +313,6 @@ int main ()
 	}// end of loop over nobj
 	
 	// choose a jet definition
-	double R = 0.4;
-	double PTMINJET = 5.0e3;
 	JetDefinition jet_def(antikt_algorithm, R);
 	std::vector<PseudoJet> input_trpcle;
 
@@ -333,23 +348,26 @@ int main ()
 		std::cout << "n_ybins: " << n_ybins <<std::endl;//phibins
 		std::cout<<"Cell Energy threshold: " << caloObj.GetCellEnergyThreshold()*1e-3 << "GeV."<<std::endl;
 	}
-	for(unsigned int i = 1; i <= n_xbins; i++ )
+	for(unsigned int ii = 1; ii <= n_xbins; ii++ )
 	{
-		for(unsigned int j = 1; j <= n_ybins; j++)
+		for(unsigned int jj = 1; jj <= n_ybins; jj++)
 		{
-			std::vector<double> Eptetaphi = caloObj.GetCellEnergy(i, j);
+			std::vector<double> Eptetaphi = caloObj.GetCellEnergy(ii, jj);
 			if(Eptetaphi[0] > caloObj.GetCellEnergyThreshold())
 			{
 				PseudoJet p(0., 0., 0., 0.);
 				// And treat 'clusters' as massless.
-				if(debug) std::cout<<"Cell energy[ " << i << ", " << j << "]: " << Eptetaphi[0] <<std::endl;
+				if(debug) std::cout<<"Cell energy[ " << ii << ", " << jj << "]: " << Eptetaphi[0] <<std::endl;
 	                     	p.reset_PtYPhiM(Eptetaphi[1], Eptetaphi[2], Eptetaphi[3], 0.);
 				CellEnergy_forEmuCaloJets.push_back(p);
-
+				if(i == 10)
+				{
+					std::cout<<"ii, jj, E_sm:" << ii <<", " << jj << ", " <<Eptetaphi[0]*1e-3<<std::endl;
+					h2d->SetBinContent(ii, jj, Eptetaphi[0]);
+				}
 			}	
 		}//phibins
 	}//etabins
-
 	ClusterSequence cs_CaloEmuJet(CellEnergy_forEmuCaloJets, jet_def);
 	std::vector<PseudoJet>  incl_CaloEmuJets = sorted_by_pt(cs_CaloEmuJet.inclusive_jets(PTMINJET));
 	// ********************************************************************************************//
@@ -455,6 +473,7 @@ int main ()
 			
 		}
 
+		if(debug) std::cout<<"where is it crashing?" <<std::endl;
 		trigger.n5_tot[i2] = 1;
 		trigger.n4_tot[i2] = 1;
 		trigger.n3_tot[i2] = 1;
@@ -492,7 +511,10 @@ int main ()
 			if(jetPt_sm[1]*1e-3 > trigger.xbins[i2]) trigger.n2b_tot[i2] += 1;
 			
 		}
-	*/	if(incl_CaloEmuJets.size() >= trigger.Njet_max)
+
+	*/	
+		if(debug)std::cout<<"size of incl_CaloEmuJets: " << incl_CaloEmuJets.size()<<std::endl; 
+		if(incl_CaloEmuJets.size() >= trigger.Njet_max)
 		{
 			if(incl_CaloEmuJets[4].pt()*1e-3 > trigger.xbins[i2]) trigger.n5b_tot[i2] += 1;
 			if(incl_CaloEmuJets[3].pt()*1e-3 > trigger.xbins[i2]) trigger.n4b_tot[i2] += 1;
@@ -522,38 +544,38 @@ int main ()
 		}
 	}//! end of loop over pt thresholds
 	
-	////// Fill eta histograms of n leading pt jets /////
-	//if (incl_trpclejets.size() >= trigger.Njet_max) std::cout<<"leading pt jet eta: " << incl_CaloEmuJets[4].eta() <<std::endl;
-	if(incl_trpclejets.size() >= trigger.Njet_max)
-	{
-		r_sumpt.hbEta_PUNNNNLpt->Fill(std::fabs(incl_trpclejets[4].eta()));	
-		r_sumpt.hbEta_PUNNNLpt->Fill(std::fabs(incl_trpclejets[3].eta()));	
-		r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_trpclejets[2].eta()));	
-		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
-		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
-	}
-	else if (incl_trpclejets.size() >= trigger.Njet_max-1)
-	{
-		r_sumpt.hbEta_PUNNNLpt->Fill(std::fabs(incl_trpclejets[3].eta()));	
-		r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_trpclejets[2].eta()));	
-		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
-		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
-	}
-	else if (incl_trpclejets.size() >= trigger.Njet_max-2)
-	{
-		r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_trpclejets[2].eta()));	
-		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
-		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
-	}
-	else if (incl_trpclejets.size() >= trigger.Njet_max-3)
-	{
-		r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_trpclejets[1].eta()));	
-		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
-	}
-	else if (incl_trpclejets.size() >= trigger.Njet_max-4)
-	{
-		r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_trpclejets[0].eta()));	
-	}
+	//////// Fill eta histograms of n leading pt jets /////
+	////if (incl_trpclejets.size() >= trigger.Njet_max) std::cout<<"leading pt jet eta: " << incl_CaloEmuJets[4].eta() <<std::endl;
+	//if(incl_CaloEmuJets.size() >= trigger.Njet_max)
+	//{
+	//	r_sumpt.hbEta_PUNNNNLpt->Fill(std::fabs(incl_CaloEmuJets[4].eta()));	
+	//	r_sumpt.hbEta_PUNNNLpt->Fill(std::fabs(incl_CaloEmuJets[3].eta()));	
+	//	r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_CaloEmuJets[2].eta()));	
+	//	r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_CaloEmuJets[1].eta()));	
+	//	r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_CaloEmuJets[0].eta()));	
+	//}
+	//else if (incl_CaloEmuJets.size() >= trigger.Njet_max-1)
+	//{
+	//	r_sumpt.hbEta_PUNNNLpt->Fill(std::fabs(incl_CaloEmuJets[3].eta()));	
+	//	r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_CaloEmuJets[2].eta()));	
+	//	r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_CaloEmuJets[1].eta()));	
+	//	r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_CaloEmuJets[0].eta()));	
+	//}
+	//else if (incl_CaloEmuJets.size() >= trigger.Njet_max-2)
+	//{
+	//	r_sumpt.hbEta_PUNNLpt->Fill(std::fabs(incl_CaloEmuJets[2].eta()));	
+	//	r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_CaloEmuJets[1].eta()));	
+	//	r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_CaloEmuJets[0].eta()));	
+	//}
+	//else if (incl_CaloEmuJets.size() >= trigger.Njet_max-3)
+	//{
+	//	r_sumpt.hbEta_PUNLpt->Fill(std::fabs(incl_CaloEmuJets[1].eta()));	
+	//	r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_CaloEmuJets[0].eta()));	
+	//}
+	//else if (incl_CaloEmuJets.size() >= trigger.Njet_max-4)
+	//{
+	//	r_sumpt.hbEta_PULpt->Fill(std::fabs(incl_CaloEmuJets[0].eta()));	
+	//}
 
  }// for loop over nentries
   std::cout <<"total number of events used " <<r_sumpt.nevents <<std::endl;
@@ -589,9 +611,9 @@ r_sumpt.WriteAll();
 c1->Write();
 //! Write to output file
 glob_jet->Write();
-r_sumpt.SetEtaHist_props();
-r_sumpt.WriteEta();
-
+//r_sumpt.SetEtaHist_props();
+//r_sumpt.WriteEta();
+h2d->Write();
 f_out->Close();
 return 0;
 }
