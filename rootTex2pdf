@@ -73,6 +73,9 @@ for file in "$@"; do
   # now search and replace (order important!)
   # units
   sed -i -e 's@\[a.u.\]@\~\[a.u.\]@g' $BODY_FILE
+  sed -i -e 's@\[mm@\~\[\\text{mm}@g' $BODY_FILE
+  sed -i -e 's@\[cm@\~\[\\text{cm}@g' $BODY_FILE
+  sed -i -e 's@cm@\\text{cm}@g' $BODY_FILE
   sed -i -e 's@\[meV\]@\~\[meV\]@g' $BODY_FILE
   sed -i -e 's@\[MeV\]@\~\[MeV\]@g' $BODY_FILE
   sed -i -e 's@\[GeV\]@\~\[GeV\]@g' $BODY_FILE
@@ -83,6 +86,7 @@ for file in "$@"; do
   sed -i -e 's@MeV@\\text{MeV}@g' $BODY_FILE
   sed -i -e 's@GeV@\\text{GeV}@g' $BODY_FILE
   sed -i -e 's@TeV@\~\\text{TeV}@g' $BODY_FILE
+  sed -i -e 's@event\/cm@\\text{event\/cm}@g' $BODY_FILE
   # words
   sed -i -e 's@jets@\\text{jets~}@g' $BODY_FILE
   sed -i -e 's@jet@\\text{jet~}@g' $BODY_FILE
@@ -106,6 +110,7 @@ for file in "$@"; do
   sed -i -e 's@sum_@sum\\limits_@g' $BODY_FILE
   sed -i -e 's@threshold@\\text{~threshold}@g' $BODY_FILE
   sed -i -e 's@thr\.@\\text{~thr\.}@g' $BODY_FILE
+  sed -i -e 's@Hit occupancy @\\text{Hit occupancy }@g' $BODY_FILE
   # derivatives
   sed -i -e 's@d\\sigma@\\text{d}\\sigma@g' $BODY_FILE
   sed -i -e 's@dE@\\text{d}E@g' $BODY_FILE
