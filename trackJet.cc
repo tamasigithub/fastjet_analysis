@@ -128,8 +128,8 @@ int main ()
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
   //TFile *f_out = new TFile("NewjetoutPU0hh4b_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kMB7.5mm_30mm_3trk2.5_5GeV.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kggFhh4b1.5mm_30mm_1trk2.5_5GeV.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kMB1.5mm_25mm_1trk2.5_5GeV.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kggFhh4b7.5mm_25mm_3trk2.5_5GeV.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
@@ -186,8 +186,8 @@ int main ()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5_fulleta/*.root");
-  rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/MB/*.root");
-  //rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
+  //rec.Add("/data/backup/tamasi/rec_files/25mm/PU1k/MB/*.root");
+  rec.Add("/data/backup/tamasi/rec_files/25mm/PU1k/ggFhh4b_SM/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
