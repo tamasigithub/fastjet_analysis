@@ -1,3 +1,4 @@
+//!!!*********** Track multiplicities of 2nd, 3rd, 4th and 5th leading track-jets *************!!!//
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -21,9 +22,10 @@
 #include "TF1.h"
 #include "TLatex.h"
 const char* out_path = "./summary_plots/pdf"; 
-const char* output_file_name = "multiplicity_1tracks1.5_5GeVPU0";
+//const char* output_file_name = "multiplicity_1tracks1.5_5GeVPU0";
+const char* output_file_name = "multiplicity_1.5mm_30mm_1trk2.5_2GeV_5GeV_1";
 
-const double yMin = 0.01, yMax = 1e5;
+const double yMin = 0.5, yMax = 5.0e3;
 //! sumpt approach
 TH1D *E2 = nullptr;
 TH1D *E3 = nullptr;
@@ -56,7 +58,8 @@ TH1D *Rb4 = nullptr;
 TH1D *Rb5 = nullptr;
 int integral(TH1D *hist)
 {
-	return hist->Integral(2,11);//from multiplicity 1 to 10
+	//return hist->Integral(2,11);//from multiplicity 1 to 10
+	return hist->Integral(2,101);//from multiplicity 1 to 100
 
 }
 void fetch_histos(TFile *f, TFile *f1)
@@ -202,16 +205,19 @@ int TJMultiplicity()
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	const char *pileup = "0";
+	const char *pileup = "1k";
 	const char *gapsize = "30"; 
-	const char *file_path = ".";
+	//const char *file_path = ".";
+	const char *file_path = "./fastjet_output/TriggerStudies_2";
 	char signal_file_name[1023];
 	
-	sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
+	//sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
+	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b1.5mm_%smm_1trk2.5_2GeV_5GeV_1.root",file_path,pileup,gapsize);//7.5
 	TFile *f_ = new TFile(signal_file_name, "READ");
 	
 	char MinBias_file_name[1023];
-	sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
+	//sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/TrkJPU%sMB1.5mm_%smm_1trk2.5_2GeV_5GeV_1.root",file_path,pileup,gapsize);//7.5
 	TFile *f1_ = new TFile(MinBias_file_name, "READ");
 	
 	fetch_histos(f_, f1_);
@@ -273,6 +279,7 @@ int TJMultiplicity()
 	C->cd(1);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	E2->GetXaxis()->SetRangeUser(0, 40);
 	E2->Draw();
 	R2->Draw("same");
 	multiplicity1 = integral(E2);
@@ -287,6 +294,7 @@ int TJMultiplicity()
 	C->cd(2);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	E3->GetXaxis()->SetRangeUser(0, 40);
 	E3->Draw();
 	R3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -301,6 +309,7 @@ int TJMultiplicity()
 	C->cd(3);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	E4->GetXaxis()->SetRangeUser(0, 40);
 	E4->Draw();
 	R4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -315,6 +324,7 @@ int TJMultiplicity()
 	C->cd(4);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	E5->GetXaxis()->SetRangeUser(0, 40);
 	E5->Draw();
 	R5->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -332,6 +342,7 @@ int TJMultiplicity()
 	C->cd(1);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	Ea2->GetXaxis()->SetRangeUser(0, 40);
 	Ea2->Draw();
 	Ra2->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -348,6 +359,7 @@ int TJMultiplicity()
 	C->cd(2);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	Ea3->GetXaxis()->SetRangeUser(0, 40);
 	Ea3->Draw();
 	Ra3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -364,6 +376,7 @@ int TJMultiplicity()
 	C->cd(3);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	Ea4->GetXaxis()->SetRangeUser(0, 40);
 	Ea4->Draw();
 	Ra4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6

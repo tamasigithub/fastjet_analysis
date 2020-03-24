@@ -21,9 +21,9 @@ root -l padToTex.cpp -e 'pad("c8_a", 2);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c8_b", 2);'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c8_c", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProbMH30.root");'<<EOF
+root -l padToTex.cpp -e 'pad("c8_c", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProbMH30_1.root");'<<EOF
 EOF
-root -l padToTex.cpp -e 'pad("c8_d", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProbMH30.root");'<<EOF
+root -l padToTex.cpp -e 'pad("c8_d", 2, false, false, "GenJet4b2_6.0_allR0.4_0.8_incl4bProbMH30_1.root");'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c11a", 2);'<<EOF
 EOF
@@ -40,6 +40,10 @@ EOF
 root -l padToTex.cpp -e 'pad("c31a", 0);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c31b", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c31c", 0);'<<EOF
+EOF
+root -l padToTex.cpp -e 'pad("c31d", 0);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c40a", 1, true);'<<EOF
 EOF
@@ -154,6 +158,8 @@ pdflatex c17a.tex
 pdflatex c17b.tex
 pdflatex c31a.tex
 pdflatex c31b.tex
+pdflatex c31c.tex
+pdflatex c31d.tex
 pdflatex c40a.tex
 pdflatex c40b.tex
 pdflatex c40c.tex

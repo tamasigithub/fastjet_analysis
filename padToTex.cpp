@@ -9,7 +9,7 @@ const char *in_path = "./analysis_plots/root";
 //const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
 //const char *input_root_file = "./analysis_plots/root/GenJet4b2_2.5_allR0.4.root";
 //void padToTex(const char *pad_name)
-void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left = false, const char *input_file = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root")
+void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left = false, const char *input_file = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30_1.root")
 {
 
 	char input_root_file[1023];
