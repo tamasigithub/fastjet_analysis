@@ -49,8 +49,12 @@ public:
 
 	std::vector<int> v_TJMult_sumpt;
 	std::vector<int> v_TJMult_maxpt;
-	int nMultiplicityBins = 10;
-	double maxMultiplicity = 10;
+	//int nMultiplicityBins = 10;
+	//double maxMultiplicity = 10;
+	int nMultiplicityBins = 100;
+	double maxMultiplicity = 100;
+	int nMultiplicityBins_1 = 100;
+	double maxMultiplicity_1 = 100;
 
 	int nEtaBins = 100;
 	double etaMin = 0.0, etaMax = 6.0;

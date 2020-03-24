@@ -59,6 +59,7 @@ int main ()
 
   //! create an object to plot trigger efficiency as a function of pt
   TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH);
+  trigger.init(trigger.xbins, trigger.nbins);
 //////////////////////////////////////////////////////////////////////// 
   //! store results in an output root file 
 ////////////////////////////////////////////////////////////////////////
@@ -93,8 +94,8 @@ int main ()
   //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000MB_q1.2GeV_30mm.root","RECREATE");
   //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrigSEMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mm_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV2trk_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_1.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV_PU1kMB_q1.2GeVeta2.5_30mmR0.4_1.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV_PU1kMB_q1.2GeVeta2.5_30mmR0.4_1_test.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -136,8 +137,9 @@ int main ()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5/*.root");
-  //rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/MB/*.root");
-  rec.Add("/data/backup/tamasi/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
@@ -176,9 +178,10 @@ int main ()
   ////Long64_t nentries = 1000;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  //Long64_t nevents = 225;
   Long64_t nevents = rec.GetEntries();
+  nevents = 1000;
   r_sumpt.nevents = nevents;
+  trigger.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
@@ -596,7 +599,6 @@ r_sumpt.Fill_TrigRate_EMU(r_sumpt.n_tots);
 r_sumpt.SetHist_props();
 //! continuation of trigger efficiency cal.
 //! we fill outside as we want count the no. of events with 'n' trackjets above a pt threshold
-trigger.init(trigger.xbins, trigger.nbins);
 trigger.SetHist_props();
 trigger.Fill_TrigEff();
 TCanvas *C_trig = new TCanvas();

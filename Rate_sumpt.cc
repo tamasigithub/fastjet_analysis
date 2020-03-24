@@ -37,11 +37,11 @@ void Rate_sumpt::init_Histos(float xbins[], int nbins)
 	hMa_PUNNNLpt = new TH1D("hMa_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
 	hMa_PUNNNNLpt = new TH1D("hMa_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000, max-pt ",nMultiplicityBins,0,maxMultiplicity);
 	//! without binning
-        hMb_PULpt = new TH1D("hMb_PULpt","Multiplicity of highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
-	hMb_PUNLpt = new TH1D("hMb_PUNLpt","Multiplicity of 2nd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
-	hMb_PUNNLpt = new TH1D("hMb_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
-	hMb_PUNNNLpt = new TH1D("hMb_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins,0,maxMultiplicity);
-	hMb_PUNNNNLpt = new TH1D("hMb_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000 , w/o binning along z",nMultiplicityBins,0,maxMultiplicity);
+        hMb_PULpt = new TH1D("hMb_PULpt","Multiplicity of highest Pt track jet in <#mu> 1000 ",nMultiplicityBins_1,0,maxMultiplicity_1);
+	hMb_PUNLpt = new TH1D("hMb_PUNLpt","Multiplicity of 2nd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins_1,0,maxMultiplicity_1);
+	hMb_PUNNLpt = new TH1D("hMb_PUNNLpt","Multiplicity of 3rd highest Pt track jet in <#mu> 1000 ",nMultiplicityBins_1,0,maxMultiplicity_1);
+	hMb_PUNNNLpt = new TH1D("hMb_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins_1,0,maxMultiplicity_1);
+	hMb_PUNNNNLpt = new TH1D("hMb_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000 , w/o binning along z",nMultiplicityBins_1,0,maxMultiplicity_1);
 
 }
 
@@ -157,7 +157,6 @@ void Rate_sumpt::SetMultiplicityHist_props()
 }
 void Rate_sumpt::SetHist_props()
 {
-	h_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
 	h_PUNNNNLpt->SetLineColor(kBlue);
 	h_PUNNNLpt->SetLineColor(kGreen);
 	h_PUNNLpt->SetLineColor(kRed);
@@ -170,6 +169,7 @@ void Rate_sumpt::SetHist_props()
 	h_PUNLpt->SetLineWidth(3);
 	h_PULpt->SetLineWidth(3);
 
+	h_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
         h_PULpt->Scale(1.0e3/(25*nevents));
         h_PUNLpt->Scale(1.0e3/(25*nevents));
         h_PUNNLpt->Scale(1.0e3/(25*nevents));
@@ -188,7 +188,6 @@ void Rate_sumpt::SetHist_props()
         h_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         h_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 	
-	ha_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
 	ha_PUNNNNLpt->SetLineColor(kBlue);
 	ha_PUNNNLpt->SetLineColor(kGreen);
 	ha_PUNNLpt->SetLineColor(kRed);
@@ -201,6 +200,7 @@ void Rate_sumpt::SetHist_props()
 	ha_PUNLpt->SetLineWidth(3);
 	ha_PULpt->SetLineWidth(3);
 
+	ha_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
         ha_PULpt->Scale(1.0e3/(25*nevents));
         ha_PUNLpt->Scale(1.0e3/(25*nevents));
         ha_PUNNLpt->Scale(1.0e3/(25*nevents));
@@ -219,7 +219,6 @@ void Rate_sumpt::SetHist_props()
         ha_PUNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
         ha_PUNNNNLpt->GetXaxis()->SetTitle("P_{t} [GeV/c]");
 	
-	hb_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
 	hb_PUNNNNLpt->SetLineColor(kBlue);
 	hb_PUNNNLpt->SetLineColor(kGreen);
 	hb_PUNNLpt->SetLineColor(kRed);
@@ -232,6 +231,7 @@ void Rate_sumpt::SetHist_props()
 	hb_PUNLpt->SetLineWidth(3);
 	hb_PULpt->SetLineWidth(3);
 
+	hb_PUNNNNLpt->GetYaxis()->SetRangeUser(5.0e-2, 50.0);
         hb_PULpt->Scale(1.0e3/(25*nevents));
         hb_PUNLpt->Scale(1.0e3/(25*nevents));
         hb_PUNNLpt->Scale(1.0e3/(25*nevents));
@@ -259,10 +259,15 @@ void Rate_sumpt::Fill_TrigRate_EMU(std::vector<int*> vec_ntots)
         	std::cout<<"n2tot[" <<j <<"] = " << vec_ntots[0][j] <<std::endl;
           	
           
-          	hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[8][j]));
-          	hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[9][j]));
-          	hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[10][j]));
-          	hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[11][j]));
+          	hb_PUNLpt->SetBinContent(j+1, (1.0 * vec_ntots[8][j]));
+          	hb_PUNNLpt->SetBinContent(j+1, (1.0 * vec_ntots[9][j]));
+          	hb_PUNNNLpt->SetBinContent(j+1, (1.0 * vec_ntots[10][j]));
+          	hb_PUNNNNLpt->SetBinContent(j+1, (1.0 * vec_ntots[11][j]));
+          	
+		//hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[8][j]));
+          	//hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[9][j]));
+          	//hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[10][j]));
+          	//hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[11][j]));
          
 	}
 
@@ -275,20 +280,35 @@ void Rate_sumpt::Fill_TrigRate(std::vector<int*> vec_ntots)
         	//std::cout<<"n2tot[" <<j <<"] = " << vec_ntots[0][j] <<std::endl;
           	
           
-          	h_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[0][j]));
-          	h_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[1][j]));
-          	h_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[2][j]));
-          	h_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[3][j]));
+          	h_PUNLpt->SetBinContent(h_PUNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[0][j]));
+          	h_PUNNLpt->SetBinContent(h_PUNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[1][j]));
+          	h_PUNNNLpt->SetBinContent(h_PUNNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[2][j]));
+          	h_PUNNNNLpt->SetBinContent(h_PUNNNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[3][j]));
          
-	 	ha_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[4][j]));
-          	ha_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[5][j]));
-          	ha_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[6][j]));
-          	ha_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[7][j]));
+	 	ha_PUNLpt->SetBinContent(ha_PUNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[4][j]));
+          	ha_PUNNLpt->SetBinContent(ha_PUNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[5][j]));
+          	ha_PUNNNLpt->SetBinContent(ha_PUNNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[6][j]));
+          	ha_PUNNNNLpt->SetBinContent(ha_PUNNNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[7][j]));
 
-          	hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[8][j]));
-          	hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[9][j]));
-          	hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[10][j]));
-          	hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[11][j]));
+          	hb_PUNLpt->SetBinContent(hb_PUNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[8][j]));
+          	hb_PUNNLpt->SetBinContent(hb_PUNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[9][j]));
+          	hb_PUNNNLpt->SetBinContent(hb_PUNNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[10][j]));
+          	hb_PUNNNNLpt->SetBinContent(hb_PUNNNNLpt->FindBin(xbins[j]), (1.0 * vec_ntots[11][j]));
+          	
+		//h_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[0][j]));
+          	//h_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[1][j]));
+          	//h_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[2][j]));
+          	//h_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[3][j]));
+         
+	 	//ha_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[4][j]));
+          	//ha_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[5][j]));
+          	//ha_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[6][j]));
+          	//ha_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[7][j]));
+
+          	//hb_PUNLpt->Fill(xbins[j], (1.0 * vec_ntots[8][j]));
+          	//hb_PUNNLpt->Fill(xbins[j], (1.0 * vec_ntots[9][j]));
+          	//hb_PUNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[10][j]));
+          	//hb_PUNNNNLpt->Fill(xbins[j], (1.0 * vec_ntots[11][j]));
           	
           
           	/*h_tJeff5->Fill(xbins[j], (1.0*n5_tot[j])/n_entries);
@@ -300,27 +320,27 @@ void Rate_sumpt::Fill_TrigRate(std::vector<int*> vec_ntots)
 }
 void Rate_sumpt::DrawMultiplicitySumpt()
 {
-        hM_PUNNNNLpt->Draw("hist");
-        hM_PUNNNLpt->Draw("hist same");
-        hM_PUNNLpt->Draw("hist same");
-        hM_PUNLpt->Draw("hist same");
-	//hM_PULpt->Draw("hist");
+        hM_PUNNNNLpt->Draw("e");
+        hM_PUNNNLpt->Draw("e same");
+        hM_PUNNLpt->Draw("e same");
+        hM_PUNLpt->Draw("e same");
+	//hM_PULpt->Draw("e");
 }
 void Rate_sumpt::DrawMultiplicityMaxpt()
 {
-        hMa_PUNNNNLpt->Draw("hist");
-        hMa_PUNNNLpt->Draw("hist same");
-        hMa_PUNNLpt->Draw("hist same");
-        hMa_PUNLpt->Draw("hist same");
-	//hMa_PULpt->Draw("hist");
+        hMa_PUNNNNLpt->Draw("e");
+        hMa_PUNNNLpt->Draw("e same");
+        hMa_PUNNLpt->Draw("e same");
+        hMa_PUNLpt->Draw("e same");
+	//hMa_PULpt->Draw("e");
 }
 void Rate_sumpt::DrawMultiplicity()
 {
-        hMb_PUNNNNLpt->Draw("hist ");
-        hMb_PUNNNLpt->Draw("hist same");
-        hMb_PUNNLpt->Draw("hist same");
-        hMb_PUNLpt->Draw("hist same");
-	//hMb_PULpt->Draw("hist");
+        hMb_PUNNNNLpt->Draw("e ");
+        hMb_PUNNNLpt->Draw("e same");
+        hMb_PUNNLpt->Draw("e same");
+        hMb_PUNLpt->Draw("e same");
+	//hMb_PULpt->Draw("e");
 }
 void Rate_sumpt::WriteMultiplicity()
 {
@@ -342,27 +362,27 @@ void Rate_sumpt::WriteMultiplicity()
 }
 void Rate_sumpt::DrawNoBin()
 {
-	hb_PUNNNNLpt->Draw("hist");
-	hb_PUNNNLpt->Draw("hist same");
-	hb_PUNNLpt->Draw("hist same");
-	hb_PUNLpt->Draw("hist same");
-	//hb_PULpt->Draw("hist same");
+	hb_PUNNNNLpt->Draw("e");
+	hb_PUNNNLpt->Draw("e same");
+	hb_PUNNLpt->Draw("e same");
+	hb_PUNLpt->Draw("e same");
+	//hb_PULpt->Draw("e same");
 }
 void Rate_sumpt::DrawRate()
 {
-	ha_PUNNNNLpt->Draw("hist");
-	ha_PUNNNLpt->Draw("hist same");
-	ha_PUNNLpt->Draw("hist same");
-	ha_PUNLpt->Draw("hist same");
-	//ha_PULpt->Draw("hist same");
+	ha_PUNNNNLpt->Draw("e");
+	ha_PUNNNLpt->Draw("e same");
+	ha_PUNNLpt->Draw("e same");
+	ha_PUNLpt->Draw("e same");
+	//ha_PULpt->Draw("e same");
 }
 void Rate_sumpt::DrawSumpt()
 {
-	h_PUNNNNLpt->Draw("hist");
-	h_PUNNNLpt->Draw("hist same");
-	h_PUNNLpt->Draw("hist same");
-	h_PUNLpt->Draw("hist same");
-	//h_PULpt->Draw("hist same");
+	h_PUNNNNLpt->Draw("e");
+	h_PUNNNLpt->Draw("e same");
+	h_PUNNLpt->Draw("e same");
+	h_PUNLpt->Draw("e same");
+	//h_PULpt->Draw("e same");
 }
 
 void Rate_sumpt::WriteAll()

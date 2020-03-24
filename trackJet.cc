@@ -18,23 +18,23 @@ int main ()
   //bool debug = true;
   bool debug = false;
   ////////////////////////////////////////////////////////////////////////////////////
-  //     if NZVTXBIN = 40 and ZRANGE = 200mm, ZBIN_width = 5                        //
+  //     if NZVTXBIN= 40 and ZRANGE = 200mm, ZBIN_width = 5;
   //     we now extend our zbin_width to include the neighbouring bins
   //	 i.e. each of the ith bin is now 15 mm and there is an overlap of 5 mm in 
   //	 either direction
   //	 the 20th bin [0,5) will now include contents from the 19th and the 21st bins
   //	 i.e. new bin range is [-5,10) i.e. ZBIN_width +- 3/2 * ZBIN_width
-  //	 NZVTXBIN = 40  => +-7.5mm about the center of the ith bin total 15mm
-  //	 NZVTXBIN = 80 => +-3.75mm about the center of the ith bin	 7.5mm
-  //	 NZVTXBIN = 100 => +-3.0mm about the center of the ith bin	 6mm
-  //	 NZVTXBIN = 120 => +-2.5mm about the center of the ith bin	 5mm 
-  //	 NZVTXBIN = 150 => +-2.0mm about the center of the ith bin  	 4mm 
-  //	 NZVTXBIN = 200 => +-1.5mm about the center of the ith bin  	 3mm
+  //	NZVTXBIN= 40  => +-7.5mm about the center of the ith bin total 15mm
+  //    NZVTXBIN= 80 => +-3.75mm about the center of the ith bin       7.5mm
+  //    NZVTXBIN= 100 => +-3.0mm about the center of the ith bin       6mm
+  //    NZVTXBIN= 120 => +-2.5mm about the center of the ith bin       5mm
+  //    NZVTXBIN= 150 => +-2.0mm about the center of the ith bin       4mm
+  //    NZVTXBIN= 200 => +-1.5mm about the center of the ith bin       3mm
   ////////////////////////////////////////////////////////////////////////////////////
   int MIN_Constituents, NJETS, NZVTXBIN;
   float ZRANGE, ZBIN_width;
   int izbin;
-  MIN_Constituents = 3;
+  MIN_Constituents = 1;
   NJETS = 20;
   NZVTXBIN = 40;
   ZRANGE = 200; // in mm
@@ -42,7 +42,8 @@ int main ()
   double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
   double KAPPA_CUT   = 3.0;
   double ETA_CUT     = 2.5;
-  double MIN_TRACKPT = 5e3;
+  double MIN_TRACKPT   = 2e3;//! all tracks must have a min pT > MIN_TRACKPT
+  double MIN_TRACKPT_1 = 2e3;//! atleast MIN_Constituents in a jet must have pT > MIN_TRACKPT_1
   //! Jet definition
   double R = 0.4;
   double PTMINJET = 5e3;// in MeV 
@@ -76,6 +77,7 @@ int main ()
 
   //! create an object to plot trigger efficiency as a function of pt
   TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH);
+  trigger.init(trigger.xbins, trigger.nbins);
 
   //! init output vector
   std::vector<std::vector<double> > vectorof_jetpt(NZVTXBIN, std::vector<double>());
@@ -128,8 +130,8 @@ int main ()
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
   //TFile *f_out = new TFile("NewjetoutPU0hh4b_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kMB1.5mm_25mm_1trk2.5_5GeV.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrkJPU1kggFhh4b7.5mm_25mm_3trk2.5_5GeV.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/TrkJPU1kMB7.5mm_30mm_1trk2.5_2GeV_2GeV_2.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/TrkJPU1kggFhh4b7.5mm_30mm_1trk2.5_2GeV_2GeV_2.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
@@ -186,8 +188,12 @@ int main ()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5_fulleta/*.root");
-  //rec.Add("/data/backup/tamasi/rec_files/25mm/PU1k/MB/*.root");
-  rec.Add("/data/backup/tamasi/rec_files/25mm/PU1k/ggFhh4b_SM/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/tmp/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/tmp_1/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -246,9 +252,10 @@ int main ()
   ////Long64_t nentries = 300;
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
-  //Long64_t nevents = 1310;
   Long64_t nevents = rec.GetEntries();
+  //nevents = 10;
   r_sumpt.nevents = nevents;
+  trigger.nevents = nevents;
   std::cout<<"Total number of enteries in the input directory : " << rec.GetEntries() <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
@@ -320,6 +327,13 @@ int main ()
 		rec.GetEntry(i_event);
 		for(int ik = 0; ik < pt_rec->size(); ++ik)
 		{
+			if(std::fabs((*kap_pull)[ik]) > KAPPA_CUT ) continue; 	
+			if(std::fabs((*pt_rec)[ik]) < MIN_TRACKPT) continue; 	
+			if(std::fabs((*eta_rec)[ik]) > ETA_CUT) continue; 	
+			//! veto fake and dc tracks?// fakes =-1, dc = -barcode
+			if( (*tid_rec)[ik] <= -1) continue;
+			//! veto only dc tracks
+			//if( (*tid_rec)[ik] < -1) continue;
 			pt_recPU.push_back((*pt_rec)[ik]);
 			z0_recPU.push_back((*z0_rec)[ik]);
 			theta_recPU.push_back((*theta_rec)[ik]);
@@ -359,20 +373,22 @@ int main ()
 		mtheta	= m_thetaPU[j];
 		mphi	= m_phiPU[j];
 		kap_cut	= kap_pullPU[j];
-	
-		if(std::fabs(kap_cut) > KAPPA_CUT ) continue; 	
-		if(std::fabs(pt) < MIN_TRACKPT) continue; 	
-		if(std::fabs(eta) > ETA_CUT) continue; 	
 
+		//if(std::fabs(kap_cut) > KAPPA_CUT)std::cout<<"kappa_pull: " <<kap_cut << std::endl;	
+		//if(std::fabs(kap_cut) > KAPPA_CUT ) continue; 	
+		//if(std::fabs(pt) < MIN_TRACKPT) continue; 	
+		//if(std::fabs(eta) > ETA_CUT) continue; 	
+
+		//if(std::fabs(kap_cut) > KAPPA_CUT)std::cout<<"kappa_pull after skip: " <<kap_cut << std::endl;	
 		if(debug){std::cout<<"mpt, mVz, mtheta, mphi, tid: " << mpt << " , " << mVz << " , " << mtheta << " , " << mphi << " , " << tid << std::endl; }
 		if(tid==-1)tjObj.flag = 0;//fakes
 		else if(tid > 0)tjObj.flag = 1;//matched tracks
 		else if(tid < -1)tjObj.flag = -1;//dc tracks
 
-		//! veto fake and dc tracks?
-		//if(tjObj.flag!=1) continue;
-		//! veto only dc tracks
-		if(tjObj.flag < 0) continue;
+		////! veto fake and dc tracks?
+		////if(tjObj.flag!=1) continue;
+		////! veto only dc tracks
+		//if(tjObj.flag < 0) continue;
 
 		tjObj.px = pt*cos(phi);
 		tjObj.py = pt*sin(phi);
@@ -555,9 +571,9 @@ int main ()
 		constituentZ0.push_back(std::vector<double>());
 		if(debug)std::cout<<"truth jet pt  size : " << M_jetPt.size() << " , reco jet pt size : " << jetPt.size() << std::endl;
 		//if(debug)std::cout << "jet " << i << ": "<< incl_trkjets[i].pt() << " " << incl_trkjets[i].rap() << " " << incl_trkjets[i].phi() << std::endl;
-		std::vector<PseudoJet> constituents = incl_trkjets[i].constituents();
+		std::vector<PseudoJet> constituents = sorted_by_pt(incl_trkjets[i].constituents());
 		Nconstituents.push_back(constituents.size());
-		std::vector<PseudoJet> pcle_constituents = incl_m_pclejets[bestTruthJet].constituents();
+		std::vector<PseudoJet> pcle_constituents = sorted_by_pt(incl_m_pclejets[bestTruthJet].constituents());
 		M_Nconstituents.push_back(pcle_constituents.size());
 		//if(debug)std::cout<<"number of constituents in jet " << i << " = " << Nconstituents[i] << std::endl;
 		for (unsigned j = 0; j < constituents.size(); j++) 
@@ -617,7 +633,28 @@ int main ()
                 {
                         continue;
                 }
-		else incl_trkjets_minNConstituents.push_back(incl_trkjets[i]);
+		else 
+		{
+			bool BREAK = false;
+			for(int ithconsti = 0; ithconsti < MIN_Constituents; ithconsti++)
+			{
+				if(debug) std::cout<<"ith consti = " << ithconsti << ", pT = " << constituents[ithconsti].pt() <<std::endl;
+				if(constituents[ithconsti].pt() < MIN_TRACKPT_1)
+				{
+					BREAK = true;
+					break;
+				}
+			
+
+			}
+			if(debug)std::cout<<"Break: "<<BREAK<<std::endl;
+			if(BREAK)
+			{
+				continue;
+			}
+			
+			incl_trkjets_minNConstituents.push_back(incl_trkjets[i]);
+		}
 	}// end of for loop over jet size
 	//! end of Jet Matching
 	
@@ -685,16 +722,40 @@ int main ()
 			//! skip the ckeck below if the size of inclusive_jets is smaller than n, for all the subsequent n's
 			//! (inclusive_jets[n] will not exist in that case) 
 			if(n >= inclusive_jets.size()) break;
+			std::vector<PseudoJet> constituents_1 = sorted_by_pt(inclusive_jets[n].constituents());
 			
 			//! check if the nth jet has atleast MIN_Constituents
-			int multiplicity = inclusive_jets[n].constituents().size();
+			//int multiplicity = inclusive_jets[n].constituents().size();
+			int multiplicity = constituents_1.size();
 			//int multiplicity = 1;
 			if(debug) std::cout<<"nconstituents: " <<multiplicity <<std::endl;
+			//! if not continue
 			if(multiplicity < MIN_Constituents)
 			{
 				//!go to next jet. But before that fix the value of the nth index for vectorof_jetpt
 				tmp +=1;
 				continue;
+			}
+			else//! check if the minimum number of constituents have a minimum track pT
+			{
+				bool BREAK = false;
+				for(int ithconsti = 0; ithconsti < MIN_Constituents; ithconsti++)
+				{
+					if(debug) std::cout<<"ith consti = " << ithconsti << ", pT = " << constituents_1[ithconsti].pt() <<std::endl;
+					if(constituents_1[ithconsti].pt() < MIN_TRACKPT_1)
+					{
+						BREAK = true;
+						break;
+					}
+				
+
+				}
+				if(debug)std::cout<<"Break: "<<BREAK<<std::endl;
+				if(BREAK)
+				{
+					tmp +=1;
+					continue;
+				}
 			}	
 			//! at this stage vectorof_jetpt[ith_bin][n] = 0.0 => initialised above
 			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n - tmp]) 
@@ -816,6 +877,12 @@ int main ()
 		r_sumpt.hMb_PUNNLpt->Fill(incl_trkjets_minNConstituents[2].constituents().size());
 		r_sumpt.hMb_PUNNNLpt->Fill(incl_trkjets_minNConstituents[3].constituents().size());
 		r_sumpt.hMb_PUNNNNLpt->Fill(incl_trkjets_minNConstituents[4].constituents().size());
+		
+		//std::cout<<"1st leading N consti:"<<incl_trkjets_minNConstituents[0].constituents().size()<<std::endl;
+		//std::cout<<"2nd leading N consti:"<<incl_trkjets_minNConstituents[1].constituents().size()<<std::endl;
+		//std::cout<<"3rd leading N consti:"<<incl_trkjets_minNConstituents[2].constituents().size()<<std::endl;
+		//std::cout<<"4th leading N consti:"<<incl_trkjets_minNConstituents[3].constituents().size()<<std::endl;
+		//std::cout<<"5th leading N consti:"<<incl_trkjets_minNConstituents[4].constituents().size()<<std::endl;
 	}
 	else if(incl_trkjets_minNConstituents.size() > 3)
 	{
@@ -981,7 +1048,6 @@ r_sumpt.n_tots.push_back(trigger.n5b_tot);
 r_sumpt.Fill_TrigRate(r_sumpt.n_tots);
 //! continuation of trigger efficiency cal.
 //! we fill outside as we want count the no. of events with 'n' trackjets above a pt threshold
-trigger.init(trigger.xbins, trigger.nbins);
 trigger.Fill_TrigEff();
 trigger.SetHist_props();
 TCanvas *C_trig = new TCanvas();

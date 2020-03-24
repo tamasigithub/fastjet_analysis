@@ -33,6 +33,7 @@
 class TrigEff
 {
 public:
+	int nevents;// number of pileup events
 	const int Njet_max = 5;
 	const float eta_cut = 2.5; 
 	static const int nbins_plus1 = 401;//101;
