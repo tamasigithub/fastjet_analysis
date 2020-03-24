@@ -161,8 +161,8 @@ void Set_higgsPtProps_2_5()
 	Pt_Lhiggs2_5  = new TH1D("Pt_Lhiggs2_5",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	Pt_NLhiggs2_5  = new TH1D("Pt_NLhiggs2_5",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	//! reconstructed leading and sub leading inv mass
-	M_Lhiggs2_5  = new TH1D("M_Lhiggs2_5",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
-	M_NLhiggs2_5  = new TH1D("M_NLhiggs2_5",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs2_5  = new TH1D("M_Lhiggs2_5",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, MLHmin, MLHmax);
+	M_NLhiggs2_5  = new TH1D("M_NLhiggs2_5",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, MLHmin, MLHmax);
 	
 	//! reconstructed Inv mass of the di-higgs system
 	RecMH1H2_2_5  = new TH1D("RecMH1H2_2_5",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);

@@ -56,9 +56,9 @@ double k_lambda[7] = {-2.0, -1.0, 0.0, 1.0, 2.0, 2.5, 3.0};
 
 double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec2, ggFhhXsec2_5, ggFhhXsec3};
 
-const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
+const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30_1.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30";
+const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30_1";
 
 //const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr1.0_q300MeV_6.0_allR0.4.root"; 
 //const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr0.0_q300MeV_6.0_allR0.4.root"; 
@@ -950,6 +950,19 @@ TH2D *b1b2_b3b4_B = nullptr;
 TH2D *b1b3_b2b4_B = nullptr;
 TH2D *b1b4_b2b3_B = nullptr;
 
+TH2D *J1bJ1_1 = nullptr;
+TH2D *J2bJ2_1 = nullptr;
+TH2D *J3bJ3_1 = nullptr;
+TH2D *J4bJ4_1 = nullptr;
+
+TH2D *MJ1bJ1_1 = nullptr;
+TH2D *MJ2bJ2_1 = nullptr;
+TH2D *MJ3bJ3_1 = nullptr;
+TH2D *MJ4bJ4_1 = nullptr;
+
+Float_t MLHmin = 50.0;
+Float_t MLHmax = 250.0;
+
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
 Float_t MARKER_SIZE = 1.2;
@@ -966,6 +979,7 @@ TLegend *leg3 = nullptr;
 TLegend *leg4 = nullptr;
 TLegend *leg5 = nullptr;
 TLegend *leg6 = nullptr;
+TLegend *l_   = nullptr;
 
 Float_t ENTRY_SEP = 0.05;
 Float_t FILL_STYLE = 0;

@@ -28,13 +28,42 @@ void ClearLorentzVectors_B()
 	return;
 
 }
-void fetch_histos_B()
+void fill_histos_B()
 {
 
 	bLPtB->Fill((*vB_bPt)[0]*1e-3);
 	b2LPtB->Fill((*vB_bPt)[1]*1e-3);
 	b3LPtB->Fill((*vB_bPt)[2]*1e-3);
 	b4LPtB->Fill((*vB_bPt)[3]*1e-3);
+	
+	//bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
+	//b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
+	//b3CEtaB = (TH1D*)fB->Get("hbEta_NNCeta");
+	//b4CEtaB = (TH1D*)fB->Get("hbEta_NNNCeta");
+
+	//bCEtaB ->Add( (TH1D*)fB_1->Get("hbEta_Ceta") );
+	//b2CEtaB->Add( (TH1D*)fB_1->Get("hbEta_NCeta") );
+	//b3CEtaB->Add( (TH1D*)fB_1->Get("hbEta_NNCeta") );
+	//b4CEtaB->Add( (TH1D*)fB_1->Get("hbEta_NNNCeta") );
+	////bCEtaB->Fill((*vB_bEta)[0]);
+	////b2CEtaB->Fill((*vB_bEta)[1]);
+	////b3CEtaB->Fill((*vB_bEta)[2]);
+	////b4CEtaB->Fill((*vB_bEta)[3]);
+
+	//
+	////bLPtB  = (TH1D*)fB->Get("hbPt_Lpt");
+	////b2LPtB = (TH1D*)fB->Get("hbPt_NLpt");
+	////b3LPtB = (TH1D*)fB->Get("hbPt_NNLpt");
+	////b4LPtB = (TH1D*)fB->Get("hbPt_NNNLpt");
+
+	////bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
+	////b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
+	////b3CEtaB = (TH1D*)fB->Get("hbEta_NNCeta");
+	////b4CEtaB = (TH1D*)fB->Get("hbEta_NNNCeta");
+	return;
+}
+void fetch_histos_B()
+{
 	
 	bCEtaB  = (TH1D*)fB->Get("hbEta_Ceta");
 	b2CEtaB = (TH1D*)fB->Get("hbEta_NCeta");
@@ -130,8 +159,8 @@ void Set_higgsPtProps_B()
 	//! reconstructed leading and sub leading higgs pt
 	Pt_LhiggsB  = new TH1D("Pt_LhiggsB",  " BackGround Reconnstructed higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	Pt_NLhiggsB  = new TH1D("Pt_NLhiggsB",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
-	M_LhiggsB  = new TH1D("M_LhiggsB",  "BackGround Reconstructed Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
-	M_NLhiggsB  = new TH1D("M_NLhiggsB",  "Background Reconstructed Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_LhiggsB  = new TH1D("M_LhiggsB",  "BackGround Reconstructed Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, MLHmin, MLHmax);
+	M_NLhiggsB  = new TH1D("M_NLhiggsB",  "Background Reconstructed Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, MLHmin, MLHmax);
 	
 	//! reconstructed Inv mass of the di-higgs system
 	RecMH1H2_B  = new TH1D("RecMH1H2_B",  "Background Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);

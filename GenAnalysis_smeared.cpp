@@ -61,6 +61,12 @@ void Set_LegendProps()
 	leg1->SetTextFont(TEXT_FONT);
 	leg1->SetTextSize(0.09);
 
+	l_->SetFillStyle(FILL_STYLE);
+	l_->SetBorderSize(BORDER_SIZE);
+	l_->SetTextAlign(TEXT_ALIGN);
+	l_->SetTextFont(TEXT_FONT);
+	l_->SetTextSize(TEXT_SIZE);
+	
 	leg2->SetFillStyle(FILL_STYLE);
 	leg2->SetBorderSize(BORDER_SIZE);
 	leg2->SetTextAlign(TEXT_ALIGN);
@@ -189,7 +195,7 @@ void plot()
 	fetch_histos_2();
 	fetch_histos_2_5();
 	fetch_histos_3();
-	//fetch_histos_B();//now inside the loop
+	fetch_histos_B();//now inside the loop
 	
 	Draw_Nparticles_1();
 	Draw_Nparticles_0();
@@ -470,7 +476,8 @@ void plot()
 	//for(int i = 0; i < 50; i++)
 	{
 		tB.GetEntry(i);
-		fetch_histos_B();//now inside the loop
+		fill_histos_B();
+		//fetch_histos_B();//now inside the loop
 		ClearLorentzVectors_B();
 		Draw_InvariantMass_B();
 		//Fill_InvariantMass_B();
@@ -684,6 +691,7 @@ void plot()
 	leg4 = new TLegend(x1, y1, x2, y2, "");
 	leg5 = new TLegend(x1, y1, x2, y2, "");
 	leg6 = new TLegend(x1, y1, x2, y2, "");
+	l_ = new TLegend(0.6,0.2,0.89,0.4);
 
 	Set_LegendProps();
 
@@ -1329,6 +1337,10 @@ void plot()
 	bjet3LPt1->Draw("hist same");
 	bjet2LPt1->Draw("hist same");
 	bjetLPt1->Draw("hist same");
+	bjet4LPt1->Write();
+	bjet3LPt1->Write();
+	bjet2LPt1->Write();
+	bjetLPt1->Write();
 	//leg1->Draw();
 	gPad->Write("c11a");
 
@@ -1339,6 +1351,10 @@ void plot()
 	bjet2LPtB->Draw("hist same");
 	bjetLPtB->Draw("hist same");
 	bjet3LPtB->Draw("hist same");
+	bjet4LPtB->Write();
+	bjet2LPtB->Write();
+	bjetLPtB->Write();
+	bjet3LPtB->Write();
 	//leg1->Draw();
 	gPad->Write("c11b");
 	C->Print(out_file_,"pdf");
@@ -1466,6 +1482,111 @@ void plot()
 	//leg2->Draw();
 	gPad->Write("c14b");
 	C->Print(out_file_,"pdf");
+
+	//! page14_
+	//!scatter plot of jets Vs b-jets
+	C->Clear();
+	C->Divide(2,2);
+	//gStyle->SetPalette(kColorPrintableOnGrey);
+	//gStyle->SetPalette(kTemperatureMap);
+	gStyle->SetPalette(kCMYK);
+	gPad->Modified();
+	gPad->Update();
+	//b1b2_b3b4_1->SetMaximum(850.);
+	//b1b3_b2b4_1->SetMaximum(850.);
+	//b1b4_b2b3_1->SetMaximum(850.);
+	C->cd(1);
+	J1bJ1_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14_a");
+	C->cd(2);
+	J2bJ2_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14_b");
+	C->cd(3);
+	J3bJ3_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14_c");
+	C->cd(4);
+	J4bJ4_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14_d");
+	C->Print(out_file_,"pdf");
+	//! page14__
+	//!scatter plot of jets Vs b-jets
+	C->Clear();
+	C->Divide(2,2);
+	//gStyle->SetPalette(kColorPrintableOnGrey);
+	//gStyle->SetPalette(kTemperatureMap);
+	gStyle->SetPalette(kCMYK);
+	gPad->Modified();
+	gPad->Update();
+	//b1b2_b3b4_1->SetMaximum(850.);
+	//b1b3_b2b4_1->SetMaximum(850.);
+	//b1b4_b2b3_1->SetMaximum(850.);
+	C->cd(1);
+	MJ1bJ1_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14__a");
+	C->cd(2);
+	MJ2bJ2_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14__b");
+	C->cd(3);
+	MJ3bJ3_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14__c");
+	C->cd(4);
+	MJ4bJ4_1->Draw("colz");
+	gPad->Update();
+	gPad->Write("c14__d");
+	C->Print(out_file_,"pdf");
+	//! page14___
+	C->Clear();
+	C->Divide(1,2);
+	C->cd(1);
+	jet4LPt1->SetTitle("k_{#lambda} = 1.0");
+	jet4LPt1->Draw("hist");
+	jet3LPt1->Draw("hist same");
+	jet2LPt1->Draw("hist same");
+	jetLPt1->Draw("hist same");
+	bjet4LPt1->SetLineStyle(2);
+	bjet3LPt1->SetLineStyle(2);
+	bjet2LPt1->SetLineStyle(2);
+	bjetLPt1->SetLineStyle(2);
+	bjet4LPt1->Draw("hist same");
+	bjet3LPt1->Draw("hist same");
+	bjet2LPt1->Draw("hist same");
+	bjetLPt1->Draw("hist same");
+	//leg2->Draw();
+	gPad->Write("c14___a");
+
+	C->cd(2);
+	jet4LM1->SetTitle("k_{#lambda} = 1.0");
+	jet4LM1->Draw("hist");
+	jet3LM1->Draw("hist same");
+	jet2LM1->Draw("hist same");
+	jetLM1->SetLineStyle(2);
+	bjet4LM1->SetLineStyle(2);
+	bjet3LM1->SetLineStyle(2);
+	bjet2LM1->SetLineStyle(2);
+	bjetLM1->SetLineStyle(2);
+	bjet4LM1->Draw("hist same");
+	bjet3LM1->Draw("hist same");
+	bjet2LM1->Draw("hist same");
+	bjetLM1->Draw("hist same");
+	//leg2->Draw();
+	gPad->Write("c14___b");
+	C->Print(out_file_,"pdf");
+	bjet4LPt1->SetLineStyle(1);
+	bjet3LPt1->SetLineStyle(1);
+	bjet2LPt1->SetLineStyle(1);
+	bjetLPt1->SetLineStyle(1);
+	jetLM1->SetLineStyle(1);
+	bjet4LM1->SetLineStyle(1);
+	bjet3LM1->SetLineStyle(1);
+	bjet2LM1->SetLineStyle(1);
+	bjetLM1->SetLineStyle(1);
 	//! page15
 	//! 4 leading Jets invariant mass
 	C->Clear();
@@ -2245,12 +2366,20 @@ void plot()
 	M_NLhiggs1->Draw("hist");
 	gPad->Write("c31b");
 	C->cd(3);
-	M_LhiggsB->GetXaxis()->SetTitle("M_{rec, bcknd H1} [GeV]");
+	M_LhiggsB->GetXaxis()->SetTitle("M_{rec, H1} [GeV]");
+	M_LhiggsB->Scale(1e-3);
 	M_LhiggsB->Draw("hist");
+	M_Lhiggs1->Draw("hist same");
+	l_->AddEntry(M_Lhiggs1, "HH #rightarrow b#bar{b}b#bar{b}, SM", "l");
+	l_->AddEntry(M_LhiggsB, "#splitline{pp #rightarrow b#bar{b}b#bar{b}}{scaled by 10^{-3}}", "l");
+	l_->Draw();
 	gPad->Write("c31c");
 	C->cd(4);
-	M_NLhiggsB->GetXaxis()->SetTitle("M_{rec, bcknd H1} [GeV]");
+	M_NLhiggsB->GetXaxis()->SetTitle("M_{rec, H2} [GeV]");
+	M_NLhiggsB->Scale(1e-3);
 	M_NLhiggsB->Draw("hist");
+	M_NLhiggs1->Draw("hist same");
+	l_->Draw();
 	gPad->Write("c31d");
 	C->Print(out_file_,"pdf");
 
@@ -3205,17 +3334,17 @@ void plot()
 	gPad->Write("c54c");
 	C->cd(4);
 	gPad->SetLogy(); gPad->SetLogx();
-	Ana_bjet3LPtB->SetTitle("after Ana cuts, normalized to 30ab^{-1}");
+	Ana_bjet4LPtB->SetTitle("after Ana cuts, normalized to 30ab^{-1}");
 	max_rangeM = Ana_bjet3LPtB->GetMaximum() * 1.3;
-	Ana_bjet3LPtB->GetYaxis()->SetRangeUser(1e3, max_rangeM);
-	Ana_bjet3LPtB->Draw();
-	Ana_bjet3LPt_2->Draw("same");
-	Ana_bjet3LPt_1->Draw("same");
-	Ana_bjet3LPt0->Draw("same");
-	Ana_bjet3LPt1->Draw("same");
-	Ana_bjet3LPt2->Draw("same");
-	Ana_bjet3LPt2_5->Draw("same");
-	Ana_bjet3LPt3->Draw("same");
+	Ana_bjet4LPtB->GetYaxis()->SetRangeUser(1e3, max_rangeM);
+	Ana_bjet4LPtB->Draw();
+	Ana_bjet4LPt_2->Draw("same");
+	Ana_bjet4LPt_1->Draw("same");
+	Ana_bjet4LPt0->Draw("same");
+	Ana_bjet4LPt1->Draw("same");
+	Ana_bjet4LPt2->Draw("same");
+	Ana_bjet4LPt2_5->Draw("same");
+	Ana_bjet4LPt3->Draw("same");
 	gPad->Write("c54d");
 	
 	//	C->Clear();

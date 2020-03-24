@@ -164,8 +164,8 @@ void Set_higgsPtProps_1()
 	Pt_Lhiggs1  = new TH1D("Pt_Lhiggs1",  "higgs p_{t};p_{t, leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	Pt_NLhiggs1  = new TH1D("Pt_NLhiggs1",  "higgs p_{t};p_{t, sub leading higgs} [GeV/c];", nbins, ptmin, ptmax);
 	//! reconstructed leading and sub leading inv mass
-	M_Lhiggs1  = new TH1D("M_Lhiggs1",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, ptmin, ptmax);
-	M_NLhiggs1  = new TH1D("M_NLhiggs1",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, ptmin, ptmax);
+	M_Lhiggs1  = new TH1D("M_Lhiggs1",  "Invariant higgs mass;m_{rec, leading higgs} [GeV];", nbins, MLHmin, MLHmax);
+	M_NLhiggs1  = new TH1D("M_NLhiggs1",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, MLHmin, MLHmax);
 	
 	//! reconstructed Inv mass of the di-higgs system
 	RecMH1H2_1  = new TH1D("RecMH1H2_1",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
@@ -258,6 +258,17 @@ void Set_jetPtProps_1()
 	dM_b1b3_b2b4_1 = new TH1D("dM_b1b3_b2b4_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1324} [GeV];", nbins, dptmin, dptmax);
 	dM_b1b4_b2b3_1 = new TH1D("dM_b1b4_b2b3_1", "Relative difference b/w the invariant masses of the possible higgs pair; m_{H, 1423} [GeV];", nbins, dptmin, dptmax);
 
+	//!scatter plot of jets vs bjets
+	J1bJ1_1 = new TH2D("J1bJ1_1", "p_{T, J1} Vs p_{T, bJ1}; p_{T, bJ1} [GeV/c];p_{T, J1} [GeV/c]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	J2bJ2_1 = new TH2D("J2bJ2_1", "p_{T, J2} Vs p_{T, bJ2}; p_{T, bJ2} [GeV/c];p_{T, J2} [GeV/c]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	J3bJ3_1 = new TH2D("J3bJ3_1", "p_{T, J3} Vs p_{T, bJ3}; p_{T, bJ3} [GeV/c];p_{T, J3} [GeV/c]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	J4bJ4_1 = new TH2D("J4bJ4_1", "p_{T, J4} Vs p_{T, bJ4}; p_{T, bJ4} [GeV/c];p_{T, J4} [GeV/c]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	//!scatter plot of jets vs bjets
+	MJ1bJ1_1 = new TH2D("MJ1bJ1_1", "M_{J1} Vs M_{bJ1}; M_{bJ1} [GeV];M_{J1} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	MJ2bJ2_1 = new TH2D("MJ2bJ2_1", "M_{J2} Vs M_{bJ2}; M_{bJ2} [GeV];M_{J2} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	MJ3bJ3_1 = new TH2D("MJ3bJ3_1", "M_{J3} Vs M_{bJ3}; M_{bJ3} [GeV];M_{J3} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+	MJ4bJ4_1 = new TH2D("MJ4bJ4_1", "M_{J4} Vs M_{bJ4}; M_{bJ4} [GeV];M_{J4} [GeV]", nbins, ptmin, ptmax, nbins, ptmin, ptmax);
+
 	combi_selected_1 = new TH1D("combi_selected_1", "Selected combination", 3, 1, 4);
 	return;
 }
@@ -333,6 +344,18 @@ void Fill_bjetPtM_1(int &nhiggs)
 	bjet2LPt1->Fill(bJ2_1.Pt()*1e-3);
 	bjet3LPt1->Fill(bJ3_1.Pt()*1e-3);
 	bjet4LPt1->Fill(bJ4_1.Pt()*1e-3);
+	
+	//! scatter plot of jetpT vs bjetpT
+	J1bJ1_1->Fill(bJ1_1.Pt()*1e-3,(*v1_jetPt)[0]*1e-3);	
+	J2bJ2_1->Fill(bJ2_1.Pt()*1e-3,(*v1_jetPt)[1]*1e-3);	
+	J3bJ3_1->Fill(bJ3_1.Pt()*1e-3,(*v1_jetPt)[2]*1e-3);	
+	J4bJ4_1->Fill(bJ4_1.Pt()*1e-3,(*v1_jetPt)[3]*1e-3);
+	//! scatter plot of jetM vs bjetM
+	MJ1bJ1_1->Fill(bJ1_1.M()*1e-3,(*v1_jetM)[0]*1e-3);	
+	MJ2bJ2_1->Fill(bJ2_1.M()*1e-3,(*v1_jetM)[1]*1e-3);	
+	MJ3bJ3_1->Fill(bJ3_1.M()*1e-3,(*v1_jetM)[2]*1e-3);	
+	MJ4bJ4_1->Fill(bJ4_1.M()*1e-3,(*v1_jetM)[3]*1e-3);
+	
 
 	bjetLM1->Fill( bJ1_1.M()*1e-3);
 	bjet2LM1->Fill(bJ2_1.M()*1e-3);
