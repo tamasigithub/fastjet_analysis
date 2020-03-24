@@ -33,7 +33,7 @@
 
 const char* out_path = "./summary_plots/pdf"; 
 //const char* output_file_name = "nofakes100GeV2Calo_7.5_3.75_q1.2GeV_2";
-const char* output_file_name = "TrigSummary3trk_1.5_1.5_5GeV_Caloq1.2GeV_2GeV_5GeV30mm_1_test";
+const char* output_file_name = "TrigSummary1trk_7.5_3.0_5GeV_Caloq1.2GeV_2GeV_2GeV_30mm_3";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -64,6 +64,13 @@ void SaveCanvas(TCanvas *C, char *name)
 //! first two numbers of which are identical to gap size
 void roc(const char *pileup, const char *gapsize)
 {
+	//! Draw a pre-scalling function of the form rate = 40MHz * trigger efficiency
+	TF1 *fun = new TF1("fun","[0]*x*x",0,1);
+	fun->SetParameter(0,40);
+	//TF2 *fun1= new TF2("fun1","[0]*x-y",0,1,3e-2,40);
+	//fun1->SetParameter(0,40);
+	//TF12 *fun2 = new TF12("fun2",fun1,3e-2,"x");
+
 	bool debug = true;
 	//const int n = 20;
 	//const int n = 115;
@@ -73,28 +80,40 @@ void roc(const char *pileup, const char *gapsize)
 	Int_t nbinsEb, nbinsRb;
 	Float_t Xmin_range = 0.0, Xmax_range = 1.2;
 	Float_t Ymin_range = 3e-2, Ymax_range = 60.0;
-	Float_t e2[n] = {0};   Float_t r2[n] = {0};
-	Float_t e3[n] = {0};   Float_t r3[n] = {0};
-	Float_t e4[n] = {0};   Float_t r4[n] = {0};
-	Float_t e5[n] = {0};   Float_t r5[n] = {0};
-	Float_t ea2[n] = {0};   Float_t ra2[n] = {0};
-	Float_t ea3[n] = {0};   Float_t ra3[n] = {0};
-	Float_t ea4[n] = {0};   Float_t ra4[n] = {0};
-	Float_t ea5[n] = {0};   Float_t ra5[n] = {0};
-	Float_t eb2[n] = {0};   Float_t rb2[n] = {0};
-	Float_t eb3[n] = {0};   Float_t rb3[n] = {0};
-	Float_t eb4[n] = {0};   Float_t rb4[n] = {0};
-	Float_t eb5[n] = {0};   Float_t rb5[n] = {0};
-	Float_t pt_threshold[n] = {0};
+	Double_t e2[n] = {0};   Double_t r2[n] = {0};
+	Double_t e3[n] = {0};   Double_t r3[n] = {0};
+	Double_t e4[n] = {0};   Double_t r4[n] = {0};
+	Double_t e5[n] = {0};   Double_t r5[n] = {0};
+	Double_t ea2[n] = {0};   Double_t ra2[n] = {0};
+	Double_t ea3[n] = {0};   Double_t ra3[n] = {0};
+	Double_t ea4[n] = {0};   Double_t ra4[n] = {0};
+	Double_t ea5[n] = {0};   Double_t ra5[n] = {0};
+	Double_t eb2[n] = {0};   Double_t rb2[n] = {0};
+	Double_t eb3[n] = {0};   Double_t rb3[n] = {0};
+	Double_t eb4[n] = {0};   Double_t rb4[n] = {0};
+	Double_t eb5[n] = {0};   Double_t rb5[n] = {0};
+
+	Double_t e_err2[n] = {0};   Double_t r_err2[n] = {0};
+	Double_t e_err3[n] = {0};   Double_t r_err3[n] = {0};
+	Double_t e_err4[n] = {0};   Double_t r_err4[n] = {0};
+	Double_t e_err5[n] = {0};   Double_t r_err5[n] = {0};
+	Double_t e_erra2[n] = {0};   Double_t r_erra2[n] = {0};
+	Double_t e_erra3[n] = {0};   Double_t r_erra3[n] = {0};
+	Double_t e_erra4[n] = {0};   Double_t r_erra4[n] = {0};
+	Double_t e_erra5[n] = {0};   Double_t r_erra5[n] = {0};
+	Double_t e_errb2[n] = {0};   Double_t r_errb2[n] = {0};
+	Double_t e_errb3[n] = {0};   Double_t r_errb3[n] = {0};
+	Double_t e_errb4[n] = {0};   Double_t r_errb4[n] = {0};
+	Double_t e_errb5[n] = {0};   Double_t r_errb5[n] = {0};
+	Double_t pt_threshold[n] = {0};
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	const char *file_path = "./fastjet_output/TriggerStudies_2";
-	const char *file_path_2 = "./fastjet_output/TriggerStudies_2";
+	const char *file_path = "./fastjet_output/TriggerStudies_4";
+	const char *file_path_1 = "./fastjet_output/TriggerStudies_4";
+	const char *file_path_2= "./fastjet_output/TriggerStudies";
 	char signal_file_name[1023];
-	//sprintf(signal_file_name, "%s/jetoutPU%shh4b_%smm_optsig5_1tracks7.5_1.2GeV_nofakes.root",file_path,pileup,gapsize);//7.5
-	//sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks7.5_5GeV.root",file_path,pileup,gapsize);//7.5
-	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b7.5mm_%smm_3trk2.5_5GeV_5GeV_1.root",file_path_2,pileup,gapsize);//7.5
+	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b7.5mm_%smm_1trk2.5_2GeV_2GeV_3.root",file_path,pileup,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 	TFile *f = new TFile(signal_file_name, "READ");
 	//! sumpt approach
@@ -122,10 +141,11 @@ void roc(const char *pileup, const char *gapsize)
 	Eb5->GetYaxis()->SetRangeUser(0,1.2);
 	
 	char MinBias_file_name[1023];
-	//sprintf(MinBias_file_name, "%s/jetoutPU%sMB_%smm_optsig5_1tracks7.5_1.2GeV_nofakes.root",file_path,pileup,gapsize);//7.5
-	//sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks7.5_5GeV.root",file_path,pileup,gapsize);//7.5
-	sprintf(MinBias_file_name, "%s/TrkJPU%sMB7.5mm_%smm_3trk2.5_5GeV_5GeV_1.root",file_path,pileup,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/TrkJPU%sMB7.5mm_%smm_1trk2.5_2GeV_2GeV_2.root",file_path_1,pileup,gapsize);//7.5
 	TFile *f1 = new TFile(MinBias_file_name, "READ");
+	TTree *t1 = (TTree*)f1->Get("glob_jet");
+	int nevents = t1->GetEntries();
+
 	//! sumpt approach
 	TH1F *R2 = (TH1F*)f1->Get("h_PUNLpt");
 	TH1F *R3 = (TH1F*)f1->Get("h_PUNNLpt");
@@ -146,6 +166,16 @@ void roc(const char *pileup, const char *gapsize)
 	Rb3->SetLineStyle(7);
 	Rb4->SetLineStyle(7);
 	Rb5->SetLineStyle(7);
+	//Rb2->Scale(1.0e3/(25*nevents));
+	//Rb3->Scale(1.0e3/(25*nevents));
+	//Rb4->Scale(1.0e3/(25*nevents));
+	//Rb5->Scale(1.0e3/(25*nevents));
+	
+	Rb2->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rb3->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rb4->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rb5->GetYaxis()->SetTitle("trigger rate [MHz]");
+	
 	Rb2->GetYaxis()->SetRangeUser(1e-1,50);
 	Rb3->GetYaxis()->SetRangeUser(1e-1,50);
 	Rb4->GetYaxis()->SetRangeUser(1e-1,50);
@@ -205,12 +235,39 @@ void roc(const char *pileup, const char *gapsize)
 		rb4[i-1] = Rb4->GetBinContent(i);
 		eb5[i-1] = Eb5->GetBinContent(i);
 		rb5[i-1] = Rb5->GetBinContent(i);
+		//! bin errors
+		e_err2[i-1] = E2->GetBinError(i);
+		e_erra2[i-1] = Ea2->GetBinError(i);
+		e_errb2[i-1] = Eb2->GetBinError(i);
+		e_err3[i-1] = E3->GetBinError(i);
+		e_erra3[i-1] = Ea3->GetBinError(i);
+		e_errb3[i-1] = Eb3->GetBinError(i);
+		e_err4[i-1] = E4->GetBinError(i);
+		e_erra4[i-1] = Ea4->GetBinError(i);
+		e_errb4[i-1] = Eb4->GetBinError(i);
+		e_err5[i-1] = E5->GetBinError(i);
+		e_erra5[i-1] = Ea5->GetBinError(i);
+		e_errb5[i-1] = Eb5->GetBinError(i);
+		//! Fill into arrays and plot graph
+		r_err2[i-1] = R2->GetBinError(i);
+		r_erra2[i-1] = Ra2->GetBinError(i);
+		r_errb2[i-1] = Rb2->GetBinError(i);
+		r_err3[i-1] = R3->GetBinError(i);
+		r_erra3[i-1] = Ra3->GetBinError(i);
+		r_errb3[i-1] = Rb3->GetBinError(i);
+		r_err4[i-1] = R4->GetBinError(i);
+		r_erra4[i-1] = Ra4->GetBinError(i);
+		r_errb4[i-1] = Rb4->GetBinError(i);
+		r_err5[i-1] = R5->GetBinError(i);
+		r_erra5[i-1] = Ra5->GetBinError(i);
+		r_errb5[i-1] = Rb5->GetBinError(i);
 	}
         ofs.close();
 
 
 	TCanvas *c1 = new TCanvas();
-	TGraphErrors *g1 = new TGraphErrors(n,e2,r2,0,0);
+	//TGraphErrors *g1 = new TGraphErrors(n,e2,r2,0,0);
+	TGraphErrors *g1 = new TGraphErrors(n,e2,r2,e_err2,r_err2);
 	g1->GetXaxis()->SetTitle("trigger efficiency");
 	auto axis = g1->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -220,14 +277,15 @@ void roc(const char *pileup, const char *gapsize)
 	g1->SetMarkerStyle(22);//kFullCircle);
 	g1->SetMarkerColor(kBlack);
 	g1->SetLineColor(kBlack);
-	g1->SetMarkerSize(1.5);
+	g1->SetMarkerSize(1.8);
 	//c1->cd(4);
 	g1->SetFillColor(kWhite);
-	g1->SetTitle("2^{nd} leading pt track-jet, sum_pt, bin_size: 7.5mm");
+	g1->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: 7.5mm");
 	//g1->Draw("ACPe1");
 	g1->Draw("APe1");
 
-	TGraphErrors *g2 = new TGraphErrors(n,e3,r3,0,0);
+	//TGraphErrors *g2 = new TGraphErrors(n,e3,r3,0,0);
+	TGraphErrors *g2 = new TGraphErrors(n,e3,r3,e_err3,r_err3);
 	g2->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g2->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -237,14 +295,15 @@ void roc(const char *pileup, const char *gapsize)
 	g2->SetMarkerStyle(22);//kFullTriangleUp);
 	g2->SetMarkerColor(kRed);
 	g2->SetLineColor(kRed);
-	g2->SetMarkerSize(1.5);
+	g2->SetMarkerSize(1.8);
 	//c1->cd(4);
 	g2->SetFillColor(kWhite);
-	g2->SetTitle("3^{rd} leading pt track-jet, sum_pt, bin_size: 7.5mm ");
+	g2->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: 7.5mm ");
 	//g2->Draw("CPe1");
 	g2->Draw("Pe1");
 
-	TGraphErrors *g3 = new TGraphErrors(n,e4,r4,0,0);
+	//TGraphErrors *g3 = new TGraphErrors(n,e4,r4,0,0);
+	TGraphErrors *g3 = new TGraphErrors(n,e4,r4,e_err4,r_err4);
 	g3->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g3->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -254,14 +313,15 @@ void roc(const char *pileup, const char *gapsize)
 	g3->SetMarkerStyle(22);//k);
 	g3->SetMarkerColor(kGreen+2);
 	g3->SetLineColor(kGreen+2);
-	g3->SetMarkerSize(1.5);
+	g3->SetMarkerSize(1.8);
 	//c1->cd(4);
 	g3->SetFillColor(kWhite);
-	g3->SetTitle("4^{th} leading pt track-jet, sum_pt, bin_size: 7.5mm ");
+	g3->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: 7.5mm ");
 	//g3->Draw("CPe1");
 	g3->Draw("Pe1");
 
-	TGraphErrors *g4 = new TGraphErrors(n,e5,r5,0,0);
+	//TGraphErrors *g4 = new TGraphErrors(n,e5,r5,0,0);
+	TGraphErrors *g4 = new TGraphErrors(n,e5,r5,e_err5,r_err5);
 	g4->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g4->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -271,14 +331,15 @@ void roc(const char *pileup, const char *gapsize)
 	g4->SetMarkerStyle(22);//kFullStar);
 	g4->SetMarkerColor(kBlue);
 	g4->SetLineColor(kBlue);
-	g4->SetMarkerSize(1.5);
+	g4->SetMarkerSize(1.8);
 	//c1->cd(4);
 	g4->SetFillColor(kWhite);
-	g4->SetTitle("5^{th} leading pt track-jet, sum_pt, bin_size: 7.5mm ");
+	g4->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: 7.5mm ");
 	//g4->Draw("CPe1");
 	g4->Draw("Pe1");
 
-	TGraphErrors *ga1 = new TGraphErrors(n,ea2,ra2,0,0);
+	//TGraphErrors *ga1 = new TGraphErrors(n,ea2,ra2,0,0);
+	TGraphErrors *ga1 = new TGraphErrors(n,ea2,ra2,e_erra2,r_erra2);
 	ga1->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga1->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -288,14 +349,15 @@ void roc(const char *pileup, const char *gapsize)
 	ga1->SetMarkerStyle(kFullTriangleDown);//kFullCircle);
 	ga1->SetMarkerColor(kBlack);
 	ga1->SetLineColor(kBlack);
-	ga1->SetMarkerSize(1.5);
+	ga1->SetMarkerSize(1.8);
 	//c1->cd(4);
 	ga1->SetFillColor(kWhite);
-	ga1->SetTitle("2^{nd} leading pt track-jet, max_pt, bin_size: 7.5mm");
+	ga1->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: 7.5mm");
 	//g1->Draw("ACPe1");
 	ga1->Draw("APe1");
 
-	TGraphErrors *ga2 = new TGraphErrors(n,ea3,ra3,0,0);
+	//TGraphErrors *ga2 = new TGraphErrors(n,ea3,ra3,0,0);
+	TGraphErrors *ga2 = new TGraphErrors(n,ea3,ra3,e_erra3,r_erra3);
 	ga2->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga2->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -305,14 +367,15 @@ void roc(const char *pileup, const char *gapsize)
 	ga2->SetMarkerStyle(kFullTriangleDown);//kFullTriangleUp);
 	ga2->SetMarkerColor(kRed);
 	ga2->SetLineColor(kRed);
-	ga2->SetMarkerSize(1.5);
+	ga2->SetMarkerSize(1.8);
 	//c1->cd(4);
 	ga2->SetFillColor(kWhite);
-	ga2->SetTitle("3^{rd} leading pt track-jet, max_pt, bin_size: 7.5mm ");
+	ga2->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: 7.5mm ");
 	//ga2->Draw("CPe1");
 	ga2->Draw("Pe1");
 
-	TGraphErrors *ga3 = new TGraphErrors(n,ea4,ra4,0,0);
+	//TGraphErrors *ga3 = new TGraphErrors(n,ea4,ra4,0,0);
+	TGraphErrors *ga3 = new TGraphErrors(n,ea4,ra4,e_erra4,r_erra4);
 	ga3->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga3->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -322,14 +385,15 @@ void roc(const char *pileup, const char *gapsize)
 	ga3->SetMarkerStyle(kFullTriangleDown);//k);
 	ga3->SetMarkerColor(kGreen+2);
 	ga3->SetLineColor(kGreen+2);
-	ga3->SetMarkerSize(1.5);
+	ga3->SetMarkerSize(1.8);
 	//c1->cd(4);
 	ga3->SetFillColor(kWhite);
-	ga3->SetTitle("4^{th} leading pt track-jet, max_pt, bin_size: 7.5mm ");
+	ga3->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: 7.5mm ");
 	//ga3->Draw("CPe1");
 	ga3->Draw("Pe1");
 
-	TGraphErrors *ga4 = new TGraphErrors(n,ea5,ra5,0,0);
+	//TGraphErrors *ga4 = new TGraphErrors(n,ea5,ra5,0,0);
+	TGraphErrors *ga4 = new TGraphErrors(n,ea5,ra5,e_erra5,r_erra5);
 	ga4->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga4->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -339,14 +403,15 @@ void roc(const char *pileup, const char *gapsize)
 	ga4->SetMarkerStyle(kFullTriangleDown);//kFullStar);
 	ga4->SetMarkerColor(kBlue);
 	ga4->SetLineColor(kBlue);
-	ga4->SetMarkerSize(1.5);
+	ga4->SetMarkerSize(1.8);
 	//c1->cd(4);
 	ga4->SetFillColor(kWhite);
 	ga4->SetTitle("5^{th} leading pt track-jet, max-pt, bin_size: 7.5mm ");
 	//ga4->Draw("CPe1");
 	ga4->Draw("Pe1");
 
-	TGraphErrors *gb1 = new TGraphErrors(n,eb2,rb2,0,0);
+	//TGraphErrors *gb1 = new TGraphErrors(n,eb2,rb2,0,0);
+	TGraphErrors *gb1 = new TGraphErrors(n,eb2,rb2,e_errb2,r_errb2);
 	gb1->Draw("AP");
 	axis = gb1->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -362,7 +427,8 @@ void roc(const char *pileup, const char *gapsize)
 	gb1->SetTitle("2^{nd} leading pt track-jet no binning ");
 	//gb1->Draw("ACPe1");
 
-	TGraphErrors *gb2 = new TGraphErrors(n,eb3,rb3,0,0);
+	//TGraphErrors *gb2 = new TGraphErrors(n,eb3,rb3,0,0);
+	TGraphErrors *gb2 = new TGraphErrors(n,eb3,rb3,e_errb3,r_errb3);
 	gb2->Draw("AP");
 	gb2->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb2->GetXaxis();
@@ -379,7 +445,8 @@ void roc(const char *pileup, const char *gapsize)
 	gb2->SetTitle("3^{rd} leading pt track-jet no binning ");
 	//gb2->Draw("CPe1");
 
-	TGraphErrors *gb3 = new TGraphErrors(n,eb4,rb4,0,0);
+	//TGraphErrors *gb3 = new TGraphErrors(n,eb4,rb4,0,0);
+	TGraphErrors *gb3 = new TGraphErrors(n,eb4,rb4,e_errb4,r_errb4);
 	gb3->Draw("AP");
 	gb3->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb3->GetXaxis();
@@ -396,7 +463,8 @@ void roc(const char *pileup, const char *gapsize)
 	gb3->SetTitle("4^{th} leading pt track-jet no binning ");
 	//gb3->Draw("CPe1");
 
-	TGraphErrors *gb4 = new TGraphErrors(n,eb5,rb5,0,0);
+	//TGraphErrors *gb4 = new TGraphErrors(n,eb5,rb5,0,0);
+	TGraphErrors *gb4 = new TGraphErrors(n,eb5,rb5,e_errb5,r_errb5);
 	gb4->Draw("AP");
 	gb4->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb4->GetXaxis();
@@ -416,25 +484,36 @@ void roc(const char *pileup, const char *gapsize)
 /////////////// for a different z vertex bin  ////////////////
 //////////////////////////////////////////////////////////////
 
-	Float_t e2_[n] = {0};    Float_t r2_[n] = {0};
-	Float_t e3_[n] = {0};    Float_t r3_[n] = {0};
-	Float_t e4_[n] = {0};    Float_t r4_[n] = {0};
-	Float_t e5_[n] = {0};    Float_t r5_[n] = {0};
-	Float_t ea_2[n] = {0};   Float_t ra_2[n] = {0};
-	Float_t ea_3[n] = {0};   Float_t ra_3[n] = {0};
-	Float_t ea_4[n] = {0};   Float_t ra_4[n] = {0};
-	Float_t ea_5[n] = {0};   Float_t ra_5[n] = {0};
-	Float_t eb_2[n] = {0};   Float_t rb_2[n] = {0};
-	Float_t eb_3[n] = {0};   Float_t rb_3[n] = {0};
-	Float_t eb_4[n] = {0};   Float_t rb_4[n] = {0};
-	Float_t eb_5[n] = {0};   Float_t rb_5[n] = {0};
+	Double_t e2_[n] = {0};    Double_t r2_[n] = {0};
+	Double_t e3_[n] = {0};    Double_t r3_[n] = {0};
+	Double_t e4_[n] = {0};    Double_t r4_[n] = {0};
+	Double_t e5_[n] = {0};    Double_t r5_[n] = {0};
+	Double_t ea_2[n] = {0};   Double_t ra_2[n] = {0};
+	Double_t ea_3[n] = {0};   Double_t ra_3[n] = {0};
+	Double_t ea_4[n] = {0};   Double_t ra_4[n] = {0};
+	Double_t ea_5[n] = {0};   Double_t ra_5[n] = {0};
+	Double_t eb_2[n] = {0};   Double_t rb_2[n] = {0};
+	Double_t eb_3[n] = {0};   Double_t rb_3[n] = {0};
+	Double_t eb_4[n] = {0};   Double_t rb_4[n] = {0};
+	Double_t eb_5[n] = {0};   Double_t rb_5[n] = {0};
+	
+	Double_t e_err2_[n] = {0};    Double_t r_err2_[n] = {0};
+	Double_t e_err3_[n] = {0};    Double_t r_err3_[n] = {0};
+	Double_t e_err4_[n] = {0};    Double_t r_err4_[n] = {0};
+	Double_t e_err5_[n] = {0};    Double_t r_err5_[n] = {0};
+	Double_t e_erra_2[n] = {0};   Double_t r_erra_2[n] = {0};
+	Double_t e_erra_3[n] = {0};   Double_t r_erra_3[n] = {0};
+	Double_t e_erra_4[n] = {0};   Double_t r_erra_4[n] = {0};
+	Double_t e_erra_5[n] = {0};   Double_t r_erra_5[n] = {0};
+	Double_t e_errb_2[n] = {0};   Double_t r_errb_2[n] = {0};
+	Double_t e_errb_3[n] = {0};   Double_t r_errb_3[n] = {0};
+	Double_t e_errb_4[n] = {0};   Double_t r_errb_4[n] = {0};
+	Double_t e_errb_5[n] = {0};   Double_t r_errb_5[n] = {0};
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
 	char signal_file_name_1[1023];
-	//sprintf(signal_file_name_1, "%s/jetoutPU%shh4b_%smm_optsig5_1tracks3.75_1.2GeV_nofakes.root",file_path,pileup,gapsize);
-	//sprintf(signal_file_name_1, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks3.75_5GeV.root",file_path,pileup,gapsize);
-	sprintf(signal_file_name_1, "%s/TrkJPU%sggFhh4b7.5mm_%smm_3trk2.5_2GeV_5GeV_1.root",file_path_2,pileup,gapsize);//1.5
+	sprintf(signal_file_name_1, "%s/TrkJPU%sggFhh4b3.0mm_%smm_1trk2.5_2GeV_2GeV_3.root",file_path,pileup,gapsize);//1.5
 	TFile *f_ = new TFile(signal_file_name_1, "READ");
 	//! sumpt approach
 	TH1F *E2_ = (TH1F*)f_->Get("h_tJeff2");
@@ -461,10 +540,10 @@ void roc(const char *pileup, const char *gapsize)
 	Eb_5->GetYaxis()->SetRangeUser(0,1.2);
 	
 	char MinBias_file_name_1[1023];
-	//sprintf(MinBias_file_name_1, "%s/jetoutPU%sMB_%smm_optsig5_1tracks3.75_1.2GeV_nofakes.root",file_path,pileup,gapsize);
-	//sprintf(MinBias_file_name_1, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks3.75_5GeV.root",file_path,pileup,gapsize);
-	sprintf(MinBias_file_name_1, "%s/TrkJPU%sMB7.5mm_%smm_3trk2.5_2GeV_5GeV_1.root",file_path,pileup,gapsize);//1.5
+	sprintf(MinBias_file_name_1, "%s/TrkJPU%sMB3.0mm_%smm_1trk2.5_2GeV_2GeV_2.root",file_path_1,pileup,gapsize);//1.5
 	TFile *f_1 = new TFile(MinBias_file_name_1, "READ");
+	TTree *t_1 = (TTree*)f_1->Get("glob_jet");
+	nevents = t_1->GetEntries();
 	//! sumpt approach
 	TH1F *R2_ = (TH1F*)f_1->Get("h_PUNLpt");
 	TH1F *R3_ = (TH1F*)f_1->Get("h_PUNNLpt");
@@ -484,6 +563,16 @@ void roc(const char *pileup, const char *gapsize)
 	Rb_3->SetLineStyle(7);
 	Rb_4->SetLineStyle(7);
 	Rb_5->SetLineStyle(7);
+	//Rb_2->Scale(1.0e3/(25*nevents));
+	//Rb_3->Scale(1.0e3/(25*nevents));
+	//Rb_4->Scale(1.0e3/(25*nevents));
+	//Rb_5->Scale(1.0e3/(25*nevents));
+	
+	Rb_2->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rb_3->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rb_4->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rb_5->GetYaxis()->SetTitle("trigger rate [MHz]");
+
 	Rb_2->GetYaxis()->SetRangeUser(1e-1,50);
 	Rb_3->GetYaxis()->SetRangeUser(1e-1,50);
 	Rb_4->GetYaxis()->SetRangeUser(1e-1,50);
@@ -528,9 +617,37 @@ void roc(const char *pileup, const char *gapsize)
 		rb_4[i-1] = Rb_4->GetBinContent(i);
 		eb_5[i-1] = Eb_5->GetBinContent(i);
 		rb_5[i-1] = Rb_5->GetBinContent(i);
+		
+		//! bin error
+		e_err2_[i-1] = E2_->GetBinError(i);
+		e_erra_2[i-1] = Ea_2->GetBinError(i);
+		e_errb_2[i-1] = Eb_2->GetBinError(i);
+		e_err3_[i-1] = E3_->GetBinError(i);
+		e_erra_3[i-1] = Ea_3->GetBinError(i);
+		e_errb_3[i-1] = Eb_3->GetBinError(i);
+		e_err4_[i-1] = E4_->GetBinError(i);
+		e_erra_4[i-1] = Ea_4->GetBinError(i);
+		e_errb_4[i-1] = Eb_4->GetBinError(i);
+		e_err5_[i-1] = E5_->GetBinError(i);
+		e_erra_5[i-1] = Ea_5->GetBinError(i);
+		e_errb_5[i-1] = Eb_5->GetBinError(i);
+		//_! Fill into arrays and plot graph
+		r_err2_[i-1] = R2_->GetBinError(i);
+		r_erra_2[i-1] = Ra_2->GetBinError(i);
+		r_errb_2[i-1] = Rb_2->GetBinError(i);
+		r_err3_[i-1] = R3_->GetBinError(i);
+		r_erra_3[i-1] = Ra_3->GetBinError(i);
+		r_errb_3[i-1] = Rb_3->GetBinError(i);
+		r_err4_[i-1] = R4_->GetBinError(i);
+		r_erra_4[i-1] = Ra_4->GetBinError(i);
+		r_errb_4[i-1] = Rb_4->GetBinError(i);
+		r_err5_[i-1] = R5_->GetBinError(i);
+		r_erra_5[i-1] = Ra_5->GetBinError(i);
+		r_errb_5[i-1] = Rb_5->GetBinError(i);
 	}
 
-	TGraphErrors *g1_ = new TGraphErrors(n,e2_,r2_,0,0);
+	//TGraphErrors *g1_ = new TGraphErrors(n,e2_,r2_,0,0);
+	TGraphErrors *g1_ = new TGraphErrors(n,e2_,r2_,e_err2_,r_err2_);
 	g1_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g1_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -543,11 +660,12 @@ void roc(const char *pileup, const char *gapsize)
 	g1_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g1_->SetFillColor(kWhite);
-	g1_->SetTitle("2^{nd} leading pt track-jet, sum_pt, bin_size: +-7.5mm ");
+	g1_->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
 	//g1_->Draw("ACPe1");
 	g1_->Draw("APe1");
 
-	TGraphErrors *g2_ = new TGraphErrors(n,e3_,r3_,0,0);
+	//TGraphErrors *g2_ = new TGraphErrors(n,e3_,r3_,0,0);
+	TGraphErrors *g2_ = new TGraphErrors(n,e3_,r3_,e_err3_,r_err3_);
 	g2_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g2_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -560,11 +678,12 @@ void roc(const char *pileup, const char *gapsize)
 	g2_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g2_->SetFillColor(kWhite);
-	g2_->SetTitle("3^{rd} leading pt track-jet, sum_pt, bin_size: +-7.5mm ");
+	g2_->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
 	//g2_->Draw("CPe1");
 	g2_->Draw("Pe1");
 
-	TGraphErrors *g3_ = new TGraphErrors(n,e4_,r4_,0,0);
+	//TGraphErrors *g3_ = new TGraphErrors(n,e4_,r4_,0,0);
+	TGraphErrors *g3_ = new TGraphErrors(n,e4_,r4_,e_err4_,r_err4_);
 	g3_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g3_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -577,11 +696,12 @@ void roc(const char *pileup, const char *gapsize)
 	g3_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g3_->SetFillColor(kWhite);
-	g3_->SetTitle("4^{th} leading pt track-jet, sum_pt, bin_size: +-7.5mm ");
+	g3_->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
 	//g3_->Draw("CPe1");
 	g3_->Draw("Pe1");
 
-	TGraphErrors *g4_ = new TGraphErrors(n,e5_,r5_,0,0);
+	//TGraphErrors *g4_ = new TGraphErrors(n,e5_,r5_,0,0);
+	TGraphErrors *g4_ = new TGraphErrors(n,e5_,r5_,e_err5_,r_err5_);
 	g4_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = g4_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -594,11 +714,12 @@ void roc(const char *pileup, const char *gapsize)
 	g4_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g4_->SetFillColor(kWhite);
-	g4_->SetTitle("5^{th} leading pt track-jet, sum_pt, bin_size: +-7.5mm ");
+	g4_->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
 	//g4_->Draw("CPe1");
 	g4_->Draw("Pe1");
 
-	TGraphErrors *ga1_ = new TGraphErrors(n,ea_2,ra_2,0,0);
+	//TGraphErrors *ga1_ = new TGraphErrors(n,ea_2,ra_2,0,0);
+	TGraphErrors *ga1_ = new TGraphErrors(n,ea_2,ra_2,e_erra_2,r_erra_2);
 	ga1_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga1_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -611,11 +732,12 @@ void roc(const char *pileup, const char *gapsize)
 	ga1_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga1_->SetFillColor(kWhite);
-	ga1_->SetTitle("2^{nd} leading pt track-jet, max_pt, bin_size: +-7.5mm ");
+	ga1_->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
 	//g1->Draw("ACPe1");
 	ga1_->Draw("APe1");
 
-	TGraphErrors *ga2_ = new TGraphErrors(n,ea_3,ra_3,0,0);
+	//TGraphErrors *ga2_ = new TGraphErrors(n,ea_3,ra_3,0,0);
+	TGraphErrors *ga2_ = new TGraphErrors(n,ea_3,ra_3,e_erra_3,r_erra_3);
 	ga2_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga2_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -628,11 +750,12 @@ void roc(const char *pileup, const char *gapsize)
 	ga2_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga2_->SetFillColor(kWhite);
-	ga2_->SetTitle("3^{rd} leading pt track-jet, max_pt, bin_size: +-7.5mm ");
+	ga2_->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
 	//ga2_->Draw("CPe1");
 	ga2_->Draw("Pe1");
 
-	TGraphErrors *ga3_ = new TGraphErrors(n,ea_4,ra_4,0,0);
+	//TGraphErrors *ga3_ = new TGraphErrors(n,ea_4,ra_4,0,0);
+	TGraphErrors *ga3_ = new TGraphErrors(n,ea_4,ra_4,e_erra_4,r_erra_4);
 	ga3_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga3_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -645,11 +768,12 @@ void roc(const char *pileup, const char *gapsize)
 	ga3_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga3_->SetFillColor(kWhite);
-	ga3_->SetTitle("4^{th} leading pt track-jet, max_pt, bin_size: +-7.5mm ");
+	ga3_->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
 	//ga3_->Draw("CPe1");
 	ga3_->Draw("Pe1");
 
-	TGraphErrors *ga4_ = new TGraphErrors(n,ea_5,ra_5,0,0);
+	//TGraphErrors *ga4_ = new TGraphErrors(n,ea_5,ra_5,0,0);
+	TGraphErrors *ga4_ = new TGraphErrors(n,ea_5,ra_5,e_erra_5,r_erra_5);
 	ga4_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = ga4_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -662,11 +786,12 @@ void roc(const char *pileup, const char *gapsize)
 	ga4_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga4_->SetFillColor(kWhite);
-	ga4_->SetTitle("5^{th} leading pt track-jet, max_pt, bin_size: +-7.5mm ");
+	ga4_->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
 	//ga4_->Draw("CPe1");
 	ga4_->Draw("Pe1");
 
-	TGraphErrors *gb1_ = new TGraphErrors(n,eb_2,rb_2,0,0);
+	//TGraphErrors *gb1_ = new TGraphErrors(n,eb_2,rb_2,0,0);
+	TGraphErrors *gb1_ = new TGraphErrors(n,eb_2,rb_2,e_errb_2,r_errb_2);
 	gb1_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb1_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -683,7 +808,8 @@ void roc(const char *pileup, const char *gapsize)
 	//gb1_->Draw("ACPe1");
 	gb1_->Draw("APe1");
 
-	TGraphErrors *gb2_ = new TGraphErrors(n,eb_3,rb_3,0,0);
+	//TGraphErrors *gb2_ = new TGraphErrors(n,eb_3,rb_3,0,0);
+	TGraphErrors *gb2_ = new TGraphErrors(n,eb_3,rb_3,e_errb_3,r_errb_3);
 	gb2_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb2_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -700,7 +826,8 @@ void roc(const char *pileup, const char *gapsize)
 	//gb2_->Draw("CPe1");
 	gb2_->Draw("Pe1");
 
-	TGraphErrors *gb3_ = new TGraphErrors(n,eb_4,rb_4,0,0);
+	//TGraphErrors *gb3_ = new TGraphErrors(n,eb_4,rb_4,0,0);
+	TGraphErrors *gb3_ = new TGraphErrors(n,eb_4,rb_4,e_errb_4,r_errb_4);
 	gb3_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb3_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -717,7 +844,8 @@ void roc(const char *pileup, const char *gapsize)
 	//gb3_->Draw("CPe1");
 	gb3_->Draw("Pe1");
 
-	TGraphErrors *gb4_ = new TGraphErrors(n,eb_5,rb_5,0,0);
+	//TGraphErrors *gb4_ = new TGraphErrors(n,eb_5,rb_5,0,0);
+	TGraphErrors *gb4_ = new TGraphErrors(n,eb_5,rb_5,e_errb_5,r_errb_5);
 	gb4_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb4_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -737,14 +865,17 @@ void roc(const char *pileup, const char *gapsize)
 /////////////////////////////////////////////////////////////////////////////////////////////
 //                               For emulated calo jets
 /////////////////////////////////////////////////////////////////////////////////////////////
-	Float_t eb__2[n] = {0};   Float_t rb__2[n] = {0};
-	Float_t eb__3[n] = {0};   Float_t rb__3[n] = {0};
-	Float_t eb__4[n] = {0};   Float_t rb__4[n] = {0};
-	Float_t eb__5[n] = {0};   Float_t rb__5[n] = {0};
+	Double_t eb__2[n] = {0};   Double_t rb__2[n] = {0};
+	Double_t eb__3[n] = {0};   Double_t rb__3[n] = {0};
+	Double_t eb__4[n] = {0};   Double_t rb__4[n] = {0};
+	Double_t eb__5[n] = {0};   Double_t rb__5[n] = {0};
+
+	Double_t e_errb__2[n] = {0};   Double_t r_errb__2[n] = {0};
+	Double_t e_errb__3[n] = {0};   Double_t r_errb__3[n] = {0};
+	Double_t e_errb__4[n] = {0};   Double_t r_errb__4[n] = {0};
+	Double_t e_errb__5[n] = {0};   Double_t r_errb__5[n] = {0};
 	char signal_file_calo[1023];
-	//sprintf(signal_file_calo, "%s/jetEMU_PU%shh4b_m260_%smm.root",file_path,pileup,gapsize);
-	//sprintf(signal_file_calo, "%s/jetEMU5GeV_PU%shh4b_m260_q1.2GeV_%smm.root",file_path,pileup,gapsize);
-	sprintf(signal_file_calo, "%s/EMU5GeV_PU%sggFhh4b1.0_q1.2GeVeta2.5_%smmR0.4_1.root",file_path,pileup,gapsize);
+	sprintf(signal_file_calo, "%s/EMU5GeV_PU%sggFhh4b1.0_q1.2GeVeta2.5_%smmR0.4_2.root",file_path_2,pileup,gapsize);
 	TFile *fcalo = new TFile(signal_file_calo, "READ");
 	//! Calo Emulation
 	TH1F *Ebcalo2 = (TH1F*)fcalo->Get("hb_tJeff2");
@@ -761,10 +892,10 @@ void roc(const char *pileup, const char *gapsize)
 	Ebcalo5->SetLineStyle(2);
 	
 	char MinBias_file_calo[1023];
-	//sprintf(MinBias_file_calo, "%s/jetEMU_PU%sMB_%smm.root",file_path,pileup,gapsize);
-	//sprintf(MinBias_file_calo, "%s/jetEMU5GeV_PU%sMB_q1.2GeV_%smm.root",file_path,pileup,gapsize);
-	sprintf(MinBias_file_calo, "%s/EMU5GeV_PU%sMB_q1.2GeVeta2.5_%smmR0.4_1_test.root",file_path,pileup,gapsize);
+	sprintf(MinBias_file_calo, "%s/EMU5GeV_PU%sMB_q1.2GeVeta2.5_%smmR0.4_1_test.root",file_path_2,pileup,gapsize);
 	TFile *f1calo = new TFile(MinBias_file_calo, "READ");
+	TTree *t1calo = (TTree*)f1calo->Get("glob_jet");
+	nevents = t1calo->GetEntries();
 	//! sumpt approach
 	TH1F *Rbcalo2 = (TH1F*)f1calo->Get("hb_PUNLpt");
 	TH1F *Rbcalo3 = (TH1F*)f1calo->Get("hb_PUNNLpt");
@@ -778,6 +909,15 @@ void roc(const char *pileup, const char *gapsize)
 	Rbcalo3->SetLineStyle(2);
 	Rbcalo4->SetLineStyle(2);
 	Rbcalo5->SetLineStyle(2);
+	//Rbcalo2->Scale(1.0e3/(25*nevents));
+	//Rbcalo3->Scale(1.0e3/(25*nevents));
+	//Rbcalo4->Scale(1.0e3/(25*nevents));
+	//Rbcalo5->Scale(1.0e3/(25*nevents));
+	
+	Rbcalo2->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rbcalo3->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rbcalo4->GetYaxis()->SetTitle("trigger rate [MHz]");
+	Rbcalo5->GetYaxis()->SetTitle("trigger rate [MHz]");
 	if(debug) std::cout<<"nbinsEcalo = " << Ebcalo2->GetNbinsX() << ", nbinsRcalo = " << Rbcalo2->GetNbinsX() <<std::endl;
 
 	for(int i = 1; i < n + 1; i++)
@@ -792,8 +932,19 @@ void roc(const char *pileup, const char *gapsize)
 		rb__4[i-1] = Rbcalo4->GetBinContent(i);
 		eb__5[i-1] = Ebcalo5->GetBinContent(i);
 		rb__5[i-1] = Rbcalo5->GetBinContent(i);
+		//_! Fill into_ arrays and plot graph
+		e_errb__2[i-1] = Ebcalo2->GetBinError(i);
+		e_errb__3[i-1] = Ebcalo3->GetBinError(i);
+		e_errb__4[i-1] = Ebcalo4->GetBinError(i);
+		e_errb__5[i-1] = Ebcalo5->GetBinError(i);
+		
+		r_errb__2[i-1] = Rbcalo2->GetBinError(i);
+		r_errb__3[i-1] = Rbcalo3->GetBinError(i);
+		r_errb__4[i-1] = Rbcalo4->GetBinError(i);
+		r_errb__5[i-1] = Rbcalo5->GetBinError(i);
 	}
-	TGraphErrors *gb_1_ = new TGraphErrors(n,eb__2,rb__2,0,0);
+	//TGraphErrors *gb_1_ = new TGraphErrors(n,eb__2,rb__2,0,0);
+	TGraphErrors *gb_1_ = new TGraphErrors(n,eb__2,rb__2,e_errb__2,r_errb__2);
 	gb_1_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb_1_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -809,7 +960,8 @@ void roc(const char *pileup, const char *gapsize)
 	//gb1_->Draw("ACPe1");
 	gb_1_->Draw("APe1");
 
-	TGraphErrors *gb_2_ = new TGraphErrors(n,eb__3,rb__3,0,0);
+	//TGraphErrors *gb_2_ = new TGraphErrors(n,eb__3,rb__3,0,0);
+	TGraphErrors *gb_2_ = new TGraphErrors(n,eb__3,rb__3,e_errb__3,r_errb__3);
 	gb_2_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb_2_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -825,7 +977,8 @@ void roc(const char *pileup, const char *gapsize)
 	//gb2_->Draw("CPe1");
 	gb_2_->Draw("Pe1");
 
-	TGraphErrors *gb_3_ = new TGraphErrors(n,eb__4,rb__4,0,0);
+	//TGraphErrors *gb_3_ = new TGraphErrors(n,eb__4,rb__4,0,0);
+	TGraphErrors *gb_3_ = new TGraphErrors(n,eb__4,rb__4,e_errb__4,r_errb__4);
 	gb_3_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb_3_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -841,7 +994,8 @@ void roc(const char *pileup, const char *gapsize)
 	//gb3_->Draw("CPe1");
 	gb_3_->Draw("Pe1");
 
-	TGraphErrors *gb_4_ = new TGraphErrors(n,eb__5,rb__5,0,0);
+	//TGraphErrors *gb_4_ = new TGraphErrors(n,eb__5,rb__5,0,0);
+	TGraphErrors *gb_4_ = new TGraphErrors(n,eb__5,rb__5,e_errb__5,r_errb__5);
 	gb_4_->GetXaxis()->SetTitle("trigger efficiency");
 	axis = gb_4_->GetXaxis();
 	axis->SetLimits(Xmin_range, Xmax_range);
@@ -879,7 +1033,7 @@ void roc(const char *pileup, const char *gapsize)
 //	g->GetXaxis()->SetRangeUser(0,100);
 //	g->GetYaxis()->SetTitleOffset(1.5);
 	mg->GetYaxis()->SetRangeUser(Ymin_range, Ymax_range);
-	c1->BuildLegend(xx1,yy1,xx2,yy2,"sum_pt");
+	c1->BuildLegend(xx1,yy1,xx2,yy2,"max-bin");
 
 	//! draw a second Y axis
 	// scale rightmax to pad co-o
@@ -898,8 +1052,8 @@ void roc(const char *pileup, const char *gapsize)
 ///                    2D graphs
 /////////////////////////////////////////////////////////////
 	TCanvas *c_ = new TCanvas();
-	//! max_pt
-	TGraph2D *ga2d1 = new TGraph2D(n,ea2,ra2,pt_threshold);
+	//! multi-bin
+	TGraph2DErrors *ga2d1 = new TGraph2DErrors(n,ea2,ra2,pt_threshold, e_erra2, r_erra2, 0);
 	ga2d1->SetName("g2D2nd_maxpt");
 	//ga2d1->GetXaxis()->SetTitle("trigger efficiency");
 	//auto axis2d = ga2d1->GetXaxis();
@@ -909,145 +1063,145 @@ void roc(const char *pileup, const char *gapsize)
 	//auto axisy2d = ga2d1->GetYaxis();
 	//axisy2d->SetRange(Ymin_range, Ymax_range);
 	ga2d1->SetMarkerStyle(kFullTriangleDown);
-	ga2d1->SetMarkerSize(1.4);
+	ga2d1->SetMarkerSize(1.8);
 	ga2d1->SetFillColor(kWhite);
-	ga2d1->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d1->SetTitle("2^{nd} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d1->Draw("PCOLZ");
+	ga2d1->SetTitle("track-jet, multi-bin, 7.5mm");
+	//ga2d1->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: 7.5mm");
+	ga2d1->Draw("PCOLZ ERR");
 	//TH1 *h2d = new TH2D();
 	//h2d = ga2d1->Project("xy");
 	//h2d->GetYaxis()->SetRangeUser(Ymin_range, Ymax_range);
 	//c_->SetLogy();
 	//h2d->Draw("colz");
-	TGraph2D *ga2d2 = new TGraph2D(n,ea3,ra3,pt_threshold);
+	TGraph2DErrors *ga2d2 = new TGraph2DErrors(n,ea3,ra3,pt_threshold, e_erra3, r_erra3, 0);
 	ga2d2->SetName("g2D3rd_maxpt");
 	ga2d2->SetMarkerStyle(kFullTriangleDown);
-	ga2d2->SetMarkerSize(1.4);
+	ga2d2->SetMarkerSize(1.8);
 	ga2d2->SetFillColor(kWhite);
-	ga2d2->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d2->SetTitle("3^{rd} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d2->Draw("PCOLZ");
-	TGraph2D *ga2d3 = new TGraph2D(n,ea4,ra4,pt_threshold);
+	ga2d2->SetTitle("track-jet, multi-bin, 7.5mm");
+	//ga2d2->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: 7.5mm");
+	ga2d2->Draw("PCOLZ ERR");
+	TGraph2DErrors *ga2d3 = new TGraph2DErrors(n,ea4,ra4,pt_threshold, e_erra4, r_erra4, 0);
 	ga2d3->SetName("g2D4th_maxpt");
 	ga2d3->SetMarkerStyle(kFullTriangleDown);
-	ga2d3->SetMarkerSize(1.4);
+	ga2d3->SetMarkerSize(1.8);
 	ga2d3->SetFillColor(kWhite);
-	ga2d3->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d3->SetTitle("4^{th} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d3->Draw("PCOLZ");
-	TGraph2D *ga2d4 = new TGraph2D(n,ea5,ra5,pt_threshold);
+	ga2d3->SetTitle("track-jet, multi-bin, 7.5mm");
+	//ga2d3->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: 7.5mm");
+	ga2d3->Draw("PCOLZ ERR");
+	TGraph2DErrors *ga2d4 = new TGraph2DErrors(n,ea5,ra5,pt_threshold, e_erra5, r_erra5, 0);
 	ga2d4->SetName("g2D5th_maxpt");
 	ga2d4->SetMarkerStyle(kFullTriangleDown);
-	ga2d4->SetMarkerSize(1.4);
+	ga2d4->SetMarkerSize(1.8);
 	ga2d4->SetFillColor(kWhite);
-	ga2d4->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d4->SetTitle("5^{th} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d4->Draw("PCOLZ");
+	ga2d4->SetTitle("track-jet, multi-bin, 7.5mm");
+	//ga2d4->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: 7.5mm");
+	ga2d4->Draw("PCOLZ ERR");
 
-	//! max_pt +-7.5mm
-	TGraph2D *ga2d_1 = new TGraph2D(n,ea_2,ra_2,pt_threshold);
+	//! multi-bin +-3.0mm
+	TGraph2DErrors *ga2d_1 = new TGraph2DErrors(n,ea_2,ra_2,pt_threshold, e_erra_2, r_erra_2, 0);
 	ga2d_1->SetName("g2D_2nd_maxpt");
 	ga2d_1->SetMarkerStyle(kFullStar);
 	ga2d_1->SetMarkerSize(2.0);
 	ga2d_1->SetFillColor(kWhite);
-	ga2d_1->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d_1->SetTitle("2^{nd} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d_1->Draw("PCOLZ");
-	TGraph2D *ga2d_2 = new TGraph2D(n,ea_3,ra_3,pt_threshold);
+	ga2d_1->SetTitle("track-jet, multi-bin, 3.0mm");
+	//ga2d_1->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_1->Draw("PCOLZ ERR");
+	TGraph2DErrors *ga2d_2 = new TGraph2DErrors(n,ea_3,ra_3,pt_threshold, e_erra_3, r_erra_3, 0);
 	ga2d_2->SetName("g2D_3rd_maxpt");
 	ga2d_2->SetMarkerStyle(kFullStar);
 	ga2d_2->SetMarkerSize(2.0);
 	ga2d_2->SetFillColor(kWhite);
-	ga2d_2->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d_2->SetTitle("3^{rd} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d_2->Draw("PCOLZ");
-	TGraph2D *ga2d_3 = new TGraph2D(n,ea_4,ra_4,pt_threshold);
+	ga2d_2->SetTitle("track-jet, multi-bin, 3.0mm");
+	//ga2d_2->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_2->Draw("PCOLZ ERR");
+	TGraph2DErrors *ga2d_3 = new TGraph2DErrors(n,ea_4,ra_4,pt_threshold, e_erra_4, r_erra_4, 0);
 	ga2d_3->SetName("g2D_4th_maxpt");
 	ga2d_3->SetMarkerStyle(kFullStar);
 	ga2d_3->SetMarkerSize(2.0);
 	ga2d_3->SetFillColor(kWhite);
-	ga2d_3->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d_3->SetTitle("4^{th} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d_3->Draw("PCOLZ");
-	TGraph2D *ga2d_4 = new TGraph2D(n,ea_5,ra_5,pt_threshold);
+	ga2d_3->SetTitle("track-jet, multi-bin, 3.0mm");
+	//ga2d_3->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_3->Draw("PCOLZ ERR");
+	TGraph2DErrors *ga2d_4 = new TGraph2DErrors(n,ea_5,ra_5,pt_threshold, e_erra_5, r_erra_5, 0);
 	ga2d_4->SetName("g2D_5th_maxpt");
 	ga2d_4->SetMarkerStyle(kFullStar);
 	ga2d_4->SetMarkerSize(2.0);
 	ga2d_4->SetFillColor(kWhite);
-	ga2d_4->SetTitle("track-jet, max_pt, 7.5mm");
-	//ga2d_4->SetTitle("5^{th} leading pt track-jet, max_pt, bin_size: 7.5mm");
-	ga2d_4->Draw("PCOLZ");
+	ga2d_4->SetTitle("track-jet, multi-bin, 3.0mm");
+	//ga2d_4->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_4->Draw("PCOLZ ERR");
 	
-	//! sum_pt
-	TGraph2D *g2d1 = new TGraph2D(n,e2,r2,pt_threshold);
+	//! max-bin
+	TGraph2DErrors *g2d1 = new TGraph2DErrors(n,e2,r2,pt_threshold, e_err2, r_err2, 0);
 	g2d1->SetName("g2D2nd_sumpt");
 	g2d1->SetMarkerStyle(kFullTriangleUp);
-	g2d1->SetMarkerSize(1.4);
+	g2d1->SetMarkerSize(1.8);
 	g2d1->SetFillColor(kWhite);
-	g2d1->SetTitle("track-jet, sum_pt, 7.5mm");
-	//g2d1->SetTitle("2^{nd} leading pt track-jet, sum_pt, bin_size: 7.5mm");
-	g2d1->Draw("PCOLZ");
-	TGraph2D *g2d2 = new TGraph2D(n,e3,r3,pt_threshold);
+	g2d1->SetTitle("track-jet, max-bin, 7.5mm");
+	//g2d1->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: 7.5mm");
+	g2d1->Draw("PCOLZ ERR");
+	TGraph2DErrors *g2d2 = new TGraph2DErrors(n,e3,r3,pt_threshold, e_err3, r_err3, 0);
 	g2d2->SetName("g2D3rd_sumpt");
 	g2d2->SetMarkerStyle(kFullTriangleUp);
-	g2d2->SetMarkerSize(1.4);
+	g2d2->SetMarkerSize(1.8);
 	g2d2->SetFillColor(kWhite);
-	g2d2->SetTitle("track-jet, sum_pt, 7.5mm");
-	//g2d2->SetTitle("3^{rd} leading pt track-jet, sum_pt, bin_size: 7.5mm");
-	g2d2->Draw("PCOLZ");
-	TGraph2D *g2d3 = new TGraph2D(n,e4,r4,pt_threshold);
+	g2d2->SetTitle("track-jet, max-bin, 7.5mm");
+	//g2d2->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: 7.5mm");
+	g2d2->Draw("PCOLZ ERR");
+	TGraph2DErrors *g2d3 = new TGraph2DErrors(n,e4,r4,pt_threshold, e_err4, r_err4, 0);
 	g2d3->SetName("g2D4th_sumpt");
 	g2d3->SetMarkerStyle(kFullTriangleUp);
-	g2d3->SetMarkerSize(1.4);
+	g2d3->SetMarkerSize(1.8);
 	g2d3->SetFillColor(kWhite);
-	g2d3->SetTitle("track-jet, sum_pt, 7.5mm");
-	//g2d3->SetTitle("4^{th} leading pt track-jet, sum_pt, bin_size: 7.5mm");
-	g2d3->Draw("PCOLZ");
-	TGraph2D *g2d4 = new TGraph2D(n,e5,r5,pt_threshold);
+	g2d3->SetTitle("track-jet, max-bin, 7.5mm");
+	//g2d3->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: 7.5mm");
+	g2d3->Draw("PCOLZ ERR");
+	TGraph2DErrors *g2d4 = new TGraph2DErrors(n,e5,r5,pt_threshold, e_err5, r_err5, 0);
 	g2d4->SetName("g2D5th_sumpt");
 	g2d4->SetMarkerStyle(kFullTriangleUp);
-	g2d4->SetMarkerSize(1.4);
+	g2d4->SetMarkerSize(1.8);
 	g2d4->SetFillColor(kWhite);
-	g2d4->SetTitle("track-jet, sum_pt, 7.5mm");
-	//g2d4->SetTitle("5^{th} leading pt track-jet, sum_pt, bin_size: 7.5mm");
-	g2d4->Draw("PCOLZ");
+	g2d4->SetTitle("track-jet, max-bin, 7.5mm");
+	//g2d4->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: 7.5mm");
+	g2d4->Draw("PCOLZ ERR");
 	
-	//! sum_pt +-7.5mm
-	TGraph2D *g2d_1 = new TGraph2D(n,e2_,r2_,pt_threshold);
+	//! max-bin +-3.0mm
+	TGraph2DErrors *g2d_1 = new TGraph2DErrors(n,e2_,r2_,pt_threshold, e_err2_, r_err2_, 0);
 	g2d_1->SetName("g2D_2nd_sumpt");
 	g2d_1->SetMarkerStyle(kFullStar);
 	g2d_1->SetMarkerSize(2.0);
 	g2d_1->SetFillColor(kWhite);
-	g2d_1->SetTitle("track-jet, sum_pt, +-7.5mm");
-	//g2d_1->SetTitle("2^{nd} leading pt track-jet, sum_pt, bin_size: +-7.5mm");
-	g2d_1->Draw("PCOLZ");
-	TGraph2D *g2d_2 = new TGraph2D(n,e3_,r3_,pt_threshold);
+	g2d_1->SetTitle("track-jet, max-bin, +-3.0mm");
+	//g2d_1->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_1->Draw("PCOLZ ERR");
+	TGraph2DErrors *g2d_2 = new TGraph2DErrors(n,e3_,r3_,pt_threshold, e_err3_, r_err3_, 0);
 	g2d_2->SetName("g2D_3rd_sumpt");
 	g2d_2->SetMarkerStyle(kFullStar);
 	g2d_2->SetMarkerSize(2.0);
 	g2d_2->SetFillColor(kWhite);
-	g2d_2->SetTitle("track-jet, sum_pt, +-7.5mm");
-	//g2d_2->SetTitle("3^{rd} leading pt track-jet, sum_pt, bin_size: +-7.5mm");
-	g2d_2->Draw("PCOLZ");
-	TGraph2D *g2d_3 = new TGraph2D(n,e4_,r4_,pt_threshold);
+	g2d_2->SetTitle("track-jet, max-bin, +-3.0mm");
+	//g2d_2->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_2->Draw("PCOLZ ERR");
+	TGraph2DErrors *g2d_3 = new TGraph2DErrors(n,e4_,r4_,pt_threshold, e_err4_, r_err4_, 0);
 	g2d_3->SetName("g2D_4th_sumpt");
 	g2d_3->SetMarkerStyle(kFullStar);
 	g2d_3->SetMarkerSize(2.0);
 	g2d_3->SetFillColor(kWhite);
-	g2d_3->SetTitle("track-jet, sum_pt, +-7.5mm");
-	//g2d_3->SetTitle("4^{th} leading pt track-jet, sum_pt, bin_size: +-7.5mm");
-	g2d_3->Draw("PCOLZ");
-	TGraph2D *g2d_4 = new TGraph2D(n,e5_,r5_,pt_threshold);
+	g2d_3->SetTitle("track-jet, max-bin, +-3.0mm");
+	//g2d_3->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_3->Draw("PCOLZ ERR");
+	TGraph2DErrors *g2d_4 = new TGraph2DErrors(n,e5_,r5_,pt_threshold, e_err5_, r_err5_, 0);
 	g2d_4->SetName("g2D_5th_sumpt");
 	g2d_4->SetMarkerStyle(kFullStar);
 	g2d_4->SetMarkerSize(2.0);
 	g2d_4->SetFillColor(kWhite);
-	g2d_4->SetTitle("track-jet, sum_pt, +-7.5mm");
-	//g2d_4->SetTitle("5^{th} leading pt track-jet, sum_pt, bin_size: +-7.5mm");
-	g2d_4->Draw("PCOLZ");
+	g2d_4->SetTitle("track-jet, max-bin, +-3.0mm");
+	//g2d_4->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_4->Draw("PCOLZ ERR");
 
 	//! no binning
-	TGraph2D *gb2d1 = new TGraph2D(n,eb2,rb2,pt_threshold);
+	TGraph2DErrors *gb2d1 = new TGraph2DErrors(n,eb2,rb2,pt_threshold, e_errb2, r_errb2, 0);
 	gb2d1->SetName("g2D2nd_nobin");
 	//gb2d1->GetXaxis()->SetTitle("trigger efficiency");
 	//auto axis2d = gb2d1->GetXaxis();
@@ -1061,70 +1215,70 @@ void roc(const char *pileup, const char *gapsize)
 	gb2d1->SetFillColor(kWhite);
 	gb2d1->SetTitle("track-jet, no z bin");
 	//gb2d1->SetTitle("2^{nd} leading pt track-jet, no z bin");
-	gb2d1->Draw("PCOLZ");
+	gb2d1->Draw("PCOLZ ERR");
 	//TH1 *h2d = new TH2D();
 	//h2d = gb2d1->Project("xy");
 	//h2d->GetYaxis()->SetRangeUser(Ymin_range, Ymax_range);
 	//c_->SetLogy();
 	//h2d->Draw("colz");
-	TGraph2D *gb2d2 = new TGraph2D(n,eb3,rb3,pt_threshold);
+	TGraph2DErrors *gb2d2 = new TGraph2DErrors(n,eb3,rb3,pt_threshold, e_errb3, r_errb3, 0);
 	gb2d2->SetName("g2D3rd_nobin");
 	gb2d2->SetMarkerStyle(kFullCircle);
 	gb2d2->SetMarkerSize(1.4);
 	gb2d2->SetFillColor(kWhite);
 	gb2d2->SetTitle("track-jet, no z bin");
 	//gb2d2->SetTitle("3^{rd} leading pt track-jet, no z bin");
-	gb2d2->Draw("PCOLZ");
-	TGraph2D *gb2d3 = new TGraph2D(n,eb4,rb4,pt_threshold);
+	gb2d2->Draw("PCOLZ ERR");
+	TGraph2DErrors *gb2d3 = new TGraph2DErrors(n,eb4,rb4,pt_threshold, e_errb4, r_errb4, 0);
 	gb2d3->SetName("g2D4th_nobin");
 	gb2d3->SetMarkerStyle(kFullCircle);
 	gb2d3->SetMarkerSize(1.4);
 	gb2d3->SetFillColor(kWhite);
 	gb2d3->SetTitle("track-jet, no z bin");
 	//gb2d3->SetTitle("4^{th} leading pt track-jet, no z bin");
-	gb2d3->Draw("PCOLZ");
-	TGraph2D *gb2d4 = new TGraph2D(n,eb5,rb5,pt_threshold);
+	gb2d3->Draw("PCOLZ ERR");
+	TGraph2DErrors *gb2d4 = new TGraph2DErrors(n,eb5,rb5,pt_threshold, e_errb5, r_errb5, 0);
 	gb2d4->SetName("g2D5th_nobin");
 	gb2d4->SetMarkerStyle(kFullCircle);
 	gb2d4->SetMarkerSize(1.4);
 	gb2d4->SetFillColor(kWhite);
 	gb2d4->SetTitle("track-jet, no z bin");
 	//gb2d4->SetTitle("5^{th} leading pt track-jet, no z bin");
-	gb2d4->Draw("PCOLZ");
+	gb2d4->Draw("PCOLZ ERR");
 	
 	//! emulated calo-jet
-	TGraph2D *gb_2d1_ = new TGraph2D(n,eb__2,rb__2,pt_threshold);
+	TGraph2DErrors *gb_2d1_ = new TGraph2DErrors(n,eb__2,rb__2,pt_threshold, e_errb__2, r_errb__2, 0);
 	gb_2d1_->SetName("g2D2nd_calo");
 	gb_2d1_->SetMarkerStyle(kFullDiamond);
 	gb_2d1_->SetMarkerSize(2.0);
 	gb_2d1_->SetFillColor(kWhite);
 	gb_2d1_->SetTitle("emulated calo-jet");
 	//gb_2d1_->SetTitle("2^{nd} leading pt emulated calo-jet");
-	gb_2d1_->Draw("PCOLZ");
-	TGraph2D *gb_2d2_ = new TGraph2D(n,eb__3,rb__3,pt_threshold);
+	gb_2d1_->Draw("PCOLZ ERR");
+	TGraph2DErrors *gb_2d2_ = new TGraph2DErrors(n,eb__3,rb__3,pt_threshold, e_errb__3, r_errb__3, 0);
 	gb_2d2_->SetName("g2D3rd_calo");
 	gb_2d2_->SetMarkerStyle(kFullDiamond);
 	gb_2d2_->SetMarkerSize(2.0);
 	gb_2d2_->SetFillColor(kWhite);
 	gb_2d2_->SetTitle("emulated calo-jet");
 	//gb_2d2_->SetTitle("3^{rd} leading pt emulated calo-jet");
-	gb_2d2_->Draw("PCOLZ");
-	TGraph2D *gb_2d3_ = new TGraph2D(n,eb__4,rb__4,pt_threshold);
+	gb_2d2_->Draw("PCOLZ ERR");
+	TGraph2DErrors *gb_2d3_ = new TGraph2DErrors(n,eb__4,rb__4,pt_threshold, e_errb__4, r_errb__4, 0);
 	gb_2d3_->SetName("g2D4th_calo");
 	gb_2d3_->SetMarkerStyle(kFullDiamond);
 	gb_2d3_->SetMarkerSize(2.0);
 	gb_2d3_->SetFillColor(kWhite);
 	gb_2d3_->SetTitle("emulated calo-jet");
 	//gb_2d3_->SetTitle("4^{th} leading pt emulated calo-jet");
-	gb_2d3_->Draw("PCOLZ");
-	TGraph2D *gb_2d4_ = new TGraph2D(n,eb__5,rb__5,pt_threshold);
+	gb_2d3_->Draw("PCOLZ ERR");
+	TGraph2DErrors *gb_2d4_ = new TGraph2DErrors(n,eb__5,rb__5,pt_threshold, e_errb__5, r_errb__5, 0);
 	gb_2d4_->SetName("g2D5th_calo");
 	gb_2d4_->SetMarkerStyle(kFullDiamond);
 	gb_2d4_->SetMarkerSize(2.0);
 	gb_2d4_->SetFillColor(kWhite);
 	gb_2d4_->SetTitle("emulated calo-jet");
 	//gb_2d4_->SetTitle("5^{th} leading pt emulated calo-jet");
-	gb_2d4_->Draw("PCOLZ");
+	gb_2d4_->Draw("PCOLZ ERR");
 ///////////////////////////////////////////////////////////////////////
 //////////////// writing to pdf ///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -1138,10 +1292,9 @@ void roc(const char *pileup, const char *gapsize)
 	char out_root_file[1023];
 	sprintf(out_root_file, "%s/%s.root",out_path,output_file_name);
 
-	//TFile *f_out = new TFile(out_root_file, "RECREATE");
 
 	//Double_t x1 = 0.5, y1 = 0.11, x2 = 0.89, y2 = 0.39;
-	Double_t x1 = 0.47, y1 = 0.11, x2 = 0.95, y2 = 0.32;
+	Double_t x1 = 0.49, y1 = 0.11, x2 = 0.95, y2 = 0.32;
 	//Double_t x1 = 0.01, y1 = 0.8, x2 = 0.49, y2 = 0.99;
 	//TCanvas * C = new TCanvas();
 	Legends();
@@ -1150,7 +1303,7 @@ void roc(const char *pileup, const char *gapsize)
 	gStyle->SetOptTitle(0);
 	TGaxis::SetMaxDigits(3);
 	gPad->SetRightMargin(0.04);
-	//C->SetGridx();
+	C->SetGridx();
 	C->SetGridy();
 	//C->SetTickx();
 	//C->SetTicky();
@@ -1165,8 +1318,8 @@ void roc(const char *pileup, const char *gapsize)
 	g1->GetYaxis()->CenterTitle();
 	g1->GetXaxis()->SetTitleSize(0.04);
 	g1->GetYaxis()->SetTitleSize(0.04);
-	g1->Draw("APe1");	//sum_pt track-jet
-	ga1->Draw("Pe1");       //max_pt track-jet
+	g1->Draw("APe1");	//max-bin track-jet
+	ga1->Draw("Pe1");       //multi-bin track-jet
 	gb1->Draw("Pe1");       //unbinned track-jet
 	gb_1_->Draw("Pe1");     //emulated calo track-jet
 	g1->SetTitle("2^{nd} leading p_{t} track-jet");
@@ -1176,18 +1329,20 @@ void roc(const char *pileup, const char *gapsize)
 	l1->SetFillColor(kWhite);
 	l1->SetTextSize(0.04);
 	l1->SetHeader("2^{nd} leading","C");
-	l1->AddEntry(g1,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm", "pl");
-	l1->AddEntry(ga1,"TTT-jet, max_{p_{T}}: #pm 7.5 mm","pl");
-	l1->AddEntry(gb1,"TTT-jet, no z-binning","pl");
-	l1->AddEntry(gb_1_,"emulated calo-jet","pl");
+	l1->AddEntry(g1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
+	l1->AddEntry(ga1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm","p");
+	l1->AddEntry(gb1,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l1->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l1->SetTextAlign(12);
+	l1->SetMargin(0.15);
 	l1->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c1a");
 	C->Print(out_file_open,"pdf");
-	C->SaveAs("./summary_plots/tex/C1_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C1_30mm_7515mm_1trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1196,8 +1351,8 @@ void roc(const char *pileup, const char *gapsize)
 	g2->GetYaxis()->CenterTitle();
 	g2->GetXaxis()->SetTitleSize(0.04);
 	g2->GetYaxis()->SetTitleSize(0.04);
-	g2->Draw("APe1");	//sum_pt track-jet
-	ga2->Draw("Pe1");       //max_pt track-jet
+	g2->Draw("APe1");	//max-bin track-jet
+	ga2->Draw("Pe1");       //multi-bin track-jet
 	gb2->Draw("Pe1");       //unbinned track-jet
 	gb_2_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1207,18 +1362,20 @@ void roc(const char *pileup, const char *gapsize)
 	l2->SetFillColor(kWhite);
 	l2->SetTextSize(0.04);
 	l2->SetHeader("3^{rd} leading","C");
-	l2->AddEntry(g2,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm","pl");
-	l2->AddEntry(ga2,"TTT-jet, max_{p_{T}}: #pm 7.5 mm","pl");
-	l2->AddEntry(gb2,"TTT-jet, no z-binning","pl");
-	l2->AddEntry(gb_2_,"emulated calo-jet","pl");
+	l2->AddEntry(g2,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm","p");
+	l2->AddEntry(ga2,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm","p");
+	l2->AddEntry(gb2,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l2->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l2->SetTextAlign(12);
+	l2->SetMargin(0.15);
 	l2->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c1b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C2_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C2_30mm_7515mm_1trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1227,8 +1384,8 @@ void roc(const char *pileup, const char *gapsize)
 	g3->GetYaxis()->CenterTitle();
 	g3->GetXaxis()->SetTitleSize(0.04);
 	g3->GetYaxis()->SetTitleSize(0.04);
-	g3->Draw("APe1");	//sum_pt track-jet
-	ga3->Draw("Pe1");       //max_pt track-jet
+	g3->Draw("APe1");	//max-bin track-jet
+	ga3->Draw("Pe1");       //multi-bin track-jet
 	gb3->Draw("Pe1");       //unbinned track-jet
 	gb_3_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1238,18 +1395,20 @@ void roc(const char *pileup, const char *gapsize)
 	l3->SetFillColor(kWhite);
 	l3->SetTextSize(0.04);
 	l3->SetHeader("4^{th} leading","C");
-	l3->AddEntry(g3,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm","pl");
-	l3->AddEntry(ga3,"TTT-jet, max_{p_{T}}: #pm 7.5 mm","pl");
-	l3->AddEntry(gb3,"TTT-jet, no z-binning","pl");
-	l3->AddEntry(gb_3_,"emulated calo-jet","pl");
+	l3->AddEntry(g3,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm","p");
+	l3->AddEntry(ga3,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm","p");
+	l3->AddEntry(gb3,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l3->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l3->SetTextAlign(12);
+	l3->SetMargin(0.15);
 	l3->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c1c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C3_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C3_30mm_7515mm_1trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1258,8 +1417,8 @@ void roc(const char *pileup, const char *gapsize)
 	g4->GetYaxis()->CenterTitle();
 	g4->GetXaxis()->SetTitleSize(0.04);
 	g4->GetYaxis()->SetTitleSize(0.04);
-	g4->Draw("APe1");	//sum_pt track-jet
-	ga4->Draw("Pe1");	//max_pt track-jet
+	g4->Draw("APe1");	//max-bin track-jet
+	ga4->Draw("Pe1");	//multi-bin track-jet
 	gb4->Draw("Pe1");	//unbinned track-jet
 	gb_4_->Draw("Pe1");	//emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1269,21 +1428,23 @@ void roc(const char *pileup, const char *gapsize)
 	l4->SetFillColor(kWhite);
 	l4->SetTextSize(0.04);
 	l4->SetHeader("5^{th} leading","C");
-	l4->AddEntry(g4,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm","pl");
-	l4->AddEntry(ga4,"TTT-jet, max_{p_{T}}: #pm 7.5 mm","pl");
-	l4->AddEntry(gb4,"TTT-jet, no z-binning","pl");
-	l4->AddEntry(gb_4_,"emulated calo-jet","pl");
+	l4->AddEntry(g4,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm","p");
+	l4->AddEntry(ga4,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm","p");
+	l4->AddEntry(gb4,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l4->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l4->SetTextAlign(12);
+	l4->SetMargin(0.15);
 	l4->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c1d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C4_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C4_30mm_7515mm_1trk.tex");
 
 	//! page2
-	//! +-7.5mm 	
+	//! +-3.0mm 	
 	C->cd(1);
 	//gPad->SetGrid();
 	gPad->SetLogy();
@@ -1291,8 +1452,8 @@ void roc(const char *pileup, const char *gapsize)
 	g1_->GetYaxis()->CenterTitle();
 	g1_->GetXaxis()->SetTitleSize(0.04);
 	g1_->GetYaxis()->SetTitleSize(0.04);
-	g1_->Draw("APe1");	//sum_pt track-jet
-	ga1_->Draw("Pe1");       //max_pt track-jet
+	g1_->Draw("APe1");	//max-bin track-jet
+	ga1_->Draw("Pe1");       //multi-bin track-jet
 	gb1_->Draw("Pe1");       //unbinned track-jet
 	gb_1_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1302,18 +1463,20 @@ void roc(const char *pileup, const char *gapsize)
 	l1_->SetFillColor(kWhite);
 	l1_->SetTextSize(0.04);
 	l1_->SetHeader("2^{nd} leading","C");
-	l1_->AddEntry(g1_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm", "pl");
-	l1_->AddEntry(ga1_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l1_->AddEntry(gb1_,"TTT-jet, no z-binning","pl");
-	l1_->AddEntry(gb_1_,"emulated calo-jet","pl");
+	l1_->AddEntry(g1_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
+	l1_->AddEntry(ga1_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l1_->AddEntry(gb1_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l1_->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l1_->SetTextAlign(12);
+	l1_->SetMargin(0.15);
 	l1_->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c2a");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C5_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C5_30mm_7515mm_1trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1322,8 +1485,8 @@ void roc(const char *pileup, const char *gapsize)
 	g2_->GetYaxis()->CenterTitle();
 	g2_->GetXaxis()->SetTitleSize(0.04);
 	g2_->GetYaxis()->SetTitleSize(0.04);
-	g2_->Draw("APe1");	//sum_pt track-jet
-	ga2_->Draw("Pe1");       //max_pt track-jet
+	g2_->Draw("APe1");	//max-bin track-jet
+	ga2_->Draw("Pe1");       //multi-bin track-jet
 	gb2_->Draw("Pe1");       //unbinned track-jet
 	gb_2_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1333,18 +1496,20 @@ void roc(const char *pileup, const char *gapsize)
 	l2_->SetFillColor(kWhite);
 	l2_->SetTextSize(0.04);
 	l2_->SetHeader("3^{rd} leading","C");
-	l2_->AddEntry(g2_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm", "pl");
-	l2_->AddEntry(ga2_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l2_->AddEntry(gb2_,"TTT-jet, no z-binning","pl");
-	l2_->AddEntry(gb_2_,"emulated calo-jet","pl");
+	l2_->AddEntry(g2_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
+	l2_->AddEntry(ga2_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l2_->AddEntry(gb2_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l2_->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l2_->SetTextAlign(12);
+	l2_->SetMargin(0.15);
 	l2_->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c2b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C6_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C6_30mm_7515mm_1trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1353,8 +1518,8 @@ void roc(const char *pileup, const char *gapsize)
 	g3_->GetYaxis()->CenterTitle();
 	g3_->GetXaxis()->SetTitleSize(0.04);
 	g3_->GetYaxis()->SetTitleSize(0.04);
-	g3_->Draw("APe1");	//sum_pt track-jet
-	ga3_->Draw("Pe1");       //max_pt track-jet
+	g3_->Draw("APe1");	//max-bin track-jet
+	ga3_->Draw("Pe1");       //multi-bin track-jet
 	gb3_->Draw("Pe1");       //unbinned track-jet
 	gb_3_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1365,18 +1530,20 @@ void roc(const char *pileup, const char *gapsize)
 	l3_->SetFillColor(kWhite);
 	l3_->SetTextSize(0.04);
 	l3_->SetHeader("4^{th} leading","C");
-	l3_->AddEntry(g3_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm", "pl");
-	l3_->AddEntry(ga3_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l3_->AddEntry(gb3_,"TTT-jet, no z-binning","pl");
-	l3_->AddEntry(gb_3_,"emulated calo-jet","pl");
+	l3_->AddEntry(g3_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
+	l3_->AddEntry(ga3_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l3_->AddEntry(gb3_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l3_->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l3_->SetTextAlign(12);
+	l3_->SetMargin(0.15);
 	l3_->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c2c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C7_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C7_30mm_7515mm_1trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1385,8 +1552,8 @@ void roc(const char *pileup, const char *gapsize)
 	g4_->GetYaxis()->CenterTitle();
 	g4_->GetXaxis()->SetTitleSize(0.04);
 	g4_->GetYaxis()->SetTitleSize(0.04);
-	g4_->Draw("APe1");	//sum_pt track-jet
-	ga4_->Draw("Pe1");	//max_pt track-jet
+	g4_->Draw("APe1");	//max-bin track-jet
+	ga4_->Draw("Pe1");	//multi-bin track-jet
 	gb4_->Draw("Pe1");	//unbinned track-jet
 	gb_4_->Draw("Pe1");	//emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1396,23 +1563,25 @@ void roc(const char *pileup, const char *gapsize)
 	l4_->SetFillColor(kWhite);
 	l4_->SetTextSize(0.04);
 	l4_->SetHeader("5^{th} leading","C");
-	l4_->AddEntry(g4_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm", "pl");
-	l4_->AddEntry(ga4_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l4_->AddEntry(gb4_,"TTT-jet, no z-binning","pl");
-	l4_->AddEntry(gb_4_,"emulated calo-jet","pl");
+	l4_->AddEntry(g4_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
+	l4_->AddEntry(ga4_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l4_->AddEntry(gb4_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l4_->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l4_->SetTextAlign(12);
+	l4_->SetMargin(0.15);
 	l4_->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c2d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C8_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C8_30mm_7515mm_1trk.tex");
 
 
 	//! page3
 	y1 = 0.11; y2 = 0.32;
-	//! +-7.5, +-7.5mm max_pt	
+	//! +-7.5, +-3.0mm multi-bin	
 	C->cd(1);
 	//gPad->SetGrid();
 	gPad->SetLogy();
@@ -1420,8 +1589,8 @@ void roc(const char *pileup, const char *gapsize)
 	ga1->GetYaxis()->CenterTitle();
 	ga1->GetXaxis()->SetTitleSize(0.04);
 	ga1->GetYaxis()->SetTitleSize(0.04);
-	ga1->Draw("APe1");	//max_pt 7.5  track-jet
-	ga1_->Draw("Pe1");       //max_pt 3.75 track-jet
+	ga1->Draw("APe1");	//multi-bin 7.5  track-jet
+	ga1_->Draw("Pe1");       //multi-bin 3.75 track-jet
 	gb1_->Draw("Pe1");       //unbinned track-jet
 	gb_1_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1431,18 +1600,20 @@ void roc(const char *pileup, const char *gapsize)
 	l1__->SetFillColor(kWhite);
 	l1__->SetTextSize(0.04);
 	l1__->SetHeader("2^{nd} leading","C");
-	l1__->AddEntry(ga1,"TTT-jet, max_{p_{T}}: #pm 7.5 mm", "pl");
-	l1__->AddEntry(ga1_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l1__->AddEntry(gb1_,"TTT-jet, no z-binning","pl");
-	l1__->AddEntry(gb_1_,"emulated calo-jet","pl");
+	l1__->AddEntry(ga1_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l1__->AddEntry(ga1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
+	l1__->AddEntry(gb1_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l1__->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l1__->SetTextAlign(12);
+	l1__->SetMargin(0.15);
 	l1__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c3a");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C9_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C9_30mm_7515mm_1trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1451,8 +1622,8 @@ void roc(const char *pileup, const char *gapsize)
 	ga2->GetYaxis()->CenterTitle();
 	ga2->GetXaxis()->SetTitleSize(0.04);
 	ga2->GetYaxis()->SetTitleSize(0.04);
-	ga2->Draw("APe1");	//max_pt 7.5  track-jet
-	ga2_->Draw("Pe1");       //max_pt 3.75 track-jet
+	ga2->Draw("APe1");	//multi-bin 7.5  track-jet
+	ga2_->Draw("Pe1");       //multi-bin 3.75 track-jet
 	gb2_->Draw("Pe1");       //unbinned track-jet
 	gb_2_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1462,18 +1633,20 @@ void roc(const char *pileup, const char *gapsize)
 	l2__->SetFillColor(kWhite);
 	l2__->SetTextSize(0.04);
 	l2__->SetHeader("3^{rd} leading","C");
-	l2__->AddEntry(ga2,"TTT-jet, max_{p_{T}}: #pm 7.5 mm", "pl");
-	l2__->AddEntry(ga2_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l2__->AddEntry(gb2_,"TTT-jet, no z-binning","pl");
-	l2__->AddEntry(gb_2_,"emulated calo-jet","pl");
+	l2__->AddEntry(ga2_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l2__->AddEntry(ga2,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
+	l2__->AddEntry(gb2_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l2__->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l2__->SetTextAlign(12);
+	l2__->SetMargin(0.15);
 	l2__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c3b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C10_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C10_30mm_7515mm_1trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1482,8 +1655,8 @@ void roc(const char *pileup, const char *gapsize)
 	ga3->GetYaxis()->CenterTitle();
 	ga3->GetXaxis()->SetTitleSize(0.04);
 	ga3->GetYaxis()->SetTitleSize(0.04);
-	ga3->Draw("APe1");	//max_pt 7.5 track-jet
-	ga3_->Draw("Pe1");       //max_pt 3.75 track-jet
+	ga3->Draw("APe1");	//multi-bin 7.5 track-jet
+	ga3_->Draw("Pe1");       //multi-bin 3.75 track-jet
 	gb3_->Draw("Pe1");       //unbinned track-jet
 	gb_3_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1494,18 +1667,20 @@ void roc(const char *pileup, const char *gapsize)
 	l3__->SetFillColor(kWhite);
 	l3__->SetTextSize(0.04);
 	l3__->SetHeader("4^{th} leading","C");
-	l3__->AddEntry(ga3,"TTT-jet, max_{p_{T}}: #pm 7.5 mm", "pl");
-	l3__->AddEntry(ga3_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l3__->AddEntry(gb3_,"TTT-jet, no z-binning","pl");
-	l3__->AddEntry(gb_3_,"emulated calo-jet","pl");
+	l3__->AddEntry(ga3_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l3__->AddEntry(ga3,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
+	l3__->AddEntry(gb3_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l3__->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l3__->SetTextAlign(12);
+	l3__->SetMargin(0.15);
 	l3__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c3c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C11_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C11_30mm_7515mm_1trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1514,8 +1689,8 @@ void roc(const char *pileup, const char *gapsize)
 	ga4->GetYaxis()->CenterTitle();
 	ga4->GetXaxis()->SetTitleSize(0.04);
 	ga4->GetYaxis()->SetTitleSize(0.04);
-	ga4->Draw("APe1");	//max_pt 7.5 track-jet
-	ga4_->Draw("Pe1");	//max_pt 3.75 track-jet
+	ga4->Draw("APe1");	//multi-bin 7.5 track-jet
+	ga4_->Draw("Pe1");	//multi-bin 3.75 track-jet
 	gb4_->Draw("Pe1");	//unbinned track-jet
 	gb_4_->Draw("Pe1");	//emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1526,26 +1701,28 @@ void roc(const char *pileup, const char *gapsize)
 	l4__->SetFillColor(kWhite);
 	l4__->SetTextSize(0.04);
 	l4__->SetHeader("5^{th} leading","C");
-	l4__->AddEntry(ga4,"TTT-jet, max_{p_{T}}: #pm 7.5 mm", "pl");
-	l4__->AddEntry(ga4_,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l4__->AddEntry(gb4_,"TTT-jet, no z-binning","pl");
-	l4__->AddEntry(gb_4_,"emulated calo-jet","pl");
+	l4__->AddEntry(ga4_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l4__->AddEntry(ga4,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
+	l4__->AddEntry(gb4_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l4__->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l4__->SetTextAlign(12);
+	l4__->SetMargin(0.15);
 	l4__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c3d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C12_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C12_30mm_7515mm_1trk.tex");
 
 	//! page4
-	//! +-7.5, +-7.5mm sum_pt
+	//! +-7.5, +-3.0mm max-bin
 	C->cd(1);
 	//gPad->SetGrid();
 	gPad->SetLogy();
-	g1->Draw("APe1");	//sum_pt 7.5  track-jet
-	g1_->Draw("Pe1");       //sum_pt 3.75 track-jet
+	g1->Draw("APe1");	//max-bin 7.5  track-jet
+	g1_->Draw("Pe1");       //max-bin 3.75 track-jet
 	gb1_->Draw("Pe1");       //unbinned track-jet
 	gb_1_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1556,24 +1733,26 @@ void roc(const char *pileup, const char *gapsize)
 	l_1__->SetFillColor(kWhite);
 	l_1__->SetTextSize(0.04);
 	l_1__->SetHeader("2^{nd} leading","C");
-	l_1__->AddEntry(g1,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm", "pl");
-	l_1__->AddEntry(g1_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm","pl");
-	l_1__->AddEntry(gb1_,"TTT-jet, no z-binning","pl");
-	l_1__->AddEntry(gb_1_,"emulated calo-jet","pl");
+	l_1__->AddEntry(g1_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_1__->AddEntry(g1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
+	l_1__->AddEntry(gb1_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l_1__->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l_1__->SetTextAlign(12);
+	l_1__->SetMargin(0.15);
 	l_1__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c4a");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C13_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C13_30mm_7515mm_1trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
 	gPad->SetLogy();
-	g2->Draw("APe1");	//sum_pt 7.5  track-jet
-	g2_->Draw("Pe1");       //sum_pt 3.75 track-jet
+	g2->Draw("APe1");	//max-bin 7.5  track-jet
+	g2_->Draw("Pe1");       //max-bin 3.75 track-jet
 	gb2_->Draw("Pe1");       //unbinned track-jet
 	gb_2_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1583,24 +1762,26 @@ void roc(const char *pileup, const char *gapsize)
 	l_2__->SetFillColor(kWhite);
 	l_2__->SetTextSize(0.04);
 	l_2__->SetHeader("3^{rd} leading","C");
-	l_2__->AddEntry(g2,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm", "pl");
-	l_2__->AddEntry(g2_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm","pl");
-	l_2__->AddEntry(gb2_,"TTT-jet, no z-binning","pl");
-	l_2__->AddEntry(gb_2_,"emulated calo-jet","pl");
+	l_2__->AddEntry(g2_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_2__->AddEntry(g2,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
+	l_2__->AddEntry(gb2_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l_2__->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l_2__->SetTextAlign(12);
+	l_2__->SetMargin(0.15);
 	l_2__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c4b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C14_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C14_30mm_7515mm_1trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
 	gPad->SetLogy();
-	g3->Draw("APe1");	//sum_pt 7.5 track-jet
-	g3_->Draw("Pe1");       //sum_pt 3.75 track-jet
+	g3->Draw("APe1");	//max-bin 7.5 track-jet
+	g3_->Draw("Pe1");       //max-bin 3.75 track-jet
 	gb3_->Draw("Pe1");       //unbinned track-jet
 	gb_3_->Draw("Pe1");     //emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1611,24 +1792,26 @@ void roc(const char *pileup, const char *gapsize)
 	l_3__->SetFillColor(kWhite);
 	l_3__->SetTextSize(0.04);
 	l_3__->SetHeader("4^{th} leading","C");
-	l_3__->AddEntry(g3,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm", "pl");
-	l_3__->AddEntry(g3_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm","pl");
-	l_3__->AddEntry(gb3_,"TTT-jet, no z-binning","pl");
-	l_3__->AddEntry(gb_3_,"emulated calo-jet","pl");
+	l_3__->AddEntry(g3_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_3__->AddEntry(g3,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
+	l_3__->AddEntry(gb3_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l_3__->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l_3__->SetTextAlign(12);
+	l_3__->SetMargin(0.15);
 	l_3__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c4c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C15_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C15_30mm_7515mm_1trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
 	gPad->SetLogy();
-	g4->Draw("APe1");	//sum_pt 7.5 track-jet
-	g4_->Draw("Pe1");	//sum_pt 3.75 track-jet
+	g4->Draw("APe1");	//max-bin 7.5 track-jet
+	g4_->Draw("Pe1");	//max-bin 3.75 track-jet
 	gb4_->Draw("Pe1");	//unbinned track-jet
 	gb_4_->Draw("Pe1");	//emulated calo track-jet
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -1639,18 +1822,20 @@ void roc(const char *pileup, const char *gapsize)
 	l_4__->SetFillColor(kWhite);
 	l_4__->SetTextSize(0.04);
 	l_4__->SetHeader("5^{th} leading","C");
-	l_4__->AddEntry(g4,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm", "pl");
-	l_4__->AddEntry(g4_,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm","pl");
-	l_4__->AddEntry(gb4_,"TTT-jet, no z-binning","pl");
-	l_4__->AddEntry(gb_4_,"emulated calo-jet","pl");
+	l_4__->AddEntry(g4_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_4__->AddEntry(g4,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
+	l_4__->AddEntry(gb4_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l_4__->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l_4__->SetTextAlign(12);
+	l_4__->SetMargin(0.15);
 	l_4__->Draw();
 	leg1->Draw();
 	leg5->Draw();
+	fun->Draw("same");
 	gPad->Update();
 	//gPad->Write("c4d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C16_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C16_30mm_7515mm_1trk.tex");
 
 	//gPad->DrawFrame(Xmin_range, Ymin_range, Xmax_range, Ymax_range);
 	//https://root-forum.cern.ch/t/tgraph2d-access-xyz-range-and-title-out-of-sync-color-bar/15722	
@@ -1735,7 +1920,7 @@ void roc(const char *pileup, const char *gapsize)
 	//gStyle->SetPalette(kRainBow);
 	gStyle->SetPalette(kLightTemperature);
 	//! page5
-	//! max_pt and calo
+	//! multi-bin and calo
 	C->Clear();
 	C->cd(1);
 	ga2d1->SetHistogram(ha2d1);
@@ -1754,10 +1939,11 @@ void roc(const char *pileup, const char *gapsize)
 	ga2d1->GetXaxis()->SetTitleSize(0.04);
 	ga2d1->GetYaxis()->SetTitleSize(0.04);
 	ga2d1->GetZaxis()->SetTitleSize(0.04);
-	ga2d1->Draw("PCOLZ");
-	ga2d_1->Draw("PCOL same");
-	gb2d1->Draw("PCOL same");
-	gb_2d1_->Draw("PCOL same");
+	ga2d1->Draw("PCOLZ ERR");
+	ga2d_1->Draw("PCOL ERR same");
+	gb2d1->Draw("PCOL ERR same");
+	gb_2d1_->Draw("PCOL ERR same");
+	//fun->Draw("same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
 	gPad->SetRightMargin(0.15);
@@ -1774,18 +1960,19 @@ void roc(const char *pileup, const char *gapsize)
 	l1___->SetBorderSize(0);
 	l1___->SetFillColor(kWhite);
 	l1___->SetTextSize(0.04);
-	l1___->AddEntry(ga2d1,"TTT-jet, max_{p_{T}}: #pm 7.5 mm", "pl");
-	l1___->AddEntry(ga2d_1,"TTT-jet, max_{p_{T}}: #pm 1.5 mm","pl");
-	l1___->AddEntry(gb2d1,"TTT-jet, no z-binning","pl");
-	l1___->AddEntry(gb_2d1_,"emulated calo-jet","pl");
+	l1___->AddEntry(ga2d_1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l1___->AddEntry(ga2d1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
+	l1___->AddEntry(gb2d1,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l1___->AddEntry(gb_2d1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l1___->SetTextAlign(12);
+	l1___->SetMargin(0.15);
 	l1___->Draw();
 	leg1->Draw();
 	leg5->Draw();
 	gPad->Modified();
 	gPad->Update();
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C17_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C17_30mm_7515mm_1trk.tex");
 	//cc->Write("c5a");
 	//gPad->GetView()->TopView();
 	C->cd(2);
@@ -1794,10 +1981,11 @@ void roc(const char *pileup, const char *gapsize)
 	gb2d2->SetHistogram(hb2d2);
 	gb_2d2_->SetHistogram(h2d2_);
 	//gPad->SetFillStyle(4000);
-	ga2d2->Draw("PCOLZ");
-	ga2d_2->Draw("PCOL same");
-	gb2d2->Draw("PCOL same");
-	gb_2d2_->Draw("PCOL same");
+	ga2d2->Draw("PCOLZ ERR");
+	ga2d_2->Draw("PCOL ERR same");
+	gb2d2->Draw("PCOL ERR same");
+	gb_2d2_->Draw("PCOL ERR same");
+	//fun->Draw("same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
 	ga2d2->GetXaxis()->SetTitle("trigger efficiency");
@@ -1812,7 +2000,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->SetLeftMargin(0.125);
 	//gPad->BuildLegend(x1, y1, x2, y2, "3^{rd} leading p_{t}", "PL"); // ROOT 6
 	//l2__->Draw();
-	TLegend *J2 = new TLegend(x1+0.15,y2+0.01,x2,y2+0.05);
+	TLegend *J2 = new TLegend(x1+0.15,y2-0.1,x2,y2-0.06);
 	J2->SetFillColor(kWhite);
         J2->SetBorderSize(0);
         J2->AddEntry((TObject*)0, "3^{rd} leading", "");
@@ -1824,17 +2012,18 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c5b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C18_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C18_30mm_7515mm_1trk.tex");
 	C->cd(3);
 	ga2d3->SetHistogram(ha2d3);
 	ga2d_3->SetHistogram(ha2d_3);
 	gb2d3->SetHistogram(hb2d3);
 	gb_2d3_->SetHistogram(h2d3_);
 	//gPad->SetFillStyle(4000);
-	ga2d3->Draw("PCOLZ");
-	ga2d_3->Draw("PCOL same");
-	gb2d3->Draw("PCOL same");
-	gb_2d3_->Draw("PCOL same");
+	ga2d3->Draw("PCOLZ ERR");
+	ga2d_3->Draw("PCOL ERR same");
+	gb2d3->Draw("PCOL ERR same");
+	gb_2d3_->Draw("PCOL ERR same");
+	//fun->Draw("same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
 	ga2d3->GetXaxis()->SetTitle("trigger efficiency");
@@ -1849,7 +2038,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->SetLeftMargin(0.125);
 	//gPad->BuildLegend(x1, y1, x2, y2, "4^{th} leading p_{t}", "PL"); // ROOT 6
 	//l3__->Draw();
-	TLegend *J3 = new TLegend(x1+0.15,y2+0.01,x2,y2+0.05);
+	TLegend *J3 = new TLegend(x1+0.15,y2-0.1,x2,y2-0.06);
 	J3->SetFillColor(kWhite);
         J3->SetBorderSize(0);
         J3->AddEntry((TObject*)0, "4^{th} leading", "");
@@ -1861,17 +2050,18 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c5c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C19_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C19_30mm_7515mm_1trk.tex");
 	C->cd(4);
 	ga2d4->SetHistogram(ha2d4);
 	ga2d_4->SetHistogram(ha2d_4);
 	gb2d4->SetHistogram(hb2d4);
 	gb_2d4_->SetHistogram(h2d4_);
 	//gPad->SetFillStyle(4000);
-	ga2d4->Draw("PCOLZ");
-	ga2d_4->Draw("PCOL same");
-	gb2d4->Draw("PCOL same");
-	gb_2d4_->Draw("PCOL same");
+	ga2d4->Draw("PCOLZ ERR");
+	ga2d_4->Draw("PCOL ERR same");
+	gb2d4->Draw("PCOL ERR same");
+	gb_2d4_->Draw("PCOL ERR same");
+	//fun->Draw("same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
 	ga2d4->GetXaxis()->SetTitle("trigger efficiency");
@@ -1899,21 +2089,22 @@ void roc(const char *pileup, const char *gapsize)
 	//gPad->Write("c5d");
 	C->SaveAs("./summary_plots/pdf/c5.C");
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C20_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C20_30mm_7515mm_1trk.tex");
 
 	C->Clear();
 	//C->Divide(2,2,0.5,0.5);
 	//! page6
-	//! sum_pt and calo
+	//! max-bin and calo
 	C->cd(1);
 	gPad->SetLogy();
 	g2d1->SetHistogram(h2d1);
 	g2d_1->SetHistogram(h2d_1);
 	//gPad->SetFillStyle(4000);
-	g2d1->Draw("PCOLZ");
-	g2d_1->Draw("PCOL same");
-	gb2d1->Draw("PCOL same");
-	gb_2d1_->Draw("PCOL same");
+	g2d1->Draw("PCOLZ ERR");
+	g2d_1->Draw("PCOL ERR same");
+	gb2d1->Draw("PCOL ERR same");
+	gb_2d1_->Draw("PCOL ERR same");
+	//fun->Draw("same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
 	g2d1->GetXaxis()->SetTitle("trigger efficiency");
@@ -1934,27 +2125,27 @@ void roc(const char *pileup, const char *gapsize)
 	l_1___->SetBorderSize(0);
 	l_1___->SetFillColor(kWhite);
 	l_1___->SetTextSize(0.04);
-	l_1___->AddEntry(g2d1,"TTT-jet, sum_{p_{T}}: #pm 7.5 mm", "pl");
-	l_1___->AddEntry(g2d_1,"TTT-jet, sum_{p_{T}}: #pm 1.5 mm","pl");
-	l_1___->AddEntry(gb2d1,"TTT-jet, no z-binning","pl");
-	l_1___->AddEntry(gb_2d1_,"emulated calo-jet","pl");
+	l_1___->AddEntry(g2d_1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_1___->AddEntry(g2d1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
+	l_1___->AddEntry(gb2d1,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
+	l_1___->AddEntry(gb_2d1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l_1___->SetTextAlign(12);
+	l_1___->SetMargin(0.15);
 	l_1___->Draw();
 	gPad->Modified();
 	gPad->Update();
 	//gPad->Write("c6a");
 	//gPad->GetView()->TopView();
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C21_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C21_30mm_7515mm_1trk.tex");
 	C->cd(2);
-	gPad->SetLogy();
 	g2d2->SetHistogram(h2d2);
 	g2d_2->SetHistogram(h2d_2);
 	//gPad->SetFillStyle(4000);
-	g2d2->Draw("PCOLZ");
-	g2d_2->Draw("PCOL same");
-	gb2d2->Draw("PCOL same");
-	gb_2d2_->Draw("PCOL same");
+	g2d2->Draw("PCOLZ ERR");
+	g2d_2->Draw("PCOL ERR same");
+	gb2d2->Draw("PCOL ERR same");
+	gb_2d2_->Draw("PCOL ERR same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
 	g2d2->GetXaxis()->SetTitle("trigger efficiency");
@@ -1967,6 +2158,7 @@ void roc(const char *pileup, const char *gapsize)
 	g2d2->GetZaxis()->SetTitleSize(0.04);
 	gPad->SetRightMargin(0.15);
 	gPad->SetLeftMargin(0.125);
+	gPad->SetLogy();
 	//gPad->BuildLegend(x1, y1, x2, y2, "3^{rd} leading p_{t}", "PL"); // ROOT 6
 	//l_2__->Draw();
 	J2->Draw();
@@ -1976,18 +2168,19 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c6b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C22_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C22_30mm_7515mm_1trk.tex");
 	C->cd(3);
 	gPad->SetLogy();
 	g2d3->SetHistogram(h2d3);
 	g2d_3->SetHistogram(h2d_3);
 	//gPad->SetFillStyle(4000);
-	g2d3->Draw("PCOLZ");
-	g2d_3->Draw("PCOL same");
-	gb2d3->Draw("PCOL same");
-	gb_2d3_->Draw("PCOL same");
+	g2d3->Draw("PCOLZ ERR");
+	g2d_3->Draw("PCOL ERR same");
+	gb2d3->Draw("PCOL ERR same");
+	gb_2d3_->Draw("PCOL ERR same");
 	gPad->SetTheta(90.0);
 	gPad->SetPhi(0.001);
+	//fun2->Draw("same");
 	g2d3->GetXaxis()->SetTitle("trigger efficiency");
 	g2d3->GetXaxis()->SetTitleOffset(1.5);
 	g2d3->GetYaxis()->SetTitle("trigger rate [MHz]");
@@ -2007,12 +2200,14 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c6c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C23_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C23_30mm_7515mm_1trk.tex");
+
 	C->cd(4);
-	gPad->SetLogy();
+	TPad *mypad1 = new TPad("mypad1","mypad1",0,0,1,1);
+	mypad1->SetLogy();
 	g2d4->SetHistogram(h2d4);
 	g2d_4->SetHistogram(h2d_4);
-	//gPad->SetFillStyle(4000);
+	//mypad1->SetFillStyle(4000);
 	g2d4->GetXaxis()->SetTitle("trigger efficiency");
 	g2d4->GetXaxis()->SetTitleOffset(1.5);
 	g2d4->GetYaxis()->SetTitle("trigger rate [MHz]");
@@ -2021,25 +2216,44 @@ void roc(const char *pileup, const char *gapsize)
 	g2d4->GetXaxis()->SetTitleSize(0.04);
 	g2d4->GetYaxis()->SetTitleSize(0.04);
 	g2d4->GetZaxis()->SetTitleSize(0.04);
-	g2d4->Draw("PCOLZ");
-	g2d_4->Draw("PCOL same");
-	gb2d4->Draw("PCOL same");
-	gb_2d4_->Draw("PCOL same");
-	gPad->SetTheta(90.0);
-	gPad->SetPhi(0.001);
-	gPad->SetRightMargin(0.15);
-	gPad->SetLeftMargin(0.125);
-	//gPad->BuildLegend(x1, y1, x2, y2, "5^{th} leading p_{t}", "PL"); // ROOT 6
+	g2d4->Draw("PCOLZ ERR");
+	g2d_4->Draw("PCOL ERR same");
+	gb2d4->Draw("PCOL ERR same");
+	gb_2d4_->Draw("PCOL ERR same");
+	mypad1->SetTheta(90.0);
+	mypad1->SetPhi(0.001);
+	//fun1->Draw("same");
+	mypad1->SetRightMargin(0.15);
+	mypad1->SetLeftMargin(0.125);
+	//mypad1->BuildLegend(x1, y1, x2, y2, "5^{th} leading p_{t}", "PL"); // ROOT 6
 	//l_4__->Draw();
+	std::cout<<"X1, X2: " <<mypad1->GetX1() <<", " <<mypad1->GetX2() <<std::endl;
+	std::cout<<"Y1, Y2: " <<mypad1->GetY1() <<", " <<mypad1->GetY2() <<std::endl;
 	J4->Draw();
 	leg1->Draw();
 	leg5->Draw();
-	gPad->Modified();
-	gPad->Update();
+	mypad1->Modified();
+	mypad1->Update();
+	//mypad1->Draw();
 	//gPad->Write("c6d");
-	C->SaveAs("./summary_plots/pdf/c6.C");
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C24_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/pdf/c6.C");
+	C->SaveAs("./summary_plots/tex/C24_30mm_7515mm_1trk.tex");
+
+	std::cout<<"X1, X2: " <<gPad->GetX1() <<", " <<gPad->GetX2() <<std::endl;
+	std::cout<<"Y1, Y2: " <<gPad->GetY1() <<", " <<gPad->GetY2() <<std::endl;
+
+	//C->cd();
+	//TPad *mypad = new TPad("mypad","mypad",gPad->GetX1(),gPad->GetY1(),gPad->GetX2(),gPad->GetY2());
+	TPad *mypad = new TPad("mypad","mypad",0,0,1,1);
+	mypad->SetFillStyle(0);
+	//fun->GetYaxis()->SetRangeUser(Ymin_range,Ymax_range);
+	h2d4->Draw();
+	fun->Draw("same");
+	mypad->SetLogy();
+	mypad->DrawClone();
+	C->Print(out_file_, "pdf");
+	C->SaveAs("./summary_plots/tex/C24a_30mm_7515mm_1trk.tex");
 
 	C->Clear();
 	gPad->SetRightMargin(0.07);
@@ -2160,10 +2374,11 @@ void roc(const char *pileup, const char *gapsize)
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c11");
-	C->SaveAs("./summary_plots/tex/C32_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C32_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C32_30mm_7515mm_1trk.C");
 	
 	//! page12
-	Eb_2->SetTitle("sum-pt,+-7.5mm binning ");
+	Eb_2->SetTitle("sum-pt,+-3.0mm binning ");
 	Eb_2->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	Eb_2->GetYaxis()->SetTitle("trigger efficiency");
 	Eb_2->GetXaxis()->CenterTitle();
@@ -2186,7 +2401,8 @@ void roc(const char *pileup, const char *gapsize)
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c12");
-	C->SaveAs("./summary_plots/tex/C33_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C33_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C33_30mm_7515mm_1trk.C");
 
 	//! page13
 	Eb2->SetTitle("max pt TJ from each bin,+-7.5mm binning ");	
@@ -2206,10 +2422,11 @@ void roc(const char *pileup, const char *gapsize)
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c13");
-	C->SaveAs("./summary_plots/tex/C34_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C34_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C34_30mm_7515mm_1trk.C");
 
 	//! page14
-	Eb_2->SetTitle("max pt TJ from each bin,+-7.5mm binning ");	
+	Eb_2->SetTitle("max pt TJ from each bin,+-3.0mm binning ");	
 	Eb_2->Draw("hist ");
 	Eb_3->Draw("hist same");
 	Eb_4->Draw("hist same");
@@ -2226,7 +2443,8 @@ void roc(const char *pileup, const char *gapsize)
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c14");
-	C->SaveAs("./summary_plots/tex/C35_30mm_7515mm_3trk.tex");
+	C->SaveAs("./summary_plots/tex/C35_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C35_30mm_7515mm_1trk.C");
 
 	//! page15
 	C->SetLogy();
@@ -2254,12 +2472,12 @@ void roc(const char *pileup, const char *gapsize)
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C36_30mm_7515mm_3trk.tex");
-	C->SaveAs("./summary_plots/C/C36_30mm_7515mm_3trk.C");
+	C->SaveAs("./summary_plots/tex/C36_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C36_30mm_7515mm_1trk.C");
 	//gPad->Write("c15");
 	
 	//! page16
-	Rb_2->SetTitle("sum-pt,+-7.5mm binning ");
+	Rb_2->SetTitle("sum-pt,+-3.0mm binning ");
 	Rb_2->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	Rb_2->GetYaxis()->SetTitle("trigger rate [MHz]");
 	Rb_2->GetXaxis()->CenterTitle();
@@ -2283,8 +2501,8 @@ void roc(const char *pileup, const char *gapsize)
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C37_30mm_7515mm_3trk.tex");
-	C->SaveAs("./summary_plots/C/C37_30mm_7515mm_3trk.C");
+	C->SaveAs("./summary_plots/tex/C37_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C37_30mm_7515mm_1trk.C");
 	//gPad->Write("c16");
 
 	//! page17
@@ -2304,12 +2522,12 @@ void roc(const char *pileup, const char *gapsize)
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C38_30mm_7515mm_3trk.tex");
-	C->SaveAs("./summary_plots/C/C38_30mm_7515mm_3trk.C");
+	C->SaveAs("./summary_plots/tex/C38_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C38_30mm_7515mm_1trk.C");
 	//gPad->Write("c17");
 
 	//! pagr18
-	Rb_2->SetTitle("max pt TJ from each bin,+-7.5mm binning ");	
+	Rb_2->SetTitle("max pt TJ from each bin,+-3.0mm binning ");	
 	Rb_2->Draw("hist ");
 	Rb_3->Draw("hist same");
 	Rb_4->Draw("hist same");
@@ -2325,8 +2543,8 @@ void roc(const char *pileup, const char *gapsize)
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_close,"pdf");
-	C->SaveAs("./summary_plots/tex/C39_30mm_7515mm_3trk.tex");
-	C->SaveAs("./summary_plots/C/C39_30mm_7515mm_3trk.C");
+	C->SaveAs("./summary_plots/tex/C39_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/C/C39_30mm_7515mm_1trk.C");
 	//gPad->Write("c18");
 
 	//f_out->Close();
