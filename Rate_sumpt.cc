@@ -43,6 +43,20 @@ void Rate_sumpt::init_Histos(float xbins[], int nbins)
 	hMb_PUNNNLpt = new TH1D("hMb_PUNNNLpt","Multiplicity of 4th highest Pt track jet in <#mu> 1000 ",nMultiplicityBins_1,0,maxMultiplicity_1);
 	hMb_PUNNNNLpt = new TH1D("hMb_PUNNNNLpt","Track-jet multiplicity in <#mu> 1000 , w/o binning along z",nMultiplicityBins_1,0,maxMultiplicity_1);
 
+	/////! Const track pT histograms
+	//! sumpt histos
+	hC_PULpt = new TH1D("hC_PULpt","ConstTRKpT of highest Pt track jet, max-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hC_PUNLpt = new TH1D("hC_PUNLpt","ConstTRKpT of 2nd highest Pt track jet, max-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hC_PUNNLpt = new TH1D("hC_PUNNLpt","ConstTRKpT of 3rd highest Pt track jet, max-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hC_PUNNNLpt = new TH1D("hC_PUNNNLpt","ConstTRKpT of 4th highest Pt track jet, max-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hC_PUNNNNLpt = new TH1D("hC_PUNNNNLpt","Track-jet multiplicity, max-bin, max-bin",nConstTRKpTBins,0,maxConstTRKpT);
+	//! maxpt approach
+        hCa_PULpt = new TH1D("hCa_PULpt","ConstTRKpT of highest Pt track jet, multi-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hCa_PUNLpt = new TH1D("hCa_PUNLpt","ConstTRKpT of 2nd highest Pt track jet, multi-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hCa_PUNNLpt = new TH1D("hCa_PUNNLpt","ConstTRKpT of 3rd highest Pt track jet, multi-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hCa_PUNNNLpt = new TH1D("hCa_PUNNNLpt","ConstTRKpT of 4th highest Pt track jet, multi-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+	hCa_PUNNNNLpt = new TH1D("hCa_PUNNNNLpt","Track-jet multiplicity, multi-bin, multi-bin ",nConstTRKpTBins,0,maxConstTRKpT);
+
 }
 
 void Rate_sumpt::init_EtaHist()
@@ -96,6 +110,46 @@ void Rate_sumpt::SetEtaHist_props()
         hbEta_NCEta->GetXaxis()->SetTitle("Track-jet #eta");
         hbEta_NNCEta->GetXaxis()->SetTitle("Track-jet #eta");
         hbEta_NNNCEta->GetXaxis()->SetTitle("Track-jet #eta");
+
+}
+void Rate_sumpt::SetConstTRKpTHist_props()
+{
+	hC_PUNNNNLpt->SetLineColor(kBlue);
+	hC_PUNNNLpt->SetLineColor(kGreen);
+	hC_PUNNLpt->SetLineColor(kRed);
+	hC_PUNLpt->SetLineColor(kBlack);
+	hC_PULpt->SetLineColor(kOrange);
+
+	hC_PUNNNNLpt->SetLineWidth(3);
+	hC_PUNNNLpt->SetLineWidth(3);
+	hC_PUNNLpt->SetLineWidth(3);
+	hC_PUNLpt->SetLineWidth(3);
+	hC_PULpt->SetLineWidth(3);
+
+        hC_PULpt->GetXaxis()->SetTitle("Leading Track-jet Constituent pT");
+        hC_PUNLpt->GetXaxis()->SetTitle("2^{nd} leading Track-jet Constituent pT");
+        hC_PUNNLpt->GetXaxis()->SetTitle("3^{rd} leading Track-jet Constituent pT");
+        hC_PUNNNLpt->GetXaxis()->SetTitle("4^{th} leading Track-jet Constituent pT");
+        hC_PUNNNNLpt->GetXaxis()->SetTitle("5^{th} leading Track-jet Constituent pT");
+	
+	hCa_PUNNNNLpt->SetLineColor(kBlue);
+	hCa_PUNNNLpt->SetLineColor(kGreen);
+	hCa_PUNNLpt->SetLineColor(kRed);
+	hCa_PUNLpt->SetLineColor(kBlack);
+	hCa_PULpt->SetLineColor(kOrange);
+
+	hCa_PUNNNNLpt->SetLineWidth(3);
+	hCa_PUNNNLpt->SetLineWidth(3);
+	hCa_PUNNLpt->SetLineWidth(3);
+	hCa_PUNLpt->SetLineWidth(3);
+	hCa_PULpt->SetLineWidth(3);
+
+        hCa_PULpt->GetXaxis()->SetTitle("leading Track-jet Constituent pT");
+        hCa_PUNLpt->GetXaxis()->SetTitle("2^{nd} leading Track-jet Constituent pT");
+        hCa_PUNNLpt->GetXaxis()->SetTitle("3^{rd} leading Track-jet Constituent pT");
+        hCa_PUNNNLpt->GetXaxis()->SetTitle("4^{th} leading Track-jet Constituent pT");
+        hCa_PUNNNNLpt->GetXaxis()->SetTitle("5^{th} leading Track-jet Constituent pT");
+	
 
 }
 void Rate_sumpt::SetMultiplicityHist_props()
@@ -435,4 +489,80 @@ void Rate_sumpt::WriteEta1()
         hbEta_NCEta->Write();
         hbEta_NNCEta->Write();
         hbEta_NNNCEta->Write();
+}
+void Rate_sumpt::Fill_ContTRKpT_sumpt()
+{
+
+	for(int cc = 0; cc < v_constTRKpT_1Lsumpt.size(); ++cc)
+	{
+		hC_PULpt->Fill(v_constTRKpT_1Lsumpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_2Lsumpt.size(); ++cc)
+	{
+		hC_PUNLpt->Fill(v_constTRKpT_2Lsumpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_3Lsumpt.size(); ++cc)
+	{
+		hC_PUNNLpt->Fill(v_constTRKpT_3Lsumpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_4Lsumpt.size(); ++cc)
+	{
+		hC_PUNNNLpt->Fill(v_constTRKpT_4Lsumpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_5Lsumpt.size(); ++cc)
+	{
+		hC_PUNNNNLpt->Fill(v_constTRKpT_5Lsumpt[cc]);
+	}
+}
+void Rate_sumpt::Fill_ContTRKpT_maxpt()
+{
+
+	for(int cc = 0; cc < v_constTRKpT_1Lmaxpt.size(); ++cc)
+	{
+		hCa_PULpt->Fill(v_constTRKpT_1Lmaxpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_2Lmaxpt.size(); ++cc)
+	{
+		hCa_PUNLpt->Fill(v_constTRKpT_2Lmaxpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_3Lmaxpt.size(); ++cc)
+	{
+		hCa_PUNNLpt->Fill(v_constTRKpT_3Lmaxpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_4Lmaxpt.size(); ++cc)
+	{
+		hCa_PUNNNLpt->Fill(v_constTRKpT_4Lmaxpt[cc]);
+	}
+	for(int cc = 0; cc < v_constTRKpT_5Lmaxpt.size(); ++cc)
+	{
+		hCa_PUNNNNLpt->Fill(v_constTRKpT_5Lmaxpt[cc]);
+	}
+}
+void Rate_sumpt::DrawConstTRKpTHist()
+{
+	hCa_PULpt->Draw("e");
+        hCa_PUNLpt->Draw("e");
+        hCa_PUNNLpt->Draw("e");
+        hCa_PUNNNLpt->Draw("e");
+        hCa_PUNNNNLpt->Draw("e");
+	hC_PULpt->Draw("e");
+        hC_PUNLpt->Draw("e");
+        hC_PUNNLpt->Draw("e");
+        hC_PUNNNLpt->Draw("e");
+        hC_PUNNNNLpt->Draw("e");
+
+}
+void Rate_sumpt::WriteConstTRKpTHist()
+{
+	hCa_PULpt->Write();
+        hCa_PUNLpt->Write();
+        hCa_PUNNLpt->Write();
+        hCa_PUNNNLpt->Write();
+        hCa_PUNNNNLpt->Write();
+	hC_PULpt->Write();
+        hC_PUNLpt->Write();
+        hC_PUNNLpt->Write();
+        hC_PUNNNLpt->Write();
+        hC_PUNNNNLpt->Write();
+
 }

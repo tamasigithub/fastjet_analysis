@@ -40,7 +40,10 @@ class CaloEmu
 	      std::vector<double> EPtEtaPhi;//accumulated params for a cell
 	      double CellEnergyThreshold = 0.5e3;//MeV
 	      double Calo_radius = 2e3;//mm
-	      double SCALEfac_Ereso = 0.5;// 50%
+	      //double SCALEfac_Ereso = 0.5;// 50%
+	      double SCALEfac_Ereso = 1.14;// 114%
+	      double Noise_Term     = 1.3;// 1.3GeV 
+	      double Const_Term     = 0.03;// 3%
 	public:
 	          //static constexpr double B_field = 4.0; //Magnetic Field strength
 		  //static constexpr double CONSTANT = 0.299760192;
@@ -60,14 +63,23 @@ class CaloEmu
 		    phimin: minimum azimuthal
 		    phimax: maximum azimuthal
 		*/
-	        //! FCC-hh ECAL granularity deta x dphi  = 0.01 x 0.009 in |eta| < 2.5
+	        ////! FCC-hh ECAL granularity deta x dphi  = 0.01 x 0.009 in |eta| < 2.5
+		//CaloEmu(const bool debug = false,
+                //        const unsigned int neta = 500,
+                //        const float etamin = -2.5,
+                //        const float etamax = 2.5,
+                //        const unsigned int nphi = 698,
+                //        const float phimin = 0,
+                //        const float phimax = 2*3.141);//! I have purposely not used M_PI here 
+	        
+		//! FCC-hh ECAL granularity deta x dphi  = 0.025 x 0.025 in |eta| < 2.5
 		CaloEmu(const bool debug = false,
-                        const unsigned int neta = 500,
+                        const unsigned int neta = 200,
                         const float etamin = -2.5,
                         const float etamax = 2.5,
-                        const unsigned int nphi = 698,
+                        const unsigned int nphi = 252,
                         const float phimin = 0,
-                        const float phimax = 2*3.141);//! I have purposely not used M_PI here 
+                        const float phimax = 2*3.15);//! I have purposely not used M_PI here 
 		
 		~CaloEmu()
 		{

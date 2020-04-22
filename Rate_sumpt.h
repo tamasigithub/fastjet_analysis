@@ -38,8 +38,10 @@ public:
 	//int nbins = 40;
 	//double ptmin = 0.0, ptmax = 1000;//in GeV/c 
 	double Lpt, NLpt, NNLpt, NNNLpt, NNNNLpt;
-	static const int nbins_plus1 = 401;//101;
-	static const  int nbins = 400;//100;// = (pt_max - pt_min)/ptcut_width;
+	double M_Lpt, M_NLpt, M_NNLpt, M_NNNLpt, M_NNNNLpt;
+	double Ma_Lpt, Ma_NLpt, Ma_NNLpt, Ma_NNNLpt, Ma_NNNNLpt;
+	static const int nbins_plus1 = 501;//401;//101;
+	static const  int nbins = 500;//400;//100;// = (pt_max - pt_min)/ptcut_width;
 	//static const int nbins_plus1 = 116;
 	//static const  int nbins = 115;// = (pt_max - pt_min)/ptcut_width;
 	//const int Nlowpt_bins = 80;
@@ -49,12 +51,26 @@ public:
 
 	std::vector<int> v_TJMult_sumpt;
 	std::vector<int> v_TJMult_maxpt;
+
+	std::vector<double>v_constTRKpT_1Lsumpt;
+	std::vector<double>v_constTRKpT_2Lsumpt;
+	std::vector<double>v_constTRKpT_3Lsumpt;
+	std::vector<double>v_constTRKpT_4Lsumpt;
+	std::vector<double>v_constTRKpT_5Lsumpt;
+	
+	std::vector<double>v_constTRKpT_1Lmaxpt;
+	std::vector<double>v_constTRKpT_2Lmaxpt;
+	std::vector<double>v_constTRKpT_3Lmaxpt;
+	std::vector<double>v_constTRKpT_4Lmaxpt;
+	std::vector<double>v_constTRKpT_5Lmaxpt;
 	//int nMultiplicityBins = 10;
 	//double maxMultiplicity = 10;
 	int nMultiplicityBins = 100;
 	double maxMultiplicity = 100;
 	int nMultiplicityBins_1 = 100;
 	double maxMultiplicity_1 = 100;
+	int nConstTRKpTBins = 100;
+	double maxConstTRKpT = 50;
 
 	int nEtaBins = 100;
 	double etaMin = 0.0, etaMax = 6.0;
@@ -113,6 +129,11 @@ public:
 	void WriteMultiplicity();
 	void WriteEta();
 	void WriteEta1();
+	void Fill_ContTRKpT_maxpt();
+	void Fill_ContTRKpT_sumpt();
+	void SetConstTRKpTHist_props();
+	void DrawConstTRKpTHist();
+	void WriteConstTRKpTHist();
 public:
 	//! Book Histogram        
 	//! sumpt histos
@@ -165,6 +186,20 @@ public:
 	TH1* hbEta_NNCEta = nullptr;
 	TH1* hbEta_NCEta = nullptr;
 	TH1* hbEta_CEta = nullptr;
+
+	//! histograms for recording constituent  track pt of the 1st five leading TJ
+	//! sumpt histos
+	TH1* hC_PULpt = nullptr;
+	TH1* hC_PUNLpt = nullptr;
+	TH1* hC_PUNNLpt = nullptr;
+	TH1* hC_PUNNNLpt = nullptr;
+	TH1* hC_PUNNNNLpt = nullptr;
+	//! overlapping bin approach
+        TH1* hCa_PULpt = nullptr;
+	TH1* hCa_PUNLpt = nullptr;
+	TH1* hCa_PUNNLpt = nullptr;
+	TH1* hCa_PUNNNLpt = nullptr;
+	TH1* hCa_PUNNNNLpt = nullptr;
 
 	
 private:

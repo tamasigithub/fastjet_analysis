@@ -70,7 +70,8 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 3000., PTCUT_WIDTH = 5.0;// in GeV/c
+  //const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -130,8 +131,8 @@ int main ()
   //! output root file
   //TFile *f_out = new TFile("jetoutTEST.root","RECREATE");
   //TFile *f_out = new TFile("NewjetoutPU0hh4b_30mm_optsig5_1tracks1.5_2GeV.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/TrkJPU1kMB7.5mm_30mm_1trk2.5_2GeV_2GeV_2.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/TrkJPU1kggFhh4b7.5mm_30mm_1trk2.5_2GeV_2GeV_2.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/TrkJPU1kMB7.5mm_30mm_1trk2.5_2GeV_2GeV_3.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/TrkJPU1kggFhh4b7.5mm_30mm_1trk2.5_2GeV_2GeV_5.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000hh4b_30mm_optsig5_2tracks1.5_1.2GeV_nofakes.root","RECREATE");
   ////TFile *f_out = new TFile("jetoutPU1000MB_30mm_optsig5_2tracks7.5_1.2GeV_nofakes.root","RECREATE");
   TH1::SetDefaultSumw2(true);
@@ -188,12 +189,12 @@ int main ()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_hh4bm260_30mm_sig5_fulleta/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU0_MB_30mm_sig5_fulleta/*.root");
-  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
-  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/tmp/*.root");
-  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/tmp_1/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/tmp/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/tmp_1/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -253,7 +254,7 @@ int main ()
   //int pileup = 160;
   //Long64_t nevents = nentries/pileup;
   Long64_t nevents = rec.GetEntries();
-  //nevents = 10;
+  nevents = 3136;
   r_sumpt.nevents = nevents;
   trigger.nevents = nevents;
   std::cout<<"Total number of enteries in the input directory : " << rec.GetEntries() <<std::endl;
@@ -331,9 +332,9 @@ int main ()
 			if(std::fabs((*pt_rec)[ik]) < MIN_TRACKPT) continue; 	
 			if(std::fabs((*eta_rec)[ik]) > ETA_CUT) continue; 	
 			//! veto fake and dc tracks?// fakes =-1, dc = -barcode
-			if( (*tid_rec)[ik] <= -1) continue;
+			//if( (*tid_rec)[ik] <= -1) continue;
 			//! veto only dc tracks
-			//if( (*tid_rec)[ik] < -1) continue;
+			if( (*tid_rec)[ik] < -1) continue;
 			pt_recPU.push_back((*pt_rec)[ik]);
 			z0_recPU.push_back((*z0_rec)[ik]);
 			theta_recPU.push_back((*theta_rec)[ik]);
@@ -361,7 +362,8 @@ int main ()
 	//! create objects(constituents) for feeding it to jet clustering alg.
 	for (int j = 0; j < nobj; ++j)
 	{
-		pt	= std::min(pt_recPU[j], MAX_TRACKpt);
+		pt	= pt_recPU[j];
+		//pt	= std::min(pt_recPU[j], MAX_TRACKpt);
 		z0	= z0_recPU[j];
 		theta	= theta_recPU[j];
 		eta	= eta_recPU[j];

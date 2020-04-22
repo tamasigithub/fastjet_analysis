@@ -33,7 +33,7 @@
 
 const char* out_path = "./summary_plots/pdf"; 
 //const char* output_file_name = "nofakes100GeV2Calo_7.5_3.75_q1.2GeV_2";
-const char* output_file_name = "TrigSummary1trk_7.5_3.0_5GeV_Caloq1.2GeV_2GeV_2GeV_30mm_3";
+const char* output_file_name = "TrigSummary43232trk_7.5_1.5_5GeV_a114c3Caloq1.2GeV_2GeV_33322GeV_30mm_5_2";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -74,7 +74,8 @@ void roc(const char *pileup, const char *gapsize)
 	bool debug = true;
 	//const int n = 20;
 	//const int n = 115;
-	const int n = 400;
+	//const int n = 400;
+	const int n = 500;
 	Int_t nbinsE, nbinsR;
 	Int_t nbinsEa, nbinsRa;
 	Int_t nbinsEb, nbinsRb;
@@ -109,11 +110,11 @@ void roc(const char *pileup, const char *gapsize)
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	const char *file_path = "./fastjet_output/TriggerStudies_4";
-	const char *file_path_1 = "./fastjet_output/TriggerStudies_4";
+	const char *file_path = "./fastjet_output/TriggerStudies_5";
+	const char *file_path_1 = "./fastjet_output/TriggerStudies_6";
 	const char *file_path_2= "./fastjet_output/TriggerStudies";
 	char signal_file_name[1023];
-	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b7.5mm_%smm_1trk2.5_2GeV_2GeV_3.root",file_path,pileup,gapsize);//7.5
+	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b7.5mm_%smm_11111trk2.5_2GeV_2GeV_5.root",file_path_1,pileup,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 	TFile *f = new TFile(signal_file_name, "READ");
 	//! sumpt approach
@@ -141,7 +142,7 @@ void roc(const char *pileup, const char *gapsize)
 	Eb5->GetYaxis()->SetRangeUser(0,1.2);
 	
 	char MinBias_file_name[1023];
-	sprintf(MinBias_file_name, "%s/TrkJPU%sMB7.5mm_%smm_1trk2.5_2GeV_2GeV_2.root",file_path_1,pileup,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/TrkJPU%sMB7.5mm_%smm_11111trk2.5_2GeV_2GeV_3.root",file_path_1,pileup,gapsize);//7.5
 	TFile *f1 = new TFile(MinBias_file_name, "READ");
 	TTree *t1 = (TTree*)f1->Get("glob_jet");
 	int nevents = t1->GetEntries();
@@ -513,7 +514,7 @@ void roc(const char *pileup, const char *gapsize)
 	//! Fetch the histograms
 	////////////////////////////////////////////////
 	char signal_file_name_1[1023];
-	sprintf(signal_file_name_1, "%s/TrkJPU%sggFhh4b3.0mm_%smm_1trk2.5_2GeV_2GeV_3.root",file_path,pileup,gapsize);//1.5
+	sprintf(signal_file_name_1, "%s/TrkJPU%sggFhh4b1.5mm_%smm_43232trk2.5_2GeV_33322GeV_5.root",file_path_1,pileup,gapsize);//1.5
 	TFile *f_ = new TFile(signal_file_name_1, "READ");
 	//! sumpt approach
 	TH1F *E2_ = (TH1F*)f_->Get("h_tJeff2");
@@ -540,7 +541,7 @@ void roc(const char *pileup, const char *gapsize)
 	Eb_5->GetYaxis()->SetRangeUser(0,1.2);
 	
 	char MinBias_file_name_1[1023];
-	sprintf(MinBias_file_name_1, "%s/TrkJPU%sMB3.0mm_%smm_1trk2.5_2GeV_2GeV_2.root",file_path_1,pileup,gapsize);//1.5
+	sprintf(MinBias_file_name_1, "%s/TrkJPU%sMB1.5mm_%smm_43232trk2.5_2GeV_33322GeV_3.root",file_path_1,pileup,gapsize);//1.5
 	TFile *f_1 = new TFile(MinBias_file_name_1, "READ");
 	TTree *t_1 = (TTree*)f_1->Get("glob_jet");
 	nevents = t_1->GetEntries();
@@ -660,7 +661,7 @@ void roc(const char *pileup, const char *gapsize)
 	g1_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g1_->SetFillColor(kWhite);
-	g1_->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
+	g1_->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: +-1.5mm ");
 	//g1_->Draw("ACPe1");
 	g1_->Draw("APe1");
 
@@ -678,7 +679,7 @@ void roc(const char *pileup, const char *gapsize)
 	g2_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g2_->SetFillColor(kWhite);
-	g2_->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
+	g2_->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: +-1.5mm ");
 	//g2_->Draw("CPe1");
 	g2_->Draw("Pe1");
 
@@ -696,7 +697,7 @@ void roc(const char *pileup, const char *gapsize)
 	g3_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g3_->SetFillColor(kWhite);
-	g3_->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
+	g3_->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: +-1.5mm ");
 	//g3_->Draw("CPe1");
 	g3_->Draw("Pe1");
 
@@ -714,7 +715,7 @@ void roc(const char *pileup, const char *gapsize)
 	g4_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	g4_->SetFillColor(kWhite);
-	g4_->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm ");
+	g4_->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: +-1.5mm ");
 	//g4_->Draw("CPe1");
 	g4_->Draw("Pe1");
 
@@ -732,7 +733,7 @@ void roc(const char *pileup, const char *gapsize)
 	ga1_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga1_->SetFillColor(kWhite);
-	ga1_->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
+	ga1_->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: +-1.5mm ");
 	//g1->Draw("ACPe1");
 	ga1_->Draw("APe1");
 
@@ -750,7 +751,7 @@ void roc(const char *pileup, const char *gapsize)
 	ga2_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga2_->SetFillColor(kWhite);
-	ga2_->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
+	ga2_->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: +-1.5mm ");
 	//ga2_->Draw("CPe1");
 	ga2_->Draw("Pe1");
 
@@ -768,7 +769,7 @@ void roc(const char *pileup, const char *gapsize)
 	ga3_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga3_->SetFillColor(kWhite);
-	ga3_->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
+	ga3_->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: +-1.5mm ");
 	//ga3_->Draw("CPe1");
 	ga3_->Draw("Pe1");
 
@@ -786,7 +787,7 @@ void roc(const char *pileup, const char *gapsize)
 	ga4_->SetMarkerSize(1.5);
 	//c1->cd(4);
 	ga4_->SetFillColor(kWhite);
-	ga4_->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: +-3.0mm ");
+	ga4_->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: +-1.5mm ");
 	//ga4_->Draw("CPe1");
 	ga4_->Draw("Pe1");
 
@@ -875,7 +876,7 @@ void roc(const char *pileup, const char *gapsize)
 	Double_t e_errb__4[n] = {0};   Double_t r_errb__4[n] = {0};
 	Double_t e_errb__5[n] = {0};   Double_t r_errb__5[n] = {0};
 	char signal_file_calo[1023];
-	sprintf(signal_file_calo, "%s/EMU5GeV_PU%sggFhh4b1.0_q1.2GeVeta2.5_%smmR0.4_2.root",file_path_2,pileup,gapsize);
+	sprintf(signal_file_calo, "%s/EMU5GeV_a114c3_PU%sggFhh4b1.0_q1.2GeVeta2.5_%smmR0.4_4_test_2.root",file_path,pileup,gapsize);
 	TFile *fcalo = new TFile(signal_file_calo, "READ");
 	//! Calo Emulation
 	TH1F *Ebcalo2 = (TH1F*)fcalo->Get("hb_tJeff2");
@@ -892,7 +893,7 @@ void roc(const char *pileup, const char *gapsize)
 	Ebcalo5->SetLineStyle(2);
 	
 	char MinBias_file_calo[1023];
-	sprintf(MinBias_file_calo, "%s/EMU5GeV_PU%sMB_q1.2GeVeta2.5_%smmR0.4_1_test.root",file_path_2,pileup,gapsize);
+	sprintf(MinBias_file_calo, "%s/EMU5GeV_a114c3_PU%sMB_q1.2GeVeta2.5_%smmR0.4_4_test_2.root",file_path,pileup,gapsize);
 	TFile *f1calo = new TFile(MinBias_file_calo, "READ");
 	TTree *t1calo = (TTree*)f1calo->Get("glob_jet");
 	nevents = t1calo->GetEntries();
@@ -1098,38 +1099,38 @@ void roc(const char *pileup, const char *gapsize)
 	//ga2d4->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: 7.5mm");
 	ga2d4->Draw("PCOLZ ERR");
 
-	//! multi-bin +-3.0mm
+	//! multi-bin +-1.5mm
 	TGraph2DErrors *ga2d_1 = new TGraph2DErrors(n,ea_2,ra_2,pt_threshold, e_erra_2, r_erra_2, 0);
 	ga2d_1->SetName("g2D_2nd_maxpt");
 	ga2d_1->SetMarkerStyle(kFullStar);
 	ga2d_1->SetMarkerSize(2.0);
 	ga2d_1->SetFillColor(kWhite);
-	ga2d_1->SetTitle("track-jet, multi-bin, 3.0mm");
-	//ga2d_1->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_1->SetTitle("track-jet, multi-bin, 1.5mm");
+	//ga2d_1->SetTitle("2^{nd} leading pt track-jet, multi-bin, bin_size: 1.5mm");
 	ga2d_1->Draw("PCOLZ ERR");
 	TGraph2DErrors *ga2d_2 = new TGraph2DErrors(n,ea_3,ra_3,pt_threshold, e_erra_3, r_erra_3, 0);
 	ga2d_2->SetName("g2D_3rd_maxpt");
 	ga2d_2->SetMarkerStyle(kFullStar);
 	ga2d_2->SetMarkerSize(2.0);
 	ga2d_2->SetFillColor(kWhite);
-	ga2d_2->SetTitle("track-jet, multi-bin, 3.0mm");
-	//ga2d_2->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_2->SetTitle("track-jet, multi-bin, 1.5mm");
+	//ga2d_2->SetTitle("3^{rd} leading pt track-jet, multi-bin, bin_size: 1.5mm");
 	ga2d_2->Draw("PCOLZ ERR");
 	TGraph2DErrors *ga2d_3 = new TGraph2DErrors(n,ea_4,ra_4,pt_threshold, e_erra_4, r_erra_4, 0);
 	ga2d_3->SetName("g2D_4th_maxpt");
 	ga2d_3->SetMarkerStyle(kFullStar);
 	ga2d_3->SetMarkerSize(2.0);
 	ga2d_3->SetFillColor(kWhite);
-	ga2d_3->SetTitle("track-jet, multi-bin, 3.0mm");
-	//ga2d_3->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_3->SetTitle("track-jet, multi-bin, 1.5mm");
+	//ga2d_3->SetTitle("4^{th} leading pt track-jet, multi-bin, bin_size: 1.5mm");
 	ga2d_3->Draw("PCOLZ ERR");
 	TGraph2DErrors *ga2d_4 = new TGraph2DErrors(n,ea_5,ra_5,pt_threshold, e_erra_5, r_erra_5, 0);
 	ga2d_4->SetName("g2D_5th_maxpt");
 	ga2d_4->SetMarkerStyle(kFullStar);
 	ga2d_4->SetMarkerSize(2.0);
 	ga2d_4->SetFillColor(kWhite);
-	ga2d_4->SetTitle("track-jet, multi-bin, 3.0mm");
-	//ga2d_4->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: 3.0mm");
+	ga2d_4->SetTitle("track-jet, multi-bin, 1.5mm");
+	//ga2d_4->SetTitle("5^{th} leading pt track-jet, multi-bin, bin_size: 1.5mm");
 	ga2d_4->Draw("PCOLZ ERR");
 	
 	//! max-bin
@@ -1166,38 +1167,38 @@ void roc(const char *pileup, const char *gapsize)
 	//g2d4->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: 7.5mm");
 	g2d4->Draw("PCOLZ ERR");
 	
-	//! max-bin +-3.0mm
+	//! max-bin +-1.5mm
 	TGraph2DErrors *g2d_1 = new TGraph2DErrors(n,e2_,r2_,pt_threshold, e_err2_, r_err2_, 0);
 	g2d_1->SetName("g2D_2nd_sumpt");
 	g2d_1->SetMarkerStyle(kFullStar);
 	g2d_1->SetMarkerSize(2.0);
 	g2d_1->SetFillColor(kWhite);
-	g2d_1->SetTitle("track-jet, max-bin, +-3.0mm");
-	//g2d_1->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_1->SetTitle("track-jet, max-bin, +-1.5mm");
+	//g2d_1->SetTitle("2^{nd} leading pt track-jet, max-bin, bin_size: +-1.5mm");
 	g2d_1->Draw("PCOLZ ERR");
 	TGraph2DErrors *g2d_2 = new TGraph2DErrors(n,e3_,r3_,pt_threshold, e_err3_, r_err3_, 0);
 	g2d_2->SetName("g2D_3rd_sumpt");
 	g2d_2->SetMarkerStyle(kFullStar);
 	g2d_2->SetMarkerSize(2.0);
 	g2d_2->SetFillColor(kWhite);
-	g2d_2->SetTitle("track-jet, max-bin, +-3.0mm");
-	//g2d_2->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_2->SetTitle("track-jet, max-bin, +-1.5mm");
+	//g2d_2->SetTitle("3^{rd} leading pt track-jet, max-bin, bin_size: +-1.5mm");
 	g2d_2->Draw("PCOLZ ERR");
 	TGraph2DErrors *g2d_3 = new TGraph2DErrors(n,e4_,r4_,pt_threshold, e_err4_, r_err4_, 0);
 	g2d_3->SetName("g2D_4th_sumpt");
 	g2d_3->SetMarkerStyle(kFullStar);
 	g2d_3->SetMarkerSize(2.0);
 	g2d_3->SetFillColor(kWhite);
-	g2d_3->SetTitle("track-jet, max-bin, +-3.0mm");
-	//g2d_3->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_3->SetTitle("track-jet, max-bin, +-1.5mm");
+	//g2d_3->SetTitle("4^{th} leading pt track-jet, max-bin, bin_size: +-1.5mm");
 	g2d_3->Draw("PCOLZ ERR");
 	TGraph2DErrors *g2d_4 = new TGraph2DErrors(n,e5_,r5_,pt_threshold, e_err5_, r_err5_, 0);
 	g2d_4->SetName("g2D_5th_sumpt");
 	g2d_4->SetMarkerStyle(kFullStar);
 	g2d_4->SetMarkerSize(2.0);
 	g2d_4->SetFillColor(kWhite);
-	g2d_4->SetTitle("track-jet, max-bin, +-3.0mm");
-	//g2d_4->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: +-3.0mm");
+	g2d_4->SetTitle("track-jet, max-bin, +-1.5mm");
+	//g2d_4->SetTitle("5^{th} leading pt track-jet, max-bin, bin_size: +-1.5mm");
 	g2d_4->Draw("PCOLZ ERR");
 
 	//! no binning
@@ -1342,7 +1343,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c1a");
 	C->Print(out_file_open,"pdf");
-	C->SaveAs("./summary_plots/tex/C1_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C1_30mm_7515mm_2trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1375,7 +1376,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c1b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C2_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C2_30mm_7515mm_2trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1408,7 +1409,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c1c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C3_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C3_30mm_7515mm_2trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1441,10 +1442,10 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c1d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C4_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C4_30mm_7515mm_2trk.tex");
 
 	//! page2
-	//! +-3.0mm 	
+	//! +-1.5mm 	
 	C->cd(1);
 	//gPad->SetGrid();
 	gPad->SetLogy();
@@ -1463,8 +1464,8 @@ void roc(const char *pileup, const char *gapsize)
 	l1_->SetFillColor(kWhite);
 	l1_->SetTextSize(0.04);
 	l1_->SetHeader("2^{nd} leading","C");
-	l1_->AddEntry(g1_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
-	l1_->AddEntry(ga1_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l1_->AddEntry(g1_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm", "p");
+	l1_->AddEntry(ga1_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l1_->AddEntry(gb1_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l1_->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l1_->SetTextAlign(12);
@@ -1476,7 +1477,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c2a");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C5_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C5_30mm_7515mm_2trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1496,8 +1497,8 @@ void roc(const char *pileup, const char *gapsize)
 	l2_->SetFillColor(kWhite);
 	l2_->SetTextSize(0.04);
 	l2_->SetHeader("3^{rd} leading","C");
-	l2_->AddEntry(g2_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
-	l2_->AddEntry(ga2_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l2_->AddEntry(g2_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm", "p");
+	l2_->AddEntry(ga2_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l2_->AddEntry(gb2_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l2_->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l2_->SetTextAlign(12);
@@ -1509,7 +1510,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c2b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C6_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C6_30mm_7515mm_2trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1530,8 +1531,8 @@ void roc(const char *pileup, const char *gapsize)
 	l3_->SetFillColor(kWhite);
 	l3_->SetTextSize(0.04);
 	l3_->SetHeader("4^{th} leading","C");
-	l3_->AddEntry(g3_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
-	l3_->AddEntry(ga3_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l3_->AddEntry(g3_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm", "p");
+	l3_->AddEntry(ga3_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l3_->AddEntry(gb3_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l3_->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l3_->SetTextAlign(12);
@@ -1543,7 +1544,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c2c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C7_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C7_30mm_7515mm_2trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1563,8 +1564,8 @@ void roc(const char *pileup, const char *gapsize)
 	l4_->SetFillColor(kWhite);
 	l4_->SetTextSize(0.04);
 	l4_->SetHeader("5^{th} leading","C");
-	l4_->AddEntry(g4_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm", "p");
-	l4_->AddEntry(ga4_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l4_->AddEntry(g4_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm", "p");
+	l4_->AddEntry(ga4_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l4_->AddEntry(gb4_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l4_->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
 	l4_->SetTextAlign(12);
@@ -1576,12 +1577,12 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c2d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C8_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C8_30mm_7515mm_2trk.tex");
 
 
 	//! page3
 	y1 = 0.11; y2 = 0.32;
-	//! +-7.5, +-3.0mm multi-bin	
+	//! +-7.5, +-1.5mm multi-bin	
 	C->cd(1);
 	//gPad->SetGrid();
 	gPad->SetLogy();
@@ -1600,7 +1601,7 @@ void roc(const char *pileup, const char *gapsize)
 	l1__->SetFillColor(kWhite);
 	l1__->SetTextSize(0.04);
 	l1__->SetHeader("2^{nd} leading","C");
-	l1__->AddEntry(ga1_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l1__->AddEntry(ga1_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l1__->AddEntry(ga1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
 	l1__->AddEntry(gb1_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l1__->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1613,7 +1614,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c3a");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C9_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C9_30mm_7515mm_2trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1633,7 +1634,7 @@ void roc(const char *pileup, const char *gapsize)
 	l2__->SetFillColor(kWhite);
 	l2__->SetTextSize(0.04);
 	l2__->SetHeader("3^{rd} leading","C");
-	l2__->AddEntry(ga2_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l2__->AddEntry(ga2_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l2__->AddEntry(ga2,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
 	l2__->AddEntry(gb2_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l2__->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1646,7 +1647,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c3b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C10_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C10_30mm_7515mm_2trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1667,7 +1668,7 @@ void roc(const char *pileup, const char *gapsize)
 	l3__->SetFillColor(kWhite);
 	l3__->SetTextSize(0.04);
 	l3__->SetHeader("4^{th} leading","C");
-	l3__->AddEntry(ga3_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l3__->AddEntry(ga3_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l3__->AddEntry(ga3,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
 	l3__->AddEntry(gb3_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l3__->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1680,7 +1681,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c3c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C11_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C11_30mm_7515mm_2trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1701,7 +1702,7 @@ void roc(const char *pileup, const char *gapsize)
 	l4__->SetFillColor(kWhite);
 	l4__->SetTextSize(0.04);
 	l4__->SetHeader("5^{th} leading","C");
-	l4__->AddEntry(ga4_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l4__->AddEntry(ga4_,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l4__->AddEntry(ga4,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
 	l4__->AddEntry(gb4_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l4__->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1714,10 +1715,10 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c3d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C12_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C12_30mm_7515mm_2trk.tex");
 
 	//! page4
-	//! +-7.5, +-3.0mm max-bin
+	//! +-7.5, +-1.5mm max-bin
 	C->cd(1);
 	//gPad->SetGrid();
 	gPad->SetLogy();
@@ -1733,7 +1734,7 @@ void roc(const char *pileup, const char *gapsize)
 	l_1__->SetFillColor(kWhite);
 	l_1__->SetTextSize(0.04);
 	l_1__->SetHeader("2^{nd} leading","C");
-	l_1__->AddEntry(g1_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_1__->AddEntry(g1_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm","p");
 	l_1__->AddEntry(g1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
 	l_1__->AddEntry(gb1_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l_1__->AddEntry(gb_1_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1746,7 +1747,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c4a");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C13_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C13_30mm_7515mm_2trk.tex");
 
 	C->cd(2);
 	//gPad->SetGrid();
@@ -1762,7 +1763,7 @@ void roc(const char *pileup, const char *gapsize)
 	l_2__->SetFillColor(kWhite);
 	l_2__->SetTextSize(0.04);
 	l_2__->SetHeader("3^{rd} leading","C");
-	l_2__->AddEntry(g2_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_2__->AddEntry(g2_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm","p");
 	l_2__->AddEntry(g2,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
 	l_2__->AddEntry(gb2_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l_2__->AddEntry(gb_2_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1775,7 +1776,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c4b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C14_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C14_30mm_7515mm_2trk.tex");
 
 	C->cd(3);
 	//gPad->SetGrid();
@@ -1792,7 +1793,7 @@ void roc(const char *pileup, const char *gapsize)
 	l_3__->SetFillColor(kWhite);
 	l_3__->SetTextSize(0.04);
 	l_3__->SetHeader("4^{th} leading","C");
-	l_3__->AddEntry(g3_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_3__->AddEntry(g3_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm","p");
 	l_3__->AddEntry(g3,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
 	l_3__->AddEntry(gb3_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l_3__->AddEntry(gb_3_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1805,7 +1806,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c4c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C15_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C15_30mm_7515mm_2trk.tex");
 
 	C->cd(4);
 	//gPad->SetGrid();
@@ -1822,7 +1823,7 @@ void roc(const char *pileup, const char *gapsize)
 	l_4__->SetFillColor(kWhite);
 	l_4__->SetTextSize(0.04);
 	l_4__->SetHeader("5^{th} leading","C");
-	l_4__->AddEntry(g4_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_4__->AddEntry(g4_,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm","p");
 	l_4__->AddEntry(g4,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
 	l_4__->AddEntry(gb4_,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l_4__->AddEntry(gb_4_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1835,7 +1836,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c4d");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C16_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C16_30mm_7515mm_2trk.tex");
 
 	//gPad->DrawFrame(Xmin_range, Ymin_range, Xmax_range, Ymax_range);
 	//https://root-forum.cern.ch/t/tgraph2d-access-xyz-range-and-title-out-of-sync-color-bar/15722	
@@ -1960,7 +1961,7 @@ void roc(const char *pileup, const char *gapsize)
 	l1___->SetBorderSize(0);
 	l1___->SetFillColor(kWhite);
 	l1___->SetTextSize(0.04);
-	l1___->AddEntry(ga2d_1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 3.0 mm","p");
+	l1___->AddEntry(ga2d_1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 1.5mm","p");
 	l1___->AddEntry(ga2d1,"#kern[-3.0]{ } TTT-jet, multi-bin: #pm 7.5 mm", "p");
 	l1___->AddEntry(gb2d1,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l1___->AddEntry(gb_2d1_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -1972,7 +1973,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Modified();
 	gPad->Update();
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C17_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C17_30mm_7515mm_2trk.tex");
 	//cc->Write("c5a");
 	//gPad->GetView()->TopView();
 	C->cd(2);
@@ -2012,7 +2013,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c5b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C18_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C18_30mm_7515mm_2trk.tex");
 	C->cd(3);
 	ga2d3->SetHistogram(ha2d3);
 	ga2d_3->SetHistogram(ha2d_3);
@@ -2050,7 +2051,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c5c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C19_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C19_30mm_7515mm_2trk.tex");
 	C->cd(4);
 	ga2d4->SetHistogram(ha2d4);
 	ga2d_4->SetHistogram(ha2d_4);
@@ -2089,7 +2090,7 @@ void roc(const char *pileup, const char *gapsize)
 	//gPad->Write("c5d");
 	C->SaveAs("./summary_plots/pdf/c5.C");
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C20_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C20_30mm_7515mm_2trk.tex");
 
 	C->Clear();
 	//C->Divide(2,2,0.5,0.5);
@@ -2125,7 +2126,7 @@ void roc(const char *pileup, const char *gapsize)
 	l_1___->SetBorderSize(0);
 	l_1___->SetFillColor(kWhite);
 	l_1___->SetTextSize(0.04);
-	l_1___->AddEntry(g2d_1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 3.0 mm","p");
+	l_1___->AddEntry(g2d_1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 1.5mm","p");
 	l_1___->AddEntry(g2d1,"#kern[-3.0]{ } TTT-jet, max-bin: #pm 7.5 mm", "p");
 	l_1___->AddEntry(gb2d1,"#kern[-3.0]{ } TTT-jet, no z-binning","p");
 	l_1___->AddEntry(gb_2d1_,"#kern[-3.0]{ } emulated calo-jet","p");
@@ -2137,7 +2138,7 @@ void roc(const char *pileup, const char *gapsize)
 	//gPad->Write("c6a");
 	//gPad->GetView()->TopView();
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C21_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C21_30mm_7515mm_2trk.tex");
 	C->cd(2);
 	g2d2->SetHistogram(h2d2);
 	g2d_2->SetHistogram(h2d_2);
@@ -2168,7 +2169,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c6b");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C22_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C22_30mm_7515mm_2trk.tex");
 	C->cd(3);
 	gPad->SetLogy();
 	g2d3->SetHistogram(h2d3);
@@ -2200,7 +2201,7 @@ void roc(const char *pileup, const char *gapsize)
 	gPad->Update();
 	//gPad->Write("c6c");
 	C->Print(out_file_,"pdf");
-	C->SaveAs("./summary_plots/tex/C23_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C23_30mm_7515mm_2trk.tex");
 
 	C->cd(4);
 	TPad *mypad1 = new TPad("mypad1","mypad1",0,0,1,1);
@@ -2238,7 +2239,7 @@ void roc(const char *pileup, const char *gapsize)
 	//gPad->Write("c6d");
 	C->Print(out_file_, "pdf");
 	C->SaveAs("./summary_plots/pdf/c6.C");
-	C->SaveAs("./summary_plots/tex/C24_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C24_30mm_7515mm_2trk.tex");
 
 	std::cout<<"X1, X2: " <<gPad->GetX1() <<", " <<gPad->GetX2() <<std::endl;
 	std::cout<<"Y1, Y2: " <<gPad->GetY1() <<", " <<gPad->GetY2() <<std::endl;
@@ -2253,7 +2254,7 @@ void roc(const char *pileup, const char *gapsize)
 	mypad->SetLogy();
 	mypad->DrawClone();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C24a_30mm_7515mm_1trk.tex");
+	C->SaveAs("./summary_plots/tex/C24a_30mm_7515mm_2trk.tex");
 
 	C->Clear();
 	gPad->SetRightMargin(0.07);
@@ -2358,6 +2359,7 @@ void roc(const char *pileup, const char *gapsize)
 	Eb2->GetYaxis()->CenterTitle();
 	Eb2->GetXaxis()->SetTitleSize(0.04);
 	Eb2->GetYaxis()->SetTitleSize(0.04);
+	Eb2->GetXaxis()->SetRangeUser(0, 0.4e3);
 	Eb2->Draw("hist ");
 	Eb3->Draw("hist same");
 	Eb4->Draw("hist same");
@@ -2366,25 +2368,26 @@ void roc(const char *pileup, const char *gapsize)
 	E3->Draw("hist same");
 	E4->Draw("hist same");
 	E5->Draw("hist same");
-	Ebcalo2->Draw("hist same");
-	Ebcalo3->Draw("hist same");
-	Ebcalo4->Draw("hist same");
-	Ebcalo5->Draw("hist same");
+	//Ebcalo2->Draw("hist same");
+	//Ebcalo3->Draw("hist same");
+	//Ebcalo4->Draw("hist same");
+	//Ebcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c11");
-	C->SaveAs("./summary_plots/tex/C32_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C32_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C32_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C32_30mm_7515mm_2trk.C");
 	
 	//! page12
-	Eb_2->SetTitle("sum-pt,+-3.0mm binning ");
+	Eb_2->SetTitle("sum-pt,+-1.5mm binning ");
 	Eb_2->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	Eb_2->GetYaxis()->SetTitle("trigger efficiency");
 	Eb_2->GetXaxis()->CenterTitle();
 	Eb_2->GetYaxis()->CenterTitle();	
 	Eb_2->GetXaxis()->SetTitleSize(0.04);
 	Eb_2->GetYaxis()->SetTitleSize(0.04);
+	Eb_2->GetXaxis()->SetRangeUser(0, 0.4e3);
 	Eb_2->Draw("hist ");
 	Eb_3->Draw("hist same");
 	Eb_4->Draw("hist same");
@@ -2393,16 +2396,16 @@ void roc(const char *pileup, const char *gapsize)
 	E3_->Draw("hist same");
 	E4_->Draw("hist same");
 	E5_->Draw("hist same");
-	Ebcalo2->Draw("hist same");
-	Ebcalo3->Draw("hist same");
-	Ebcalo4->Draw("hist same");
-	Ebcalo5->Draw("hist same");
+	//Ebcalo2->Draw("hist same");
+	//Ebcalo3->Draw("hist same");
+	//Ebcalo4->Draw("hist same");
+	//Ebcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c12");
-	C->SaveAs("./summary_plots/tex/C33_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C33_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C33_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C33_30mm_7515mm_2trk.C");
 
 	//! page13
 	Eb2->SetTitle("max pt TJ from each bin,+-7.5mm binning ");	
@@ -2414,19 +2417,19 @@ void roc(const char *pileup, const char *gapsize)
 	Ea3->Draw("hist same");
 	Ea4->Draw("hist same");
 	Ea5->Draw("hist same");
-	Ebcalo2->Draw("hist same");
-	Ebcalo3->Draw("hist same");
-	Ebcalo4->Draw("hist same");
-	Ebcalo5->Draw("hist same");
+	//Ebcalo2->Draw("hist same");
+	//Ebcalo3->Draw("hist same");
+	//Ebcalo4->Draw("hist same");
+	//Ebcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c13");
-	C->SaveAs("./summary_plots/tex/C34_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C34_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C34_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C34_30mm_7515mm_2trk.C");
 
 	//! page14
-	Eb_2->SetTitle("max pt TJ from each bin,+-3.0mm binning ");	
+	Eb_2->SetTitle("max pt TJ from each bin,+-1.5mm binning ");	
 	Eb_2->Draw("hist ");
 	Eb_3->Draw("hist same");
 	Eb_4->Draw("hist same");
@@ -2435,16 +2438,16 @@ void roc(const char *pileup, const char *gapsize)
 	Ea_3->Draw("hist same");
 	Ea_4->Draw("hist same");
 	Ea_5->Draw("hist same");
-	Ebcalo2->Draw("hist same");
-	Ebcalo3->Draw("hist same");
-	Ebcalo4->Draw("hist same");
-	Ebcalo5->Draw("hist same");
+	//Ebcalo2->Draw("hist same");
+	//Ebcalo3->Draw("hist same");
+	//Ebcalo4->Draw("hist same");
+	//Ebcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
 	//gPad->Write("c14");
-	C->SaveAs("./summary_plots/tex/C35_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C35_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C35_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C35_30mm_7515mm_2trk.C");
 
 	//! page15
 	C->SetLogy();
@@ -2454,6 +2457,7 @@ void roc(const char *pileup, const char *gapsize)
 	Rb2->GetXaxis()->CenterTitle();
 	Rb2->GetYaxis()->CenterTitle();
 	Rb2->GetYaxis()->SetRangeUser(Ymin_range, Ymax_range);
+	Rb2->GetXaxis()->SetRangeUser(0, 0.4e3);
 	Rb2->GetXaxis()->SetTitleSize(0.04);
 	Rb2->GetYaxis()->SetTitleSize(0.04);
 	Rb2->GetYaxis()->SetTitleOffset(1.2);
@@ -2465,24 +2469,25 @@ void roc(const char *pileup, const char *gapsize)
 	R3->Draw("hist same");
 	R4->Draw("hist same");
 	R5->Draw("hist same");
-	Rbcalo2->Draw("hist same");
-	Rbcalo3->Draw("hist same");
-	Rbcalo4->Draw("hist same");
-	Rbcalo5->Draw("hist same");
+	//Rbcalo2->Draw("hist same");
+	//Rbcalo3->Draw("hist same");
+	//Rbcalo4->Draw("hist same");
+	//Rbcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C36_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C36_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C36_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C36_30mm_7515mm_2trk.C");
 	//gPad->Write("c15");
 	
 	//! page16
-	Rb_2->SetTitle("sum-pt,+-3.0mm binning ");
+	Rb_2->SetTitle("sum-pt,+-1.5mm binning ");
 	Rb_2->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	Rb_2->GetYaxis()->SetTitle("trigger rate [MHz]");
 	Rb_2->GetXaxis()->CenterTitle();
 	Rb_2->GetYaxis()->CenterTitle();	
 	Rb_2->GetYaxis()->SetRangeUser(Ymin_range, Ymax_range);
+	Rb_2->GetXaxis()->SetRangeUser(0, 0.4e3);
 	Rb_2->GetXaxis()->SetTitleSize(0.04);
 	Rb_2->GetYaxis()->SetTitleSize(0.04);
 	Rb_2->GetYaxis()->SetTitleOffset(1.2);
@@ -2494,15 +2499,15 @@ void roc(const char *pileup, const char *gapsize)
 	R3_->Draw("hist same");
 	R4_->Draw("hist same");
 	R5_->Draw("hist same");
-	Rbcalo2->Draw("hist same");
-	Rbcalo3->Draw("hist same");
-	Rbcalo4->Draw("hist same");
-	Rbcalo5->Draw("hist same");
+	//Rbcalo2->Draw("hist same");
+	//Rbcalo3->Draw("hist same");
+	//Rbcalo4->Draw("hist same");
+	//Rbcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C37_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C37_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C37_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C37_30mm_7515mm_2trk.C");
 	//gPad->Write("c16");
 
 	//! page17
@@ -2515,19 +2520,19 @@ void roc(const char *pileup, const char *gapsize)
 	Ra3->Draw("hist same");
 	Ra4->Draw("hist same");
 	Ra5->Draw("hist same");
-	Rbcalo2->Draw("hist same");
-	Rbcalo3->Draw("hist same");
-	Rbcalo4->Draw("hist same");
-	Rbcalo5->Draw("hist same");
+	//Rbcalo2->Draw("hist same");
+	//Rbcalo3->Draw("hist same");
+	//Rbcalo4->Draw("hist same");
+	//Rbcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_, "pdf");
-	C->SaveAs("./summary_plots/tex/C38_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C38_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C38_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C38_30mm_7515mm_2trk.C");
 	//gPad->Write("c17");
 
 	//! pagr18
-	Rb_2->SetTitle("max pt TJ from each bin,+-3.0mm binning ");	
+	Rb_2->SetTitle("max pt TJ from each bin,+-1.5mm binning ");	
 	Rb_2->Draw("hist ");
 	Rb_3->Draw("hist same");
 	Rb_4->Draw("hist same");
@@ -2536,15 +2541,15 @@ void roc(const char *pileup, const char *gapsize)
 	Ra_3->Draw("hist same");
 	Ra_4->Draw("hist same");
 	Ra_5->Draw("hist same");
-	Rbcalo2->Draw("hist same");
-	Rbcalo3->Draw("hist same");
-	Rbcalo4->Draw("hist same");
-	Rbcalo5->Draw("hist same");
+	//Rbcalo2->Draw("hist same");
+	//Rbcalo3->Draw("hist same");
+	//Rbcalo4->Draw("hist same");
+	//Rbcalo5->Draw("hist same");
 	leg1->Draw();
 	leg5->Draw();
 	C->Print(out_file_close,"pdf");
-	C->SaveAs("./summary_plots/tex/C39_30mm_7515mm_1trk.tex");
-	C->SaveAs("./summary_plots/C/C39_30mm_7515mm_1trk.C");
+	C->SaveAs("./summary_plots/tex/C39_30mm_7515mm_2trk.tex");
+	C->SaveAs("./summary_plots/C/C39_30mm_7515mm_2trk.C");
 	//gPad->Write("c18");
 
 	//f_out->Close();

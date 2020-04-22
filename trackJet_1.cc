@@ -17,6 +17,12 @@
 #include <TInterpreter.h>
 using namespace fastjet;
 #define mass_piPM  139.57018f /* MeV/c^2 */
+/** get first digit of a number */
+template<typename T>
+inline T first_digit(T a)
+{
+        return (int)(a / std::pow(10, (int)(log10(a))));
+}
 int main () 
 {
   //bool debug = true;
@@ -50,6 +56,7 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
+  //const float PT_MIN = 0., PT_MAX = 2500., PTCUT_WIDTH = 5.0;// in GeV/c
   const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
   //const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
@@ -60,9 +67,19 @@ int main ()
   //! create an object to plot trigger efficiency as a function of pt
   TrigEff trigger(PT_MIN, PT_MAX, PTCUT_WIDTH);
   trigger.init(trigger.xbins, trigger.nbins);
+////////////////////////////////////////////////////////////////
+  //! fetch event list
+///////////////////////////////////////////////////////////////  
+  int eve_i = 0;
+  //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_Eta2_5_BasicCuts.root","READ");
+  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","READ");
+  //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
+  TTree *evelistTree = (TTree*)f_eve->Get("eventList");
+  evelistTree->SetBranchAddress("eventNums", &eve_i);
+  Long64_t nevents = evelistTree->GetEntries();
 //////////////////////////////////////////////////////////////////////// 
   //! store results in an output root file 
-////////////////////////////////////////////////////////////////////////
+////////////////aaaa////////////////////////////////////////////////////
   //! branch variables
   gInterpreter->GenerateDictionary("vector<vector<double>>","vector");
   gInterpreter->GenerateDictionary("vector<vector<int>>","vector");
@@ -94,8 +111,8 @@ int main ()
   //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000MB_q1.2GeV_30mm.root","RECREATE");
   //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrigSEMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mm_1.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies/EMU5GeV_PU1kMB_q1.2GeVeta2.5_30mmR0.4_1_test.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/EMU5GeV_B0a114c3_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_4_test_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/EMU5GeV_B0a114c3_PU1kMB_q1.2GeVeta2.5_30mmR0.4_4_test_1.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -137,9 +154,10 @@ int main ()
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_MB_30mm_sig5/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
@@ -149,6 +167,7 @@ int main ()
   std::vector<double> *phi_tru = 0;
   std::vector<int> *pdg = 0;
   std::vector<int> *charge = 0;
+  std::vector<uint32_t> *barcode = 0;
   rec.SetBranchStatus("pt",1);
   rec.SetBranchStatus("vz",1);
   rec.SetBranchStatus("theta",1);
@@ -156,6 +175,7 @@ int main ()
   rec.SetBranchStatus("phi",1);
   rec.SetBranchStatus("pid",1);
   rec.SetBranchStatus("charge",1);
+  rec.SetBranchStatus("tid",1);
   rec.SetBranchAddress("pt", &pt_tru);
   rec.SetBranchAddress("vz", &z0_tru);
   rec.SetBranchAddress("theta", &theta_tru);
@@ -163,6 +183,7 @@ int main ()
   rec.SetBranchAddress("phi", &phi_tru);
   rec.SetBranchAddress("pid", &pdg);
   rec.SetBranchAddress("charge", &charge);
+  rec.SetBranchAddress("tid", &barcode);
   //! get mc information -pdgid and z vertex  
   //! vectors containing a single pileup event
   std::vector<double> pt_truPU;
@@ -173,13 +194,14 @@ int main ()
   std::vector<int> pdgPU;
   std::vector<int> chargePU;
   
-  //! Get total no. of events
-  //Long64_t nentries = rec.GetEntries();
-  ////Long64_t nentries = 1000;
-  //int pileup = 160;
-  //Long64_t nevents = nentries/pileup;
-  Long64_t nevents = rec.GetEntries();
-  nevents = 1000;
+  ////! Get total no. of events
+  ////Long64_t nentries = rec.GetEntries();
+  //////Long64_t nentries = 1000;
+  ////int pileup = 160;
+  ////Long64_t nevents = nentries/pileup;
+  nevents = rec.GetEntries();
+  //nevents = 1000;
+  if(nevents > 500) nevents = 500;
   r_sumpt.nevents = nevents;
   trigger.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
@@ -198,6 +220,8 @@ int main ()
   for(Long64_t i = 0; i < nevents; ++i)
   {
   	eventNo=i;
+	//evelistTree->GetEntry(i);
+  	//eventNo = eve_i;
 	TrackJetObj tjObj;
 	jetE_sm.clear();
 	jetPt_sm.clear();
@@ -228,10 +252,32 @@ int main ()
 	pdgPU.clear();
 	chargePU.clear();
 
+	//! initialise a calo object
+	//! in principle one should not create objects for every event
+	//! TODO: call the block below just once and reset the detector for every event
+	//! right now this is not working for some reason.
+	CaloEmu caloObj;	
+	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0;
+	Rad_calo = caloObj.GetCaloRadius();//in mm since pt is in MeV
+	ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
+	//ChargedPcle_PtThreshold = 2e3;//2GeV
+	if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c" <<std::endl;
+
 	//caloObj.Reset_Detector();	
 	rec.GetEntry(i);
+	//rec.GetEntry(eve_i);
 	for(int ik = 0; ik < pt_tru->size(); ++ik)
 	{
+		//! Get rid of hard scattered events
+		if(first_digit((*barcode)[ik]) == 1) continue;
+		
+		if(std::fabs((*eta_tru)[ik]) > ETA_CUT) continue; 
+		if(std::abs((*charge)[ik]) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
+		/////// ONLY to test remove neutrals //////////
+		//if(std::abs((*charge)[ik]) == 0) continue;
+		////////////////////////////////////////
+		//! get rid of charged particles that will not make it to the calorimeter
+		if(std::abs((*charge)[ik]) == 1 && std::fabs((*pt_tru)[ik]) < ChargedPcle_PtThreshold) continue;
 		pt_truPU.push_back((*pt_tru)[ik]);
 		z0_truPU.push_back((*z0_tru)[ik]);
 		theta_truPU.push_back((*theta_tru)[ik]);
@@ -242,18 +288,6 @@ int main ()
 		
 	}
 	
-
-	//! initialise a calo object
-	//! in principle one should not create objects for every event
-	//! TODO: call the block below just once and reset the detector for every event
-	//! right now this is not working for some reason.
-
-	CaloEmu caloObj;	
-	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0;
-	Rad_calo = caloObj.GetCaloRadius();//in mm since pt is in MeV
-	ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
-	if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c" <<std::endl;
-
 	
 	//! total number of tracks reconstructed in an event
 	int nobj = pt_truPU.size();
@@ -271,23 +305,23 @@ int main ()
 		q	= chargePU[j];
 
 		//////// ACCEPTANCE CUTS //////////	
-		if(std::fabs(eta) > ETA_CUT) continue; 
-		if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
+		//if(std::fabs(eta) > ETA_CUT) continue; 
+		//if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
 		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
 		phi_Rcalo = phi;
-		if(std::abs(q) != 0) //is chrarged
-		{	
-			//! get rid of charged particles that will not make it to the calorimeter
-			if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
-			phi_Rcalo = phi + acos(0.5 * Rad_calo/Rad_pcle) - (M_PI/2);
-			if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
-			if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
-		}	
+		//if(std::abs(q) != 0) //is chrarged
+		//{	
+		//	//! get rid of charged particles that will not make it to the calorimeter
+		//	//if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
+		//	phi_Rcalo = phi + acos(0.5 * Rad_calo/Rad_pcle) - (M_PI/2);
+		//	if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
+		//	if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
+		//}	
 
-		//! veto fake and dc tracks?
-		//if(tjObj.flag!=1) continue;
-		//! veto only dc tracks and those which do not satisfy the above selection cuts?
-		if(tjObj.flag < 0) continue;
+		////! veto fake and dc tracks?
+		////if(tjObj.flag!=1) continue;
+		////! veto only dc tracks and those which do not satisfy the above selection cuts?
+		//if(tjObj.flag < 0) continue;
 
 		if(debug)
 		{

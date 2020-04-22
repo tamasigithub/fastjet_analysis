@@ -31,19 +31,23 @@ int main ()
   //    NZVTXBIN= 150 => +-2.0mm about the center of the ith bin       4mm
   //    NZVTXBIN= 200 => +-1.5mm about the center of the ith bin       3mm
   ////////////////////////////////////////////////////////////////////////////////////
-  int MIN_Constituents, NJETS, NZVTXBIN;
+  int NJETS, NZVTXBIN;
   float ZRANGE, ZBIN_width;
   int izbin;
-  MIN_Constituents = 1;
+  //MIN_Constituents = 4;
+  std::vector<int> MIN_Constituents = {4,3,2,2,1};
+  //:std::vector<int> MIN_Constituents = {4,4,3,3,2};
+  //std::vector<int> MIN_Constituents = {4,3,2,2,1};
   NJETS = 20;
-  NZVTXBIN = 40;
+  NZVTXBIN = 200;
   ZRANGE = 200; // in mm
   ZBIN_width = ZRANGE/NZVTXBIN;
   double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
   double KAPPA_CUT   = 3.0;
   double ETA_CUT     = 2.5;
   double MIN_TRACKPT   = 2e3;//! all tracks must have a min pT > MIN_TRACKPT
-  double MIN_TRACKPT_1 = 5e3;//! atleast MIN_Constituents in a jet must have pT > MIN_TRACKPT_1
+  double MIN_TRACKPT_1 = 3e3;//! atleast MIN_Constituents in a jet must have pT > MIN_TRACKPT_1
+  double MIN_TRACKPT_2[5] = {3e3,3e3,3e3,3e3,3e3};//! atleast MIN_Constituents in a jet must have pT > MIN_TRACKPT_1
   //! Jet definition
   double R = 0.4;
   double PTMINJET = 5e3;// in MeV 
@@ -70,7 +74,8 @@ int main ()
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
+  const float PT_MIN = 0., PT_MAX = 2500., PTCUT_WIDTH = 5.0;// in GeV/c
+  //const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
   r_sumpt.init_Histos(r_sumpt.xbins, r_sumpt.nbins);
@@ -82,11 +87,17 @@ int main ()
   //! init output vector
   std::vector<std::vector<double> > vectorof_jetpt(NZVTXBIN, std::vector<double>());
   std::vector<std::vector<int> > vectorof_jetMult(NZVTXBIN, std::vector<int>());
+  std::vector<std::vector<double> > vec_constTRKpT_1L(NZVTXBIN, std::vector<double>());
+  std::vector<std::vector<double> > vec_constTRKpT_2L(NZVTXBIN, std::vector<double>());
+  std::vector<std::vector<double> > vec_constTRKpT_3L(NZVTXBIN, std::vector<double>());
+  std::vector<std::vector<double> > vec_constTRKpT_4L(NZVTXBIN, std::vector<double>());
+  std::vector<std::vector<double> > vec_constTRKpT_5L(NZVTXBIN, std::vector<double>());
 ////////////////////////////////////////////////////////////////
   //! fetch event list
 ///////////////////////////////////////////////////////////////  
   int eve_i = 0;
-  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_Eta2_5_BasicCuts.root","READ");
+  //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_Eta2_5_BasicCuts.root","READ");
+  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
   evelistTree->SetBranchAddress("eventNums", &eve_i);
   Long64_t nevents = evelistTree->GetEntries();
@@ -136,7 +147,10 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/TrkJPU1kggFhh4b7.5mm_30mm_1trk2.5_2GeV_5GeV_3.root","RECREATE");
+  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/TrkJPU1kggFhh4b1.2mm_30mm_4trk2.5_2GeV_33333GeV_5.root","RECREATE");
+  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/TrkJPU1kMB1.2mm_30mm_1trk2.5_2GeV_33333GeV_3.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/TrkJPU1kggFhh4b1.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/TrkJPU1kMB1.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -182,12 +196,33 @@ int main ()
   glob_jet->Branch("M_has_constituents",&M_hasConstituents);
   glob_jet->Branch("M_Nconstituents",&M_Nconstituents);
   
+  TTree *bin_Tree = new TTree("bin_Tree","bin_Tree");
+  bin_Tree->Branch("M_1L", &r_sumpt.M_Lpt);
+  bin_Tree->Branch("M_2L", &r_sumpt.M_NLpt);
+  bin_Tree->Branch("M_3L", &r_sumpt.M_NNLpt);
+  bin_Tree->Branch("M_4L", &r_sumpt.M_NNNLpt);
+  bin_Tree->Branch("M_5L", &r_sumpt.M_NNNNLpt);
+  bin_Tree->Branch("C_1LpT", &r_sumpt.v_constTRKpT_1Lsumpt);
+  bin_Tree->Branch("C_2LpT", &r_sumpt.v_constTRKpT_2Lsumpt);
+  bin_Tree->Branch("C_3LpT", &r_sumpt.v_constTRKpT_3Lsumpt);
+  bin_Tree->Branch("C_4LpT", &r_sumpt.v_constTRKpT_4Lsumpt);
+  bin_Tree->Branch("C_5LpT", &r_sumpt.v_constTRKpT_5Lsumpt);
+  
+  bin_Tree->Branch("Ma_1L", &r_sumpt.Ma_Lpt);
+  bin_Tree->Branch("Ma_2L", &r_sumpt.Ma_NLpt);
+  bin_Tree->Branch("Ma_3L", &r_sumpt.Ma_NNLpt);
+  bin_Tree->Branch("Ma_4L", &r_sumpt.Ma_NNNLpt);
+  bin_Tree->Branch("Ma_5L", &r_sumpt.Ma_NNNNLpt);
+  bin_Tree->Branch("Ca_1LpT", &r_sumpt.v_constTRKpT_1Lmaxpt);
+  bin_Tree->Branch("Ca_2LpT", &r_sumpt.v_constTRKpT_2Lmaxpt);
+  bin_Tree->Branch("Ca_3LpT", &r_sumpt.v_constTRKpT_3Lmaxpt);
+  bin_Tree->Branch("Ca_4LpT", &r_sumpt.v_constTRKpT_4Lmaxpt);
+  bin_Tree->Branch("Ca_5LpT", &r_sumpt.v_constTRKpT_5Lmaxpt);
   //! open input trees 
   TChain rec("m_recTree");
   //! high pt min bias sample sigma = 3
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB_1/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_rec = 0;
@@ -259,6 +294,7 @@ int main ()
   double pt,z0,theta,eta,phi,tid,mpt,mVz,mtheta,mphi,kap_cut;
   int pid;
   //for(Long64_t i_event = 0; i_event < nevents; ++i_event)
+  //nevents = 1;
   r_sumpt.nevents = nevents;
   trigger.nevents = nevents;
   std::cout<<"Total number of enteries in the input directory : " << rec.GetEntries() <<std::endl;
@@ -335,9 +371,9 @@ int main ()
 			if(std::fabs((*pt_rec)[ik]) < MIN_TRACKPT) continue; 	
 			if(std::fabs((*eta_rec)[ik]) > ETA_CUT) continue; 	
 			//! veto fake and dc tracks?// fakes =-1, dc = -barcode
-			if( (*tid_rec)[ik] <= -1) continue;
+			//if( (*tid_rec)[ik] <= -1) continue;
 			//! veto only dc tracks
-			//if( (*tid_rec)[ik] < -1) continue;
+			if( (*tid_rec)[ik] < -1) continue;
 			pt_recPU.push_back((*pt_rec)[ik]);
 			z0_recPU.push_back((*z0_rec)[ik]);
 			theta_recPU.push_back((*theta_rec)[ik]);
@@ -365,6 +401,7 @@ int main ()
 	//! create objects(constituents) for feeding it to jet clustering alg.
 	for (int j = 0; j < nobj; ++j)
 	{
+		//pt	= pt_recPU[j];
 		pt	= std::min(pt_recPU[j], MAX_TRACKpt);
 		z0	= z0_recPU[j];
 		theta	= theta_recPU[j];
@@ -633,31 +670,34 @@ int main ()
 		h_den_vs_etaPU->Fill(jetEta[i]);
 		if(M_jetPt[i]!= 0 ) h_num_vs_etaPU->Fill(jetEta[i]);
 		//!store psedojets that have a minimum number of constituents associated to them
-		if(constituents.size() < MIN_Constituents)
-                {
-                        continue;
-                }
-		else 
-		{
-			bool BREAK = false;
-			for(int ithconsti = 0; ithconsti < MIN_Constituents; ithconsti++)
-			{
-				if(debug) std::cout<<"ith consti = " << ithconsti << ", pT = " << constituents[ithconsti].pt() <<std::endl;
-				if(constituents[ithconsti].pt() < MIN_TRACKPT_1)
-				{
-					BREAK = true;
-					break;
-				}
-			
-
-			}
-			if(debug)std::cout<<"Break: "<<BREAK<<std::endl;
-			if(BREAK)
+ 		if(i < MIN_Constituents.size())
+		{ 
+			if(constituents.size() < MIN_Constituents[i])
 			{
 				continue;
 			}
-			
-			incl_trkjets_minNConstituents.push_back(incl_trkjets[i]);
+			else 
+			{
+				bool BREAK = false;
+				for(int ithconsti = 0; ithconsti < MIN_Constituents.size(); ithconsti++)
+				{
+					if(debug) std::cout<<"ith consti = " << ithconsti << ", pT = " << constituents[ithconsti].pt() <<std::endl;
+					if(constituents[ithconsti].pt() < MIN_TRACKPT_1)
+					{
+						BREAK = true;
+						break;
+					}
+				
+
+				}
+				if(debug)std::cout<<"Break: "<<BREAK<<std::endl;
+				if(BREAK)
+				{
+					continue;
+				}
+				
+				incl_trkjets_minNConstituents.push_back(incl_trkjets[i]);
+			}
 		}
 	}// end of for loop over jet size
 	//! end of Jet Matching
@@ -684,6 +724,11 @@ int main ()
 		(vectorof_jetpt[ith_bin]).resize(NJETS,0.0);
 		(vectorof_jetMult[ith_bin]).clear();
 		(vectorof_jetMult[ith_bin]).resize(NJETS,0);
+		(vec_constTRKpT_1L[ith_bin]).clear();
+		(vec_constTRKpT_2L[ith_bin]).clear();
+		(vec_constTRKpT_3L[ith_bin]).clear();
+		(vec_constTRKpT_4L[ith_bin]).clear();
+		(vec_constTRKpT_5L[ith_bin]).clear();
 		if(debug)
 		{
 			std::cout<<"ith bin, tjVec.size() : " << ith_bin <<", " << tjVec.size() << std::endl;
@@ -720,6 +765,8 @@ int main ()
 		//! Notice that inclusive_jets is sorted hence vectorof_jetpt[ith_bin] is also already sorted
 		int tmp = 0;
 		//! for NJETS in the ith_bin
+		bool CUTS_SATISFIED = false;//! multiplicity cut satiffied in this bin
+		if(debug)std::cout << "ith_bin: " << ith_bin <<std::endl; 
 		for(int n = 0; n < NJETS; ++n)
 		{
 			if(debug) std::cout<<"size of inclusive_jets:" <<inclusive_jets.size()<<std::endl;
@@ -728,44 +775,91 @@ int main ()
 			if(n >= inclusive_jets.size()) break;
 			std::vector<PseudoJet> constituents_1 = sorted_by_pt(inclusive_jets[n].constituents());
 			
-			//! check if the nth jet has atleast MIN_Constituents
+			//! check if the first 5 jets have atleast MIN_Constituents
 			//int multiplicity = inclusive_jets[n].constituents().size();
 			int multiplicity = constituents_1.size();
 			//int multiplicity = 1;
-			if(debug) std::cout<<"nconstituents: " <<multiplicity <<std::endl;
+			if(debug) std::cout<<"nconstituents, n: " <<multiplicity  << ", " << n <<std::endl;
 			//! if not continue
-			if(multiplicity < MIN_Constituents)
+			//! do not check if not amongst the first five jets
+			if(n < MIN_Constituents.size())
 			{
-				//!go to next jet. But before that fix the value of the nth index for vectorof_jetpt
-				tmp +=1;
-				continue;
-			}
-			else//! check if the minimum number of constituents have a minimum track pT
-			{
-				bool BREAK = false;
-				for(int ithconsti = 0; ithconsti < MIN_Constituents; ithconsti++)
+				if(multiplicity < MIN_Constituents[n])
 				{
-					if(debug) std::cout<<"ith consti = " << ithconsti << ", pT = " << constituents_1[ithconsti].pt() <<std::endl;
-					if(constituents_1[ithconsti].pt() < MIN_TRACKPT_1)
+					//!go to next jet. But before that fix the value of the nth index for vectorof_jetpt
+					//tmp +=1;
+					CUTS_SATISFIED = false;
+					//continue;
+					break;
+				}
+				//else CUTS_SATISFIED = true;
+				else//! check if the minimum number of constituents have a minimum track pT
+				{
+					//CUTS_SATISFIED = false;
+					bool BREAK = false;
+					for(int ithconsti = 0; ithconsti < MIN_Constituents[n]; ithconsti++)
 					{
-						BREAK = true;
+						if(debug) std::cout<<"ith consti = " << ithconsti << ", pT = " << constituents_1[ithconsti].pt() <<std::endl;
+						if(constituents_1[ithconsti].pt() < MIN_TRACKPT_2[n])
+						{
+							BREAK = true;
+							CUTS_SATISFIED = false;
+							break;
+						}
+						else	CUTS_SATISFIED = true;
+					
+
+					}
+					if(debug)std::cout<<"Break: "<<BREAK<<std::endl;
+					if(BREAK)
+					{
+						//tmp +=1;
+						//continue;
 						break;
 					}
-				
-
-				}
-				if(debug)std::cout<<"Break: "<<BREAK<<std::endl;
-				if(BREAK)
-				{
-					tmp +=1;
-					continue;
-				}
-			}	
+				}	
+			}
+			if (debug) std::cout<<"n, cuts_satis: " << n << ", " << CUTS_SATISFIED << std::endl; 
 			//! at this stage vectorof_jetpt[ith_bin][n] = 0.0 => initialised above
-			if(inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n - tmp]) 
+			if(CUTS_SATISFIED && inclusive_jets[n].perp() > vectorof_jetpt[ith_bin][n - tmp]) 
 			{
 				vectorof_jetpt[ith_bin][n - tmp] = inclusive_jets[n].perp();
 				vectorof_jetMult[ith_bin][n - tmp] = multiplicity;
+				if(n==0)
+				{
+					for(int cc = 0; cc < multiplicity; ++cc)
+					{
+						vec_constTRKpT_1L[ith_bin].push_back(constituents_1[cc].pt()*1e-3);
+					}
+				}
+				else if(n==1)
+				{
+					for(int cc = 0; cc < multiplicity; ++cc)
+					{
+						vec_constTRKpT_2L[ith_bin].push_back(constituents_1[cc].pt()*1e-3);
+					}
+				}
+				else if(n==2)
+				{
+					for(int cc = 0; cc < multiplicity; ++cc)
+					{
+						vec_constTRKpT_3L[ith_bin].push_back(constituents_1[cc].pt()*1e-3);
+					}
+				}
+				else if(n==3)
+				{
+					for(int cc = 0; cc < multiplicity; ++cc)
+					{
+						vec_constTRKpT_4L[ith_bin].push_back(constituents_1[cc].pt()*1e-3);
+					}
+				}
+				else if(n==4)
+				{
+					for(int cc = 0; cc < multiplicity; ++cc)
+					{
+						vec_constTRKpT_5L[ith_bin].push_back(constituents_1[cc].pt()*1e-3);
+					}
+				}
 			}
 			if(debug) std::cout<<"contents in vectorof_jetpt["<<ith_bin<<"][" << n - tmp<<"] = " <<vectorof_jetpt[ith_bin][n - tmp] <<std::endl;
 		}
@@ -781,12 +875,57 @@ int main ()
 	r_sumpt.v_TJMult_maxpt.clear();
 	r_sumpt.v_TJMult_sumpt.resize(NJETS,0);
 	r_sumpt.v_TJMult_maxpt.resize(NJETS,0);
+	
+	r_sumpt.v_constTRKpT_1Lsumpt.clear();
+	r_sumpt.v_constTRKpT_2Lsumpt.clear();
+	r_sumpt.v_constTRKpT_3Lsumpt.clear();
+	r_sumpt.v_constTRKpT_4Lsumpt.clear();
+	r_sumpt.v_constTRKpT_5Lsumpt.clear();
+	
+	r_sumpt.v_constTRKpT_1Lmaxpt.clear();
+	r_sumpt.v_constTRKpT_2Lmaxpt.clear();
+	r_sumpt.v_constTRKpT_3Lmaxpt.clear();
+	r_sumpt.v_constTRKpT_4Lmaxpt.clear();
+	r_sumpt.v_constTRKpT_5Lmaxpt.clear();
+
 	//! Andre's approach
 	r_sumpt.Lpt = vectorof_jetpt[0][0];
 	r_sumpt.NLpt = vectorof_jetpt[0][1];
 	r_sumpt.NNLpt = vectorof_jetpt[0][2];
 	r_sumpt.NNNLpt = vectorof_jetpt[0][3];
 	r_sumpt.NNNNLpt = vectorof_jetpt[0][4];
+	//! TJ const pT Andre's approach
+	int c_size;
+	c_size = std::min((vec_constTRKpT_1L[0]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_1Lmaxpt.push_back(vec_constTRKpT_1L[0][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_2L[0]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_2Lmaxpt.push_back(vec_constTRKpT_2L[0][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_3L[0]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_3Lmaxpt.push_back(vec_constTRKpT_3L[0][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_4L[0]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_4Lmaxpt.push_back(vec_constTRKpT_4L[0][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_5L[0]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_5Lmaxpt.push_back(vec_constTRKpT_5L[0][cc]);
+		
+	}
 	//! sumpt approach
 	r_sumpt.max_sumpt = r_sumpt.v_sumpt[0];
 	r_sumpt.prim_bin  = 0;
@@ -800,26 +939,61 @@ int main ()
 		{
 			r_sumpt.Lpt = vectorof_jetpt[p][0];
 			r_sumpt.v_TJMult_maxpt[0]  = vectorof_jetMult[p][0];
+			r_sumpt.v_constTRKpT_1Lmaxpt.clear();
+			c_size = std::min((vec_constTRKpT_1L[p]).size(), MIN_Constituents.size());
+			for(int cc = 0; cc < c_size; ++cc)
+			{
+				r_sumpt.v_constTRKpT_1Lmaxpt.push_back(vec_constTRKpT_1L[p][cc]);
+				
+			}
 		}
 		if(r_sumpt.NLpt < vectorof_jetpt[p][1])
 		{
 			r_sumpt.NLpt = vectorof_jetpt[p][1];
 			r_sumpt.v_TJMult_maxpt[1]  = vectorof_jetMult[p][1];
+			r_sumpt.v_constTRKpT_2Lmaxpt.clear();
+			c_size = std::min((vec_constTRKpT_2L[p]).size(), MIN_Constituents.size());
+			for(int cc = 0; cc < c_size; ++cc)
+			{
+				r_sumpt.v_constTRKpT_2Lmaxpt.push_back(vec_constTRKpT_2L[p][cc]);
+				
+			}
 		}
 		if(r_sumpt.NNLpt < vectorof_jetpt[p][2])
 		{
 			r_sumpt.NNLpt = vectorof_jetpt[p][2];
 			r_sumpt.v_TJMult_maxpt[2]  = vectorof_jetMult[p][2];
+			r_sumpt.v_constTRKpT_3Lmaxpt.clear();
+			c_size = std::min((vec_constTRKpT_3L[p]).size(), MIN_Constituents.size());
+			for(int cc = 0; cc < c_size; ++cc)
+			{
+				r_sumpt.v_constTRKpT_3Lmaxpt.push_back(vec_constTRKpT_3L[p][cc]);
+				
+			}
 		}
 		if(r_sumpt.NNNLpt < vectorof_jetpt[p][3])
 		{
 			r_sumpt.NNNLpt = vectorof_jetpt[p][3];
 			r_sumpt.v_TJMult_maxpt[3]  = vectorof_jetMult[p][3];
+			r_sumpt.v_constTRKpT_4Lmaxpt.clear();
+			c_size = std::min((vec_constTRKpT_4L[p]).size(), MIN_Constituents.size());
+			for(int cc = 0; cc < c_size; ++cc)
+			{
+				r_sumpt.v_constTRKpT_4Lmaxpt.push_back(vec_constTRKpT_4L[p][cc]);
+				
+			}
 		}
 		if(r_sumpt.NNNNLpt < vectorof_jetpt[p][4])
 		{
 			r_sumpt.NNNNLpt = vectorof_jetpt[p][4];
 			r_sumpt.v_TJMult_maxpt[4]  = vectorof_jetMult[p][4];
+			r_sumpt.v_constTRKpT_5Lmaxpt.clear();
+			c_size = std::min((vec_constTRKpT_5L[p]).size(), MIN_Constituents.size());
+			for(int cc = 0; cc < c_size; ++cc)
+			{
+				r_sumpt.v_constTRKpT_5Lmaxpt.push_back(vec_constTRKpT_5L[p][cc]);
+				
+			}
 		}
 
 		//! sumpt approach
@@ -835,6 +1009,37 @@ int main ()
 	r_sumpt.v_TJMult_sumpt[2]  = vectorof_jetMult[r_sumpt.prim_bin][2];
 	r_sumpt.v_TJMult_sumpt[3]  = vectorof_jetMult[r_sumpt.prim_bin][3];
 	r_sumpt.v_TJMult_sumpt[4]  = vectorof_jetMult[r_sumpt.prim_bin][4];
+
+	c_size = std::min((vec_constTRKpT_1L[r_sumpt.prim_bin]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_1Lsumpt.push_back(vec_constTRKpT_1L[r_sumpt.prim_bin][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_2L[r_sumpt.prim_bin]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_2Lsumpt.push_back(vec_constTRKpT_2L[r_sumpt.prim_bin][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_3L[r_sumpt.prim_bin]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_3Lsumpt.push_back(vec_constTRKpT_3L[r_sumpt.prim_bin][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_4L[r_sumpt.prim_bin]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_4Lsumpt.push_back(vec_constTRKpT_4L[r_sumpt.prim_bin][cc]);
+		
+	}
+	c_size = std::min((vec_constTRKpT_5L[r_sumpt.prim_bin]).size(), MIN_Constituents.size());
+	for(int cc = 0; cc < c_size; ++cc)
+	{
+		r_sumpt.v_constTRKpT_5Lsumpt.push_back(vec_constTRKpT_5L[r_sumpt.prim_bin][cc]);
+		
+	}
 
 	if(debug) 
 	{
@@ -853,6 +1058,14 @@ int main ()
 	r_sumpt.hMa_PUNNLpt->Fill(r_sumpt.v_TJMult_maxpt[2]);
 	r_sumpt.hMa_PUNNNLpt->Fill(r_sumpt.v_TJMult_maxpt[3]);
 	r_sumpt.hMa_PUNNNNLpt->Fill(r_sumpt.v_TJMult_maxpt[4]);
+	r_sumpt.Fill_ContTRKpT_maxpt();
+	
+	r_sumpt.Ma_Lpt = r_sumpt.v_TJMult_maxpt[0];
+	r_sumpt.Ma_NLpt = r_sumpt.v_TJMult_maxpt[1];
+	r_sumpt.Ma_NNLpt = r_sumpt.v_TJMult_maxpt[2];
+	r_sumpt.Ma_NNNLpt = r_sumpt.v_TJMult_maxpt[3];
+	r_sumpt.Ma_NNNNLpt = r_sumpt.v_TJMult_maxpt[4];
+	
 	//
 	//////! Sumpt approach
 	//////std::cout<<"trackjet size : " <<vectorof_jetpt[r_sumpt.prim_bin].size() <<std::endl;
@@ -866,7 +1079,15 @@ int main ()
 	r_sumpt.hM_PUNNLpt->Fill(r_sumpt.v_TJMult_sumpt[2]);
 	r_sumpt.hM_PUNNNLpt->Fill(r_sumpt.v_TJMult_sumpt[3]);
 	r_sumpt.hM_PUNNNNLpt->Fill(r_sumpt.v_TJMult_sumpt[4]);
+	r_sumpt.Fill_ContTRKpT_sumpt();
+	
+	r_sumpt.M_Lpt = r_sumpt.v_TJMult_sumpt[0];
+	r_sumpt.M_NLpt = r_sumpt.v_TJMult_sumpt[1];
+	r_sumpt.M_NNLpt = r_sumpt.v_TJMult_sumpt[2];
+	r_sumpt.M_NNNLpt = r_sumpt.v_TJMult_sumpt[3];
+	r_sumpt.M_NNNNLpt = r_sumpt.v_TJMult_sumpt[4];
 
+	bin_Tree->Fill();
 	//////! No bin approach
 	//////std::cout<<"inclusive trackjet size : " <<incl_trkjets.size() <<std::endl;
 	//////std::cout<<"hb_PULpt   : " <<incl_trkjets[0].pt() <<std::endl;
@@ -1109,6 +1330,7 @@ c1->Write();
 c2->Write();
 c3->Write();
 
+bin_Tree->Write();
 r_sumpt.SetMultiplicityHist_props();
 r_sumpt.WriteMultiplicity();
 TCanvas *c4 = new TCanvas();
@@ -1122,6 +1344,11 @@ c5->Write();
 TCanvas *c6 = new TCanvas();
 r_sumpt.DrawMultiplicityMaxpt();
 c6->Write();
+
+r_sumpt.SetConstTRKpTHist_props();
+r_sumpt.DrawConstTRKpTHist();
+r_sumpt.WriteConstTRKpTHist();
+TCanvas *c7 = new TCanvas();
 
 f_out->Close();
 return 0;

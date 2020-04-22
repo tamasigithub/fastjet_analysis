@@ -36,8 +36,8 @@ public:
 	int nevents;// number of pileup events
 	const int Njet_max = 5;
 	const float eta_cut = 2.5; 
-	static const int nbins_plus1 = 401;//101;
-	static const  int nbins = 400;//100;// = (pt_max - pt_min)/ptcut_width;
+	static const int nbins_plus1 = 501;//401;//101;
+	static const  int nbins = 500;//400;//100;// = (pt_max - pt_min)/ptcut_width;
 	//static const int nbins_plus1 = 116;
 	//static const  int nbins = 115;// = (pt_max - pt_min)/ptcut_width;
 	//const int Nlowpt_bins = 80;

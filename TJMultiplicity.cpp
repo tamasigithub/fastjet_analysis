@@ -23,7 +23,7 @@
 #include "TLatex.h"
 const char* out_path = "./summary_plots/pdf"; 
 //const char* output_file_name = "multiplicity_1tracks1.5_5GeVPU0";
-const char* output_file_name = "multiplicity_1.5mm_30mm_1trk2.5_2GeV_5GeV_1";
+const char* output_file_name = "multiplicity_1.2mm_30mm_43221trk2.5_2GeV_3GeV_2";
 
 const double yMin = 0.5, yMax = 5.0e3;
 //! sumpt approach
@@ -208,16 +208,16 @@ int TJMultiplicity()
 	const char *pileup = "1k";
 	const char *gapsize = "30"; 
 	//const char *file_path = ".";
-	const char *file_path = "./fastjet_output/TriggerStudies_2";
+	const char *file_path = "./fastjet_output/TriggerStudies_6";
 	char signal_file_name[1023];
 	
 	//sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
-	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b1.5mm_%smm_1trk2.5_2GeV_5GeV_1.root",file_path,pileup,gapsize);//7.5
+	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b1.2mm_%smm_43221trk2.5_2GeV_3GeV_5.root",file_path,pileup,gapsize);//7.5
 	TFile *f_ = new TFile(signal_file_name, "READ");
 	
 	char MinBias_file_name[1023];
 	//sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
-	sprintf(MinBias_file_name, "%s/TrkJPU%sMB1.5mm_%smm_1trk2.5_2GeV_5GeV_1.root",file_path,pileup,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/TrkJPU%sMB1.2mm_%smm_43221trk2.5_2GeV_3GeV_3.root",file_path,pileup,gapsize);//7.5
 	TFile *f1_ = new TFile(MinBias_file_name, "READ");
 	
 	fetch_histos(f_, f1_);

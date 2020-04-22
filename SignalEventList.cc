@@ -37,10 +37,10 @@ int main()
   const double R 			= 0.4;
   const double PTMINJET 		= 20.0e3;//MeV
   int MAX_NLEADINGJETS 			= 4;// number of jets to be b-tagged-> 99 for all
-  const double default_Pt_cut           = 20.0e3;//MeV 
-  const double third_Pt_cut             = 35.0e3;//MeV 
-  const double second_Pt_cut            = 40.0e3;//MeV
-  const double first_Pt_cut             = 55.0e3;//MeV
+  const double default_Pt_cut           = 20.0e3;//20.0e3;//MeV 
+  const double third_Pt_cut             = 20.0e3;//35.0e3;//MeV 
+  const double second_Pt_cut            = 30.0e3;//40.0e3;//MeV
+  const double first_Pt_cut             = 30.0e3;//55.0e3;//MeV
   double BASIC_pT_CUTS[4] 		= {first_Pt_cut, second_Pt_cut, third_Pt_cut, default_Pt_cut};
   bool CUTS_SATISFIED			= false;
 
@@ -58,7 +58,7 @@ int main()
   double thirdLeading_eta = 0;
   double fourthLeading_eta = 0;
   //! store results in an output root file 
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/EventList_ggFhh4b_Eta2_5_BasicCuts.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta2_5_BasicCuts_1.root","RECREATE");
   TTree *eventList = new TTree("eventList","event numbers of signal like events");
   eventList->Branch("eventNums", &eventNumbers);
   eventList->Branch("Njets", &N_jets);

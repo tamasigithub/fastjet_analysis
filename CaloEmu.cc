@@ -76,7 +76,11 @@ std::vector<double> CaloEmu::GetCellEnergy(int i, int j)
                      eta = m_detector->GetXaxis()->GetBinCenter(i);
                      phi = m_detector->GetYaxis()->GetBinCenter(j);
                      E = m_detector->GetBinContent(i, j);
-		     E_reso_ = SCALEfac_Ereso/sqrt(E);//50% energy resolution
+		     //! only stochastic term
+		     //E_reso_ = SCALEfac_Ereso/sqrt(E);//50% energy resolution
+		     //! stochastic term, noise term, constant term
+		     //E_reso_ = (SCALEfac_Ereso/sqrt(E)) + (Noise_Term/E) + Const_Term;//energy resolution
+		     E_reso_ = (SCALEfac_Ereso/std::sqrt(E)) + Const_Term;//energy resolution
 		     E_smeared = gRandom->Gaus(E,E_reso_*E);
 		     Pt_smeared = E_smeared/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
 		     Pt = E/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
