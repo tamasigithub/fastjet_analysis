@@ -53,7 +53,8 @@ pdflatex Sens_pTthre.tex
 pdflatex sens_ithBincontri.tex
 pdflatex hist_Zi2Z2tot.tex
 pdflatex hist_sensi2sens2tot.tex
-mv ./*.pdf ./pdf/Sensitivity_Summary/
+pdflatex hist_sibi.tex
+mv ./*.pdf ./pdf/Sensitivity_Summary_1/
 rm ./*.log
 rm ./*.aux
 cd ${CURRENT_DIR}

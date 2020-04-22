@@ -21,8 +21,8 @@
 #include "TF1.h"
 #include "TLatex.h"
 
-const int n = 8;
-const int nGraphPts = 7;
+const int n = 7;
+const int nGraphPts = 6;
 const float ctr = 1.0;
 //const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
 const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
@@ -49,7 +49,7 @@ int tot_MCevents_B = 1e6;
 double norm_signal, norm_bckgnd;
 
 Int_t nbinsMinus = n - 1; 
-Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 500.};
+Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 500.};
 Int_t   nAna[n]        = {0};
 Int_t   nAnaB[n]        = {0};
 
@@ -68,8 +68,10 @@ TH1D *Ana_bjet4LPt = nullptr;
 TH1D *Ana_bjet4LPtB = nullptr; 
 TH1 *h4_sig   = nullptr;
 TH1 *h4_bg     = nullptr;
+TH1 *h4_sig_   = nullptr;
+TH1 *h4_bg_     = nullptr;
 
-TH1D *h4_SoverB        = nullptr;
+TH1 *h4_SoverB        = nullptr;
 TH1D *h4_Significance1   = nullptr;
 TH1D *h4_Significance2   = nullptr;
 
@@ -87,6 +89,8 @@ void plot_VsPt1()
 	Ana_bjet4LPtB = (TH1D*)f->Get("Ana_bjet4LPtB");
 	h4_sig = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig", pt_bins);
 	h4_bg   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg", pt_bins);
+	h4_sig_ = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig_", pt_bins);
+	h4_bg_   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg_", pt_bins);
 	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt1");
 	//h4_bg   = (TH1D*)f->Get("Ana_bjet4LPtB");
 
@@ -124,17 +128,18 @@ void plot_VsPt1()
 			Significance1[i-1] = (nAna[i-1] * norm_signal)/std::sqrt(nAnaB[i-1] * norm_bckgnd);
 			Significance2[i-1] = std::pow(nAna[i-1] * norm_signal, 2)/(nAnaB[i-1] * norm_bckgnd);
 		}
-		//h4_sig->Scale(norm_signal);
-		//h4_bckgnd->Scale(norm_bckgnd);
-		//h4_SoverB = dynamic_cast<TH1*>(h4_sig->Clone("h4_SoverB"));
-		//h4_SoverB->Divide(h4_sig, h4_bckgnd, 1.0, 1.0)
-		h4_SoverB->SetBinContent(i, SoverB[i-1]);
+		//h4_SoverB->SetBinContent(i, SoverB[i-1]);
 		h4_Significance1->SetBinContent(i, Significance1[i-1]);
 		h4_Significance2->SetBinContent(i, Significance2[i-1]);
 
         	ofs<<pT_threshold[i-1]<<" "<<nAna[i-1]<<" "<<nAnaB[i-1]<<" "<<nAna[i-1]*norm_signal<<" "<<nAnaB[i-1]*norm_bckgnd<<" "<<SoverB[i-1]<<" "<<Significance1[i-1]<<" "<<Significance2[i-1]<<"\n";
 	}
 	ofs.close();
+
+	h4_sig_->Scale(norm_signal);
+	h4_bg_->Scale(norm_bckgnd);
+	h4_SoverB = dynamic_cast<TH1*>(h4_sig_->Clone("h4_SoverB"));
+	h4_SoverB->Divide(h4_sig_, h4_bg_, 1.0, 1.0);
 
 	return;
 }
@@ -298,7 +303,7 @@ void plot_graph()
 	g3->GetYaxis()->SetRangeUser(min_range, max_range);
 	
 	//! Gain in (Significance)^2 Vs Pt threshold 
-	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 120.0};
+	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 120.0};
 	G3 = new TGraphErrors(nGraphPts, pT_new, SignificanceGain2,0,0);
 	G3->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	G3->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);

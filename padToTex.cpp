@@ -36,7 +36,7 @@ void pad(const char *pad_name, int which_legend = 0, bool up = false, bool left 
 		//! default - down right
 		legend->SetPad(0.3,0.02,0.85,0.47);
 		//! down left
-		//if(!up && left)legend->SetPad(-0.15,0.02,0.40,0.47);
+		//if(!up && left)legend->SetPad(-0.17,0.02,0.38,0.47);
 		if(!up && left)legend->SetPad(0.0,0.02,0.55,0.47);
 		//! up left
 		if(up && left)legend->SetPad(-0.15,0.4,0.40,0.85);

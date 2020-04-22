@@ -39,10 +39,10 @@ const int nlambda = 6;
 Float_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
 Double_t Norms_Signal[nlambda] = {0};
 Float_t lambda_colors[nlambda] = {kGreen, kGray +1, kBlack, kRed, kBlue, kViolet};
-const int n = 8;
-const int nGraphPts = 7;
+const int n = 7;
+const int nGraphPts = 6;
 Int_t nbinsMinus = n - 1; 
-Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 500.};
+Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 500.};
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 
 const double pp4bXsec     = 23.283e6;//fb 
