@@ -167,7 +167,7 @@ void Set_higgsPtProps_3()
 	M_NLhiggs3  = new TH1D("M_NLhiggs3",  "Invariant higgs mass;m_{rec, sub leading higgs} [GeV];", nbins, MLHmin, MLHmax);
 	
 	//! reconstructed Inv mass of the di-higgs system
-	RecMH1H2_3  = new TH1D("RecMH1H2_3",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin, Mmax);
+	RecMH1H2_3  = new TH1D("RecMH1H2_3",  "Invariant di-higgs mass;m_{truth, h1,h2} [GeV];", nbins, Mmin1, Mmax);
 	//! reconstructed Pt of the di-higgs system
 	RecPtH1H2_3  = new TH1D("RecPtH1H2_3",  "Transverse momentum of the di-higgs system;p_{T, truth, h1,h2} [GeV/c];", nbins, ptmin, ptmax);
 

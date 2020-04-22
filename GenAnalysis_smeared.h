@@ -962,6 +962,7 @@ TH2D *MJ4bJ4_1 = nullptr;
 
 Float_t MLHmin = 50.0;
 Float_t MLHmax = 250.0;
+Float_t Mmin1 = 100.0;
 
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
