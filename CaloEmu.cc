@@ -64,33 +64,33 @@ void CaloEmu::AccumulateEnergy( double eta,
 std::vector<double> CaloEmu::GetCellEnergy(int i, int j)
 {
 	EPtEtaPhi.clear();
-	double	phi = -999;
-	double	eta = -999;
-	double	E = 0, Pt = 0;
+	double	phi__ = -999;
+	double	eta__ = -999;
+	double	E__ = 0, Pt__ = 0;
 	//! smear jet energies
 	double E_reso_;
 	double E_smeared = 0, Pt_smeared = 0;
 
 	if (m_detector->GetBinContent(i, j) > 0) 
 	{
-                     eta = m_detector->GetXaxis()->GetBinCenter(i);
-                     phi = m_detector->GetYaxis()->GetBinCenter(j);
-                     E = m_detector->GetBinContent(i, j);
+                     eta__ = m_detector->GetXaxis()->GetBinCenter(i);
+                     phi__ = m_detector->GetYaxis()->GetBinCenter(j);
+                     E__ = m_detector->GetBinContent(i, j);
 		     //! only stochastic term
-		     //E_reso_ = SCALEfac_Ereso/sqrt(E);//50% energy resolution
+		     //E_reso_ = SCALEfac_Ereso/sqrt(E__);//50% energy resolution
 		     //! stochastic term, noise term, constant term
-		     //E_reso_ = (SCALEfac_Ereso/sqrt(E)) + (Noise_Term/E) + Const_Term;//energy resolution
-		     E_reso_ = (SCALEfac_Ereso/std::sqrt(E)) + Const_Term;//energy resolution
-		     E_smeared = gRandom->Gaus(E,E_reso_*E);
-		     Pt_smeared = E_smeared/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
-		     Pt = E/cosh(eta);// E = sqrt(pt^2 + m^2) cosh(eta)
+		     //E_reso_ = (SCALEfac_Ereso/sqrt(E__)) + (Noise_Term/E__) + Const_Term;//energy resolution
+		     E_reso_ = (SCALEfac_Ereso/std::sqrt(E__)) + Const_Term;//energy resolution
+		     E_smeared = gRandom->Gaus(E__,E_reso_*E__);
+		     Pt_smeared = E_smeared/cosh(eta__);// E = sqrt(pt^2 + m^2) cosh(eta)
+		     Pt__ = E__/cosh(eta__);// E = sqrt(pt^2 + m^2) cosh(eta)
 
 	}
 	EPtEtaPhi.push_back(E_smeared);
-	//EPtEtaPhi.push_back(E);
-	//EPtEtaPhi.push_back(Pt);
 	EPtEtaPhi.push_back(Pt_smeared);
-	EPtEtaPhi.push_back(eta);
-	EPtEtaPhi.push_back(phi);
+	//EPtEtaPhi.push_back(E__);
+	//EPtEtaPhi.push_back(Pt__);
+	EPtEtaPhi.push_back(eta__);
+	EPtEtaPhi.push_back(phi__);
 	return EPtEtaPhi;
 }

@@ -58,7 +58,7 @@ double Xsec_OG[7] = {ggFhhXsec_2, ggFhhXsec_1, ggFhhXsec0, ggFhhXsec1, ggFhhXsec
 
 const char *root_out_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30_1.root";
 const char *out_path = "./analysis_plots/pdf"; 
-const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30_1";
+const char *output_file_name = "GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30_2";
 
 //const char *inp_file1  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr1.0_q300MeV_6.0_allR0.4.root"; 
 //const char *inp_file0  = "./fastjet_output/80percentBtag/Genjet2_ggF_Ctr0.0_q300MeV_6.0_allR0.4.root"; 

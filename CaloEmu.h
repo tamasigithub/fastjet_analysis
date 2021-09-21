@@ -39,9 +39,10 @@ class CaloEmu
 	      TH2F *m_detector = nullptr; // detector (modeled by a 2dim histogram)
 	      std::vector<double> EPtEtaPhi;//accumulated params for a cell
 	      double CellEnergyThreshold = 0.5e3;//MeV
+	      //double CellEnergyThreshold = 0.0;//MeV
 	      double Calo_radius = 2e3;//mm
-	      //double SCALEfac_Ereso = 0.5;// 50%
-	      double SCALEfac_Ereso = 1.14;// 114%
+	      double SCALEfac_Ereso = 0.5;// 50%
+	      //double SCALEfac_Ereso = 1.14;// 114%
 	      double Noise_Term     = 1.3;// 1.3GeV 
 	      double Const_Term     = 0.03;// 3%
 	public:
