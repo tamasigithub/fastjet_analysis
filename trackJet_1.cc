@@ -1,3 +1,4 @@
+//////////////////////////////////// CALO EMULATION CELL BASED ////////////////////////////////
 #include "fastjet/ClusterSequence.hh"
 #include "Constituent_info.h"
 #include "TrackJetObj.h"
@@ -49,15 +50,16 @@ int main ()
   int MIN_Constituents = 2;
   float SCALEfac_Ereso = 0.5;//50% 
 
-  double ETA_CUT     = 2.5;
+  double ETA_CUT     = 1.5;
+  const double MaxOGradius = 1e3;//1m
   //! Jet definition
-  double R = 0.4;
+  double R = 0.2;
   double PTMINJET = 5e3;// in MeV 
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
 ////////////////////////////////////////////////////////
-  //const float PT_MIN = 0., PT_MAX = 2500., PTCUT_WIDTH = 5.0;// in GeV/c
-  const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
+   const float PT_MIN = 0., PT_MAX = 1000., PTCUT_WIDTH = 2.0;// in GeV/c
+  //const float PT_MIN = 0., PT_MAX = 2000., PTCUT_WIDTH = 5.0;// in GeV/c
   //const float PT_MIN = 0., PT_MAX = 500., PTCUT_WIDTH = 5.0;// in GeV/c
   //! create an object to plot rate as a function of pt
   Rate_sumpt r_sumpt(PT_MIN, PT_MAX, PTCUT_WIDTH);
@@ -72,8 +74,9 @@ int main ()
 ///////////////////////////////////////////////////////////////  
   int eve_i = 0;
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_Eta2_5_BasicCuts.root","READ");
-  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","READ");
+  //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
+  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000004.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
   evelistTree->SetBranchAddress("eventNums", &eve_i);
   Long64_t nevents = evelistTree->GetEntries();
@@ -107,12 +110,14 @@ int main ()
   std::vector<bool>  hasConstituents;            	// flag indicating if the truth-jet has constituents
   std::vector<int>   Nconstituents;	            	// number of constituents for each jet
 
-  //! output root file
-  //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000MB_q1.2GeV_30mm.root","RECREATE");
-  //TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrigSEMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mm_1.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/EMU5GeV_B0a114c3_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_4_test_1.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/EMU5GeV_B0a114c3_PU1kMB_q1.2GeVeta2.5_30mmR0.4_4_test_1.root","RECREATE");
+  ////! output root file
+  ////TFile *f_out = new TFile("NewjetEMU5GeV_PU1000MB_q1.2GeV_30mm.root","RECREATE");
+  ////TFile *f_out = new TFile("NewjetEMU5GeV_PU1000hh4b_m260_q1.2GeV_30mm_1.root","RECREATE");
+  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies/TrigSEMU5GeV_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mm_1.root","RECREATE");
+  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
+  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kMB_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_7/CELL_a50c3_ALL_PU1kggF_ETA1.5_30mm_R0.3_3.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_7/CELL_a50c3_ALL_PU1kMB_ETA1.5_30mm_R0.2_3.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -150,6 +155,7 @@ int main ()
   
   //! open input trees 
   TChain rec("tracks");
+  //TChain rec("m_recTree");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000hh4b_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1000MB_recTree_3*.root");
   //rec.Add("/media/tamasi/Z/PhD/FCC/Castellated/rec_files/PU1K_hh4bm260_30mm_sig5/*.root");
@@ -157,18 +163,25 @@ int main ()
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
+  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB_1/*.root");
   //! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
+  std::vector<double> *x0_tru = 0;
+  std::vector<double> *y0_tru = 0;
   std::vector<double> *z0_tru = 0;
   std::vector<double> *theta_tru = 0;
   std::vector<double> *eta_tru = 0;
   std::vector<double> *phi_tru = 0;
   std::vector<int> *pdg = 0;
   std::vector<int> *charge = 0;
-  std::vector<uint32_t> *barcode = 0;
+  std::vector<int> *type = 0;
+  //std::vector<uint32_t> *barcode = 0;
+  std::vector<int> *barcode = 0;
   rec.SetBranchStatus("pt",1);
+  rec.SetBranchStatus("vx",1);
+  rec.SetBranchStatus("vy",1);
   rec.SetBranchStatus("vz",1);
   rec.SetBranchStatus("theta",1);
   rec.SetBranchStatus("eta",1);
@@ -176,7 +189,10 @@ int main ()
   rec.SetBranchStatus("pid",1);
   rec.SetBranchStatus("charge",1);
   rec.SetBranchStatus("tid",1);
+  rec.SetBranchStatus("type_traj",1);
   rec.SetBranchAddress("pt", &pt_tru);
+  rec.SetBranchAddress("vx", &x0_tru);
+  rec.SetBranchAddress("vy", &y0_tru);
   rec.SetBranchAddress("vz", &z0_tru);
   rec.SetBranchAddress("theta", &theta_tru);
   rec.SetBranchAddress("eta", &eta_tru);
@@ -184,9 +200,57 @@ int main ()
   rec.SetBranchAddress("pid", &pdg);
   rec.SetBranchAddress("charge", &charge);
   rec.SetBranchAddress("tid", &barcode);
+  rec.SetBranchAddress("type_traj", &type);
+  //////////////// FOR TEST ONLY -try reco tracks for emulation ////////////////
+  //std::vector<double> *kap_pull = 0;
+  //double KAPPA_CUT   = 3.0;
+  //double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
+  ////rec.SetBranchStatus("Pt_n",1);//m_pt, Pt_n
+  ////rec.SetBranchStatus("Z013",1);
+  ////rec.SetBranchStatus("Theta13",1);
+  ////rec.SetBranchStatus("Eta13",1);
+  ////rec.SetBranchStatus("Phi013",1);
+  ////rec.SetBranchStatus("M_pdg",1);
+  ////rec.SetBranchStatus("M_charge",1);
+  ////rec.SetBranchStatus("Tid",1);
+  ////rec.SetBranchAddress("Pt_n", &pt_tru);
+  ////rec.SetBranchAddress("Z013", &z0_tru);
+  ////rec.SetBranchAddress("Theta13", &theta_tru);
+  ////rec.SetBranchAddress("Eta13", &eta_tru);
+  ////rec.SetBranchAddress("Phi013", &phi_tru);
+  ////rec.SetBranchAddress("M_pdg", &pdg);
+  ////rec.SetBranchAddress("M_charge", &charge);
+  ////rec.SetBranchAddress("Tid", &barcode);
+  ////rec.SetBranchAddress("kappa_pull", &kap_pull);
+  ////rec.SetBranchAddress("mc_interaction", &type);
+  //rec.SetBranchStatus("M_pt",1);//m_pt, Pt_n
+  //rec.SetBranchStatus("M_Vx",1);
+  //rec.SetBranchStatus("M_Vy",1);
+  //rec.SetBranchStatus("M_Vz",1);
+  //rec.SetBranchStatus("M_theta",1);
+  //rec.SetBranchStatus("M_eta",1);
+  //rec.SetBranchStatus("M_phi",1);
+  //rec.SetBranchStatus("M_pdg",1);
+  //rec.SetBranchStatus("M_charge",1);
+  //rec.SetBranchStatus("Tid",1);
+  //rec.SetBranchStatus("mc_interaction",1);
+  //rec.SetBranchAddress("M_pt", &pt_tru);
+  //rec.SetBranchAddress("M_Vx", &x0_tru);
+  //rec.SetBranchAddress("M_Vy", &y0_tru);
+  //rec.SetBranchAddress("M_Vz", &z0_tru);
+  //rec.SetBranchAddress("M_theta", &theta_tru);
+  //rec.SetBranchAddress("M_eta", &eta_tru);
+  //rec.SetBranchAddress("M_phi", &phi_tru);
+  //rec.SetBranchAddress("M_pdg", &pdg);
+  //rec.SetBranchAddress("M_charge", &charge);
+  //rec.SetBranchAddress("Tid", &barcode);
+  //rec.SetBranchAddress("kappa_pull", &kap_pull);
+  //rec.SetBranchAddress("mc_interaction", &type);
+  ////////////////////////////////////////////////////////////
   //! get mc information -pdgid and z vertex  
   //! vectors containing a single pileup event
   std::vector<double> pt_truPU;
+  std::vector<double> vr_truPU;
   std::vector<double> z0_truPU;
   std::vector<double> theta_truPU;
   std::vector<double> eta_truPU;
@@ -201,7 +265,7 @@ int main ()
   ////Long64_t nevents = nentries/pileup;
   nevents = rec.GetEntries();
   //nevents = 1000;
-  if(nevents > 500) nevents = 500;
+  if(nevents > 1000) nevents = 1000;
   r_sumpt.nevents = nevents;
   trigger.nevents = nevents;
   //std::cout<<"Total number of enteries : " << nentries <<std::endl;
@@ -213,15 +277,17 @@ int main ()
   int pid,q;
 
 
-  TH2D *h2d = new TH2D("h2d","h2d", 500, -2.5, 2.5, 698, 0, 6.282);
+  //TH2D *h2d = new TH2D("h2d","h2d", 500, -2.5, 2.5, 698, 0, 6.282);
+  TH2D *h2d = new TH2D("h2d","h2d", 200, -2.5, 2.5, 252, 0, 6.3);
+  TH2D *h2dpt = new TH2D("h2dpt","h2dpt", 200, -2.5, 2.5, 252, 0, 6.3);
   //,100,0,50);
 
   //! for every event do the following
   for(Long64_t i = 0; i < nevents; ++i)
   {
-  	eventNo=i;
-	//evelistTree->GetEntry(i);
-  	//eventNo = eve_i;
+  	//eventNo=i;
+	evelistTree->GetEntry(i);
+  	eventNo = eve_i;
 	TrackJetObj tjObj;
 	jetE_sm.clear();
 	jetPt_sm.clear();
@@ -246,6 +312,7 @@ int main ()
 	trjVec.clear();
 	pt_truPU.clear();
 	z0_truPU.clear();
+	vr_truPU.clear();
 	theta_truPU.clear();
 	eta_truPU.clear();
 	phi_truPU.clear();
@@ -257,29 +324,49 @@ int main ()
 	//! TODO: call the block below just once and reset the detector for every event
 	//! right now this is not working for some reason.
 	CaloEmu caloObj;	
-	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0;
+	double phi_Rcalo = 0, Rad_calo = 0, Rad_pcle = 0, ChargedPcle_PtThreshold = 0, R_prime = 0, vr = 0;
 	Rad_calo = caloObj.GetCaloRadius();//in mm since pt is in MeV
-	ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
+	//ChargedPcle_PtThreshold = caloObj.GetChargedPcle_PtThreshold();
+	//! Now a different threshold for each particle depending on where the particle originated
+	//! see below
 	//ChargedPcle_PtThreshold = 2e3;//2GeV
-	if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c" <<std::endl;
 
 	//caloObj.Reset_Detector();	
-	rec.GetEntry(i);
-	//rec.GetEntry(eve_i);
+	//rec.GetEntry(i);
+	rec.GetEntry(eve_i);
 	for(int ik = 0; ik < pt_tru->size(); ++ik)
 	{
 		//! Get rid of hard scattered events
-		if(first_digit((*barcode)[ik]) == 1) continue;
+		//if(first_digit((*barcode)[ik]) == 1) continue;
+
+		/////// ONLY FOR TEST- use reco TTT tracks/////////////
+			//if(std::fabs((*kap_pull)[ik]) > KAPPA_CUT ) continue; 	
+			////! veto fake and dc tracks?// fakes =-1, dc = -barcode
+			//if( (*barcode)[ik] <= -1) continue;
+			////! veto only dc tracks
+			////if( (*barcode)[ik] < -1) continue;
+		/////////////////////////////////////////////////	
 		
+		if((*type)[ik] != 0) continue;
 		if(std::fabs((*eta_tru)[ik]) > ETA_CUT) continue; 
 		if(std::abs((*charge)[ik]) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
+		if(std::abs((*pdg)[ik]) == 12 || std::abs((*pdg)[ik]) == 14 || std::abs((*pdg)[ik]) == 16) continue; // get rid of the neutrinos
+		if(std::abs((*pdg)[ik]) == 25 || std::abs((*pdg)[ik]) == 5) continue; // get rid of the Higgs's and the b quarks
 		/////// ONLY to test remove neutrals //////////
-		//if(std::abs((*charge)[ik]) == 0) continue;
+		//if(std::abs((*charge)[ik]) != 0) continue;
+		//! keep only primaries
 		////////////////////////////////////////
 		//! get rid of charged particles that will not make it to the calorimeter
+		//! first calculate the threshold by noting their origin (vx, vy) in the transverse plane
+		vr = std::sqrt(std::pow((*x0_tru)[ik], 2) + std::pow((*y0_tru)[ik], 2));
+		if(vr > MaxOGradius) continue;//! There are huge number of particles at the Magnet at 1300mm
+		R_prime = Rad_calo - vr;
+		ChargedPcle_PtThreshold = caloObj.CONSTANT *  caloObj.B_field * R_prime*0.5;
+		if(debug) std::cout << "charged particle pt threshold = " << ChargedPcle_PtThreshold*1e-3 << "GeV/c, for vr: " << vr <<std::endl;
 		if(std::abs((*charge)[ik]) == 1 && std::fabs((*pt_tru)[ik]) < ChargedPcle_PtThreshold) continue;
 		pt_truPU.push_back((*pt_tru)[ik]);
 		z0_truPU.push_back((*z0_tru)[ik]);
+		vr_truPU.push_back(vr);
 		theta_truPU.push_back((*theta_tru)[ik]);
 		eta_truPU.push_back((*eta_tru)[ik]);
 		phi_truPU.push_back((*phi_tru)[ik]);
@@ -297,6 +384,7 @@ int main ()
 	for (int j = 0; j < nobj; ++j)
 	{
 		pt	= pt_truPU[j];
+		//pt	= std::min(pt_truPU[j], MAX_TRACKpt);
 		z0	= z0_truPU[j];
 		theta	= theta_truPU[j];
 		eta	= eta_truPU[j];
@@ -309,14 +397,15 @@ int main ()
 		//if(std::abs(q) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
 		Rad_pcle  = pt/(caloObj.CONSTANT * q * caloObj.B_field); 
 		phi_Rcalo = phi;
-		//if(std::abs(q) != 0) //is chrarged
-		//{	
-		//	//! get rid of charged particles that will not make it to the calorimeter
-		//	//if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
-		//	phi_Rcalo = phi + acos(0.5 * Rad_calo/Rad_pcle) - (M_PI/2);
-		//	if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
-		//	if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
-		//}	
+		if(std::abs(q) != 0) //is chrarged
+		{	
+			//! get rid of charged particles that will not make it to the calorimeter
+			//if(std::fabs(pt) < ChargedPcle_PtThreshold) continue;
+			//phi_Rcalo = phi + acos(0.5 * Rad_calo/Rad_pcle) - (M_PI/2);
+			phi_Rcalo = phi + acos(0.5 * (Rad_calo - vr_truPU[j])/Rad_pcle) - (M_PI/2);
+			if(phi_Rcalo > 2 * M_PI) phi_Rcalo -= 2*M_PI;
+			if(phi_Rcalo < 0) phi_Rcalo += 2*M_PI;
+		}	
 
 		////! veto fake and dc tracks?
 		////if(tjObj.flag!=1) continue;
@@ -373,6 +462,11 @@ int main ()
 		std::cout<<"phi, Phi: " <<trjVec[k].phi << ", " << trpcle.phi() <<std::endl;
 		std::cout<<"e, E: " <<trjVec[k].E << ", " << trpcle.e() <<std::endl;*/
 		//caloObj.AccumulateEnergy(trpcle.eta(), trpcle.phi(), trpcle.e());// initial eta phi
+		//
+		//
+		//!smear particle energy instead
+		//double smearedE = gRandom->Gaus(trjVec[k].E, SCALEfac_Ereso* std::sqrt(trjVec[k].E));
+		//caloObj.AccumulateEnergy(trjVec[k].eta, trjVec[k].phi, smearedE);// modified eta phi due to bending in magnetic field
 		caloObj.AccumulateEnergy(trjVec[k].eta, trjVec[k].phi, trjVec[k].E);// modified eta phi due to bending in magnetic field
 	}// end of loop over all tracks trjVec
 	
@@ -396,11 +490,13 @@ int main ()
 				// And treat 'clusters' as massless.
 				if(debug) std::cout<<"Cell energy[ " << ii << ", " << jj << "]: " << Eptetaphi[0] <<std::endl;
 	                     	p.reset_PtYPhiM(Eptetaphi[1], Eptetaphi[2], Eptetaphi[3], 0.);
+	                     	//p.reset_PtYPhiM(Eptetaphi[1], Eptetaphi[2], Eptetaphi[3], mass_piPM);
 				CellEnergy_forEmuCaloJets.push_back(p);
 				if(i == 10)
 				{
 					std::cout<<"ii, jj, E_sm:" << ii <<", " << jj << ", " <<Eptetaphi[0]*1e-3<<std::endl;
 					h2d->SetBinContent(ii, jj, Eptetaphi[0]);
+					h2dpt->SetBinContent(ii, jj, Eptetaphi[1]);
 				}
 			}	
 		}//phibins
@@ -650,6 +746,7 @@ glob_jet->Write();
 //r_sumpt.SetEtaHist_props();
 //r_sumpt.WriteEta();
 h2d->Write();
+h2dpt->Write();
 f_out->Close();
 return 0;
 }
