@@ -63,6 +63,8 @@ public:
 	std::vector<double>v_constTRKpT_3Lmaxpt;
 	std::vector<double>v_constTRKpT_4Lmaxpt;
 	std::vector<double>v_constTRKpT_5Lmaxpt;
+
+	int PB1, PB2, PB3, PB4, PB5;
 	//int nMultiplicityBins = 10;
 	//double maxMultiplicity = 10;
 	int nMultiplicityBins = 100;

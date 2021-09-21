@@ -3,10 +3,10 @@
 #include "plot_props.h"
 
 const char *in_path = "/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_7";
-const char *fName1 = "CELL1_a50c3_ALL_PU1kMB_ETA2.5_30mm_R0.4_2.root";
-const char *fName2 = "CELL1_a50c3_TRK_PU1kMB_ETA2.5_30mm_R0.4_2.root";
-const char *fName3 = "CELL1_a50c3_ALL_PU1kggF_ETA2.5_30mm_R0.4_2.root";
-const char *fName4 = "CELL1_a50c3_TRK_PU1kggF_ETA2.5_30mm_R0.4_2.root";
+const char *fName1 = "CELL_a50c3_ALL_PU1kMB_ETA2.5_30mm_R0.4_3.root";
+const char *fName2 = "CELL_a50c3_TRK_PU1kMB_ETA2.5_30mm_R0.4_3.root";
+const char *fName3 = "CELL_a50c3_ALL_PU1kggF_ETA2.5_30mm_R0.4_3.root";
+const char *fName4 = "CELL_a50c3_TRK_PU1kggF_ETA2.5_30mm_R0.4_3.root";
 
 TFile *f1 = nullptr;
 TFile *f2 = nullptr;
@@ -41,31 +41,44 @@ void open_files()
 
 void GetHistos()
 {
-	h1 = (TH2D*)f1->Get("h2d");
-	h2 = (TH2D*)f2->Get("h2d");
-	h3 = (TH2D*)f3->Get("h2d");
-	h4 = (TH2D*)f4->Get("h2d");
+	//h1 = (TH2D*)f1->Get("h2d");
+	//h2 = (TH2D*)f2->Get("h2d");
+	//h3 = (TH2D*)f3->Get("h2d");
+	//h4 = (TH2D*)f4->Get("h2d");
 	
-	//h1 = (TH2D*)f1->Get("h2dpt");
-	//h2 = (TH2D*)f2->Get("h2dpt");
-	//h3 = (TH2D*)f3->Get("h2dpt");
-	//h4 = (TH2D*)f4->Get("h2dpt");
+	h1 = (TH2D*)f1->Get("h2dpt");
+	h2 = (TH2D*)f2->Get("h2dpt");
+	h3 = (TH2D*)f3->Get("h2dpt");
+	h4 = (TH2D*)f4->Get("h2dpt");
 	return;
 }
 void SetProps()
 {
-	h1->GetZaxis()->SetTitle("Energy [GeV]");
+	h1->GetZaxis()->SetTitle("p_{T} [GeV/c]");
 	h1->GetYaxis()->SetTitle("#phi [rad]");
 	h1->GetXaxis()->SetTitle("#eta");
-	h2->GetZaxis()->SetTitle("Energy [GeV]");
+	h2->GetZaxis()->SetTitle("p_{T} [GeV/c]");
 	h2->GetYaxis()->SetTitle("#phi [rad]");
 	h2->GetXaxis()->SetTitle("#eta");
-	h3->GetZaxis()->SetTitle("Energy [GeV]");
+	h3->GetZaxis()->SetTitle("p_{T} [GeV/c]");
 	h3->GetYaxis()->SetTitle("#phi [rad]");
 	h3->GetXaxis()->SetTitle("#eta");
-	h4->GetZaxis()->SetTitle("Energy [GeV]");
+	h4->GetZaxis()->SetTitle("p_{T} [GeV/c]");
 	h4->GetYaxis()->SetTitle("#phi [rad]");
 	h4->GetXaxis()->SetTitle("#eta");
+	
+	//h1->GetZaxis()->SetTitle("Energy [GeV]");
+	//h1->GetYaxis()->SetTitle("#phi [rad]");
+	//h1->GetXaxis()->SetTitle("#eta");
+	//h2->GetZaxis()->SetTitle("Energy [GeV]");
+	//h2->GetYaxis()->SetTitle("#phi [rad]");
+	//h2->GetXaxis()->SetTitle("#eta");
+	//h3->GetZaxis()->SetTitle("Energy [GeV]");
+	//h3->GetYaxis()->SetTitle("#phi [rad]");
+	//h3->GetXaxis()->SetTitle("#eta");
+	//h4->GetZaxis()->SetTitle("Energy [GeV]");
+	//h4->GetYaxis()->SetTitle("#phi [rad]");
+	//h4->GetXaxis()->SetTitle("#eta");
 	
 	h1->GetZaxis()->CenterTitle();
 	h1->GetYaxis()->CenterTitle();
@@ -164,4 +177,29 @@ void plot()
 	gPad->SetPhi(PHI);
 	gPad->Update();
 	return;
+}
+void plot_1()
+{
+	gStyle->SetOptStat(0);
+	open_files();
+	GetHistos();
+	SetProps();
+	Legends();
+	TCanvas *c = new TCanvas("c", "c", 800, 800);
+	//TCanvas *c = new TCanvas();
+		//gStyle->SetPalette(kCMYK);
+		//gStyle->SetPalette(kNeon);
+		//gStyle->SetPalette(kPastel);
+		//gStyle->SetPalette(kCherry);
+		TColor::InvertPalette();
+	h1->GetZaxis()->SetTitleOffset(1.2);
+	h1->GetZaxis()->SetRangeUser(0,30);
+	h1->Draw("LEGO2 0 FB");
+	gPad->SetPhi(PHI);
+	//leg1->Draw();
+	//leg5->Draw();
+	gPad->Update();
+	c->SaveAs("LEGO_2.tex");
+	c->SaveAs("LEGO_2_.pdf");
+ return;
 }

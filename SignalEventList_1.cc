@@ -16,7 +16,7 @@
 using namespace fastjet;
 //const char *out_path = "./out_test";
 const char *out_path = "/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4";
-const int file_number = 1;
+const int file_number = 4;
 TFile *f_out = nullptr;
 TTree *eventList = nullptr;
 
@@ -29,6 +29,7 @@ inline T first_digit(T a)
 
 //! event numbers that have satisfied all the analysis cuts
 int eventNumbers = -1;
+double PV = -999.0;
 int N_jets = -1;
 double firstLeading_pT = 0;
 double secondLeading_pT = 0;
@@ -52,6 +53,7 @@ void Clear_Branch_Vars()
 {
   
 	eventNumbers = -1;
+//	PV = -999.0;
 	N_jets = -1;
 	firstLeading_pT = 0;
 	secondLeading_pT = 0;
@@ -77,6 +79,7 @@ void Clear_Branch_Vars()
 void Branch_t_out()
 {
   eventList->Branch("eventNums", &eventNumbers);
+  eventList->Branch("PV", &PV);
   eventList->Branch("Njets", &N_jets);
   eventList->Branch("firstL_pT", &firstLeading_pT);
   eventList->Branch("secondL_pT", &secondLeading_pT);
@@ -142,12 +145,17 @@ int main()
 
   const double HiggsMass       = 125.0;//GeV
   const double MassWidth       = 60.0;//GeV
+  const double Max_vz	       = 100.0;//mm
 
 //************************************************//
 
   //! open input trees 
   TChain rec("tracks");
   rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
+  rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_2/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
 
   //! Get total no. of events
   //Long64_t nevents = 500000;
@@ -195,7 +203,7 @@ int main()
 //*****************************************************************************************//
 	//! open a new output file with the following name
 	char newFilename[1023];
-	sprintf(newFilename,"user.tkar.EventList_allAnaCuts_%06i.root",file_number);
+	sprintf(newFilename,"user.tkar.EventList_2_5_allAnaCuts_%06i.root",file_number);
 	std::cout<<"New File Name: " << newFilename <<std::endl;
 	createNewOutput(newFilename);
 //****************************** Begining of Event Loop ***********************************//
@@ -207,6 +215,8 @@ int main()
 
 	rec.GetEntry(i);
 	
+	PV = -999.0;
+	bool PVoutsideLumiR = false;
 	//! total number of tracks reconstructed in an event
 	int nobj = px_tru->size();
   	if(debug)
@@ -240,7 +250,7 @@ int main()
 		if(std::fabs(eta) > TrackerAcceptance) continue;
 		if(std::abs(q) > 1) continue;
 		//! neutrinos do not deposit energy
-		if(std::abs(pid) == 12 || std::abs(pid) == 14 || std::abs(pid) == 15) continue;
+		if(std::abs(pid) == 12 || std::abs(pid) == 14 || std::abs(pid) == 16) continue;
 		//! is chrarged and is not a SM higgs or bquark or charm or any of the light quarks
 		if(std::abs(q) != 0 && (std::abs(pid) > 5 || pid != 25))
 		{	
@@ -255,6 +265,12 @@ int main()
 		if(std::abs(pid) == 5 ) 
 		{
 			tjObj.flag = 5;
+			if(std::fabs(vz) > Max_vz)
+			{
+				PVoutsideLumiR = true;
+				break;
+			}
+			else PV = vz;	
 
 		}// b quark
 		else if(std::abs(pid) == 25) 
@@ -289,6 +305,8 @@ int main()
 		trjVec.push_back(tjObj);
 
 	}// end of loop over nobj(all tracks/particles in an event)
+
+	if(PVoutsideLumiR) continue;
 
 	//! choose a jet definition
 	JetDefinition jet_def(antikt_algorithm, R);

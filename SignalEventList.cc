@@ -32,15 +32,15 @@ int main()
 //**************** Constants *********************//
   const double ChargedPcle_PtThreshold 	= 300;//MeV
   const double SCALEfac_Ereso 		= 0.5; //50%
-  const double TrackerAcceptance 	= 2.5;
+  const double TrackerAcceptance 	= 1.5;
 
   const double R 			= 0.4;
   const double PTMINJET 		= 20.0e3;//MeV
   int MAX_NLEADINGJETS 			= 4;// number of jets to be b-tagged-> 99 for all
-  const double default_Pt_cut           = 20.0e3;//20.0e3;//MeV 
-  const double third_Pt_cut             = 20.0e3;//35.0e3;//MeV 
-  const double second_Pt_cut            = 30.0e3;//40.0e3;//MeV
-  const double first_Pt_cut             = 30.0e3;//55.0e3;//MeV
+  const double default_Pt_cut           = 20.0e3;//MeV 
+  const double third_Pt_cut             = 35.0e3;//MeV 
+  const double second_Pt_cut            = 40.0e3;//MeV
+  const double first_Pt_cut             = 55.0e3;//MeV
   double BASIC_pT_CUTS[4] 		= {first_Pt_cut, second_Pt_cut, third_Pt_cut, default_Pt_cut};
   bool CUTS_SATISFIED			= false;
 
@@ -58,7 +58,7 @@ int main()
   double thirdLeading_eta = 0;
   double fourthLeading_eta = 0;
   //! store results in an output root file 
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta2_5_BasicCuts_1.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","RECREATE");
   TTree *eventList = new TTree("eventList","event numbers of signal like events");
   eventList->Branch("eventNums", &eventNumbers);
   eventList->Branch("Njets", &N_jets);
@@ -74,9 +74,9 @@ int main()
   TH1::SetDefaultSumw2(true);
   //! open input trees 
   TChain tru("tracks");
-  tru.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
-  tru.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
-  tru.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
+  tru.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
+  //tru.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
+  //tru.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
 
   //! Get total no. of events
   //Long64_t nevents = 500000;

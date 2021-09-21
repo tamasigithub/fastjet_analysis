@@ -23,7 +23,7 @@
 #include "TLatex.h"
 const char* out_path = "./summary_plots/pdf"; 
 //const char* output_file_name = "multiplicity_1tracks1.5_5GeVPU0";
-const char* output_file_name = "multiplicity_1.2mm_30mm_43221trk2.5_2GeV_3GeV_2";
+const char* output_file_name = "multiplicity_1.2mm_30mm_11111trk2.5_2GeV_3GeV_2";
 
 const double yMin = 0.5, yMax = 5.0e3;
 //! sumpt approach
@@ -208,16 +208,16 @@ int TJMultiplicity()
 	const char *pileup = "1k";
 	const char *gapsize = "30"; 
 	//const char *file_path = ".";
-	const char *file_path = "./fastjet_output/TriggerStudies_6";
+	const char *file_path = "./fastjet_output/TriggerStudies_4";
 	char signal_file_name[1023];
 	
 	//sprintf(signal_file_name, "%s/NewjetoutPU%shh4b_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
-	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b1.2mm_%smm_43221trk2.5_2GeV_3GeV_5.root",file_path,pileup,gapsize);//7.5
+	sprintf(signal_file_name, "%s/TrkJPU%sggFhh4b1.2mm_%smm_11111trk2.5_2GeV_22222GeV_5.root",file_path,pileup,gapsize);//7.5
 	TFile *f_ = new TFile(signal_file_name, "READ");
 	
 	char MinBias_file_name[1023];
 	//sprintf(MinBias_file_name, "%s/NewjetoutPU%sMB_%smm_optsig5_1tracks1.5_5GeV.root",file_path,pileup,gapsize);//7.5
-	sprintf(MinBias_file_name, "%s/TrkJPU%sMB1.2mm_%smm_43221trk2.5_2GeV_3GeV_3.root",file_path,pileup,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/TrkJPU%sMB1.2mm_%smm_11111trk2.5_2GeV_22222GeV_3.root",file_path,pileup,gapsize);//7.5
 	TFile *f1_ = new TFile(MinBias_file_name, "READ");
 	
 	fetch_histos(f_, f1_);
@@ -294,7 +294,7 @@ int TJMultiplicity()
 	C->cd(2);
 	gPad->SetGrid();
 	gPad->SetLogy();
-	E3->GetXaxis()->SetRangeUser(0, 40);
+	E3->GetXaxis()->SetRangeUser(0, 25);
 	E3->Draw();
 	R3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -309,7 +309,7 @@ int TJMultiplicity()
 	C->cd(3);
 	gPad->SetGrid();
 	gPad->SetLogy();
-	E4->GetXaxis()->SetRangeUser(0, 40);
+	E4->GetXaxis()->SetRangeUser(0, 20);
 	E4->Draw();
 	R4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -324,7 +324,7 @@ int TJMultiplicity()
 	C->cd(4);
 	gPad->SetGrid();
 	gPad->SetLogy();
-	E5->GetXaxis()->SetRangeUser(0, 40);
+	E5->GetXaxis()->SetRangeUser(0, 20);
 	E5->Draw();
 	R5->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -359,7 +359,7 @@ int TJMultiplicity()
 	C->cd(2);
 	gPad->SetGrid();
 	gPad->SetLogy();
-	Ea3->GetXaxis()->SetRangeUser(0, 40);
+	Ea3->GetXaxis()->SetRangeUser(0, 25);
 	Ea3->Draw();
 	Ra3->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -376,7 +376,7 @@ int TJMultiplicity()
 	C->cd(3);
 	gPad->SetGrid();
 	gPad->SetLogy();
-	Ea4->GetXaxis()->SetRangeUser(0, 40);
+	Ea4->GetXaxis()->SetRangeUser(0, 20);
 	Ea4->Draw();
 	Ra4->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6
@@ -393,6 +393,7 @@ int TJMultiplicity()
 	C->cd(4);
 	gPad->SetGrid();
 	gPad->SetLogy();
+	Ea5->GetXaxis()->SetRangeUser(0, 20);
 	Ea5->Draw();
 	Ra5->Draw("same");
 	//gPad->BuildLegend(x1, y1, x2, y2, "", "PL"); // ROOT 6

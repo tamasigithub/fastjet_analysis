@@ -4,16 +4,16 @@ const int nevents = 3350;
 
 const char* out_path = "./summary_plots/pdf"; 
 //const char* output_file_name = "multiplicity_1tracks1.5_5GeVPU0";
-const char* output_file_name = "pTdist_7.5mm_30mm_123trk2.5_2GeV_5GeV_1";
-const char *file1name = "./fastjet_output/TriggerStudies_2/TrkJPU1kggFhh4b7.5mm_30mm_1trk2.5_2GeV_5GeV_1.root";
-const char *file2name = "./fastjet_output/TriggerStudies_2/TrkJPU1kggFhh4b7.5mm_30mm_2trk2.5_2GeV_5GeV_1.root";
-const char *file3name = "./fastjet_output/TriggerStudies_2/TrkJPU1kggFhh4b7.5mm_30mm_3trk2.5_2GeV_5GeV_1.root";
+const char* output_file_name = "pTdist_1.5mm_30mm_123trk2.5_2GeV_5GeV_2";
+const char *file1name = "./fastjet_output/TriggerStudies_5/TrkJPU1kggFhh4b1.5mm_30mm_1trk2.5_2GeV_2GeV_5.root";
+const char *file2name = "./fastjet_output/TriggerStudies_5/TrkJPU1kggFhh4b1.5mm_30mm_2trk2.5_2GeV_2GeV_5.root";
+const char *file3name = "./fastjet_output/TriggerStudies_5/TrkJPU1kggFhh4b1.5mm_30mm_3trk2.5_2GeV_2GeV_5.root";
 //const char *file1name_ = "./fastjet_output/TriggerStudies_2/TrkJPU1kggFhh4b7.5mm_30mm_1trk2.5_5GeV_5GeV_1.root";
 //const char *file2name_ = "./fastjet_output/TriggerStudies_2/TrkJPU1kggFhh4b7.5mm_30mm_2trk2.5_5GeV_5GeV_1.root";
 //const char *file3name_ = "./fastjet_output/TriggerStudies_2/TrkJPU1kggFhh4b7.5mm_30mm_3trk2.5_5GeV_5GeV_1.root";
-const char *file1name_ = "./fastjet_output/TriggerStudies_2/TrkJPU1kMB7.5mm_30mm_1trk2.5_2GeV_5GeV_1.root";
-const char *file2name_ = "./fastjet_output/TriggerStudies_2/TrkJPU1kMB7.5mm_30mm_2trk2.5_2GeV_5GeV_1.root";
-const char *file3name_ = "./fastjet_output/TriggerStudies_2/TrkJPU1kMB7.5mm_30mm_3trk2.5_2GeV_5GeV_1.root";
+const char *file1name_ = "./fastjet_output/TriggerStudies_5/TrkJPU1kMB1.5mm_30mm_1trk2.5_2GeV_2GeV_3.root";
+const char *file2name_ = "./fastjet_output/TriggerStudies_5/TrkJPU1kMB1.5mm_30mm_2trk2.5_2GeV_2GeV_3.root";
+const char *file3name_ = "./fastjet_output/TriggerStudies_5/TrkJPU1kMB1.5mm_30mm_3trk2.5_2GeV_2GeV_3.root";
 //!ggF
 //! sumpt approach
 TH1D *R2_1 = nullptr;
