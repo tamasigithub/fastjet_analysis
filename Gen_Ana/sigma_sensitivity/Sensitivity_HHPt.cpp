@@ -24,8 +24,8 @@
 const int n = 14;
 const int nGraphPts = 7;
 const float ctr = 1.0;
-const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8.root";
-const char *txt_path = "./analysis_plots/txt_files";
+const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8.root";
+const char *txt_path = "../../analysis_plots/txt_files";
 
 Float_t LINE_WIDTH = 2.5;
 Float_t TITLE_SIZE = 0.04;
@@ -266,7 +266,7 @@ void plot_graph()
 	min_range = g3->GetHistogram()->GetMinimum()*0.4;
 	g3->GetYaxis()->SetRangeUser(min_range, max_range);
 
-	TFile *f_out = new TFile("./analysis_plots/root/SensitivityVsHHPt.root","RECREATE");
+	TFile *f_out = new TFile("../../analysis_plots/root/SensitivityVsHHPt.root","RECREATE");
 	h4_Sensitivity1->Write();	
 	h4_SoverB1->Write();
 	g1->Write();

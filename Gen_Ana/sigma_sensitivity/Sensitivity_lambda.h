@@ -22,11 +22,11 @@
 
 //! input root file
 TFile *f = nullptr;
-//const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
-const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
+//const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
 
-const char *txt_path = "./analysis_plots/txt_files";
-const char *out_path = "./analysis_plots/pdf"; 
+const char *txt_path = "../../analysis_plots/txt_files";
+const char *out_path = "../../analysis_plots/pdf"; 
 const char *output_file_name = "Sensitivity_studyVsk_lambda_corrected_incl4bProbMH30";
 char out_root_file_name[1023];
 

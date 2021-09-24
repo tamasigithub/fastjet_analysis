@@ -23,11 +23,11 @@
 
 const int n = 7;
 const int nGraphPts = 6;
-const float ctr = -2.0;
-//const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
-const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
-const char *txt_path = "./analysis_plots/txt_files";
-const char *out_path = "./analysis_plots/pdf"; 
+const float ctr = 3.0;
+//const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
+const char *txt_path = "../../analysis_plots/txt_files";
+const char *out_path = "../../analysis_plots/pdf"; 
 const char *output_file_name = "SignificanceVs4thPt_incl4bProbMH30";
 
 Float_t LINE_WIDTH = 2.5;
@@ -41,7 +41,7 @@ Float_t min_range;
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3
-const double ggFhhXsec_2  = 6172.40;
+const double ggFhhXsec3   = 553.485;
 const double four_b_Prob  = std::pow(0.58,2);
 int tot_MCevents = 5e5;
 int tot_MCevents_B = 1e6;
@@ -81,20 +81,20 @@ TGraphErrors *g3 = nullptr;
 TGraphErrors *G2 = nullptr;
 TGraphErrors *G2_ = nullptr;
 TGraphErrors *G3 = nullptr;
-void plot_VsPt_2()
+void plot_VsPt3()
 {
 
 	TFile *f = new TFile(root_file_name, "READ");
-	Ana_bjet4LPt = (TH1D*)f->Get("Ana_bjet4LPt_2");
+	Ana_bjet4LPt = (TH1D*)f->Get("Ana_bjet4LPt3");
 	Ana_bjet4LPtB = (TH1D*)f->Get("Ana_bjet4LPtB");
 	h4_sig = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig", pt_bins);
 	h4_bg   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg", pt_bins);
 	h4_sig_ = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig_", pt_bins);
 	h4_bg_   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg_", pt_bins);
-	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt_2");
+	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt3");
 	//h4_bg   = (TH1D*)f->Get("Ana_bjet4LPtB");
 
-	norm_signal   = (IntLumi * four_b_Prob * ggFhhXsec_2)/tot_MCevents;
+	norm_signal   = (IntLumi * four_b_Prob * ggFhhXsec3)/tot_MCevents;
 	norm_bckgnd   = (IntLumi * pp4bXsec)/tot_MCevents_B;
 	
 	int nbins = h4_sig->GetNbinsX();
@@ -148,7 +148,7 @@ void plot_graph()
 {
 
 	TCanvas *c = new TCanvas("c","c",800,800);
-	plot_VsPt_2();
+	plot_VsPt3();
 	c->SetLeftMargin(0.13);
 	TGaxis::SetMaxDigits(3);
 	h4_sig->Draw("hist");	
@@ -189,12 +189,7 @@ void plot_graph()
 	for(int i = 0; i < nGraphPts; i++)
 	{
 		SignificanceGain1[i] = Significance1[i]/h4_Significance1->Integral(1,nGraphPts); 
-		SignificanceGain2[i] = Significance2[i]/h4_Significance2->Integral(1, nGraphPts);
-		//std::cout<<"i: " << i <<std::endl;
-		//std::cout<<"Significance2[i]: " << Significance2[i] <<std::endl;
-		//std::cout<<"Significance2Tot[i]: " << h4_Significance2->Integral(1, nGraphPts) <<std::endl;
-		//std::cout<<"SignificanceGain2[i]: " << SignificanceGain2[i] <<std::endl;
-
+		SignificanceGain2[i] = Significance2[i]/h4_Significance2->Integral(1, nGraphPts); 
 	}
 	for(int i = 0; i < nGraphPts; i++)
 	{

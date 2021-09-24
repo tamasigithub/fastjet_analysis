@@ -21,13 +21,13 @@
 #include "TF1.h"
 #include "TLatex.h"
 
-const int n = 7;
-const int nGraphPts = 6;
-const float ctr = 1.0;
-//const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
-const char *root_file_name = "./analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
-const char *txt_path = "./analysis_plots/txt_files";
-const char *out_path = "./analysis_plots/pdf"; 
+const int n = 8;
+const int nGraphPts = 7;
+const float ctr = 2.5;
+//const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProb.root";
+const char *root_file_name = "../../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
+const char *txt_path = "../../analysis_plots/txt_files";
+const char *out_path = "../../analysis_plots/pdf"; 
 const char *output_file_name = "SignificanceVs4thPt_incl4bProbMH30";
 
 Float_t LINE_WIDTH = 2.5;
@@ -41,7 +41,7 @@ Float_t min_range;
 //! 100TeV
 const double IntLumi      = 3e4;//fb-1 -> 10 ab-1(projected luminosity is 30 ab-1 not 10 ab-1)
 const double pp4bXsec     = 23.283e6;//fb, NLO Xsection// k-factor 1.6// LO 14.552e6 +- 12.16e3
-const double ggFhhXsec1   = 12.24e2;//fb, latest available NNLO Xsection, arXiv:1803.02463v1
+const double ggFhhXsec2_5 = 523.907;
 const double four_b_Prob  = std::pow(0.58,2);
 int tot_MCevents = 5e5;
 int tot_MCevents_B = 1e6;
@@ -49,7 +49,7 @@ int tot_MCevents_B = 1e6;
 double norm_signal, norm_bckgnd;
 
 Int_t nbinsMinus = n - 1; 
-Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 500.};
+Double_t pt_bins[n] = {20., 30., 40., 50., 60., 70., 80., 500.};
 Int_t   nAna[n]        = {0};
 Int_t   nAnaB[n]        = {0};
 
@@ -68,10 +68,8 @@ TH1D *Ana_bjet4LPt = nullptr;
 TH1D *Ana_bjet4LPtB = nullptr; 
 TH1 *h4_sig   = nullptr;
 TH1 *h4_bg     = nullptr;
-TH1 *h4_sig_   = nullptr;
-TH1 *h4_bg_     = nullptr;
 
-TH1 *h4_SoverB        = nullptr;
+TH1D *h4_SoverB        = nullptr;
 TH1D *h4_Significance1   = nullptr;
 TH1D *h4_Significance2   = nullptr;
 
@@ -81,20 +79,18 @@ TGraphErrors *g3 = nullptr;
 TGraphErrors *G2 = nullptr;
 TGraphErrors *G2_ = nullptr;
 TGraphErrors *G3 = nullptr;
-void plot_VsPt1()
+void plot_VsPt2_5()
 {
 
 	TFile *f = new TFile(root_file_name, "READ");
-	Ana_bjet4LPt = (TH1D*)f->Get("Ana_bjet4LPt1");
+	Ana_bjet4LPt = (TH1D*)f->Get("Ana_bjet4LPt2_5");
 	Ana_bjet4LPtB = (TH1D*)f->Get("Ana_bjet4LPtB");
 	h4_sig = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig", pt_bins);
 	h4_bg   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg", pt_bins);
-	h4_sig_ = Ana_bjet4LPt->Rebin(nbinsMinus, "h4_sig_", pt_bins);
-	h4_bg_   = Ana_bjet4LPtB->Rebin(nbinsMinus, "h4_bg_", pt_bins);
-	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt1");
+	//h4_sig = (TH1D*)f->Get("Ana_bjet4LPt2_5");
 	//h4_bg   = (TH1D*)f->Get("Ana_bjet4LPtB");
 
-	norm_signal   = (IntLumi * four_b_Prob * ggFhhXsec1)/tot_MCevents;
+	norm_signal   = (IntLumi * four_b_Prob * ggFhhXsec2_5)/tot_MCevents;
 	norm_bckgnd   = (IntLumi * pp4bXsec)/tot_MCevents_B;
 	
 	int nbins = h4_sig->GetNbinsX();
@@ -128,18 +124,13 @@ void plot_VsPt1()
 			Significance1[i-1] = (nAna[i-1] * norm_signal)/std::sqrt(nAnaB[i-1] * norm_bckgnd);
 			Significance2[i-1] = std::pow(nAna[i-1] * norm_signal, 2)/(nAnaB[i-1] * norm_bckgnd);
 		}
-		//h4_SoverB->SetBinContent(i, SoverB[i-1]);
+		h4_SoverB->SetBinContent(i, SoverB[i-1]);
 		h4_Significance1->SetBinContent(i, Significance1[i-1]);
 		h4_Significance2->SetBinContent(i, Significance2[i-1]);
 
         	ofs<<pT_threshold[i-1]<<" "<<nAna[i-1]<<" "<<nAnaB[i-1]<<" "<<nAna[i-1]*norm_signal<<" "<<nAnaB[i-1]*norm_bckgnd<<" "<<SoverB[i-1]<<" "<<Significance1[i-1]<<" "<<Significance2[i-1]<<"\n";
 	}
 	ofs.close();
-
-	h4_sig_->Scale(norm_signal);
-	h4_bg_->Scale(norm_bckgnd);
-	h4_SoverB = dynamic_cast<TH1*>(h4_sig_->Clone("h4_SoverB"));
-	h4_SoverB->Divide(h4_sig_, h4_bg_, 1.0, 1.0);
 
 	return;
 }
@@ -148,7 +139,7 @@ void plot_graph()
 {
 
 	TCanvas *c = new TCanvas("c","c",800,800);
-	plot_VsPt1();
+	plot_VsPt2_5();
 	c->SetLeftMargin(0.13);
 	TGaxis::SetMaxDigits(3);
 	h4_sig->Draw("hist");	
@@ -189,12 +180,7 @@ void plot_graph()
 	for(int i = 0; i < nGraphPts; i++)
 	{
 		SignificanceGain1[i] = Significance1[i]/h4_Significance1->Integral(1,nGraphPts); 
-		SignificanceGain2[i] = Significance2[i]/h4_Significance2->Integral(1, nGraphPts);
-		//std::cout<<"i: " << i <<std::endl;
-		//std::cout<<"Significance2[i]: " << Significance2[i] <<std::endl;
-		//std::cout<<"Significance2Tot[i]: " << h4_Significance2->Integral(1, nGraphPts) <<std::endl;
-		//std::cout<<"SignificanceGain2[i]: " << SignificanceGain2[i] <<std::endl;
-
+		SignificanceGain2[i] = Significance2[i]/h4_Significance2->Integral(1, nGraphPts); 
 	}
 	for(int i = 0; i < nGraphPts; i++)
 	{
@@ -287,7 +273,7 @@ void plot_graph()
 	g3 = new TGraphErrors(nGraphPts, pT_threshold, SignificanceGain1,0,0);
 	g3->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	g3->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	g3->GetYaxis()->SetTitle("i^{th} bin contribution to S/#sqrt{B}");
+	g3->GetYaxis()->SetTitle("Gain in S/#sqrt{B}");
 	g3->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	g3->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	g3->GetYaxis()->CenterTitle();
@@ -303,11 +289,11 @@ void plot_graph()
 	g3->GetYaxis()->SetRangeUser(min_range, max_range);
 	
 	//! Gain in (Significance)^2 Vs Pt threshold 
-	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 120.0};
+	Float_t pT_new[nGraphPts] = {25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 120.0};
 	G3 = new TGraphErrors(nGraphPts, pT_new, SignificanceGain2,0,0);
 	G3->GetXaxis()->SetTitle("p_{T, bJ4} [GeV/c]");
 	G3->GetYaxis()->SetTitleOffset(YAXISTITLE_OFFSET);
-	G3->GetYaxis()->SetTitle("i^{th} bin contribution to S^{2}/B");
+	G3->GetYaxis()->SetTitle("Gain in S^{2}/B");
 	G3->GetYaxis()->SetTitleSize(TITLE_SIZE);
 	G3->GetXaxis()->SetTitleSize(TITLE_SIZE);
 	G3->GetYaxis()->CenterTitle();
@@ -316,7 +302,7 @@ void plot_graph()
 	G3->SetLineColor(kRed);
 	G3->SetLineWidth(LINE_WIDTH);
 	G3->SetMarkerSize(MARKER_SIZE);
-	G3->SetTitle("hh #rightarrow 4b (Significance)^{2} contribution Vs 4^{th} leading b-jet p_{T} bin");
+	G3->SetTitle("hh #rightarrow 4b (Significance)^{2} gain Vs 4^{th} leading jet p_{T}");
 	G3->Draw("ACPe1");
 	max_range = G3->GetHistogram()->GetMaximum()*1.3;
 	min_range = G3->GetHistogram()->GetMinimum()*0.4;
@@ -326,7 +312,6 @@ void plot_graph()
         sprintf(root_file_name,"%s/../root/%s_%.1f.root",out_path,output_file_name,ctr);
 
 	TFile *f_out = new TFile(root_file_name,"RECREATE");
-	//TFile *f_out = new TFile("./analysis_plots/root/SignificanceVs4thPt_1.root","RECREATE");
 	h4_sig->Write();
 	h4_bg->Write();
 	h4_Significance1->Write();	
@@ -374,12 +359,12 @@ void pdf()
 	C->Print(out_file_,"pdf");
 	C->Clear();
 	G2_->Draw("ACPe1");
-	C->Print(out_file_,"pdf");
-	C->Clear();
-	g3->Draw("ACPe1");
-	C->Print(out_file_,"pdf");
-	C->Clear();
-	G3->Draw("ACPe1");
+	//C->Print(out_file_,"pdf");
+	//C->Clear();
+	//g3->Draw("ACPe1");
+	//C->Print(out_file_,"pdf");
+	//C->Clear();
+	//G3->Draw("ACPe1");
 	C->Print(out_file_close,"pdf");
         	
 	return;

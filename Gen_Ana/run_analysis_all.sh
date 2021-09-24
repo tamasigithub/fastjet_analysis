@@ -67,10 +67,10 @@ sed -i -e 's/_6.0_allR0.4/_2.5_allR0.2/g' ./GenAnalysis_smeared.h
 #EOF
 #root -l padToTex.cpp -e 'pad("c44d", 1);'<<EOF
 #EOF
-#./rootTex2pdf ./analysis_plots/tex/*.tex
+#./rootTex2pdf ../analysis_plots/tex/*.tex
 #echo "TEX files modified DONE!"
 #
-#cd ${CURRENT_DIR}/analysis_plots/tex/
+#cd ${CURRENT_DIR}/../analysis_plots/tex/
 #pdflatex c3_a.tex
 #pdflatex c3_b.tex
 #pdflatex c4_a.tex

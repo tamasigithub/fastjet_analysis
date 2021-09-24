@@ -306,7 +306,7 @@ legR->Draw();
 	mg1->Write("Sens_pTthre");
 	gPad->Write("Sens_pTthre");
 	c1->Print(out_file_,"pdf");
-	c1->SaveAs("./analysis_plots/tex/Sens_pTthre.tex");
+	c1->SaveAs("../../analysis_plots/tex/Sens_pTthre.tex");
 	
 
 	//gPad->Modified();
@@ -332,7 +332,7 @@ leg->Draw();
 	mg2->Write("sens_ithBincontri");
 	gPad->Write("sens_ithBincontri");
 	c1->Print(out_file_,"pdf");
-	c1->SaveAs("./analysis_plots/tex/sens_ithBincontri.tex");
+	c1->SaveAs("../../analysis_plots/tex/sens_ithBincontri.tex");
 	c1->Clear();
 	leg->Draw();
 	gPad->Write("k_lambdaLeg");

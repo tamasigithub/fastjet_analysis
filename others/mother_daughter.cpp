@@ -7,7 +7,7 @@ int mother_daughter()
 {
 
 	bool debug = false;
-	TFile *f = new TFile("output.root","READ");
+	TFile *f = new TFile("../root_files/output.root","READ");
 	TTree *t = (TTree*)f->Get("CollectionTree");
 	std::vector<int> *d1 = nullptr;
 	std::vector<int> *d2 = nullptr;
@@ -25,7 +25,7 @@ int mother_daughter()
 	t->SetBranchAddress("pdgId", &pid);
 	t->SetBranchAddress("status", &stat);
 	 
-	TFile *fout = new TFile("MomChild.root","RECREATE");
+	TFile *fout = new TFile("../root_files/MomChild.root","RECREATE");
  
 	std::vector<int> FS_mother1; 
 	std::vector<int> FS_mother2; 

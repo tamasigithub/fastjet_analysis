@@ -32,16 +32,16 @@ const int nlambda = 6;
 Double_t lambda[nlambda] = {-2.0, -1.0, 0.0, 1.0, 2.0, 3.0};
 Float_t lambda_colors[nlambda] = {kGreen, kGray +1, kBlack, kRed, kBlue, kViolet};
 
-const char *root_file_name   = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30";
-const char *root_file_name1   = "./analysis_plots/root/Sensitivity_studyVsk_lambda_corrected_incl4bProbMH30_final.root";
-//const char *root_file_name_2 = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-2.0.root";
-//const char *root_file_name_1 = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-1.0.root";
-//const char *root_file_name0  = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_0.0.root";
-//const char *root_file_name1  = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_1.0.root";
-//const char *root_file_name2  = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_2.0.root";
-//const char *root_file_name3  = "./analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_3.0.root";
+const char *root_file_name   = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30";
+const char *root_file_name1   = "../../analysis_plots/root/Sensitivity_studyVsk_lambda_corrected_incl4bProbMH30_final.root";
+//const char *root_file_name_2 = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-2.0.root";
+//const char *root_file_name_1 = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_-1.0.root";
+//const char *root_file_name0  = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_0.0.root";
+//const char *root_file_name1  = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_1.0.root";
+//const char *root_file_name2  = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_2.0.root";
+//const char *root_file_name3  = "../../analysis_plots/root/SignificanceVs4thPt_incl4bProbMH30_3.0.root";
 
-const char *out_path = "./analysis_plots/pdf"; 
+const char *out_path = "../../analysis_plots/pdf"; 
 const char *output_file_name = "Significance_Summary_incl4bProbMH30";
 
 Float_t max_range, min_range;
@@ -277,7 +277,7 @@ ana_txt->Draw();
 		
 	c1->Print(out_file_open,"pdf");
 	c1->Write("hist_sibi");
-	c1->SaveAs("./analysis_plots/tex/hist_sibi.tex");
+	c1->SaveAs("../../analysis_plots/tex/hist_sibi.tex");
 	f->Close();
 
 	c1->Clear();
@@ -299,7 +299,7 @@ ana_txt->Draw();
 legR->Draw();
 	c1->Print(out_file_,"pdf");
 	c1->Write("mgSB");
-	c1->SaveAs("./analysis_plots/tex/mgSB.tex");
+	c1->SaveAs("../../analysis_plots/tex/mgSB.tex");
 
 	mg1->Draw("ACP");
 	mg1->GetXaxis()->SetTitle("p_{T,bJ4} threshold [GeV/c]");
@@ -318,7 +318,7 @@ ana_txt->Draw();
 legR->Draw();
 	c1->Print(out_file_,"pdf");
 	c1->Write("mgZsum");
-	c1->SaveAs("./analysis_plots/tex/mgZsum.tex");
+	c1->SaveAs("../../analysis_plots/tex/mgZsum.tex");
 
 	mg2->Draw("ACP");
 	mg2->GetXaxis()->SetTitle("p_{T,bJ4} [GeV/c]");
@@ -337,7 +337,7 @@ ana_txt->Draw();
 leg->Draw();
 	c1->Print(out_file_,"pdf");
 	c1->Write("mgZiZtot");
-	c1->SaveAs("./analysis_plots/tex/mgZiZtot.tex");
+	c1->SaveAs("../../analysis_plots/tex/mgZiZtot.tex");
 
 	
 	mgZfor_k->Draw("ACP");
@@ -360,7 +360,7 @@ signal_->Draw();
 ana_txt->Draw();	
 	c1->Print(out_file_,"pdf");
 	c1->Write("gZatpT");
-	c1->SaveAs("./analysis_plots/tex/gZatpT.tex");
+	c1->SaveAs("../../analysis_plots/tex/gZatpT.tex");
 
 	mgSBfor_k->Draw("ACP");
 	mgSBfor_k->GetXaxis()->SetTitle("k_{#lambda}");
@@ -382,7 +382,7 @@ signal_->Draw();
 ana_txt->Draw();	
 	c1->Print(out_file_,"pdf");
 	c1->Write("gSBatpT");
-	c1->SaveAs("./analysis_plots/tex/gSBatpT.tex");
+	c1->SaveAs("../../analysis_plots/tex/gSBatpT.tex");
 	
 	mgSensfor_k->Draw("ACP");
 	mgSensfor_k->GetXaxis()->SetTitle("k_{#lambda}");
@@ -404,7 +404,7 @@ signal_->Draw();
 ana_txt->Draw();	
 	c1->Print(out_file_,"pdf");
 	c1->Write("gSensatpT");
-	c1->SaveAs("./analysis_plots/tex/gSensatpT.tex");
+	c1->SaveAs("../../analysis_plots/tex/gSensatpT.tex");
 	
 	mgInvSensfor_k->Draw("ACP");
 	mgInvSensfor_k->GetXaxis()->SetTitle("k_{#lambda}");
@@ -427,7 +427,7 @@ signal_->Draw();
 ana_txt->Draw();	
 	c1->Print(out_file_,"pdf");
 	c1->Write("gInvSensatpT");
-	c1->SaveAs("./analysis_plots/tex/gInvSensatpT.tex");
+	c1->SaveAs("../../analysis_plots/tex/gInvSensatpT.tex");
 
 	TString hi_name;
 	for(int k = nlambda-1; k > -1; --k)
@@ -474,7 +474,7 @@ signal_->Draw();
 ana_txt->Draw();	
 	c1->Print(out_file_,"pdf");
 	c1->Write("hist_Zi2Z2tot");
-	c1->SaveAs("./analysis_plots/tex/hist_Zi2Z2tot.tex");
+	c1->SaveAs("../../analysis_plots/tex/hist_Zi2Z2tot.tex");
 
 	for(int k = nlambda-1; k > -1; --k)
 	{
@@ -523,7 +523,7 @@ signal_->Draw();
 ana_txt->Draw();	
 	c1->Print(out_file_,"pdf");
 	c1->Write("hist_sensi2sens2tot");
-	c1->SaveAs("./analysis_plots/tex/hist_sensi2sens2tot.tex");
+	c1->SaveAs("../../analysis_plots/tex/hist_sensi2sens2tot.tex");
 	f1->Close();
 	
 	c1->Clear();

@@ -39,10 +39,10 @@ echo 'Done Significance Summary'
 echo 'NOW RUNNING SENSITIVITY MACRO'
 #
 ##
-./rootTex2pdf ./analysis_plots/tex/*.tex
+../../rootTex2pdf ../../analysis_plots/tex/*.tex
 echo "TEX files modified DONE!"
 #
-cd ${CURRENT_DIR}/analysis_plots/tex/
+cd ${CURRENT_DIR}/../../analysis_plots/tex/
 pdflatex mgSB.tex
 pdflatex mgZsum.tex
 pdflatex mgZiZtot.tex

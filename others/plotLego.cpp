@@ -1,6 +1,6 @@
 #include <iostream>
 #include "TROOT.h"
-#include "plot_props.h"
+#include "../plot_props.h"
 
 const char *in_path = "/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_7";
 const char *fName1 = "CELL_a50c3_ALL_PU1kMB_ETA2.5_30mm_R0.4_3.root";
@@ -199,7 +199,7 @@ void plot_1()
 	//leg1->Draw();
 	//leg5->Draw();
 	gPad->Update();
-	c->SaveAs("LEGO_2.tex");
-	c->SaveAs("LEGO_2_.pdf");
+	c->SaveAs("./plots/LEGO_2.tex");
+	c->SaveAs("./plots/LEGO_2_.pdf");
  return;
 }

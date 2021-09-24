@@ -42,7 +42,7 @@ TH1D *Ptb3b4 = new TH1D("Ptb3b4","Pt b3b4; pt_{b3b4} [GeV/c];", nbins, ptmin, pt
 int invariant_mass()
 {
 
-	f = new TFile("./fastjet_output/fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_5.root","READ");
+	f = new TFile("../fastjet_output/fastjet_output/Genjet2_ggF_Ctr1.0_q300MeV_2.5_5.root","READ");
 	t = (TTree*)f->Get("glob_jet");
 
 	t->SetBranchAddress("jetPt", &v_bPt);
@@ -52,7 +52,7 @@ int invariant_mass()
 	t->SetBranchAddress("Nbtags",  &n1_btags);
 	t->SetBranchAddress("btaggedFlavor",  &v_btagFlavor);
 	
-	TFile *fout = new TFile("test.root","RECREATE");
+	TFile *fout = new TFile("../root_files/test.root","RECREATE");
 	for(int i = 0; i < t->GetEntries(); i++)
 	{
 		v1_bPt.clear();
