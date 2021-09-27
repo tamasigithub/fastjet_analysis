@@ -1,6 +1,7 @@
+// *** newer and better version of this file: SignalEventList_1.cc ***//
 #include "fastjet/ClusterSequence.hh"
-#include "Constituent_info.h"
-#include "TrackJetObj.h"
+#include "../Constituent_info.h"
+#include "../TrackJetObj.h"
 #include <iostream>
 #include <vector>
 #include "math.h"
@@ -58,7 +59,7 @@ int main()
   double thirdLeading_eta = 0;
   double fourthLeading_eta = 0;
   //! store results in an output root file 
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","RECREATE");
+  TFile *f_out = new TFile("../fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","RECREATE");
   TTree *eventList = new TTree("eventList","event numbers of signal like events");
   eventList->Branch("eventNums", &eventNumbers);
   eventList->Branch("Njets", &N_jets);

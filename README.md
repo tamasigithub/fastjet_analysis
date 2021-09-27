@@ -3,6 +3,9 @@
 ## This repository contains macros I've used for jet clustering during my PhD.
 
 ### Macro descriptions
+Calo emulation: trackJet\_1.cc (newer and better version of track\_jet.cc) 
+TTT jets :  trackJetMod\_1.cc (latest version)
+
 **Generator level analysis for HH->4b using only the pp->4b QCD background:**
 main macro - *GenAnalysis\_smeared.cpp*
 includes - *GenAnalysis\_smeared.h, GenAna\_1.cpp, GenAna\_0.cpp, GenAna\_\_1.cpp, GenAna\_\_2.cpp, GenAna\_2.cpp, GenAna\_2\_5.cpp, GenAna\_3.cpp, GenAna\_bckgnd.cpp, SetAxix\_Props.cpp*

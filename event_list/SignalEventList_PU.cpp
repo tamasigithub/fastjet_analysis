@@ -1,3 +1,8 @@
+// ***********************************************************************************************//
+// From simulated 'selected' events, select events that have a pileup above/below NPU1plusNPU2
+// Here 'selected' events means that the simulation was done with events satisfying the basic 
+// generator level analysis cuts
+// **********************************************************************************************//
 #include <iostream>
 #include <vector>
 #include "math.h"
@@ -26,7 +31,7 @@ void SignalEvent_PU()
   double Npileup1 = 0;
   double Npileup2 = 0;
   //! store results in an output root file 
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","RECREATE");
+  TFile *f_out = new TFile("../fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","RECREATE");
   TTree *eventList = new TTree("eventList","event numbers of signal like events");
   eventList->Branch("eventNums", &eventNumbers);
   eventList->Branch("Npileup1", &Npileup1);

@@ -1,4 +1,5 @@
-/////////////////////////////////////// CALO EMULATION TRACK BASED //////////////////////////////////////
+/////////////////////////////////////// CALO EMULATION TRACK BASED ///////////////////////////////////
+// Without cell based emulation; smearing of individual constituent pTs b4 clustering (not used for end results)//
 #include "fastjet/ClusterSequence.hh"
 #include "Constituent_info.h"
 #include "TrackJetObj.h"

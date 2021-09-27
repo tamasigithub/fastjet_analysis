@@ -1,5 +1,5 @@
 #include <iostream>
-#include "TrigEff.h"
+#include "../TrigEff.h"
 
 int main()
 {

@@ -1,3 +1,6 @@
+// *** Needs 14TeV and 100TeV pythia output as input files. *** //
+// The 100TeV files are located on higgs2: /data/atlas/tkar/HH_4b_ggF
+// The 14TeV files are on cernbox2: home/grid_files/FCC_merge
 #include <iostream>
 #include <fstream>
 #include <string>

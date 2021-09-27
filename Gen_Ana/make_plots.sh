@@ -91,10 +91,10 @@ root -l padToTex.cpp -e 'pad("c54c", -1, true, true);'<<EOF
 EOF
 root -l padToTex.cpp -e 'pad("c54d", -1, true, true);'<<EOF
 EOF
-./rootTex2pdf ./analysis_plots/tex/*.tex
+./rootTex2pdf ../analysis_plots/tex/*.tex
 echo "TEX files modified DONE!"
 
-cd ${CURRENT_DIR}/analysis_plots/tex/
+cd ${CURRENT_DIR}/../analysis_plots/tex/
 sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c8_b.tex
 sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c8_d.tex
 sed -i -e 's/HH\ \\rightarrow/pp\ \\rightarrow/g' ./c11b.tex

@@ -1,3 +1,19 @@
+// *************************************************************************************************//
+// *** Create an event list that satisfies the selection cuts used for Generator level analysis ***//
+// *** For this calo-jets(charged + neutrals) are created from the reco "tracks" TTree ***//
+//
+// input files: TTT reco output (PU1k) specified in the main()
+// output file: a root output created by createNewOutput(file_name) -> called in main()
+// for all "tracks"(simulated info) in an event the following checks are made:
+// 1. only primary tracks (the ones shot into the simulation)
+// 2. only hard scattered particles (PU included)
+// 3. those within a given tracker acceptance (eta)
+// 4. tracks with charge >1 are discarded
+// 5. neutrinos, Higgs and other quarks do not deposit energy in the calo 
+// 6. Events with b quarks with PV(same as HS vertex) outside the Luminous region are discarded
+// 7. Gen_Ana cuts on the clustered jets: atleast 4 jets satisfying the basic pT cuts
+// Note: invariant higgs mast cut not included
+// *************************************************************************************************//
 #include <iostream>
 #include <vector>
 #include "math.h"
@@ -10,8 +26,8 @@
 #include <TInterpreter.h>
 #include <TLorentzVector.h>
 #include "fastjet/ClusterSequence.hh"
-#include "Constituent_info.h"
-#include "TrackJetObj.h"
+#include "../Constituent_info.h"
+#include "../TrackJetObj.h"
 #define mass_piPM  139.57018f /* MeV/c^2 */
 using namespace fastjet;
 //const char *out_path = "./out_test";

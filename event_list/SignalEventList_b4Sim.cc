@@ -1,3 +1,6 @@
+// ************************************************************************************************ //
+// Creates an event list that satisfy the generator level ana cuts from pythia output as input files 
+// ************************************************************************************************ //
 #include <iostream>
 #include <vector>
 #include "math.h"
@@ -10,8 +13,8 @@
 #include <TInterpreter.h>
 #include <TLorentzVector.h>
 #include "fastjet/ClusterSequence.hh"
-#include "Constituent_info.h"
-#include "TrackJetObj.h"
+#include "../Constituent_info.h"
+#include "../TrackJetObj.h"
 #define mass_piPM  139.57018f /* MeV/c^2 */
 using namespace fastjet;
 const char *out_path = "./out_test";

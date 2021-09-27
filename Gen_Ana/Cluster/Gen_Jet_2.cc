@@ -1,6 +1,6 @@
 #include "fastjet/ClusterSequence.hh"
-#include "Constituent_info.h"
-#include "TrackJetObj.h"
+#include "../../Constituent_info.h"
+#include "../../TrackJetObj.h"
 #include "Gen_output_2.h"
 #include <iostream>
 #include <vector>
@@ -52,9 +52,9 @@ int main()
   gInterpreter->GenerateDictionary("vector<vector<int>>","vector");
 
   //! store results in an output root file 
-  //TFile *f_out = new TFile("./fastjet_output/test_all_b.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/Genjet2_pp4b_q300MeV_6.0_allR0.4_0.8btag_1.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4_0.8btag.root","RECREATE");
+  //TFile *f_out = new TFile("../../fastjet_output/test_all_b.root","RECREATE");
+  TFile *f_out = new TFile("../../fastjet_output/Genjet2_pp4b_q300MeV_6.0_allR0.4_0.8btag_1.root","RECREATE");
+  //TFile *f_out = new TFile("../../fastjet_output/Genjet2_ggF_Ctr-2.0_q300MeV_2.5_allR0.4_0.8btag.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   genOut.init_TTree();
   genOut.Branch_OutTree();

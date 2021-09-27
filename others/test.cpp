@@ -39,9 +39,9 @@ int test()
 	TFile *f = new TFile("MomChild.root", "READ");
 	TTree *t = (TTree*)f->Get("CollectionTree");
 
-	const char *out_path = "./analysis_plots/pdf"; 
+	const char *out_path = "../analysis_plots/pdf"; 
 	const char *output_file_name = "testMomChild";
-	const char *root_file_name = "testMomChild.root";
+	const char *root_file_name = "../root_files/testMomChild.root";
 	//////////////////////////////////////////////////
 	//////////////// writing to pdf //////////////////
 	//////////////////////////////////////////////////
