@@ -17,7 +17,9 @@
 #include "../TrackJetObj.h"
 #define mass_piPM  139.57018f /* MeV/c^2 */
 using namespace fastjet;
-const char *out_path = "./out_test";
+const int maxEventsinFile = 50;
+//const char *out_path = "./out_test";
+const char *out_path = "/user/tkar/work/data/gen/user.tkar.pp_4bQCD_selectedBGEvents_0/";
 TFile *f_out = nullptr;
 TTree *t_out = nullptr;
 //! define a local vector<double> to store the input values
@@ -95,8 +97,8 @@ int main()
   TRandom3 *myRNG = new TRandom3();
   gRandom = myRNG;
   
-  bool debug = true;
-  //bool debug = false;
+  //bool debug = true;
+  bool debug = false;
  
 //**************** Constants *********************//
   const double ChargedPcle_PtThreshold 	= 300;//MeV
@@ -124,12 +126,12 @@ int main()
 
   //! open input trees 
   TChain rec("CollectionTree");
-  rec.Add("~/repo_tamasi/grid_files/user.tkar.pp_ggF_Ctr1.0hh_pythia82_nopileup.v5_output.root/*.root");
+  rec.Add("/user/tkar/work/data/gen/user.tkar.pp_4bQCD_pythia82_nopileup.v5_output.root/*.root");
 
   //! Get total no. of events
   //Long64_t nevents = 500000;
   Long64_t nevents = rec.GetEntries();
-  nevents = 1000;
+  //nevents = 1000;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl; 
   
   //! define a local vector<double> to store the input values
@@ -522,7 +524,7 @@ int main()
 	out_Nentries++;
 	if(debug) std::cout<<"out_entries = " <<out_Nentries <<std::endl;
 	if(debug) std::cout<<"out_entriesmod25 = " <<out_Nentries%25 <<std::endl;
-	if(out_Nentries%25 == 0)
+	if(out_Nentries%maxEventsinFile == 0)
 	{
 		//! close any already open output file
 		if(f_out) 
@@ -533,7 +535,8 @@ int main()
 		}
 		//! open a new output file with the following name
 		char newFilename[1023];
-		sprintf(newFilename,"user.tkar.pp_ggF_Ctr1.0_selectedSignalEvents_%06i.root",file_number);
+		//sprintf(newFilename,"user.tkar.pp_ggF_Ctr1.0_selectedSignalEvents_%06i.root",file_number);
+		sprintf(newFilename,"user.tkar.pp_4bQCD_selectedBGEvents_%06i.root",file_number);
 		std::cout<<"New File Name: " << newFilename <<std::endl;
 		createNewOutput(newFilename);
 

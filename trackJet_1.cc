@@ -51,10 +51,10 @@ int main ()
   int MIN_Constituents = 2;
   float SCALEfac_Ereso = 0.5;//50% 
 
-  double ETA_CUT     = 1.5;
+  double ETA_CUT     = 2.5;
   const double MaxOGradius = 1e3;//1m
   //! Jet definition
-  double R = 0.2;
+  double R = 0.4;
   double PTMINJET = 5e3;// in MeV 
 /////////////////////////////////////////////////////////
   //! binning for rate and trigger efficienceis
@@ -77,7 +77,8 @@ int main ()
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_Eta2_5_BasicCuts.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
-  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000004.root","READ");
+  //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000004.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000003.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
   evelistTree->SetBranchAddress("eventNums", &eve_i);
   Long64_t nevents = evelistTree->GetEntries();
@@ -118,7 +119,7 @@ int main ()
   ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
   ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kMB_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_7/CELL_a50c3_ALL_PU1kggF_ETA1.5_30mm_R0.3_3.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_7/CELL_a50c3_ALL_PU1kMB_ETA1.5_30mm_R0.2_3.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/calo_data/CELL_a50c3_ALL_PU1kMB_pp4b_ETA2.5_30mm_R0.4_2.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -165,8 +166,14 @@ int main ()
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
-  rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB_1/*.root");
-  //! define a local vector<double> to store the reconstructed pt values
+  //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB_1/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/pp_4bQCD/*.root");
+  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/MB_pp4b/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/MB_1/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/ggF1.0/*.root");
+  Long64_t nentries = rec.GetEntries();
+
+//! define a local vector<double> to store the reconstructed pt values
   //! always initialise a pointer!!
   std::vector<double> *pt_tru = 0;
   std::vector<double> *x0_tru = 0;
@@ -259,17 +266,11 @@ int main ()
   std::vector<int> pdgPU;
   std::vector<int> chargePU;
   
-  ////! Get total no. of events
-  ////Long64_t nentries = rec.GetEntries();
-  //////Long64_t nentries = 1000;
-  ////int pileup = 160;
-  ////Long64_t nevents = nentries/pileup;
-  nevents = rec.GetEntries();
-  //nevents = 1000;
+  ////! Limit total no. of selected pileup events to 1000
   if(nevents > 1000) nevents = 1000;
   r_sumpt.nevents = nevents;
   trigger.nevents = nevents;
-  //std::cout<<"Total number of enteries : " << nentries <<std::endl;
+  std::cout<<"Total number of enteries : " << nentries <<std::endl;
   std::cout<<"number of Pile-up events : " << nevents <<std::endl;
   //! vector of reconstructed track-jet objects
   std::vector<TrackJetObj> trjVec;//define outside the loop and call clear inside OR define inside the loop and it will be destroyed at the end of the loop for each iteration similar to the class object
@@ -348,6 +349,7 @@ int main ()
 			////if( (*barcode)[ik] < -1) continue;
 		/////////////////////////////////////////////////	
 		
+		//! keep only primaries
 		if((*type)[ik] != 0) continue;
 		if(std::fabs((*eta_tru)[ik]) > ETA_CUT) continue; 
 		if(std::abs((*charge)[ik]) > 1) continue; // there are a=many particles with pdgs >1e9 which have weird charges
@@ -355,7 +357,6 @@ int main ()
 		if(std::abs((*pdg)[ik]) == 25 || std::abs((*pdg)[ik]) == 5) continue; // get rid of the Higgs's and the b quarks
 		/////// ONLY to test remove neutrals //////////
 		//if(std::abs((*charge)[ik]) != 0) continue;
-		//! keep only primaries
 		////////////////////////////////////////
 		//! get rid of charged particles that will not make it to the calorimeter
 		//! first calculate the threshold by noting their origin (vx, vy) in the transverse plane

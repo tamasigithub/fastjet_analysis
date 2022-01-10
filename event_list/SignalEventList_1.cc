@@ -30,9 +30,9 @@
 #include "../TrackJetObj.h"
 #define mass_piPM  139.57018f /* MeV/c^2 */
 using namespace fastjet;
-//const char *out_path = "./out_test";
-const char *out_path = "/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4";
-const int file_number = 4;
+const char *out_path = "./out_test";
+//const char *out_path = "/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4";
+const int file_number = 3;
 TFile *f_out = nullptr;
 TTree *eventList = nullptr;
 
@@ -167,8 +167,10 @@ int main()
 
   //! open input trees 
   TChain rec("tracks");
-  rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
-  rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_2/*.root");
+  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/pp_4bQCD/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/ggF1.0/*.root");
+  //rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
+  //rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_2/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/tmpnokap/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
@@ -220,6 +222,7 @@ int main()
 	//! open a new output file with the following name
 	char newFilename[1023];
 	sprintf(newFilename,"user.tkar.EventList_2_5_allAnaCuts_%06i.root",file_number);
+	//sprintf(newFilename,"user.tkar.EventListpp4bQCD_2_5_allAnaCuts_%06i.root",file_number);
 	std::cout<<"New File Name: " << newFilename <<std::endl;
 	createNewOutput(newFilename);
 //****************************** Begining of Event Loop ***********************************//

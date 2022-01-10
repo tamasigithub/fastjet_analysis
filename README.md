@@ -4,7 +4,8 @@
 
 ### Macro descriptions
 Calo emulation: trackJet\_1.cc (newer and better version of track\_jet.cc) 
-TTT jets :  trackJetMod\_1.cc (latest version)
+TTT jets (ideal case):  trackJetMod\_1.cc : use of matched track properties instead of reconstructed tracks
+TTT jets :  trackJetMod.cc (latest version)
 
 **Generator level analysis for HH->4b using only the pp->4b QCD background:**
 main macro - *GenAnalysis\_smeared.cpp*

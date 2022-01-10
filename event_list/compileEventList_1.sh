@@ -3,5 +3,5 @@
 #./short-example
 g++ SignalEventList_1.cc -o evelist_1 \
 `root-config --cflags --libs` \
-`fastjet-install/bin/fastjet-config --cxxflags --libs --plugins`
+`../fastjet-install/bin/fastjet-config --cxxflags --libs --plugins`
 #./trackjet

@@ -1,3 +1,7 @@
+// ******************************* TTT-recoJet clustering *************************
+// To change: NZVTXBIN, ETA_CUT, f_eve, f_out, rec.Add
+// check line: if((*station)[ik] != 0 ) to cluster only barrel/endcap tracks 
+// ********************************************************************************
 #include "fastjet/ClusterSequence.hh"
 #include "Constituent_info.h"
 #include "TrackJetObj.h"
@@ -39,26 +43,26 @@ int main ()
   std::vector<int> MIN_Constituents = {3,2,2,1,1};
   //std::vector<int> MIN_Constituents = {4,4,3,3,2};
   NJETS = 20;
-  NZVTXBIN = 200;
+  NZVTXBIN = 40;
   ZRANGE = 200; // in mm
   ZBIN_width = ZRANGE/NZVTXBIN;
   double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
   double KAPPA_CUT   = 3.0;
-  double ETA_CUT     = 1.5;
+  double ETA_CUT     = 2.5;
   double MIN_TRACKPT   = 2e3;//! all tracks must have a min pT > MIN_TRACKPT
   double MIN_TRACKPT_1 = 2e3;//! atleast MIN_Constituents in a jet must have pT > MIN_TRACKPT_1
-  //double MIN_TRACKPT_2[5] = {2e3,2e3,2e3,2e3,2e3};//! atleast 1st constituents in a jet must have pT > MIN_TRACKPT_1
-  double MIN_TRACKPT_2[5] = {9e3,7e3,4e3,3e3,2e3};//! atleast 1st constituents in a jet must have pT > MIN_TRACKPT_1
+  double MIN_TRACKPT_2[5] = {2e3,2e3,2e3,2e3,2e3};//! atleast 1st constituents in a jet must have pT > MIN_TRACKPT_1
+  //double MIN_TRACKPT_2[5] = {9e3,7e3,4e3,3e3,2e3};//! atleast 1st constituents in a jet must have pT > MIN_TRACKPT_1
   //! Jet definition
   double R = 0.4;
   double PTMINJET = 5e3;// in MeV
 
  //! Print constants used
-  std::cout<<"NZVTXBIN = " << NZVTXBIN <<std::endl;
-  std::cout<<"ZRANGE = " << ZRANGE <<std::endl;
-  std::cout<<"ZBIN_width = " << ZBIN_width <<std::endl;
-  std::cout<<"MAX_TRACKpt = " << MAX_TRACKpt <<std::endl;
-  std::cout<<"ETA_CUT = " << ETA_CUT <<std::endl;
+  std::cout<<"NZVTXBIN:  "<< NZVTXBIN <<std::endl;
+  std::cout<<"ZRANGE:  " << ZRANGE <<std::endl;
+  std::cout<<"ZBIN_width:  " << ZBIN_width <<std::endl;
+  std::cout<<"MAX_TRACKpt:  " << MAX_TRACKpt <<std::endl;
+  std::cout<<"ETA_CUT:  " << ETA_CUT <<std::endl;
 /////////////////////////////////////////////////////  
   //! variables used to make purity plots
 /////////////////////////////////////////////////////
@@ -107,7 +111,8 @@ int main ()
   double PV_i = 0;
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
-  TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_1_5_allAnaCuts_000004.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000003.root","READ");
+  //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_1_5_allAnaCuts_000004.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000001.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
   evelistTree->SetBranchAddress("eventNums", &eve_i);
@@ -159,10 +164,17 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/TrkJPU1kggFhh4b1.2mm_30mm_4trk2.5_2GeV_33333GeV_5.root","RECREATE");
-  ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/TrkJPU1kMB1.2mm_30mm_1trk2.5_2GeV_33333GeV_3.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/TrkJPU1kggFhh4b1.5mm_30mm_32211trk1.5_2GeV_97432GeV_5.root","RECREATE");
-  //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_6/TrkJPU1kMB1.5mm_30mm_32211trk1.5_2GeV_97432GeV_3.root","RECREATE");
+  const char* out_path = "./fastjet_output/TTT_data";
+  const char* sample = "MB_pp4b";
+  const char* bin_width = "7.5mm";
+  const char* BrEC = "Br30mmEC67mm";
+  const char* min_const = "32211";
+  const char* min_constPt = "22222";
+  char out_filename[1023];
+  sprintf(out_filename,"%s/%s/TrkJPU1k%s_%s_%strk%0.1f_%sGeV_1.root",out_path,sample,bin_width,BrEC,min_const,ETA_CUT,min_constPt);
+  std::cout<<"Output file name: " <<out_filename<<std::endl;
+  TFile *f_out = new TFile(out_filename,"RECREATE");
+  //TFile *f_out = new TFile("./fastjet_output/TTT_data/TrkJPU1kggFhh4b7.5mm_30mm_32211trk2.5_2GeV_22222GeV_1.root","RECREATE");
   TH1::SetDefaultSumw2(true);
   //! track jet purity
   TH1* h_num_vs_etaPU = new TH1F("h_num_vs_etaPU", "Numerator Count vs #eta;#eta;Numerator Count", etabin, etamin, etamax);
@@ -241,9 +253,15 @@ int main ()
   bin_Tree->Branch("PB5_multibin", &r_sumpt.PB5);
   //! open input trees 
   TChain rec("m_recTree");
+  char input_dir[1023];
+  sprintf(input_dir,"/user/tkar/work/data/rec/sel/%s/PU1k/%s/*.root",BrEC,sample);
+  std::cout<<"Input directory: "<<input_dir<<std::endl;
   //! high pt min bias sample sigma = 3
-  rec.Add("./fastjet_output/ggFhh4b_SM_1/*.root");
-  rec.Add("./fastjet_output/ggFhh4b_SM_2/*.root");
+  rec.Add(input_dir);
+  //rec.Add("/user/tkar/work/data/rec/opt/Br30mmEC67mm/PU1k/ggF1.0/*.root");
+  //rec.Add("/user/tkar/work/data/rec/opt/Br30mmEC67mm/PU1k/MB_1/*.root");
+  //rec.Add("./fastjet_output/ggFhh4b_SM_1/*.root");
+  //rec.Add("./fastjet_output/ggFhh4b_SM_2/*.root");
   //rec.Add("./fastjet_output/MB_1/*.root");
   //rec.Add("./fastjet_output/MB_2/*.root");
   ////rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
@@ -264,6 +282,7 @@ int main ()
   std::vector<double> *m_eta = 0;
   std::vector<double> *m_phi = 0;
   std::vector<int> *type = 0;
+  std::vector<int> *station = 0;
   rec.SetBranchStatus("Pt_n",1);
   rec.SetBranchStatus("Z013",1);
   rec.SetBranchStatus("Theta13",1);
@@ -291,6 +310,7 @@ int main ()
   rec.SetBranchAddress("M_eta", &m_eta);
   rec.SetBranchAddress("M_phi", &m_phi);
   rec.SetBranchAddress("mc_interaction", &type);
+  rec.SetBranchAddress("station", &station);
   //! get mc information -pdgid and z vertex  
   //! vectors containing a single pileup event
   std::vector<double> pt_recPU;
@@ -407,6 +427,7 @@ int main ()
 			//if(std::fabs((*m_pt)[ik]) < MIN_TRACKPT) continue; 	
 			//if(std::fabs((*m_eta)[ik]) > ETA_CUT) continue; 	
 			//if((*type)[ik] != 0 ) continue; 	
+			//if((*station)[ik] != 0 ) continue; 	
 			if(std::fabs((*kap_pull)[ik]) > KAPPA_CUT ) continue; 	
 			if(std::fabs((*pt_rec)[ik]) < MIN_TRACKPT) continue; 	
 			if(std::fabs((*eta_rec)[ik]) > ETA_CUT) continue; 	
