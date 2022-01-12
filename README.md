@@ -4,7 +4,6 @@
 It is based on Fastjet version 3.3.2
 
 #### Clone instructions
-**TODO: EDIT links**
 Next go to the directory where you would like to clone this repository and type
 ```
 git clone git@bitbucket.org:kartamasi16/fastjet.git
@@ -50,7 +49,7 @@ This has now updated your changes to the remote repository -> GO CHECK!
 To untrack a file already in the repository:
 ```
 git rm --cached <file_name>
-
+```
 ### Code descriptions
 
 **Generator level analysis for HH->4b using only the pp->4b QCD background:**
