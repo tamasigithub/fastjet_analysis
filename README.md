@@ -53,7 +53,7 @@ git rm --cached <file_name>
 ### Code descriptions
 
 **Generator level analysis for HH->4b using only the pp->4b QCD background:**
-The analysis is uses a very simple cut-flow analysis. All the code for this exist in Gen\_Ana
+The analysis uses a very simple cut-flow analysis. All the code for this exist in Gen\_Ana
 
 0. The Jet clustering source codes are in the folder Gen\_Ana/Cluster
 The main source file Gen\_Jet\_2.cc and the script to run it is compileGen\_run\_2.sh
@@ -75,10 +75,10 @@ It then calls *padToTex* to produce tex files followed by *rootTex2pdf* that add
 1. Calo emulation: Manin file-- trackJet\_1.cc (newer and better version of track\_jet.cc). It can be compiled using compile\_run\_1.sh and executed with the following commands:
 ```
 ./compile_run_1.sh
-./tracjet_1
+./trackjet_1
 
 ```
-The input files are read in trackJet\_1.cc. 
+The input files are read in trackJet\_1.cc. Please check if the output file paths exist.
 
 The calorimeter specifications are specified in CaloEmu.h. There is also a corresponding source file.
 The calorimeter emulations considers the ECAL granularity of FCC-hh reference detector and also assumes a magnetic field of 4T. Smearing is done in the main file.
