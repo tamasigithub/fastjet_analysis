@@ -1,4 +1,8 @@
 #!/bin/sh
+
+###########  IN trackJetMod.cc CHANGE THE EVENT LIST FILE   ###################
+########### user.tkar.EventList_2_5_allAnaCuts_000002.root  ###################
+
 ## ggF  Br 30mm EC 67mm eta 2.5 zbin 1.5mm
 #sed -i -e 's/sample = .*/sample = "ggF1.0";/g' ./trackJetMod.cc
 #sed -i -e 's/NZVTXBIN = .*/NZVTXBIN = 200;/g' ./trackJetMod.cc
@@ -43,6 +47,11 @@
 #echo 'running fastjet for Br30mm EC67mm 1.5mm bin'
 #./compile_runMod.sh
 #./trackjetMod
+
+
+###########  IN trackJetMod.cc CHANGE THE EVENT LIST FILE   ###################
+########### user.tkar.EventList_2_5_allAnaCuts_000003.root  ###################
+
 # pp_4bQCD  Br 30mm EC 67mm eta 2.5 zbin 1.5mm
 sed -i -e 's/sample = .*/sample = "pp_4bQCD";/g' ./trackJetMod.cc
 sed -i -e 's/NZVTXBIN = .*/NZVTXBIN = 200;/g' ./trackJetMod.cc

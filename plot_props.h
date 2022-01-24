@@ -28,7 +28,7 @@ TLegend *leg5 = nullptr;
 void Legends()
 {
 	leg1 = new TLegend(Xr1, Yu1, Xr2, Yu2);
-	leg1->AddEntry((TObject*)0, "#sqrt{s} = 100 TeV, B = 4T, |#eta| < 1.5", "");
+	leg1->AddEntry((TObject*)0, "#sqrt{s} = 100 TeV, B = 4T, |#eta| < 2.5", "");
 	//leg1->AddEntry((TObject*)0, "HH #rightarrow b#bar{b}b#bar{b}, <#mu> = 0", "");
 	//leg1->AddEntry((TObject*)0, "HH #rightarrow b#bar{b}b#bar{b}, <#mu> = 1k", "");
 	leg1->SetFillStyle(FILL_STYLE);
@@ -39,7 +39,7 @@ void Legends()
 
 	leg2 = new TLegend(Xl2, Yu1-0.05, Xr2, Yu1-0.001);
 	//leg2->AddEntry((TObject*)0, "final selection cuts", "");
-	leg2->AddEntry((TObject*)0, "p_{T} > 2 GeV/c, |#eta| < 1.5, |z_{vtx}| < 10 cm", "");
+	leg2->AddEntry((TObject*)0, "p_{T} > 2 GeV/c, |#eta| < 2.5, |z_{vtx}| < 10 cm", "");
 	//leg2->AddEntry((TObject*)0, "p_{T} > 2 GeV/c, |#eta| < 1.7, |z_{vtx}| < 10 cm", "");
 	leg2->SetFillStyle(FILL_STYLE);
 	leg2->SetBorderSize(BORDER_SIZE);

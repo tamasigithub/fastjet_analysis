@@ -39,7 +39,7 @@ const double TRIANGLEDOWN_SIZE = 2.1;
 const char* out_path = "./summary_plots/pdf"; 
 //const char* output_file_name = "nofakes100GeV2Calo_7.5_3.75_q1.2GeV_2";
 //const char* output_file_name = "TrigSummary43221trk_7.5_1.2_5GeV_PrimB0ALLa50c3Caloq1.2GeV_2GeV_33333GeV_30mm_5_2";
-const char* output_file_name = "TrigSummary32211trk_7.5_1.5_22222GeV_CELL_a50c3_ALL3067mmETA2.5_3";
+const char* output_file_name = "TrigSummary32211trk_7.5_1.5_22222GeV_CELL_a50c3_ALL3067mmETA2.5_2";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -122,7 +122,8 @@ void roc(const char *pileup, const char *gapsize)
 	const char *file_path_1 = "./fastjet_output/TTT_data";///TriggerStudies_6";
 	const char *file_path_2= "./fastjet_output/TTT_data";///TriggerStudies";
 	char signal_file_name[1023];
-	sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 	TFile *f = new TFile(signal_file_name, "READ");
 	//! sumpt approach
@@ -150,7 +151,8 @@ void roc(const char *pileup, const char *gapsize)
 	Eb5->GetYaxis()->SetRangeUser(0,1.2);
 	
 	char MinBias_file_name[1023];
-	sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	TFile *f1 = new TFile(MinBias_file_name, "READ");
 	TTree *t1 = (TTree*)f1->Get("glob_jet");
 	int nevents = t1->GetEntries();
@@ -525,7 +527,8 @@ void roc(const char *pileup, const char *gapsize)
 	//! Fetch the histograms
 	////////////////////////////////////////////////
 	char signal_file_name_1[1023];
-	sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	TFile *f_ = new TFile(signal_file_name_1, "READ");
 	//! sumpt approach
 	TH1F *E2_ = (TH1F*)f_->Get("h_tJeff2");
@@ -552,7 +555,8 @@ void roc(const char *pileup, const char *gapsize)
 	Eb_5->GetYaxis()->SetRangeUser(0,1.2);
 	
 	char MinBias_file_name_1[1023];
-	sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	TFile *f_1 = new TFile(MinBias_file_name_1, "READ");
 	TTree *t_1 = (TTree*)f_1->Get("glob_jet");
 	nevents = t_1->GetEntries();
