@@ -41,7 +41,7 @@
 
 
 const char* out_path = "../pdf"; 
-const char* output_file_name = "TTT_TrigSummarytrk_7.5_1.5_30_3067mmETA2.5_1";
+const char* output_file_name = "TTT_TrigSummarytrk_7.5_1.5_30_3067mmETA2.5_2";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -248,10 +248,12 @@ void roc(const char *pileup, const char *gapsize)
 ///////////////////////////////////////////////////////////
 //      Extendend barrel
 ///////////////////////////////////////////////////////////     
-	sprintf(signal_file_name_2, "%s/TrkJPU%sggFhh4b7.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//7.5
+	sprintf(signal_file_name_2, "%s/TrkJPU%sggFhh4b7.5mm_30mm_11111trk2.5_2GeV_2GeV_5.root",file_path,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name_2, "%s/TrkJPU%sggFhh4b7.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
  
-	sprintf(MinBias_file_name_2, "%s/TrkJPU%sMB7.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//7.5
+	sprintf(MinBias_file_name_2, "%s/TrkJPU%sMB7.5mm_30mm_11111trk2.5_2GeV_2GeV_3.root",file_path,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name_2, "%s/TrkJPU%sMB7.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//7.5
 
 	fetch_7_5mmExTTT();
 
@@ -316,10 +318,12 @@ void roc(const char *pileup, const char *gapsize)
 	make_graphs_7_5mmExTTT();
 
 	
-	sprintf(signal_file_name_3, "%s/TrkJPU%sggFhh4b1.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_3, "%s/TrkJPU%sggFhh4b1.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//1.5
+	sprintf(signal_file_name_3, "%s/TrkJPU%sggFhh4b1.5mm_30mm_11111trk2.5_2GeV_2GeV_5.root",file_path,pileup);//,gapsize);//1.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 
-	sprintf(MinBias_file_name_3, "%s/TrkJPU%sMB1.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//1.5
+	sprintf(MinBias_file_name_3, "%s/TrkJPU%sMB1.5mm_30mm_11111trk2.5_2GeV_2GeV_3.root",file_path,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_3, "%s/TrkJPU%sMB1.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//1.5
 
 	fetch_1_5mmExTTT();
 	
