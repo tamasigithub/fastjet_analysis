@@ -39,8 +39,8 @@ int main ()
   float ZRANGE, ZBIN_width;
   int izbin, nthBIN_PV;
   //MIN_Constituents = 4;
-  //std::vector<int> MIN_Constituents = {1,1,1,1,1};
-  std::vector<int> MIN_Constituents = {3,2,2,1,1};
+  std::vector<int> MIN_Constituents = {1,1,1,1,1};
+  //std::vector<int> MIN_Constituents = {3,2,2,1,1};
   //std::vector<int> MIN_Constituents = {4,4,3,3,2};
   NJETS = 20;
   NZVTXBIN = 40;
@@ -168,7 +168,7 @@ int main ()
   const char* sample = "MB_pp4b";
   const char* bin_width = "7.5mm";
   const char* BrEC = "Br30mmEC67mm";
-  const char* min_const = "32211";
+  const char* min_const = "11111";
   const char* min_constPt = "22222";
   char out_filename[1023];
   sprintf(out_filename,"%s/%s/TrkJPU1k%s_%s_%strk%0.1f_%sGeV_1.root",out_path,sample,bin_width,BrEC,min_const,ETA_CUT,min_constPt);
@@ -254,7 +254,8 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   char input_dir[1023];
-  sprintf(input_dir,"/user/tkar/work/data/rec/sel/%s/PU1k/%s/*.root",BrEC,sample);
+  sprintf(input_dir,"/user/tkar/work/data/rec/sel/%s/PU1k/%s/*.root",BrEC,sample);//chameleon
+  //sprintf(input_dir,"/data/backup/tamasi/rho0/rec/sel/%s/PU1k/%s/*.root",BrEC,sample);//tachyon
   std::cout<<"Input directory: "<<input_dir<<std::endl;
   //! high pt min bias sample sigma = 3
   rec.Add(input_dir);
