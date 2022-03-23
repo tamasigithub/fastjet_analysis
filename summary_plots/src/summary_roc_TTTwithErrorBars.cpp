@@ -41,7 +41,7 @@
 
 
 const char* out_path = "../pdf"; 
-const char* output_file_name = "TTT_TrigSummarytrk_7.5_1.5_30_3067mmETA2.5_2";
+const char* output_file_name = "TTT_TrigSummarytrk_7.5_1.5_30mm_3067mmETA2.5_11111";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -85,12 +85,12 @@ void roc(const char *pileup, const char *gapsize)
 	const char *file_path_1 = "../../fastjet_output/TTT_data";//with endcap data;
 	const char *file_path_2 = "../../fastjet_output/calo_data";//with endcap data;
 
-	//sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
-	sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 
-	//sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
-	sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	
 	fetch_7_5mmTTT();
 
@@ -176,11 +176,11 @@ void roc(const char *pileup, const char *gapsize)
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
-	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 
-	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
-	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_32211trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	
 	fetch_1_5mmTTT();
 
@@ -248,11 +248,13 @@ void roc(const char *pileup, const char *gapsize)
 ///////////////////////////////////////////////////////////
 //      Extendend barrel
 ///////////////////////////////////////////////////////////     
-	sprintf(signal_file_name_2, "%s/TrkJPU%sggFhh4b7.5mm_30mm_11111trk2.5_2GeV_2GeV_5.root",file_path,pileup);//,gapsize);//7.5
+	sprintf(signal_file_name_2, "%s/ExggF1.0/TrkJPU%sggFhh4b7.5mm_30mm_11111trk2.5_2GeV_22222GeV_5.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name_2, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	//sprintf(signal_file_name_2, "%s/TrkJPU%sggFhh4b7.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
  
-	sprintf(MinBias_file_name_2, "%s/TrkJPU%sMB7.5mm_30mm_11111trk2.5_2GeV_2GeV_3.root",file_path,pileup);//,gapsize);//7.5
+	sprintf(MinBias_file_name_2, "%s/ExMB_1/TrkJPU%sMB7.5mm_30mm_11111trk2.5_2GeV_22222GeV_3.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name_2, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	//sprintf(MinBias_file_name_2, "%s/TrkJPU%sMB7.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//7.5
 
 	fetch_7_5mmExTTT();
@@ -319,10 +321,12 @@ void roc(const char *pileup, const char *gapsize)
 
 	
 	//sprintf(signal_file_name_3, "%s/TrkJPU%sggFhh4b1.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//1.5
-	sprintf(signal_file_name_3, "%s/TrkJPU%sggFhh4b1.5mm_30mm_11111trk2.5_2GeV_2GeV_5.root",file_path,pileup);//,gapsize);//1.5
+	sprintf(signal_file_name_3, "%s/ExggF1.0/TrkJPU%sggFhh4b1.5mm_30mm_11111trk2.5_2GeV_22222GeV_5.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_3, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 
-	sprintf(MinBias_file_name_3, "%s/TrkJPU%sMB1.5mm_30mm_11111trk2.5_2GeV_2GeV_3.root",file_path,pileup);//,gapsize);//1.5
+	sprintf(MinBias_file_name_3, "%s/ExMB_1/TrkJPU%sMB1.5mm_30mm_11111trk2.5_2GeV_22222GeV_3.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_3, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	//sprintf(MinBias_file_name_3, "%s/TrkJPU%sMB1.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//1.5
 
 	fetch_1_5mmExTTT();

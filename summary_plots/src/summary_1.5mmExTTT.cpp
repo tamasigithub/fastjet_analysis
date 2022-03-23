@@ -363,7 +363,7 @@ void graph2D_1_5mm_Exmultibin()
 	//! multi-bin +-1.5mm
 	Exga2d_1 = new TGraph2DErrors(n,Exea_2,Exra_2,pt_threshold, Exe_erra_2, Exr_erra_2, 0);
 	Exga2d_1->SetName("g2D_2nd_Exmaxpt");
-	Exga2d_1->SetMarkerStyle(kFullDiamond);
+	Exga2d_1->SetMarkerStyle(kOpenDiamond);
 	Exga2d_1->SetMarkerSize(STAR_SIZE);
 	Exga2d_1->SetFillColor(kWhite);
 	Exga2d_1->SetTitle("track-jet, multi-bin, 1.5mm");
@@ -371,7 +371,7 @@ void graph2D_1_5mm_Exmultibin()
 	Exga2d_1->Draw("PCOLZ ERR");
 	Exga2d_2 = new TGraph2DErrors(n,Exea_3,Exra_3,pt_threshold, Exe_erra_3, Exr_erra_3, 0);
 	Exga2d_2->SetName("g2D_3rd_Exmaxpt");
-	Exga2d_2->SetMarkerStyle(kFullDiamond);
+	Exga2d_2->SetMarkerStyle(kOpenDiamond);
 	Exga2d_2->SetMarkerSize(STAR_SIZE);
 	Exga2d_2->SetFillColor(kWhite);
 	Exga2d_2->SetTitle("track-jet, multi-bin, 1.5mm");
@@ -379,7 +379,7 @@ void graph2D_1_5mm_Exmultibin()
 	Exga2d_2->Draw("PCOLZ ERR");
 	Exga2d_3 = new TGraph2DErrors(n,Exea_4,Exra_4,pt_threshold, Exe_erra_4, Exr_erra_4, 0);
 	Exga2d_3->SetName("g2D_4th_Exmaxpt");
-	Exga2d_3->SetMarkerStyle(kFullDiamond);
+	Exga2d_3->SetMarkerStyle(kOpenDiamond);
 	Exga2d_3->SetMarkerSize(STAR_SIZE);
 	Exga2d_3->SetFillColor(kWhite);
 	Exga2d_3->SetTitle("track-jet, multi-bin, 1.5mm");
@@ -387,7 +387,7 @@ void graph2D_1_5mm_Exmultibin()
 	Exga2d_3->Draw("PCOLZ ERR");
 	Exga2d_4 = new TGraph2DErrors(n,Exea_5,Exra_5,pt_threshold, Exe_erra_5, Exr_erra_5, 0);
 	Exga2d_4->SetName("g2D_5th_Exmaxpt");
-	Exga2d_4->SetMarkerStyle(kFullDiamond);
+	Exga2d_4->SetMarkerStyle(kOpenDiamond);
 	Exga2d_4->SetMarkerSize(STAR_SIZE);
 	Exga2d_4->SetFillColor(kWhite);
 	Exga2d_4->SetTitle("track-jet, multi-bin, 1.5mm");
@@ -402,7 +402,7 @@ void graph2D_1_5mm_Exmaxbin()
 	//! max-bin +-1.5mm
 	Exg2d_1 = new TGraph2DErrors(n,Exe2_,Exr2_,pt_threshold, Exe_err2_, Exr_err2_, 0);
 	Exg2d_1->SetName("g2D_2nd_Exsumpt");
-	Exg2d_1->SetMarkerStyle(kFullDiamond);
+	Exg2d_1->SetMarkerStyle(kOpenDiamond);
 	Exg2d_1->SetMarkerSize(STAR_SIZE);
 	Exg2d_1->SetFillColor(kWhite);
 	Exg2d_1->SetTitle("track-jet, max-bin, +-1.5mm");
@@ -410,7 +410,7 @@ void graph2D_1_5mm_Exmaxbin()
 	Exg2d_1->Draw("PCOLZ ERR");
 	Exg2d_2 = new TGraph2DErrors(n,Exe3_,Exr3_,pt_threshold, Exe_err3_, Exr_err3_, 0);
 	Exg2d_2->SetName("g2D_3rd_Exsumpt");
-	Exg2d_2->SetMarkerStyle(kFullDiamond);
+	Exg2d_2->SetMarkerStyle(kOpenDiamond);
 	Exg2d_2->SetMarkerSize(STAR_SIZE);
 	Exg2d_2->SetFillColor(kWhite);
 	Exg2d_2->SetTitle("track-jet, max-bin, +-1.5mm");
@@ -418,7 +418,7 @@ void graph2D_1_5mm_Exmaxbin()
 	Exg2d_2->Draw("PCOLZ ERR");
 	Exg2d_3 = new TGraph2DErrors(n,Exe4_,Exr4_,pt_threshold, Exe_err4_, Exr_err4_, 0);
 	Exg2d_3->SetName("g2D_4th_Exsumpt");
-	Exg2d_3->SetMarkerStyle(kFullDiamond);
+	Exg2d_3->SetMarkerStyle(kOpenDiamond);
 	Exg2d_3->SetMarkerSize(STAR_SIZE);
 	Exg2d_3->SetFillColor(kWhite);
 	Exg2d_3->SetTitle("track-jet, max-bin, +-1.5mm");
@@ -426,7 +426,7 @@ void graph2D_1_5mm_Exmaxbin()
 	Exg2d_3->Draw("PCOLZ ERR");
 	Exg2d_4 = new TGraph2DErrors(n,Exe5_,Exr5_,pt_threshold, Exe_err5_, Exr_err5_, 0);
 	Exg2d_4->SetName("g2D_5th_Exsumpt");
-	Exg2d_4->SetMarkerStyle(kFullDiamond);
+	Exg2d_4->SetMarkerStyle(kOpenDiamond);
 	Exg2d_4->SetMarkerSize(STAR_SIZE);
 	Exg2d_4->SetFillColor(kWhite);
 	Exg2d_4->SetTitle("track-jet, max-bin, +-1.5mm");

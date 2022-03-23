@@ -393,7 +393,7 @@ void graph2D_7_5mm_Exmultibin()
 	//Exga2d1->GetYaxis()->SetTitle("trigger rate [MHz]");
 	//auto axisy2d = Exga2d1->GetYaxis();
 	//axisy2d->SetRange(Ymin_range, Ymax_range);
-	Exga2d1->SetMarkerStyle(kFullSquare);
+	Exga2d1->SetMarkerStyle(kOpenSquare);
 	Exga2d1->SetMarkerSize(TRIANGLEDOWN_SIZE);
 	Exga2d1->SetFillColor(kWhite);
 	Exga2d1->SetTitle("track-jet, multi-bin, 7.5mm");
@@ -406,7 +406,7 @@ void graph2D_7_5mm_Exmultibin()
 	//h2d->Draw("colz");
 	Exga2d2 = new TGraph2DErrors(n,Exea3,Exra3,pt_threshold, Exe_erra3, Exr_erra3, 0);
 	Exga2d2->SetName("g2D3rd_Exmaxpt");
-	Exga2d2->SetMarkerStyle(kFullSquare);
+	Exga2d2->SetMarkerStyle(kOpenSquare);
 	Exga2d2->SetMarkerSize(TRIANGLEDOWN_SIZE);
 	Exga2d2->SetFillColor(kWhite);
 	Exga2d2->SetTitle("track-jet, multi-bin, 7.5mm");
@@ -414,7 +414,7 @@ void graph2D_7_5mm_Exmultibin()
 	Exga2d2->Draw("PCOLZ ERR");
 	Exga2d3 = new TGraph2DErrors(n,Exea4,Exra4,pt_threshold, Exe_erra4, Exr_erra4, 0);
 	Exga2d3->SetName("g2D4th_Exmaxpt");
-	Exga2d3->SetMarkerStyle(kFullSquare);
+	Exga2d3->SetMarkerStyle(kOpenSquare);
 	Exga2d3->SetMarkerSize(TRIANGLEDOWN_SIZE);
 	Exga2d3->SetFillColor(kWhite);
 	Exga2d3->SetTitle("track-jet, multi-bin, 7.5mm");
@@ -422,7 +422,7 @@ void graph2D_7_5mm_Exmultibin()
 	Exga2d3->Draw("PCOLZ ERR");
 	Exga2d4 = new TGraph2DErrors(n,Exea5,Exra5,pt_threshold, Exe_erra5, Exr_erra5, 0);
 	Exga2d4->SetName("g2D5th_Exmaxpt");
-	Exga2d4->SetMarkerStyle(kFullSquare);
+	Exga2d4->SetMarkerStyle(kOpenSquare);
 	Exga2d4->SetMarkerSize(TRIANGLEDOWN_SIZE);
 	Exga2d4->SetFillColor(kWhite);
 	Exga2d4->SetTitle("track-jet, multi-bin, 7.5mm");
@@ -437,7 +437,7 @@ void graph2D_7_5mm_Exmaxbin()
 	//! max-bin
 	Exg2d1 = new TGraph2DErrors(n,Exe2,Exr2,pt_threshold, Exe_err2, Exr_err2, 0);
 	Exg2d1->SetName("g2D2nd_Exsumpt");
-	Exg2d1->SetMarkerStyle(kFullSquare);
+	Exg2d1->SetMarkerStyle(kOpenSquare);
 	Exg2d1->SetMarkerSize(TRIANGLEUP_SIZE);
 	Exg2d1->SetFillColor(kWhite);
 	Exg2d1->SetTitle("track-jet, max-bin, 7.5mm");
@@ -445,7 +445,7 @@ void graph2D_7_5mm_Exmaxbin()
 	Exg2d1->Draw("PCOLZ ERR");
 	Exg2d2 = new TGraph2DErrors(n,Exe3,Exr3,pt_threshold, Exe_err3, Exr_err3, 0);
 	Exg2d2->SetName("g2D3rd_Exsumpt");
-	Exg2d2->SetMarkerStyle(kFullSquare);
+	Exg2d2->SetMarkerStyle(kOpenSquare);
 	Exg2d2->SetMarkerSize(TRIANGLEUP_SIZE);
 	Exg2d2->SetFillColor(kWhite);
 	Exg2d2->SetTitle("track-jet, max-bin, 7.5mm");
@@ -453,7 +453,7 @@ void graph2D_7_5mm_Exmaxbin()
 	Exg2d2->Draw("PCOLZ ERR");
 	Exg2d3 = new TGraph2DErrors(n,Exe4,Exr4,pt_threshold, Exe_err4, Exr_err4, 0);
 	Exg2d3->SetName("g2D4th_Exsumpt");
-	Exg2d3->SetMarkerStyle(kFullSquare);
+	Exg2d3->SetMarkerStyle(kOpenSquare);
 	Exg2d3->SetMarkerSize(TRIANGLEUP_SIZE);
 	Exg2d3->SetFillColor(kWhite);
 	Exg2d3->SetTitle("track-jet, max-bin, 7.5mm");
@@ -461,7 +461,7 @@ void graph2D_7_5mm_Exmaxbin()
 	Exg2d3->Draw("PCOLZ ERR");
 	Exg2d4 = new TGraph2DErrors(n,Exe5,Exr5,pt_threshold, Exe_err5, Exr_err5, 0);
 	Exg2d4->SetName("g2D5th_Exsumpt");
-	Exg2d4->SetMarkerStyle(kFullSquare);
+	Exg2d4->SetMarkerStyle(kOpenSquare);
 	Exg2d4->SetMarkerSize(TRIANGLEUP_SIZE);
 	Exg2d4->SetFillColor(kWhite);
 	Exg2d4->SetTitle("track-jet, max-bin, 7.5mm");
