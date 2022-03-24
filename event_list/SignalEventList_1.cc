@@ -32,7 +32,7 @@
 using namespace fastjet;
 const char *out_path = "./out_test";
 //const char *out_path = "/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4";
-const int file_number = 3;
+const int file_number = 6;
 TFile *f_out = nullptr;
 TTree *eventList = nullptr;
 
@@ -167,7 +167,9 @@ int main()
 
   //! open input trees 
   TChain rec("tracks");
-  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/pp_4bQCD/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC93mm/PU1k/pp_4bQCD/*.root");
+  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC93mm/PU1k/ggF1.0/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/pp_4bQCD/*.root");
   //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/ggF1.0/*.root");
   //rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
   //rec.Add("/media/tamasi/wdElements/PhD/FCC/data_files/rec_files/30mm/PU1k/ggFhh4b_SM_2/*.root");

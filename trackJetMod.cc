@@ -111,7 +111,8 @@ int main ()
   double PV_i = 0;
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
-  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000003.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root","READ");
+  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000006.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_1_5_allAnaCuts_000004.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000001.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
@@ -167,7 +168,7 @@ int main ()
   const char* out_path = "./fastjet_output/TTT_data";
   const char* sample = "MB_pp4b";
   const char* bin_width = "7.5mm";
-  const char* BrEC = "Br30mmEC67mm";
+  const char* BrEC = "Br30mmEC80mm";
   const char* min_const = "11111";
   const char* min_constPt = "22222";
   char out_filename[1023];
