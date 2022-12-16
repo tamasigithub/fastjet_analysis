@@ -62,6 +62,7 @@ TH1F *h_pheno_Z = nullptr;
 const int n = 7;
 int nbinsMinus = n - 1;
 double pt_bins[n] = {20., 30., 40., 50., 60., 70., 500.};
+//double pt_bins[n] = {20., 30., 40., 50., 60., 90., 500.};
 
 TLegend *leg = 0;
 TLegend *leg1 = 0;
