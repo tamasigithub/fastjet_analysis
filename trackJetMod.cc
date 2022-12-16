@@ -111,7 +111,8 @@ int main ()
   double PV_i = 0;
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
-  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root","READ");
+  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root","READ");
   //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000006.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_1_5_allAnaCuts_000004.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000001.root","READ");
@@ -165,8 +166,8 @@ int main ()
   std::vector<int>    M_Nconstituents;	            	// number of constituents for each jet
 
   //! output root file
-  const char* out_path = "./fastjet_output/TTT_data";
-  const char* sample = "MB_pp4b";
+  const char* out_path = "./fastjet_output/TTT_data/08_12_22";
+  const char* sample = "MB_1";
   const char* bin_width = "7.5mm";
   const char* BrEC = "Br30mmEC80mm";
   const char* min_const = "11111";
@@ -222,6 +223,12 @@ int main ()
   glob_jet->Branch("M_Nconstituents",&M_Nconstituents);
   
   TTree *bin_Tree = new TTree("bin_Tree","bin_Tree");
+  bin_Tree->Branch("event",&eventNo);
+  bin_Tree->Branch("1L", &r_sumpt.sum_Lpt);
+  bin_Tree->Branch("2L", &r_sumpt.sum_NLpt);
+  bin_Tree->Branch("3L", &r_sumpt.sum_NNLpt);
+  bin_Tree->Branch("4L", &r_sumpt.sum_NNNLpt);
+  bin_Tree->Branch("5L", &r_sumpt.sum_NNNNLpt);
   bin_Tree->Branch("M_1L", &r_sumpt.M_Lpt);
   bin_Tree->Branch("M_2L", &r_sumpt.M_NLpt);
   bin_Tree->Branch("M_3L", &r_sumpt.M_NNLpt);
@@ -233,6 +240,11 @@ int main ()
   bin_Tree->Branch("C_4LpT", &r_sumpt.v_constTRKpT_4Lsumpt);
   bin_Tree->Branch("C_5LpT", &r_sumpt.v_constTRKpT_5Lsumpt);
   
+  bin_Tree->Branch("1La", &r_sumpt.Lpt);
+  bin_Tree->Branch("2La", &r_sumpt.NLpt);
+  bin_Tree->Branch("3La", &r_sumpt.NNLpt);
+  bin_Tree->Branch("4La", &r_sumpt.NNNLpt);
+  bin_Tree->Branch("5La", &r_sumpt.NNNNLpt);
   bin_Tree->Branch("Ma_1L", &r_sumpt.Ma_Lpt);
   bin_Tree->Branch("Ma_2L", &r_sumpt.Ma_NLpt);
   bin_Tree->Branch("Ma_3L", &r_sumpt.Ma_NNLpt);
@@ -1099,11 +1111,19 @@ int main ()
 		}
 	}
 
+	//! Multiplicity of leading jets from the primary bin found using sumpt
 	r_sumpt.v_TJMult_sumpt[0]  = vectorof_jetMult[r_sumpt.prim_bin][0];
 	r_sumpt.v_TJMult_sumpt[1]  = vectorof_jetMult[r_sumpt.prim_bin][1];
 	r_sumpt.v_TJMult_sumpt[2]  = vectorof_jetMult[r_sumpt.prim_bin][2];
 	r_sumpt.v_TJMult_sumpt[3]  = vectorof_jetMult[r_sumpt.prim_bin][3];
 	r_sumpt.v_TJMult_sumpt[4]  = vectorof_jetMult[r_sumpt.prim_bin][4];
+
+	//! pt of the leading jets from the primary bin found using sumpt
+	r_sumpt.sum_Lpt = vectorof_jetpt[r_sumpt.prim_bin][0]; 
+	r_sumpt.sum_NLpt = vectorof_jetpt[r_sumpt.prim_bin][1]; 
+	r_sumpt.sum_NNLpt = vectorof_jetpt[r_sumpt.prim_bin][2]; 
+	r_sumpt.sum_NNNLpt = vectorof_jetpt[r_sumpt.prim_bin][3]; 
+	r_sumpt.sum_NNNNLpt = vectorof_jetpt[r_sumpt.prim_bin][4]; 
 
 	c_size = std::min((vec_constTRKpT_1L[r_sumpt.prim_bin]).size(), MIN_Constituents.size());
 	for(int cc = 0; cc < c_size; ++cc)

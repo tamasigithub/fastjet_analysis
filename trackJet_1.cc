@@ -78,7 +78,8 @@ int main ()
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000004.root","READ");
-  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000003.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root","READ");
+  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
   evelistTree->SetBranchAddress("eventNums", &eve_i);
   Long64_t nevents = evelistTree->GetEntries();
@@ -119,7 +120,7 @@ int main ()
   ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
   ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kMB_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_7/CELL_a50c3_ALL_PU1kggF_ETA1.5_30mm_R0.3_3.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/calo_data/CELL_a50c3_ALL_PU1kMB_pp4b_ETA2.5_30mm_R0.4_2.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kggF_ETA2.5_30mm_R0.4_2.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -154,6 +155,13 @@ int main ()
   glob_jet->Branch("has_constituents",&hasConstituents);
   glob_jet->Branch("Nconstituents", &Nconstituents);
   
+  TTree *bin_Tree = new TTree("bin_Tree","bin_Tree");
+  bin_Tree->Branch("event",&eventNo);
+  bin_Tree->Branch("1L", &r_sumpt.Lpt);
+  bin_Tree->Branch("2L", &r_sumpt.NLpt);
+  bin_Tree->Branch("3L", &r_sumpt.NNLpt);
+  bin_Tree->Branch("4L", &r_sumpt.NNNLpt);
+  bin_Tree->Branch("5L", &r_sumpt.NNNNLpt);
   
   //! open input trees 
   TChain rec("tracks");
@@ -167,10 +175,10 @@ int main ()
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB_1/*.root");
-  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/pp_4bQCD/*.root");
-  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/MB_pp4b/*.root");
-  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/MB_1/*.root");
-  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC67mm/PU1k/ggF1.0/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/pp_4bQCD/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/MB_pp4b/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/MB_1/*.root");
+  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/ggF1.0/*.root");
   Long64_t nentries = rec.GetEntries();
 
 //! define a local vector<double> to store the reconstructed pt values
@@ -594,6 +602,12 @@ int main ()
 		}
 	}// end of for loop over jet size
 	glob_jet->Fill();
+	r_sumpt.Lpt = incl_CaloEmuJets[0].pt();
+	r_sumpt.NLpt = incl_CaloEmuJets[1].pt();
+	r_sumpt.NNLpt = incl_CaloEmuJets[2].pt();
+	r_sumpt.NNNLpt = incl_CaloEmuJets[3].pt();
+	r_sumpt.NNNNLpt = incl_CaloEmuJets[4].pt();
+	bin_Tree->Fill();
 	
 	//! loop over jet pt thresholds
 	for(int i2 = 0; i2 < trigger.nbins; i2++)
@@ -745,6 +759,7 @@ r_sumpt.WriteAll();
 c1->Write();
 //! Write to output file
 glob_jet->Write();
+bin_Tree->Write();
 //r_sumpt.SetEtaHist_props();
 //r_sumpt.WriteEta();
 h2d->Write();

@@ -37,7 +37,8 @@ public:
 	std::vector<double> v_sumpt;
 	//int nbins = 40;
 	//double ptmin = 0.0, ptmax = 1000;//in GeV/c 
-	double Lpt, NLpt, NNLpt, NNNLpt, NNNNLpt;
+	double Lpt, NLpt, NNLpt, NNNLpt, NNNNLpt; //leading jet pT's from Andre's uproach (should have been Lapt acc to convention)
+	double sum_Lpt, sum_NLpt, sum_NNLpt, sum_NNNLpt, sum_NNNNLpt;
 	double M_Lpt, M_NLpt, M_NNLpt, M_NNNLpt, M_NNNNLpt;
 	double Ma_Lpt, Ma_NLpt, Ma_NNLpt, Ma_NNNLpt, Ma_NNNNLpt;
 	static const int nbins_plus1 = 501;//401;//101;
