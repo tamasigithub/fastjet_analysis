@@ -41,7 +41,7 @@
 
 
 const char* out_path = "../pdf"; 
-const char* output_file_name = "TTT_TrigSummarytrk_7.5_1.5_30mm_3067mmETA2.5_11111";
+const char* output_file_name = "TTT_TrigSummarytrk_7.5_1.5_30mm_3080mmETA2.5_11111_1";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -71,7 +71,7 @@ void SaveCanvas(TCanvas *C, char *name)
 void roc(const char *pileup, const char *gapsize)
 {
 	//! Draw a pre-scalling function of the form rate = 40MHz * trigger efficiency
-	TF1 *fun = new TF1("fun","[0]*x*x",0,1);
+	TF1 *fun = new TF1("fun","[0]*x",0,1);
 	fun->SetParameter(0,40);
 	//TF2 *fun1= new TF2("fun1","[0]*x-y",0,1,3e-2,40);
 	//fun1->SetParameter(0,40);
@@ -85,12 +85,12 @@ void roc(const char *pileup, const char *gapsize)
 	const char *file_path_1 = "../../fastjet_output/TTT_data";//with endcap data;
 	const char *file_path_2 = "../../fastjet_output/calo_data";//with endcap data;
 
-	//sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
-	sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 
-	//sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
-	sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	
 	fetch_7_5mmTTT();
 
@@ -98,7 +98,7 @@ void roc(const char *pileup, const char *gapsize)
 	std::cout<<"Writing to txt file...." <<std::endl;
         const char* txt_path = "../txt_files";
         char txt_file[1023];
-        sprintf(txt_file,"%s/summary_trackJetROC_PU%s_Br30mmEC67mm_7.5.txt",txt_path, pileup);//,gapsize);
+        sprintf(txt_file,"%s/summary_trackJetROC_PU%s_Br30mmEC80mm_7.5.txt",txt_path, pileup);//,gapsize);
         std::ofstream ofs;
         ofs.open (txt_file, std::ofstream::out | std::ofstream::app);
 	//for(int i = 1; i < nbinsE + 1; i++)
@@ -176,11 +176,11 @@ void roc(const char *pileup, const char *gapsize)
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
-	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 
-	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
-	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	
 	fetch_1_5mmTTT();
 
@@ -249,12 +249,14 @@ void roc(const char *pileup, const char *gapsize)
 //      Extendend barrel
 ///////////////////////////////////////////////////////////     
 	sprintf(signal_file_name_2, "%s/ExggF1.0/TrkJPU%sggFhh4b7.5mm_30mm_11111trk2.5_2GeV_22222GeV_5.root",file_path_1,pileup);//,gapsize);//7.5
-	//sprintf(signal_file_name_2, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name_2, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_2, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	//sprintf(signal_file_name_2, "%s/TrkJPU%sggFhh4b7.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
  
 	sprintf(MinBias_file_name_2, "%s/ExMB_1/TrkJPU%sMB7.5mm_30mm_11111trk2.5_2GeV_22222GeV_3.root",file_path_1,pileup);//,gapsize);//7.5
-	//sprintf(MinBias_file_name_2, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name_2, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_2, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	//sprintf(MinBias_file_name_2, "%s/TrkJPU%sMB7.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//7.5
 
 	fetch_7_5mmExTTT();
@@ -323,10 +325,12 @@ void roc(const char *pileup, const char *gapsize)
 	//sprintf(signal_file_name_3, "%s/TrkJPU%sggFhh4b1.5mm_30mm_43221trk2.5_2GeV_33333GeV_5.root",file_path,pileup);//,gapsize);//1.5
 	sprintf(signal_file_name_3, "%s/ExggF1.0/TrkJPU%sggFhh4b1.5mm_30mm_11111trk2.5_2GeV_22222GeV_5.root",file_path_1,pileup);//,gapsize);//1.5
 	//sprintf(signal_file_name_3, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_3, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 
 	sprintf(MinBias_file_name_3, "%s/ExMB_1/TrkJPU%sMB1.5mm_30mm_11111trk2.5_2GeV_22222GeV_3.root",file_path_1,pileup);//,gapsize);//1.5
 	//sprintf(MinBias_file_name_3, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_3, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	//sprintf(MinBias_file_name_3, "%s/TrkJPU%sMB1.5mm_30mm_43221trk2.5_2GeV_33333GeV_3.root",file_path,pileup);//,gapsize);//1.5
 
 	fetch_1_5mmExTTT();
@@ -427,6 +431,77 @@ void roc(const char *pileup, const char *gapsize)
 	}
 
 	make_graphs_emuCalo();
+	/// print ///////////
+	std::cout<<"calo-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<gb_1_->Eval(1) << std::endl;
+	std::cout <<"3L: " <<gb_2_->Eval(1) << std::endl;
+	std::cout <<"4L: " <<gb_3_->Eval(1) << std::endl;
+	std::cout <<"5L: " <<gb_4_->Eval(1) << std::endl;
+	std::cout<<"calo-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<gb_1_->Eval(4) << std::endl;
+	std::cout <<"3L: " <<gb_2_->Eval(4) << std::endl;
+	std::cout <<"4L: " <<gb_3_->Eval(4) << std::endl;
+	std::cout <<"5L: " <<gb_4_->Eval(4) << std::endl << std::endl;
+	std::cout<<"no z-bin-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<gb1_->Eval(1) << std::endl;
+	std::cout <<"3L: " <<gb2_->Eval(1) << std::endl;
+	std::cout <<"4L: " <<gb3_->Eval(1) << std::endl;
+	std::cout <<"5L: " <<gb4_->Eval(1) << std::endl;
+	std::cout<<"no z-bin-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<gb1_->Eval(4) << std::endl;
+	std::cout <<"3L: " <<gb2_->Eval(4) << std::endl;
+	std::cout <<"4L: " <<gb3_->Eval(4) << std::endl;
+	std::cout <<"5L: " <<gb4_->Eval(4) << std::endl << std::endl;
+	std::cout<<"multi-bin(1.5mm)-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<ga1_->Eval(1) << std::endl;
+	std::cout <<"3L: " <<ga2_->Eval(1) << std::endl;
+	std::cout <<"4L: " <<ga3_->Eval(1) << std::endl;
+	std::cout <<"5L: " <<ga4_->Eval(1) << std::endl;
+	std::cout<<"multi-bin(1.5mm)-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<ga1_->Eval(4) << std::endl;
+	std::cout <<"3L: " <<ga2_->Eval(4) << std::endl;
+	std::cout <<"4L: " <<ga3_->Eval(4) << std::endl;
+	std::cout <<"5L: " <<ga4_->Eval(4) << std::endl << std::endl;
+	std::cout<<"max-bin(7.5mm)-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<g1->Eval(1) << std::endl;
+	std::cout <<"3L: " <<g2->Eval(1) << std::endl;
+	std::cout <<"4L: " <<g3->Eval(1) << std::endl;
+	std::cout <<"5L: " <<g4->Eval(1) << std::endl;
+	std::cout<<"max-bin(7.5mm)-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<g1->Eval(4) << std::endl;
+	std::cout <<"3L: " <<g2->Eval(4) << std::endl;
+	std::cout <<"4L: " <<g3->Eval(4) << std::endl;
+	std::cout <<"5L: " <<g4->Eval(4) << std::endl << std::endl;
+	std::cout<<"Ex max-bin(7.5mm)-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<Exg1->Eval(1) << std::endl;
+	std::cout <<"3L: " <<Exg2->Eval(1) << std::endl;
+	std::cout <<"4L: " <<Exg3->Eval(1) << std::endl;
+	std::cout <<"5L: " <<Exg4->Eval(1) << std::endl;
+	std::cout<<"Ex max-bin(7.5mm)-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<Exg1->Eval(4) << std::endl;
+	std::cout <<"3L: " <<Exg2->Eval(4) << std::endl;
+	std::cout <<"4L: " <<Exg3->Eval(4) << std::endl;
+	std::cout <<"5L: " <<Exg4->Eval(4) << std::endl << std::endl;
+	std::cout<<"max-bin(1.5mm)-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<g1_->Eval(1) << std::endl;
+	std::cout <<"3L: " <<g2_->Eval(1) << std::endl;
+	std::cout <<"4L: " <<g3_->Eval(1) << std::endl;
+	std::cout <<"5L: " <<g4_->Eval(1) << std::endl;
+	std::cout<<"max-bin(1.5mm)-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<g1_->Eval(4) << std::endl;
+	std::cout <<"3L: " <<g2_->Eval(4) << std::endl;
+	std::cout <<"4L: " <<g3_->Eval(4) << std::endl;
+	std::cout <<"5L: " <<g4_->Eval(4) << std::endl << std::endl;
+	std::cout<<"Ex max-bin(1.5mm)-jets trigger efficiency at 1MHz: " <<std::endl;
+	std::cout <<"2L: " <<Exg1_->Eval(1) << std::endl;
+	std::cout <<"3L: " <<Exg2_->Eval(1) << std::endl;
+	std::cout <<"4L: " <<Exg3_->Eval(1) << std::endl;
+	std::cout <<"5L: " <<Exg4_->Eval(1) << std::endl;
+	std::cout<<"Ex max-bin(1.5mm)-jets trigger efficiency at 4MHz: " <<std::endl;
+	std::cout <<"2L: " <<Exg1_->Eval(4) << std::endl;
+	std::cout <<"3L: " <<Exg2_->Eval(4) << std::endl;
+	std::cout <<"4L: " <<Exg3_->Eval(4) << std::endl;
+	std::cout <<"5L: " <<Exg4_->Eval(4) << std::endl << std::endl;
 	
 /////////////////////////////////////////////////////////////
 ///                    2D graphs
@@ -1848,5 +1923,6 @@ void roc(const char *pileup, const char *gapsize)
 	//gPad->Write("c18");
 
 	//f_out->Close();
+	
 	return;
 }

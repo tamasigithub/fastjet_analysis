@@ -3,13 +3,13 @@
 #include <vector>
 
 const char* out_path = "./summary_plots/pdf"; 
-const char* output_file_name = "controlpp4b_TRKPU1k_1.5mm_Br30mmEC67mm_Eta2.5_11111_22222_1";
+const char* output_file_name = "controlpp4b_TRKPU1k_1.5mm_Br30mmEC80mm_Eta2.5_11111_22222_1";
 //const char *filename1 = "./fastjet_output/TriggerStudies_4/TrkJPU1kggFhh4b1.5mm_30mm_32221trk1.5_2GeV_22222GeV_5.root";
 //const char *filename2 = "./fastjet_output/TriggerStudies_4/TrkJPU1kMB1.5mm_30mm_32221trk1.5_2GeV_22222GeV_3.root";
 //const char *filename1 = "./fastjet_output/TriggerStudies_6/TrkJPU1kggFhh4b1.5mm_30mm_11111trk1.5_2GeV_22222GeV_5.root";
 //const char *filename2 = "./fastjet_output/TriggerStudies_6/TrkJPU1kMB1.5mm_30mm_11111trk1.5_2GeV_22222GeV_3.root";
-const char *filename1 = "./fastjet_output/TTT_data/pp_4bQCD/TrkJPU1k1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root";
-const char *filename2 = "./fastjet_output/TTT_data/MB_pp4b/TrkJPU1k1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root";
+const char *filename1 = "./fastjet_output/TTT_data/pp_4bQCD/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root";
+const char *filename2 = "./fastjet_output/TTT_data/MB_pp4b/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root";
 Double_t MINpT = 2;//GeV
 Double_t MAXpT = 100;//GeV
 Int_t MINmult = 0; 

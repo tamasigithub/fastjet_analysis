@@ -41,7 +41,7 @@
 
 
 const char* out_path = "../pdf"; 
-const char* output_file_name = "TTTCalo_TrigSummarytrk_1.5ggF_1.5pp4b_3067mm_3067mmETA2.5_11111";
+const char* output_file_name = "TTTCalo_TrigSummarytrk_1.5ggF_1.5pp4b_3080mm_3080mmETA2.5_11111";
 //! clears the txt file
 void deleteText(const char* pileup) 
 {
@@ -71,7 +71,7 @@ void SaveCanvas(TCanvas *C, char *name)
 void roc(const char *pileup, const char *gapsize)
 {
 	//! Draw a pre-scalling function of the form rate = 40MHz * trigger efficiency
-	TF1 *fun = new TF1("fun","[0]*x*x",0,1);
+	TF1 *fun = new TF1("fun","[0]*x",0,1);
 	fun->SetParameter(0,40);
 	//TF2 *fun1= new TF2("fun1","[0]*x-y",0,1,3e-2,40);
 	//fun1->SetParameter(0,40);
@@ -85,12 +85,12 @@ void roc(const char *pileup, const char *gapsize)
 	const char *file_path_1 = "../../fastjet_output/TTT_data";//with endcap data;
 	const char *file_path_2 = "../../fastjet_output/calo_data";//with endcap data;
 
-	sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
-	//sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(signal_file_name, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(signal_file_name, "%s/ggF1.0/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	std::cout<<"signal file name: " <<signal_file_name <<std::endl;
 
-	sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
-	//sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	sprintf(MinBias_file_name, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
+	//sprintf(MinBias_file_name, "%s/MB_1/TrkJPU%s7.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//7.5
 	
 	fetch_7_5mmTTT();
 
@@ -98,7 +98,7 @@ void roc(const char *pileup, const char *gapsize)
 	std::cout<<"Writing to txt file...." <<std::endl;
         const char* txt_path = "../txt_files";
         char txt_file[1023];
-        sprintf(txt_file,"%s/summary_trackJetROC_PU%s_Br30mmEC67mm_7.5.txt",txt_path, pileup);//,gapsize);
+        sprintf(txt_file,"%s/summary_trackJetROC_PU%s_Br30mmEC80mm_1.5pp4b.txt",txt_path, pileup);//,gapsize);
         std::ofstream ofs;
         ofs.open (txt_file, std::ofstream::out | std::ofstream::app);
 	//for(int i = 1; i < nbinsE + 1; i++)
@@ -176,16 +176,20 @@ void roc(const char *pileup, const char *gapsize)
 	/////////////////////////////////////////////////
 	//! Fetch the histograms
 	////////////////////////////////////////////////
-	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
-	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(signal_file_name_1, "%s/pp_4bQCD/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(signal_file_name_1, "%s/ggF1.0/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 
-	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
-	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC67mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	//sprintf(MinBias_file_name_1, "%s/MB_pp4b/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
+	sprintf(MinBias_file_name_1, "%s/MB_1/TrkJPU%s1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root",file_path_1,pileup);//,gapsize);//1.5
 	
 	fetch_1_5mmTTT();
+        sprintf(txt_file,"%s/summary_trackJetROC_PU%s_Br30mmEC80mm_1.5ggF.txt",txt_path, pileup);//,gapsize);
+        //std::ofstream ofs;
+        ofs.open (txt_file, std::ofstream::out | std::ofstream::app);
 
 	for(int i = 1; i < n + 1; i++)
 	{
+        	ofs<<E2_->GetBinLowEdge(i)<<" "<<E2_->GetBinContent(i)<<" " <<R2_->GetBinContent(i)<<" "<<E3_->GetBinContent(i)<<" "<<R3_->GetBinContent(i)<<" "<<E4_->GetBinContent(i)<<" "<<R4_->GetBinContent(i)<<" "<<E5_->GetBinContent(i)<<" "<<R5_->GetBinContent(i)<<"\n";
 		
 		//! Fill into arrays and plot graph
 		e2_[i-1] = E2_->GetBinContent(i);
@@ -1848,5 +1852,40 @@ void roc(const char *pileup, const char *gapsize)
 	//gPad->Write("c18");
 
 	//f_out->Close();
+
+	std::cout<<"efficiency  rate  pT  ex  ey  ez  for Calo ggF, Calo pp4b, TTT EC1.5mm ggF, TTT EC1.5mm pp4b"<<std::endl;	
+	std::cout<<"2L Calo ggF:"<<std::endl;
+	Exg2d_1->Print();
+	std::cout<<"3L Calo ggF:"<<std::endl;
+	Exg2d_2->Print();
+	std::cout<<"4L Calo ggF:"<<std::endl;
+	Exg2d_3->Print();
+	std::cout<<""<<std::endl;
+
+	std::cout<<"2L Calo pp4b:"<<std::endl;
+	Exg2d1->Print();
+	std::cout<<"3L Calo pp4b:"<<std::endl;
+	Exg2d2->Print();
+	std::cout<<"4L Calo pp4b:"<<std::endl;
+	Exg2d3->Print();
+	std::cout<<""<<std::endl;
+	
+	std::cout<<"2L EC TTT ggF 1.5mm max-bin:"<<std::endl;
+	g2d_1->Print();
+	std::cout<<"3L EC TTT ggF 1.5mm max-bin:"<<std::endl;
+	g2d_2->Print();
+	std::cout<<"4L EC TTT ggF 1.5mm max-bin:"<<std::endl;
+	g2d_3->Print();
+	std::cout<<""<<std::endl;
+
+	std::cout<<"2L EC TTT pp4b QCD 1.5mm max-bin:"<<std::endl;
+	g2d1->Print();
+	std::cout<<"3L EC TTT pp4b QCD 1.5mm max-bin:"<<std::endl;
+	g2d2->Print();
+	std::cout<<"4L EC TTT pp4b QCD 1.5mm max-bin:"<<std::endl;
+	g2d3->Print();
+	std::cout<<""<<std::endl;
+
+
 	return;
 }
