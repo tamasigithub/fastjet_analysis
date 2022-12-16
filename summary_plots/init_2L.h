@@ -12,16 +12,16 @@ const int tot_MCevents_B = 1e6;
 
 const char *in_files[] = {
 //! Generator level info
-"/user/tkar/work/fastjet/event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root", /* ggF signal events */
-"/user/tkar/work/fastjet/event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root",  /* pp4b BG events */
+"../event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root", /* ggF signal events */
+"../event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root",  /* pp4b BG events */
 //! Triggered jet info
-"/user/tkar/work/fastjet/fastjet_output/TTT_data/08_12_22/ggF1.0/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root", /*ggF signal TTT +-1.5 */
-"/user/tkar/work/fastjet/fastjet_output/TTT_data/08_12_22/pp_4bQCD/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root", /*pp4b BG TTT +-1.5 */
-"/user/tkar/work/fastjet/fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kggF_ETA2.5_30mm_R0.4_2.root", /*ggF signal calo */
-"/user/tkar/work/fastjet/fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kpp_4bQCD_ETA2.5_30mm_R0.4_2.root"  /*pp4b BG calo */
+"../fastjet_output/TTT_data/08_12_22/ggF1.0/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root", /*ggF signal TTT +-1.5 */
+"../fastjet_output/TTT_data/08_12_22/pp_4bQCD/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root", /*pp4b BG TTT +-1.5 */
+"../fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kggF_ETA2.5_30mm_R0.4_2.root", /*ggF signal calo */
+"../fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kpp_4bQCD_ETA2.5_30mm_R0.4_2.root"  /*pp4b BG calo */
 };
 
-const char *pheno_file = "/user/tkar/work/fastjet/analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
+const char *pheno_file = "../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
 //CHANGE
 const char *out_file = "./summary_significance_2L.root";
 const int N_files = 6;
