@@ -13,7 +13,7 @@ const int tot_MCevents_B = 1e6;
 const char *in_files[] = {
 //! Generator level info
 "../event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root", /* ggF signal events */
-"../event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root",  /* pp4b BG events */
+"../event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005_.root",  /* pp4b BG events */
 //! Triggered jet info
 "../fastjet_output/TTT_data/08_12_22/ggF1.0/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root", /*ggF signal TTT +-1.5 */
 "../fastjet_output/TTT_data/08_12_22/pp_4bQCD/TrkJPU1k1.5mm_Br30mmEC80mm_11111trk2.5_22222GeV_1.root", /*pp4b BG TTT +-1.5 */
@@ -23,7 +23,7 @@ const char *in_files[] = {
 
 const char *pheno_file = "../analysis_plots/root/GenJet4b2_2.5_allR0.4_0.8_incl4bProbMH30.root";
 
-const char *out_file = "./summary_significance.root";
+const char *out_file = "./summary_significance_.root";
 const int N_files = 6;
 //std::vector<TFile *> root_files = {S_eve, B_eve, S_TTT, B_TTT, S_Cal, B_Cal};
 std::vector<TFile *> root_files;
@@ -52,7 +52,7 @@ std::vector<TH1F *> h_4L_bJpT_pheno; // tot pheno ana events
 //copy
 std::vector<TH1F *> h_trig_4L_bJpT_copy;
 std::vector<TH1F *> h_4L_bJpT_copy; //gen bJpT for the sub-set of events used in the trigger studies 
-std::vector<TH1F *> h_4L_bJpT_ratio_copy; //ratio of triggered events / total events fed to the triggered (h_trig_4L_bJpT/h_4L_bJpT) 
+//std::vector<TH1F *> h_4L_bJpT_ratio_copy; //ratio of triggered events / total events fed to the triggered (h_trig_4L_bJpT/h_4L_bJpT) 
 std::vector<TH1F *> h_4L_bJpT_pheno_frac_copy; //fraction of the pheno ana events = tot pheno ana events * h_4L_bJpT_ratio
 //(size: 2, one for signal and one for BG)
 std::vector<TH1F *> h_4L_bJpT_pheno_copy; // tot pheno ana events  
@@ -67,3 +67,11 @@ double pt_bins[n] = {20., 30., 40., 50., 60., 70., 500.};
 TLegend *leg = 0;
 TLegend *leg1 = 0;
 TLegend *leg2 = 0;
+
+float offset = 0;
+float offset_div = 84.0;
+TGraphAsymmErrors *gr_TTT = nullptr;
+TGraphAsymmErrors *gr_Cal = nullptr;
+TGraphAsymmErrors *gr_pheno = nullptr;
+
+std::vector<TGraphAsymmErrors *> gr_bJ_ratio;

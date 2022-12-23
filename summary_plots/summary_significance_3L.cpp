@@ -21,6 +21,7 @@
 #include "TMultiGraph.h"
 #include "TLegend.h"
 #include "TGraphErrors.h"
+#include "TGraphAsymmErrors.h"
 #include "TPostScript.h"
 
 #include "TAxis.h"
@@ -203,7 +204,7 @@ void Make_hist_Copy()
 	{
 		h_trig_4L_bJpT_copy.push_back((TH1F*)h_trig_4L_bJpT[i]->Clone());	
 		h_4L_bJpT_copy.push_back((TH1F*)h_4L_bJpT[i]->Clone());
-		h_4L_bJpT_ratio_copy.push_back((TH1F*)h_4L_bJpT_ratio[i]->Clone());
+		//h_4L_bJpT_ratio_copy.push_back((TH1F*)h_4L_bJpT_ratio[i]->Clone());
 		h_4L_bJpT_pheno_frac_copy.push_back((TH1F*)h_4L_bJpT_pheno_frac[i]->Clone());
 		if(i<2)h_4L_bJpT_pheno_copy.push_back((TH1F*)h_4L_bJpT_pheno[i]->Clone());
 
@@ -263,6 +264,8 @@ void apply_cosmetics()
 {
 	int width = 2;
 	int style = 7;
+	int fillstyle = 1001;
+	float transperancy = 0.25;
 	int color_pheno = 1;//kBlack
 	int color_TTT = 600;// kBlue
 	int color_Calo= 801;//kOrgange + 1
@@ -270,9 +273,22 @@ void apply_cosmetics()
 	h_4L_bJpT_pheno[1]->SetLineColor(color_pheno);
 	h_4L_bJpT_pheno[1]->SetLineStyle(style);
 	
+	//h_TTT_Z->SetMarkerStyle(kFullSquare);
+	//h_Cal_Z->SetMarkerStyle(kFullSquare);
+	//h_pheno_Z->SetMarkerStyle(kFullSquare);
+	//h_TTT_Z->SetMarkerColor(color_TTT);
+	//h_Cal_Z->SetMarkerColor(color_Calo);
+	//h_pheno_Z->SetMarkerColor(color_pheno);
 	h_TTT_Z->SetLineColor(color_TTT);
 	h_Cal_Z->SetLineColor(color_Calo);
 	h_pheno_Z->SetLineColor(color_pheno);
+	
+	h_TTT_Z->SetFillColorAlpha(color_TTT,transperancy);
+	h_TTT_Z->SetFillStyle(fillstyle);
+	h_Cal_Z->SetFillColorAlpha(color_Calo,transperancy);
+	h_Cal_Z->SetFillStyle(fillstyle);
+	h_pheno_Z->SetFillColorAlpha(color_pheno,transperancy);
+	h_pheno_Z->SetFillStyle(fillstyle);
 	
 	h_4L_bJpT_pheno[0]->SetLineWidth(width);
 	h_4L_bJpT_pheno[1]->SetLineWidth(width);
@@ -312,41 +328,39 @@ void apply_cosmetics()
 
 void draw_legends()
 {
-	leg =  new TLegend(0.1,0.1,0.49,0.55);
+	leg =  new TLegend(0.11,0.6,0.42,0.96);
 	leg->SetFillStyle(0);
 	leg->SetBorderSize(0);
 	leg->SetHeader("","C");
-	leg->AddEntry(h_4L_bJpT[0],"TTT signal","l");
-	leg->AddEntry(h_4L_bJpT[1],"TTT background","l");
-	leg->AddEntry(h_4L_bJpT[2],"Calo signal","l");
-	leg->AddEntry(h_4L_bJpT[3],"Calo background","l");
-	leg->AddEntry(h_4L_bJpT_pheno[0],"Reference signal","l");
-	leg->AddEntry(h_4L_bJpT_pheno[1],"Reference background","l");
-	leg->Draw();
+	leg->AddEntry(h_4L_bJpT[0],"TTT signal","le");
+	leg->AddEntry(h_4L_bJpT[1],"TTT background","le");
+	leg->AddEntry(h_4L_bJpT[2],"Calo signal","le");
+	leg->AddEntry(h_4L_bJpT[3],"Calo background","le");
+	//leg->AddEntry(h_4L_bJpT_pheno[0],"Reference signal","le");
+	//leg->AddEntry(h_4L_bJpT_pheno[1],"Reference background","le");
 	
-	leg1 =  new TLegend(0.5,0.1,0.9,0.29);
+	leg1 =  new TLegend(0.12,0.1,0.52,0.25);
 	leg1->SetFillStyle(0);
 	leg1->SetBorderSize(0);
 	leg1->SetHeader("3L b-jet p_{T}","C");//CHANGE
-	leg1->AddEntry(h_4L_bJpT_pheno[0],"Reference signal","l");
-	leg1->AddEntry(h_4L_bJpT_pheno[1],"Reference background","l");
-	leg1->Draw();
+	leg1->AddEntry(h_4L_bJpT_pheno[0],"Reference signal","le");
+	leg1->AddEntry(h_4L_bJpT_pheno[1],"Reference background","le");
 
-	leg2 =  new TLegend(0.1,0.6,0.29,0.85);
+	leg2 =  new TLegend(0.67,0.11,0.98,0.32);
 	leg2->SetFillStyle(0);
 	leg2->SetBorderSize(0);
 	leg2->SetHeader("S/#sqrt{B}","");
-	leg2->AddEntry(h_TTT_Z,"TTT","l");
-	leg2->AddEntry(h_Cal_Z,"Calo","l");
-	leg2->AddEntry(h_pheno_Z,"Reference","l");
-	leg2->Draw();
+	leg2->AddEntry(h_TTT_Z,"TTT","le");
+	leg2->AddEntry(h_Cal_Z,"Calo","le");
+	leg2->AddEntry(h_pheno_Z,"Reference","le");
 	
 	return;
 }
 void make_pdf()
 {
+	draw_legends();
 	const char *out_path = ".";
-	const char *output_file_name = "summary_significance_3L";//CHANGE
+	const char *output_file_name = "summary_significance_3L_";//CHANGE
 	char out_file_open[1024];
 	char out_file_[1024];
 	char out_file_close[1024];
@@ -369,7 +383,7 @@ void make_pdf()
 	}
 	c->SetLogx();
 	c->SetLogy();
-	c->Write();
+	c->Write("c1");
 	c->Print(out_file_open,"pdf");	
 	
 	//! page2
@@ -385,7 +399,7 @@ void make_pdf()
 	}
 	c->SetLogx();
 	c->SetLogy();
-	c->Write();
+	c->Write("c2");
 	c->Print(out_file_,"pdf");
 	
 	//! page3
@@ -401,10 +415,30 @@ void make_pdf()
 	}
 	c->SetLogx();
 	c->SetLogy(0);
-	c->Write();
+	c->Write("c3");
 	c->Print(out_file_,"pdf");
 
 	//! page4
+	c->Clear();
+	gr_bJ_ratio[0]->SetMaximum(1.25);
+	gr_bJ_ratio[0]->SetMinimum(0.05);
+	gr_bJ_ratio[0]->GetYaxis()->CenterTitle();
+	gr_bJ_ratio[0]->GetXaxis()->CenterTitle();
+	gr_bJ_ratio[0]->GetYaxis()->SetTitle("#frac{events~ triggered}{total~ events}");
+	gr_bJ_ratio[0]->GetXaxis()->SetTitle("p_{T, bJ3} [GeV/c]");
+	gr_bJ_ratio[0]->Draw("APE1");
+	for(int i = 1; i < 4; i++)
+	{
+		gr_bJ_ratio[i]->Draw("P E1 same");
+	}
+	leg->Draw();
+	c->SetLogx();
+	c->SetLogy(0);
+	c->Write("c4");
+	c->Print(out_file_,"pdf");
+	c->SaveAs("c4_3L.tex","tex");
+
+	//! page5
 	c->Clear();
 	max = h_4L_bJpT_pheno[1]->GetMaximum() + 0.5*h_4L_bJpT_pheno[1]->GetMaximum();
 	min = h_4L_bJpT_pheno_frac[2]->GetMinimum() - 0.5*h_4L_bJpT_pheno_frac[2]->GetMinimum();
@@ -419,10 +453,10 @@ void make_pdf()
 	}
 	c->SetLogx();
 	c->SetLogy();
-	c->Write();
+	c->Write("c5");
 	c->Print(out_file_,"pdf");
 	
-	//! page5
+	//! page6
 	//c->Clear();
 	max = h_4L_bJpT_pheno[1]->GetMaximum() + 0.5*h_4L_bJpT_pheno[1]->GetMaximum();
 	min = h_4L_bJpT_pheno[0]->GetMinimum() - 0.5*h_4L_bJpT_pheno[0]->GetMinimum();
@@ -432,31 +466,59 @@ void make_pdf()
 	h_4L_bJpT_pheno[1]->Draw("same");
 	c->SetLogx();
 	c->SetLogy();
-	c->Write();
+	c->Write("c6");
 	c->Print(out_file_,"pdf");
 
-	//! page 6
+	//! page 7
 	c->Clear();
-	max = h_TTT_Z->GetMaximum() + 0.5*h_TTT_Z->GetMaximum();
+	max = h_TTT_Z->GetMaximum() + 0.25*h_TTT_Z->GetMaximum();
 	min = h_Cal_Z->GetMinimum() - 0.5*h_Cal_Z->GetMinimum();
 	h_TTT_Z->GetYaxis()->SetRangeUser(min, max);
 	h_TTT_Z->GetYaxis()->CenterTitle();
 	h_TTT_Z->GetXaxis()->CenterTitle();
-	h_TTT_Z->Draw();
-	h_Cal_Z->Draw("same");
-	h_pheno_Z->Draw("same");
+	//h_TTT_Z->SetBarOffset(-0.01);
+	//h_TTT_Z->Draw("E2");
+	//h_Cal_Z->Draw("E2 same");
+	//h_pheno_Z->Draw("E2 same");
+	h_TTT_Z->Draw("E1");
+	h_Cal_Z->Draw("E1 same");
+	h_pheno_Z->Draw("E1 same");
 	c->SetLogx();
 	c->SetLogy(0);
-	c->Write();
+	c->Write("c7");
 	c->Print(out_file_,"pdf");
 	
+	//! page 8
 	c->Clear();
-	draw_legends();
-	c->Write();
+	//max = gr_TTT->GetMaximum() + 0.25*gr_TTT->GetMaximum();
+	//min = gr_Cal->GetMinimum() - 0.5*gr_Cal->GetMinimum();
+	gr_TTT->SetMaximum(60);
+	gr_TTT->SetMinimum(0);
+	gr_TTT->GetYaxis()->CenterTitle();
+	gr_TTT->GetXaxis()->CenterTitle();
+	gr_TTT->GetXaxis()->SetTitle("p_{T, bJ3} [GeV/c]");
+	gr_TTT->GetYaxis()->SetTitle("Z_{i}");
+	//gr_TTT->Draw("E2");
+	//gr_Cal->Draw("E2 same");
+	//gr_pheno->Draw("E2 same");
+	gr_TTT->Draw("APE1");
+	gr_Cal->Draw("PE1 same");
+	gr_pheno->Draw("PE1 same");
+	leg2->Draw();
+	c->SetLogx();
+	c->SetLogy(0);
+	c->Write("c8");
+	c->Print(out_file_,"pdf");
+	c->SaveAs("c8_3L.tex","tex");
+	
+	c->Clear();
+	leg->Draw();
+	leg1->Draw();
+	leg2->Draw();
+	c->Write("c9");
 	c->Print(out_file_close,"pdf");
 	return;
 }
-
 void summary_significance()
 {
 	//! Open output file
@@ -541,21 +603,57 @@ void summary_significance()
 
 	Scale_with_BinWidth();
 	apply_cosmetics();
-
 	for(int i = 0; i < h_trig_4L_bJpT.size(); i++)
 	{
 		h_trig_4L_bJpT[i]->Write();
 		h_4L_bJpT[i]->Write();
 		h_4L_bJpT_ratio[i]->Write();
 		h_4L_bJpT_pheno_frac[i]->Write();
+		gr_bJ_ratio.push_back(new TGraphAsymmErrors(h_4L_bJpT_ratio[i]));
+
 	}
+	gr_TTT = new TGraphAsymmErrors(h_TTT_Z);
+	gr_Cal = new TGraphAsymmErrors(h_Cal_Z);
+	gr_pheno = new TGraphAsymmErrors(h_pheno_Z);
+	for(int i = 0; i <nbinsMinus; i++ )
+	{
+		float bin_center = h_TTT_Z->GetBinCenter(i+1);
+		float E_low = h_TTT_Z->GetBinLowEdge(i+1);
+		float E_high = h_TTT_Z->GetBinLowEdge(i+2);
+		offset = (E_high - E_low)/offset_div;
+
+		gr_TTT->SetPointX(i,bin_center-offset);
+		gr_TTT->SetPointEXlow(i,bin_center - offset - E_low);
+		gr_TTT->SetPointEXhigh(i,-bin_center + offset + E_high);
+
+		gr_bJ_ratio[0]->SetPointX(i,bin_center-offset);
+		gr_bJ_ratio[0]->SetPointEXlow(i,bin_center - offset - E_low);
+		gr_bJ_ratio[0]->SetPointEXhigh(i,-bin_center + offset + E_high);
+		gr_bJ_ratio[2]->SetPointX(i,bin_center-offset);
+		gr_bJ_ratio[2]->SetPointEXlow(i,bin_center - offset - E_low);
+		gr_bJ_ratio[2]->SetPointEXhigh(i,-bin_center + offset + E_high);
+
+	}
+
 	h_4L_bJpT_pheno[0]->Write();	
 	h_4L_bJpT_pheno[1]->Write();
 	h_TTT_Z->Write();
 	h_Cal_Z->Write();
+	h_pheno_Z->Write();
 
 	make_pdf();
 
+	TCanvas *C_1 = new TCanvas();
+	gr_TTT->Draw("AP");
+	gr_Cal->Draw("P same");
+	gr_pheno->Draw("P same");
+	gr_TTT->Write("gr_TTT");
+	gr_Cal->Write("gr_Cal");
+	gr_pheno->Write("gr_pheno");
+	gr_bJ_ratio[0]->Write("gr_STTT");
+	gr_bJ_ratio[1]->Write("gr_BTTT");
+	gr_bJ_ratio[2]->Write("gr_SCal");
+	gr_bJ_ratio[3]->Write("gr_BCal");
 	f_out->Close();
 	
 	return;
