@@ -78,8 +78,8 @@ int main ()
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/EventList_ggFhh4b_PU.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000004.root","READ");
-  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root","READ");
-  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root","READ");
+  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005_.root","READ");
   TTree *evelistTree = (TTree*)f_eve->Get("eventList");
   evelistTree->SetBranchAddress("eventNums", &eve_i);
   Long64_t nevents = evelistTree->GetEntries();
@@ -120,7 +120,7 @@ int main ()
   ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kggFhh4b1.0_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
   ////TFile *f_out = new TFile("./fastjet_output/TriggerStudies_5/EMU5GeV_corra50pcle_PU1kMB_q1.2GeVeta2.5_30mmR0.4_4_test_2.root","RECREATE");
   //TFile *f_out = new TFile("./fastjet_output/TriggerStudies_7/CELL_a50c3_ALL_PU1kggF_ETA1.5_30mm_R0.3_3.root","RECREATE");
-  TFile *f_out = new TFile("./fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kggF_ETA2.5_30mm_R0.4_2.root","RECREATE");
+  TFile *f_out = new TFile("./fastjet_output/calo_data/08_12_22/CELL_a50c3_ALL_PU1kpp_4bQCD_ETA2.5_30mm_R0.4_2.root","RECREATE");
   //! default 5 GeV pt cut, eta 1.6
   //TFile *f_out = new TFile("jetEMU_PU1000MB_30mm.root","RECREATE");
   //TFile *f_out = new TFile("jetEMU_PU1000hh4b_m260_30mm.root","RECREATE");
@@ -175,10 +175,11 @@ int main ()
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM/nokap/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/ggFhh4b_SM_1/*.root");
   //rec.Add("/home/tamasi/repo_tamasi/rec_files/rec_files/30mm/PU1k/MB_1/*.root");
-  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/pp_4bQCD/*.root");
+  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/pp_4bQCD/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/pp_4bQCD/extra/*.root");
   //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/MB_pp4b/*.root");
   //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/MB_1/*.root");
-  rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/ggF1.0/*.root");
+  //rec.Add("/user/tkar/work/data/rec/sel/Br30mmEC80mm/PU1k/ggF1.0/*.root");
   Long64_t nentries = rec.GetEntries();
 
 //! define a local vector<double> to store the reconstructed pt values
@@ -275,7 +276,7 @@ int main ()
   std::vector<int> chargePU;
   
   ////! Limit total no. of selected pileup events to 1000
-  if(nevents > 1000) nevents = 1000;
+  //if(nevents > 1000) nevents = 1000;
   r_sumpt.nevents = nevents;
   trigger.nevents = nevents;
   std::cout<<"Total number of enteries : " << nentries <<std::endl;

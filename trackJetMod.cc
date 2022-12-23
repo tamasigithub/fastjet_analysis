@@ -43,7 +43,7 @@ int main ()
   //std::vector<int> MIN_Constituents = {3,2,2,1,1};
   //std::vector<int> MIN_Constituents = {4,4,3,3,2};
   NJETS = 20;
-  NZVTXBIN = 40;
+  NZVTXBIN = 200;
   ZRANGE = 200; // in mm
   ZBIN_width = ZRANGE/NZVTXBIN;
   double MAX_TRACKpt = 100e3;//!TODO: needs to be optimised
@@ -111,8 +111,8 @@ int main ()
   double PV_i = 0;
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_6/EventList_ggFhh4b_Eta1_5_BasicCuts_1.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_allAnaCuts_000001.root","READ");
-  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005.root","READ");
-  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root","READ");
+  TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventListpp4bQCD_2_5_allAnaCuts_000005_.root","READ");
+  //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000005.root","READ");
   //TFile *f_eve = new TFile("./event_list/out_test/user.tkar.EventList_2_5_allAnaCuts_000006.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_1_5_allAnaCuts_000004.root","READ");
   //TFile *f_eve = new TFile("/media/tamasi/Z/PhD/fastjet/fastjet_output/TriggerStudies_4/user.tkar.EventList_2_5_allAnaCuts_000001.root","READ");
@@ -167,8 +167,8 @@ int main ()
 
   //! output root file
   const char* out_path = "./fastjet_output/TTT_data/08_12_22";
-  const char* sample = "MB_1";
-  const char* bin_width = "7.5mm";
+  const char* sample = "pp_4bQCD";
+  const char* bin_width = "1.5mm";
   const char* BrEC = "Br30mmEC80mm";
   const char* min_const = "11111";
   const char* min_constPt = "22222";
@@ -267,11 +267,15 @@ int main ()
   //! open input trees 
   TChain rec("m_recTree");
   char input_dir[1023];
+  //char input_dir_1[1023];
   sprintf(input_dir,"/user/tkar/work/data/rec/sel/%s/PU1k/%s/*.root",BrEC,sample);//chameleon
+  //sprintf(input_dir_1,"/user/tkar/work/data/rec/sel/%s/PU1k/%s/extra/*.root",BrEC,sample);//chameleon
   //sprintf(input_dir,"/data/backup/tamasi/rho0/rec/sel/%s/PU1k/%s/*.root",BrEC,sample);//tachyon
   std::cout<<"Input directory: "<<input_dir<<std::endl;
+  //std::cout<<"Input directory: "<<input_dir_1<<std::endl;
   //! high pt min bias sample sigma = 3
   rec.Add(input_dir);
+  //rec.Add(input_dir_1);
   //rec.Add("/user/tkar/work/data/rec/opt/Br30mmEC67mm/PU1k/ggF1.0/*.root");
   //rec.Add("/user/tkar/work/data/rec/opt/Br30mmEC67mm/PU1k/MB_1/*.root");
   //rec.Add("./fastjet_output/ggFhh4b_SM_1/*.root");
@@ -434,7 +438,7 @@ int main ()
 	//{
 		////rec.GetEntry(ievent);
 		//rec.GetEntry(i_event);
-		rec.GetEntry(eve_i);
+	rec.GetEntry(eve_i);
 
 		for(int ik = 0; ik < pt_rec->size(); ++ik)
 		{
